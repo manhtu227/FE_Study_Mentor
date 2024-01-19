@@ -1,4 +1,4 @@
-import { usePostAiTextMutation } from "@/store/ai";
+import { usePostAiTextMutation } from "@core/store/api-chat";
 import { useState } from "react";
 import MessageFormUI from "../message-form-ui/MessageFormUI";
 

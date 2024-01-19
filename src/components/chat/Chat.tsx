@@ -1,10 +1,6 @@
-
-
-
 import dynamic from "next/dynamic";
-
 import { useMultiChatLogic } from "react-chat-engine-advanced";
-import "../../styles/index.scss";
+import "./Chat.scss";
 import AiCode from "./aI-code/AiCode";
 import AiAssist from "./ai-assist/AiAssist";
 import Ai from "./ai/Ai";

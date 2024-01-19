@@ -1,8 +1,8 @@
-import DynamicLayout from '@/components/layout/DynamicLayout';
-import AntdConfigProvider from '@/provider/AntdConfigProvider';
+import DynamicLayout from '@components/layout/DynamicLayout';
+import AntdConfigProvider from '@core/provider/AntdConfigProvider';
+import '@core/styles/global.scss';
 import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
-import './globals.scss';
 
 const notosans = Noto_Sans_KR({ subsets: ['latin'] });
 

@@ -1,4 +1,4 @@
-import { usePostAiAssistMutation } from "@/store/ai";
+import { usePostAiAssistMutation } from "@core/store/api-chat";
 import React, { useEffect, useState } from "react";
 import MessageFormUI from "../message-form-ui/MessageFormUI";
 
