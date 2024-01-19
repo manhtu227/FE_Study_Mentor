@@ -1,12 +1,7 @@
+import { AiAssistProps } from "@core/models/chat.model";
 import { usePostAiAssistMutation } from "@core/store/api-chat";
 import React, { useEffect, useState } from "react";
 import MessageFormUI from "../message-form-ui/MessageFormUI";
-
-interface AiAssistProps {
-  props: any
-  activeChat: any
-  onSubmit?: (form: any) => void;
-}
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);

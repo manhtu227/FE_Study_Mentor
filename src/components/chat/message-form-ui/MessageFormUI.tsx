@@ -1,19 +1,11 @@
+import { MessageFormUIProps } from "@core/models/chat.model";
 import {
-    PaperAirplaneIcon,
-    PaperClipIcon,
-    XMarkIcon,
+  PaperAirplaneIcon,
+  PaperClipIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/solid";
-import React, { KeyboardEvent, useState } from "react";
+import React, { useState } from "react";
 import Dropzone from "react-dropzone";
-
-interface MessageFormUIProps {
-  setAttachment: (file: File) => void;
-  message: string;
-  handleChange: any;
-  handleSubmit: () => void;
-  appendText?: string;
-  handleKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-}
 
 const MessageFormUI: React.FC<MessageFormUIProps> = ({
   setAttachment,

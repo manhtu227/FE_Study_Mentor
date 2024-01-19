@@ -1,20 +1,7 @@
+import { AiCodeProps, FormData } from "@core/models/chat.model";
 import { usePostAiCodeMutation } from "@core/store/api-chat";
 import React, { ChangeEvent, useState } from "react";
 import MessageFormUI from "../message-form-ui/MessageFormUI";
-
-interface AiCodeProps {
-  props: any;
-  activeChat:any;
-  onSubmit?: (form: FormData) => void;
-}
-
-interface FormData {
-  attachments: { blob: string; file: string }[];
-  created: string;
-  sender_username: string;
-  text: string;
-  activeChatId: string;
-}
 
 const AiCode: React.FC<AiCodeProps> = ({ props, activeChat, onSubmit }) => {
   const [message, setMessage] = useState<string>("");

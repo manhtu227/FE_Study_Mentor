@@ -1,10 +1,6 @@
+import { StandardMessageFormProps } from "@core/models/chat.model";
 import React, { useState } from "react";
 import MessageFormUI from "../message-form-ui/MessageFormUI";
-
-interface StandardMessageFormProps {
-  props: any
-  activeChat: any
-}
 
 const StandardMessageForm: React.FC<StandardMessageFormProps> = ({ props, activeChat }) => {
   const [message, setMessage] = useState("");
