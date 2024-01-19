@@ -23,8 +23,7 @@ const MultiChatWindow = dynamic(() =>
   }
 );
 
-  
-function Chat() {
+const Chat = () => {
   const projectId = process.env.VITE_PROJECT_ID || "";
   const chatProps = useMultiChatLogic(projectId, "test-user-1", "1234")
 
@@ -57,4 +56,4 @@ function Chat() {
   );
 }
 
-export default Chat;
+export default Chat
