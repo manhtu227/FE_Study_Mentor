@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 import { useMultiChatLogic } from "react-chat-engine-advanced";
 import "../../styles/index.scss";
-import AiCode from "./AICode/AiCode";
+import AiCode from "./aI-code/AiCode";
 import AiAssist from "./ai-assist/AiAssist";
 import Ai from "./ai/Ai";
 import CustomerHeader from "./header/CustomHeader";
@@ -39,9 +39,11 @@ function Chat() {
           if (chatProps.chat?.title.startsWith("AiChat_")) {
             return <Ai props={props} activeChat={chatProps.chat} />;
           }
+
           if (chatProps.chat?.title.startsWith("AiCode_")) {
             return <AiCode props={props} activeChat={chatProps.chat} />;
           }
+          
           if (chatProps.chat?.title.startsWith("AiAssist_")) {
             return <AiAssist props={props} activeChat={chatProps.chat} />;
           }
