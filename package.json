@@ -47,11 +47,6 @@
     "tailwindcss": "3.3.0",
     "typescript": "5"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
