@@ -1,11 +1,13 @@
-import Chat from "@components/chat/Chat";
+import Chat from '@components/chat/Chat';
+import { Button } from '@mui/material';
 
 function ChatWithAI() {
-  return (
-    <div>
-      <Chat />
-    </div>
-  );
+    return (
+        <div>
+            <Chat />
+            <Button />
+        </div>
+    );
 }
 
 export default ChatWithAI;

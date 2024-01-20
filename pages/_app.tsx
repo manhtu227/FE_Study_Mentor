@@ -1,10 +1,10 @@
-import type { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
-import { persistor, store } from '@core/store';
-import { PersistGate } from 'redux-persist/integration/react';
-import Head from 'next/head';
 import Layout from '@components/layout/Layout';
+import { persistor, store } from '@core/store';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { Provider } from 'react-redux';
 import '@styles/global.scss';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
