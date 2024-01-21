@@ -20,11 +20,9 @@
   },
   "lint-staged": {
    
-    "*.{js,jsx,ts,tsx,css,md,html}": [
-      "prettier --write",
+    "*.{js|jsx|ts|tsx|css|md|html}": [
       "yarn run lint:fix",
-      "yarn run lint",
-      "git add"
+      "yarn run lint"
     ]
   },
  
