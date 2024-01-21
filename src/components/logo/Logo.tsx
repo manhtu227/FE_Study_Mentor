@@ -4,9 +4,10 @@ import clsx from 'clsx';
 import { CircularXXWebBook } from '@assets/fonts/fonts';
 
 function Logo({ size, title }: { size?: string; title: string }) {
+  console.log('LogoIcon', LogoIcon);
     return (
         <div className='flex h-full items-center'>
-            <LogoIcon
+                         <LogoIcon
                 className={clsx({
                     'h-[32px] w-[34px]': !size,
                     'h-[10px] w-[10px]': size === 'sm',

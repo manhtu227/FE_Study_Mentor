@@ -46,10 +46,17 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "husky": "^8.0.3",
     "postcss": "^8",
     "prettier": "^2.8.8",
     "sass": "^1.69.5",
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:fix && yarn prettier:fix",
+      "pre-push": "yarn lint:fix && yarn prettier:fix"
+    }
   }
 }
