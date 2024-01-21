@@ -10,19 +10,24 @@
     "lint:fix": "eslint src --fix --ext ts,tsx",
     "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
-    "fix": "yarn lint:fix && yarn prettier:fix"
+    "fix": "yarn lint:fix && yarn prettier:fix",
+    "lint-staged": "lint-staged"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run fix"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
+   
     "*.{js,jsx,ts,tsx,css,md,html}": [
-      "eslint — fix",
+      "prettier --write",
+      "yarn run lint:fix",
+      "yarn run lint",
       "git add"
     ]
   },
+ 
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",

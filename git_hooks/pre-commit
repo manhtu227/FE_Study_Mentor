@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+# Cancel if no staged changes
+hasStagedChanges=$(git diff --cached)
+if [ -z "$hasStagedChanges" ]; then
+  exit 0
+fi
+
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+color_print() {
+  local color="$1"
+  local message="$2"
+  printf "${color}${message}${NC}\n"
+}
+
+color_print "${YELLOW}==Pre-Commit=="
+
+hasChanges=$(git diff)
+
+pop_stash_files() {
+  if [ -n "$hasChanges" ]; then
+    color_print "${YELLOW}==Applying git stashed changes=="
+    git stash pop
+  fi
+}
+
+if [ -n "$hasChanges" ]; then
+  color_print "${YELLOW}==Stashing unstaged changes=="
+  git stash push --keep-index
+fi
+
+if [ -d .fvm ]; then
+  color_print "${YELLOW}==.fvm detected in folder=="
+  export PATH=".fvm/flutter_sdk/bin:$PATH"
+  export PATH=".fvm/flutter_sdk/bin/cache/dart-sdk/bin:$PATH"
+else
+  color_print "${YELLOW}==.fvm NOT detected in folder=="
+fi
+
+color_print "${YELLOW}==Running flutter format=="
+
+dart format .
+
+if [ $? -ne 0 ]; then
+  color_print "${RED}==Error in format=="
+  pop_stash_files
+  exit 1
+fi
+
+color_print "${GREEN}==Format completed=="
+
+color_print "${YELLOW}==Running dart fix=="
+
+dart fix --apply
+
+if [ $? -ne 0 ]; then
+  color_print "${RED}==Error in fix=="
+  pop_stash_files
+  exit 1
+fi
+
+color_print "${GREEN}==Fix completed=="
+
+hasNewFileFormatted=$(git diff)
+if [ -n "$hasNewFileFormatted" ]; then
+  git add .
+fi
+
+#color_print "${YELLOW}==Running flutter analyzer=="
+#
+#flutter analyze
+#
+#if [ $? -ne 0 ]; then
+#  color_print "${RED}==Error in analyzer=="
+#  pop_stash_files
+#  exit 1
+#fi
+
+#color_print "${GREEN}==Analyzer Completed=="
+
+pop_stash_files
