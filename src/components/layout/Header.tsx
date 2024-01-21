@@ -2,18 +2,18 @@
 import React from 'react';
 
 function Header() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <header className='h-[100px] min-h-[100px] w-full items-center'>
-      <nav className='flex h-full w-full items-center px-[44px] py-[10px] dark:bg-white'>
-        {/* <div className='flex h-full w-2/3 items-center gap-8'>
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    return (
+        <header className='h-[100px] min-h-[100px] w-full items-center'>
+            <nav className='flex h-full w-full items-center px-[44px] py-[10px] dark:bg-white'>
+                {/* <div className='flex h-full w-2/3 items-center gap-8'>
           <Logo title='Study Mentor' />
           <ButtonGroup className='gap-8'>
             <Button
@@ -48,9 +48,9 @@ function Header() {
             Đăng ký
           </Button>
         </div> */}
-      </nav>
-    </header>
-  );
+            </nav>
+        </header>
+    );
 }
 
 export default Header;
