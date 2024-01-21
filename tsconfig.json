@@ -14,11 +14,11 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"],
-      "@core/*": ["+core/*"],
-      "@page/*": ["page/*"],
-      "@styles/*": ["styles/*"],
-      "@assets/*": ["assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@core/*": ["./src/+core/*"],
+      "@page/*": ["./src/page/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
