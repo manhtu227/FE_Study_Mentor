@@ -61,7 +61,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,md,html}": [
-      "yarn run fix",
+      "prettier --single-quote --write",
       "git add"
     ]
   }
