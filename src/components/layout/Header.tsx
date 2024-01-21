@@ -1,8 +1,4 @@
-import Catalog from '@assets/icons/catalog';
-import Logo from '@components/logo/Logo';
-import { Button, Menu } from 'antd';
-import ButtonGroup from 'antd/es/button/button-group';
-import MenuItem from 'antd/es/menu/MenuItem';
+'use client';
 import React from 'react';
 
 function Header() {
