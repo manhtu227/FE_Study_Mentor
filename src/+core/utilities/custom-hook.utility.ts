@@ -2,7 +2,7 @@
 import { useEffect, EffectCallback } from 'react';
 
 export const useEffectOnce = (action: EffectCallback) =>
-  useEffect(() => {
-    action();
-    return () => {};
-  }, []);
+    useEffect(() => {
+        action();
+        return () => {};
+    }, []);
