@@ -47,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-unused-imports": "^3.0.0",
     "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "postcss": "^8",
     "prettier": "^2.8.8",
     "sass": "^1.69.5",
@@ -55,8 +56,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint:fix && yarn prettier:fix",
-      "pre-push": "yarn lint:fix && yarn prettier:fix"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,md,html}": [
+      "yarn run fix",
+      "git add"
+    ]
   }
 }
