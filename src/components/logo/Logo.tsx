@@ -1,7 +1,6 @@
 import React from 'react';
 import LogoIcon from '@assets/icons/logo';
 import clsx from 'clsx';
-import { CircularXXWebBook } from '@assets/fonts/fonts';
 
 function Logo({ size, title }: { size?: string; title: string }) {
     return (
@@ -13,9 +12,7 @@ function Logo({ size, title }: { size?: string; title: string }) {
                     'mr-3': true,
                 })}
             />
-            <div className={`text-2xl font-bold text-[#5BB9E2] ${CircularXXWebBook.className}`}>
-                {title}
-            </div>
+            <div className={`text-2xl font-bold text-[#5BB9E2]`}>{title}</div>
         </div>
     );
 }

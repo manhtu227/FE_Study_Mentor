@@ -21,6 +21,9 @@ function MethodItem({
                 '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
                 '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
                 '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
+                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
+                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
             ],
         },
         {
@@ -63,17 +66,22 @@ function MethodItem({
                 className='aspect-[2.73] object-contain object-center w-full self-stretch overflow-hidden max-md:max-w-full rounded-t-lg'
             />
 
-            <div className='text-neutral-700 text-lg font-bold leading-7 tracking-normal max-md:max-w-full'>
-                {title}
-            </div>
-
-            <div className='items-stretch flex justify-between gap-5 mt-6 max-md:max-w-full max-md:flex-wrap'>
-                <div className='items-stretch flex-grow flex-col max-md:max-w-full overflow-y-scroll'>
+            <div className='items-stretch flex flex-col justify-between gap-5 mt-6 max-md:max-w-full max-md:flex-wrap mx-8'>
+                <div className='text-neutral-700 text-lg font-bold leading-7 tracking-normal max-md:max-w-full'>
+                    {title}
+                </div>
+                <div
+                    className='items-stretch flex-grow flex-col max-md:max-w-full overflow-y-scroll leading-6 max-h-[152px]'
+                    style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'blue',
+                    }}
+                >
                     {description &&
                         description.map((item, index) => {
                             return (
                                 <div
-                                    className='text-neutral-700 text-base leading-6 tracking-normal max-md:max-w-full'
+                                    className='text-neutral-700 text-base leading-6 tracking-normal max-md:max-w-full mb-4'
                                     key={index}
                                 >
                                     {item}
@@ -87,7 +95,7 @@ function MethodItem({
                 <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
                     {titleButton}
                 </div>
-                <RightOutlined />
+                <RightOutlined className='text-white' />
             </button>
         </div>
     );
