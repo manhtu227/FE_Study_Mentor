@@ -1,17 +1,18 @@
-import Image, { StaticImageData } from 'next/image';
-import React from 'react';
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import Image, { StaticImageData } from 'next/image';
 
 function MethodItem({
     image,
     titleButton,
     type,
     title,
+    onClick,
 }: {
     image: StaticImageData;
     titleButton: string;
     title: string;
     type: number;
+    onClick?: () => void;
 }) {
     const listDescriptions = [
         {
@@ -91,7 +92,10 @@ function MethodItem({
                 </div>
             </div>
 
-            <button className='justify-center items-stretch bg-blue-600 flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'>
+            <button
+                onClick={onClick}
+                className='justify-center items-stretch bg-blue-600 flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
+            >
                 <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
                     {titleButton}
                 </div>

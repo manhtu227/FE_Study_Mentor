@@ -1,13 +1,29 @@
-import React from 'react';
-import MethodItem from '@components/study-method/StudyMethod';
-import images from '@assets/images';
-import Image from 'next/image';
-import Characteristic from '@components/homepage/characteristic/Characteristic';
-import { Button } from 'antd';
+'use client';
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import images from '@assets/images';
+import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
+import MethodItem from '@components/study-method/StudyMethod';
+import { Button } from 'antd';
+import Image from 'next/image';
+import Carousel, { ResponsiveType } from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 function Homepage() {
+    const BreakpointSlides: ResponsiveType = {
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3,
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 530 },
+            items: 2,
+        },
+        mobile: {
+            breakpoint: { max: 530, min: 0 },
+            items: 1,
+        },
+    };
     const characteistics = [
         {
             id: 1,
@@ -147,7 +163,7 @@ function Homepage() {
                 </div>
             </section>
             {/* section 5 */}
-            <section className='mb-[70px] px-40'>
+            <section className='mb-[70px]'>
                 <div className='font-bold text-[32px] text-[#3D64EE] text-center leading-[50px]'>
                     Người dùng
                     <div className='font-bold text-[32px] text-center text-black'>
@@ -155,6 +171,114 @@ function Homepage() {
                     </div>
                 </div>
                 {/* <Feedbacks /> */}
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
             </section>
         </div>
     );
