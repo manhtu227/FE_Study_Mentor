@@ -1,5 +1,5 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
-import Catalog from '@assets/icons/catalog';
+import CatalogIcon from '@assets/icons/catalog';
 import Logo from '@components/logo/Logo';
 import { Button, Dropdown, MenuProps } from 'antd';
 import clsx from 'clsx';
@@ -30,7 +30,7 @@ const Header = () => {
                     <Button type='link' className='text-darkBlue text-base font-bold '>
                         <Dropdown menu={{ items }}>
                             <div className='flex items-center gap-2 font-bold'>
-                                <Catalog
+                                <CatalogIcon
                                     className={clsx({
                                         'h-6 w-6': true,
                                         'text-darkBlue': true,

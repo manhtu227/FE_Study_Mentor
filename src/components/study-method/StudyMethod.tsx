@@ -7,12 +7,14 @@ function MethodItem({
     type,
     title,
     onClick,
+    className,
 }: {
     image: StaticImageData;
     titleButton: string;
     title: string;
     type: number;
     onClick?: () => void;
+    className?: string;
 }) {
     const listDescriptions = [
         {
@@ -59,12 +61,14 @@ function MethodItem({
     const description =
         listDescriptions && listDescriptions.find((item) => item.type === type)?.description;
     return (
-        <div className='items-center shadow-sm bg-white flex max-w-[658px] flex-col pb-8 rounded-lg'>
+        <div
+            className={`items-center shadow-sm bg-white flex flex-col pb-8 rounded-lg ${className}`}
+        >
             <Image
                 loading='lazy'
                 src={image}
                 alt={title}
-                className='aspect-[2.73] object-contain object-center w-full self-stretch overflow-hidden max-md:max-w-full rounded-t-lg'
+                className='aspect-[2.73] object-contain object-center w-full self-stretch overflow-hidden max-md:max-w-full rounded-t-lg object-cover'
             />
 
             <div className='items-stretch flex flex-col justify-between gap-5 mt-6 max-md:max-w-full max-md:flex-wrap mx-8'>
