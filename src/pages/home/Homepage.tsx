@@ -67,12 +67,14 @@ function Homepage() {
                             title='Trả lời bằng AI'
                             titleButton='Trải nghiệm ngay'
                             type={1}
+                            className='max-w-[658px]'
                         />
                         <MethodItem
                             image={images.mentorMethod}
                             title='Tìm kiếm người hướng dẫn'
                             titleButton='Tìm người hướng dẫn'
                             type={1}
+                            className='max-w-[658px]'
                         />
                     </div>
                 </div>
@@ -98,7 +100,7 @@ function Homepage() {
                     <h4 className='font-bold text-[32px] text-center mb-6'>
                         <span className='text-blue-600'>Quy trình</span> làm việc của Study Mentor
                     </h4>
-                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-[#838B8F]'>
+                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-grayText'>
                         Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
                         website của bạn độc đáo, duy nhất, có giá trị thực
                     </div>
@@ -150,7 +152,7 @@ function Homepage() {
                         </div>
                         <div className='font-bold text-[32px]'>consectetur adipiscing elit</div>
                     </div>
-                    <div className='font-medium text-lg text-[#838B8F] mb-8'>
+                    <div className='font-medium text-lg text-grayText mb-8'>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua.
                     </div>
