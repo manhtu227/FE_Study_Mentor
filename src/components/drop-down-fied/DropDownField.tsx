@@ -39,14 +39,14 @@ const menuProps = {
     // onClick: handleMenuClick,
 };
 
-export default function SortQuestionsPage() {
+export default function DropDownField({ className, title }: { className?: string; title: string }) {
     return (
         <div>
             <Space wrap>
-                <Dropdown menu={menuProps}>
+                <Dropdown menu={menuProps} className={className}>
                     <Button>
                         <Space>
-                            Button
+                            {title}
                             <DownOutlined />
                         </Space>
                     </Button>
