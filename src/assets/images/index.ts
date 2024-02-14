@@ -11,6 +11,13 @@ import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import mentorMethod from './mentor-method.png';
 import studyMethodBg from './study-method-bg.png';
+import frame from './frame.png';
+import anchor from './anchor.png';
+import clock from './clock-3.png';
+import cardCredit from './credit-card.png';
+import layer from './layers-3.png';
+import systemFindings from './Rectangle5560.png';
+import userFindings from './Rectangle5561.png';
 
 const images = {
     aiMethod: aiMethod,
@@ -26,6 +33,13 @@ const images = {
     ggMeetMethod: ggMeetMethod,
     fileMethod: fileMethod,
     studyMethodBg: studyMethodBg,
+    frame: frame,
+    anchor: anchor,
+    clock: clock,
+    cardCredit: cardCredit,
+    layer: layer,
+    systemFindings: systemFindings,
+    userFindings: userFindings,
 };
 
 export default images;
