@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .placeholder-color .ant-select-selection-placeholder {
+        color: #313636 !important;
+    }
+}
