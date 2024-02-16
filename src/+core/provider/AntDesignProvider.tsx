@@ -9,6 +9,11 @@ export default function AntDesignProvider({ children }: { children: React.ReactN
                     //   fontFamily: 'Inter, sans-serif',
                     //   borderRadius: 5,
                 },
+                components: {
+                    Form: {
+                        itemMarginBottom: 0,
+                    },
+                },
             }}
         >
             {children}

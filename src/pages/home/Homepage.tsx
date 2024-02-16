@@ -1,11 +1,9 @@
-import React from 'react';
-import MethodItem from '@components/study-method/StudyMethod';
-import images from '@assets/images';
-import Image from 'next/image';
-import Characteristic from '@components/homepage/characteristic/Characteristic';
-import { Button } from 'antd';
 import RightOutlined from '@ant-design/icons/RightOutlined';
-import Feedback from '@components/homepage/feedback/Feedback';
+import images from '@assets/images';
+import Characteristic from '@components/homepage/characteristic/Characteristic';
+import MethodItem from '@components/study-method/StudyMethod';
+import { Button } from 'antd';
+import Image from 'next/image';
 
 function Homepage() {
     const characteistics = [

@@ -1,9 +1,9 @@
-import QuestionCardPage from '../../pages/find-questions/QuestionCardPage';
+import FindQuestionsPage from '../../pages/find-questions/FindQuestionsPage';
 
 export default function FindQuestion() {
     return (
-        <main className='flex flex-col items-center justify-between'>
-            <QuestionCardPage />
+        <main className='max-w-[1369px] px-4 mx-auto'>
+            <FindQuestionsPage />
         </main>
     );
 }
