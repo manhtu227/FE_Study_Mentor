@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import React, { ReactElement, ReactNode, SVGProps } from 'react';
+import { ReactElement, ReactNode, SVGProps } from 'react';
 
-interface LogoIconProps extends SVGProps<SVGSVGElement> {
+interface CatalogIconProps extends SVGProps<SVGSVGElement> {
     children?: ReactNode;
 }
 
-export default function Catalog(props: LogoIconProps): ReactElement {
+export default function CatalogIcon(props: CatalogIconProps): ReactElement {
     const { className, ...rest } = props;
 
     return (

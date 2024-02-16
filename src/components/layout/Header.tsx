@@ -1,9 +1,8 @@
-import React from 'react';
-import Logo from '@components/logo/Logo';
-import Catalog from '@assets/icons/catalog';
-import clsx from 'clsx';
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import CatalogIcon from '@assets/icons/catalog';
+import Logo from '@components/logo/Logo';
 import { Button, Dropdown, MenuProps } from 'antd';
+import clsx from 'clsx';
 const Header = () => {
     const items: MenuProps['items'] = [
         {
@@ -31,7 +30,7 @@ const Header = () => {
                     <Button type='link' className='text-darkBlue text-base font-bold '>
                         <Dropdown menu={{ items }}>
                             <div className='flex items-center gap-2 font-bold'>
-                                <Catalog
+                                <CatalogIcon
                                     className={clsx({
                                         'h-6 w-6': true,
                                         'text-darkBlue': true,
@@ -45,7 +44,11 @@ const Header = () => {
                     <Button type='link' className='text-darkBlue text-base font-bold '>
                         Dành cho người hướng dẫn
                     </Button>
-                    <Button type='link' className='text-darkBlue text-base font-bold'>
+                    <Button
+                        type='link'
+                        className='text-darkBlue text-base font-bold'
+                        href='/study-method'
+                    >
                         Dành cho học viên
                     </Button>
                 </div>

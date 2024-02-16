@@ -14,3 +14,23 @@ body {
         font-family: 'HelveticaNeue', system-ui, sans-serif;
     }
 }
+
+.ant-steps-item.ant-steps-item-finish.ant-steps-item-custom {
+    width: 340px;
+}
+:where(.css-dev-only-do-not-override-3mqfnx).ant-steps.ant-steps-horizontal:not(
+        .ant-steps-label-vertical
+    )
+    .ant-steps-item {
+    padding-inline-start: 0px;
+    white-space: wrap;
+}
+
+:where(.css-dev-only-do-not-override-3mqfnx).ant-steps .ant-steps-item:last-child {
+    flex: 1;
+}
+
+.tox-statusbar__path-item,
+.tox-statusbar__branding {
+    display: none !important;
+}

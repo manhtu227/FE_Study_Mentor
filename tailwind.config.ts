@@ -16,6 +16,11 @@ const config: Config = {
             colors: {
                 darkBlue: '#0A2277',
                 lightBlue: '#3D64EE',
+                primary: {
+                    1: '#4EA8B4',
+                    2: '#3D64EE',
+                },
+                grayText: '#838B8F',
             },
         },
     },

@@ -69,4 +69,5 @@ export enum Colors {
     AliceBlue = '#EDF9FF',
     WildSand = '#F5F5F5',
     SnowDrift = '#F9F9F9',
+    CapeCod = '#313636',
 }
