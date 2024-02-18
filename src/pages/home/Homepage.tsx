@@ -1,13 +1,29 @@
-import React from 'react';
-import MethodItem from '@components/study-method/StudyMethod';
-import images from '@assets/images';
-import Image from 'next/image';
-import Characteristic from '@components/homepage/characteristic/Characteristic';
-import { Button } from 'antd';
+'use client';
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import images from '@assets/images';
+import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
+import MethodItem from '@components/study-method/StudyMethod';
+import { Button } from 'antd';
+import Image from 'next/image';
+import Carousel, { ResponsiveType } from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 function Homepage() {
+    const BreakpointSlides: ResponsiveType = {
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3,
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 530 },
+            items: 2,
+        },
+        mobile: {
+            breakpoint: { max: 530, min: 0 },
+            items: 1,
+        },
+    };
     const characteistics = [
         {
             id: 1,
@@ -51,12 +67,14 @@ function Homepage() {
                             title='Trả lời bằng AI'
                             titleButton='Trải nghiệm ngay'
                             type={1}
+                            className='max-w-[658px]'
                         />
                         <MethodItem
                             image={images.mentorMethod}
                             title='Tìm kiếm người hướng dẫn'
                             titleButton='Tìm người hướng dẫn'
                             type={1}
+                            className='max-w-[658px]'
                         />
                     </div>
                 </div>
@@ -82,7 +100,7 @@ function Homepage() {
                     <h4 className='font-bold text-[32px] text-center mb-6'>
                         <span className='text-blue-600'>Quy trình</span> làm việc của Study Mentor
                     </h4>
-                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-[#838B8F]'>
+                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-grayText'>
                         Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
                         website của bạn độc đáo, duy nhất, có giá trị thực
                     </div>
@@ -134,7 +152,7 @@ function Homepage() {
                         </div>
                         <div className='font-bold text-[32px]'>consectetur adipiscing elit</div>
                     </div>
-                    <div className='font-medium text-lg text-[#838B8F] mb-8'>
+                    <div className='font-medium text-lg text-grayText mb-8'>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua.
                     </div>
@@ -147,7 +165,7 @@ function Homepage() {
                 </div>
             </section>
             {/* section 5 */}
-            <section className='mb-[70px] px-40'>
+            <section className='mb-[70px]'>
                 <div className='font-bold text-[32px] text-[#3D64EE] text-center leading-[50px]'>
                     Người dùng
                     <div className='font-bold text-[32px] text-center text-black'>
@@ -155,6 +173,114 @@ function Homepage() {
                     </div>
                 </div>
                 {/* <Feedbacks /> */}
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
+                <Carousel
+                    responsive={BreakpointSlides}
+                    additionalTransfrom={0}
+                    arrows={false}
+                    autoPlay
+                    centerMode={false}
+                    customTransition='all 5s linear'
+                    dotListClass=''
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={80}
+                    pauseOnHover
+                    renderArrowsWhenDisabled={false}
+                    renderButtonGroupOutside={false}
+                    renderDotsOutside={false}
+                    ssr
+                    rewind={false}
+                    rewindWithAnimation={false}
+                    rtl={false}
+                    shouldResetAutoplay
+                    showDots={false}
+                    sliderClass=''
+                    slidesToSlide={2}
+                    swipeable
+                    transitionDuration={1000}
+                >
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                    <Feedback />
+                </Carousel>
             </section>
         </div>
     );
