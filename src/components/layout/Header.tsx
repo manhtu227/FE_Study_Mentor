@@ -23,8 +23,8 @@ const Header = () => {
         },
     ];
     return (
-        <header className='h-[100px] min-h-[100px] w-full items-center'>
-            <nav className='flex h-full items-center px-[44px] dark:bg-white'>
+        <header className='h-[100px] min-h-[100px] w-full items-center '>
+            <nav className='flex h-full items-center px-[44px] bg-white'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' />
                     <Button type='link' className='text-darkBlue text-base font-bold '>
