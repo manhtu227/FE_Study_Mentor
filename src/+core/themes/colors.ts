@@ -4,11 +4,11 @@ export default {
         800: '#3D64EE',
         500: '#5BB9E2',
     },
-    gray: {},
+    gray: {
+        700: '#838B8F',
+    },
     white: {
         900: '#FFFFFF',
         800: '#F3F9FA',
     },
-    darkBlue: '#0A2277',
-    lightBlue: '#3D64EE',
 };

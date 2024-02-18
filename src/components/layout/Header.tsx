@@ -27,13 +27,13 @@ const Header = () => {
             <nav className='flex h-full items-center px-[44px] bg-white'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' />
-                    <Button type='link' className='text-darkBlue text-base font-bold '>
+                    <Button type='link' className='text-primary-900 text-base font-bold '>
                         <Dropdown menu={{ items }}>
                             <div className='flex items-center gap-2 font-bold'>
                                 <CatalogIcon
                                     className={clsx({
                                         'h-6 w-6': true,
-                                        'text-darkBlue': true,
+                                        'text-primary-900': true,
                                     })}
                                 />
                                 <span>Danh mục</span>
@@ -41,12 +41,12 @@ const Header = () => {
                             </div>
                         </Dropdown>
                     </Button>
-                    <Button type='link' className='text-darkBlue text-base font-bold '>
+                    <Button type='link' className='text-primary-900 text-base font-bold '>
                         Dành cho người hướng dẫn
                     </Button>
                     <Button
                         type='link'
-                        className='text-darkBlue text-base font-bold'
+                        className='text-primary-900 text-base font-bold'
                         href='/study-method'
                     >
                         Dành cho học viên

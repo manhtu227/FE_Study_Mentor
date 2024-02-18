@@ -67,7 +67,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         // rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Select
-                            className='h-12 font-medium text-base text-grayText'
+                            className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn cấp độ'
                         />
                     </Form.Item>
@@ -81,7 +81,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         // rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Select
-                            className='h-12 font-medium text-base text-grayText'
+                            className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn lớp'
                         />
                     </Form.Item>
@@ -98,7 +98,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         // rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Select
-                            className='h-12 font-medium text-base text-grayText'
+                            className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn số sao'
                         />
                     </Form.Item>
@@ -112,7 +112,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         // rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Select
-                            className='h-12 font-medium text-base text-grayText'
+                            className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn tiêu chí'
                         />
                     </Form.Item>
@@ -124,7 +124,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                 >
                     <div className='font-bold text-base mb-2'>Thời gian giải đáp</div>
                     <Input
-                        className='h-12 font-medium text-base text-grayText'
+                        className='h-12 font-medium text-base text-gray-700'
                         placeholder='Nhập số phút'
                     />
                 </Form.Item>
@@ -147,7 +147,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             <p className='ant-upload-drag-icon'>
                                 <UploadIconIcon />
                             </p>
-                            <p className='font-bold text-base text-grayText'>
+                            <p className='font-bold text-base text-gray-700'>
                                 Tải lên hoặc thả tệp tại đây
                             </p>
                         </Dragger>
@@ -166,7 +166,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             </Form>
             <div className='font-medium text-sm text-[#313636]'>
                 Bạn cảm thấy mức giá không phù hợp?{' '}
-                <Link className='font-bold text-base text-darkBlue no-underline' href={'#'}>
+                <Link className='font-bold text-base text-primary-900 no-underline' href={'#'}>
                     Tùy chọn khác
                 </Link>
             </div>

@@ -100,7 +100,7 @@ function Homepage() {
                     <h4 className='font-bold text-[32px] text-center mb-6'>
                         <span className='text-blue-600'>Quy trình</span> làm việc của Study Mentor
                     </h4>
-                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-grayText'>
+                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-gray-700'>
                         Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
                         website của bạn độc đáo, duy nhất, có giá trị thực
                     </div>
@@ -152,7 +152,7 @@ function Homepage() {
                         </div>
                         <div className='font-bold text-[32px]'>consectetur adipiscing elit</div>
                     </div>
-                    <div className='font-medium text-lg text-grayText mb-8'>
+                    <div className='font-medium text-lg text-gray-700 mb-8'>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua.
                     </div>
