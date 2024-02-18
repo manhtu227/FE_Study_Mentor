@@ -1,8 +1,8 @@
 import FindMentorPage from '../../pages/find-mentor/FindMentorPage';
 
-export default function FindQuestion() {
+export default function FindMentor() {
     return (
-        <main className='flex flex-col items-center justify-between'>
+        <main className='bg-[#F3F9FA]'>
             <FindMentorPage />
         </main>
     );
