@@ -24,7 +24,7 @@ const Header = () => {
     ];
     return (
         <header className='h-[100px] min-h-[100px] w-full items-center '>
-            <nav className='flex h-full items-center px-[44px] bg-white'>
+            <nav className='flex h-full items-center px-[44px] bg-white-900'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' />
                     <Button type='link' className='text-primary-900 text-base font-bold '>
@@ -65,7 +65,7 @@ const Header = () => {
                         type='default'
                         size='large'
                         shape='round'
-                        className='bg-lightBlue border text-base font-bold text-white hover:!text-white hover:opacity-85'
+                        className='bg-lightBlue border text-base font-bold text-white-900 hover:!text-white-900 hover:opacity-85'
                     >
                         Đăng ký
                     </Button>

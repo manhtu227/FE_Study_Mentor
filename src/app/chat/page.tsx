@@ -1,5 +1,9 @@
 import ChatAiPage from '../../pages/chat-ai/ChatAiPage';
 
 export default function ChatAi() {
-    return <ChatAiPage />;
+    return (
+        <div className='bg-white-800'>
+            <ChatAiPage />
+        </div>
+    );
 }

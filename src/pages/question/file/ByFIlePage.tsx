@@ -27,7 +27,7 @@ function CreateQuestionByFilePage() {
             title: (
                 <div
                     className={`h-[60px] w-[333px] ${
-                        current >= 0 ? 'bg-primary-500 text-white' : 'bg-white text-black'
+                        current >= 0 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tl-lg rounded-bl-lg justify-center gap-2 `}
                 >
                     <QuestionIcon
@@ -45,7 +45,7 @@ function CreateQuestionByFilePage() {
             title: (
                 <div
                     className={`h-[60px] w-[333px] ${
-                        current >= 1 ? 'bg-primary-500 text-white' : 'bg-white text-black'
+                        current >= 1 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
                     <GraduationIcon
@@ -62,7 +62,7 @@ function CreateQuestionByFilePage() {
             title: (
                 <div
                     className={`h-[60px] w-[333px] ${
-                        current >= 2 ? 'bg-primary-500 text-white' : 'bg-white text-black'
+                        current >= 2 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
                     <CreateQuestionIcon
@@ -79,7 +79,7 @@ function CreateQuestionByFilePage() {
             title: (
                 <div
                     className={`h-[60px] w-[333px] ${
-                        current >= 3 ? 'bg-primary-500 text-white' : 'bg-white text-black'
+                        current >= 3 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tr-lg rounded-br-lg justify-center gap-2 `}
                 >
                     <StarIcon className='h-6 w-6' color={`${current >= 3 ? 'white' : 'black'}`} />

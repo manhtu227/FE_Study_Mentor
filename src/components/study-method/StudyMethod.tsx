@@ -62,7 +62,7 @@ function MethodItem({
         listDescriptions && listDescriptions.find((item) => item.type === type)?.description;
     return (
         <div
-            className={`items-center shadow-sm bg-white flex flex-col pb-8 rounded-lg ${className}`}
+            className={`items-center shadow-sm bg-white-900 flex flex-col pb-8 rounded-lg ${className}`}
         >
             <Image
                 loading='lazy'
@@ -103,7 +103,7 @@ function MethodItem({
                 <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
                     {titleButton}
                 </div>
-                <RightOutlined className='text-white' />
+                <RightOutlined className='text-white-900' />
             </button>
         </div>
     );

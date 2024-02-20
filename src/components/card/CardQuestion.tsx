@@ -27,18 +27,18 @@ export function CardQuestion() {
                     culpa qui officia deserunt mollit anim id est laborum.
                 </div>
                 <div className='flex mt-[10px] gap-2 flex-wrap'>
-                    <Tag className='px-3 py-2 bg-white rounded-md text-[14px] leading-[21px]'>
+                    <Tag className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'>
                         This is tag
                     </Tag>
-                    <Tag className='px-3 py-2 bg-white rounded-md text-[14px] leading-[21px]'>
+                    <Tag className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'>
                         This is tag
                     </Tag>
-                    <Tag className='px-3 py-2 bg-white rounded-md text-[14px] leading-[21px]'>
+                    <Tag className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'>
                         This is tag
                     </Tag>
                 </div>
             </div>
-            <Button className='w-full rounded-none h-[57px] bg-[#3D64EE] text-white font-bold border-0 rounded-b-lg'>
+            <Button className='w-full rounded-none h-[57px] bg-[#3D64EE] text-white-900 font-bold border-0 rounded-b-lg'>
                 Xem câu hỏi
             </Button>
         </div>
