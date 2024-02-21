@@ -1,6 +1,7 @@
 'use client';
 import { Form, Input } from 'antd';
 import { FormItemProps, Rule } from 'antd/es/form';
+import clsx from 'clsx';
 const { TextArea } = Input;
 
 export type CustomTextInputProps<T extends object> = {
@@ -43,7 +44,7 @@ export const CustomTextInput = <T extends object>({
             rules={rules}
             label={label && <label className='whitespace-normal w-full'>{label}</label>}
             wrapperCol={{ span: spanCol }}
-            className={classNameForm}
+            className={clsx('m-0', classNameForm)}
         >
             <Input
                 placeholder={placeholder}
@@ -52,7 +53,7 @@ export const CustomTextInput = <T extends object>({
                 autoFocus={autoFocus}
                 suffix={suffix}
                 type={type}
-                className={`h-[48px] ${classNameInput}`}
+                className={`h-[48px] ${classNameInput} `}
                 disabled={disabled}
                 value={value}
                 onChange={onChange}
