@@ -4,7 +4,7 @@ import { Image, Tag } from 'antd';
 
 export function CardMentorInfo() {
     return (
-        <div className='w-full border-solid bg-white border-[1px] rounded-lg border-[#D9D9D9]'>
+        <div className='w-full border-solid bg-white-900 border-[1px] rounded-lg border-[#D9D9D9]'>
             <div className='p-4'>
                 <div className='flex items-start gap-4'>
                     <div className='w-[100px] h-[100px]'>
@@ -31,7 +31,7 @@ export function CardMentorInfo() {
                             <StarFilled className='text-[#f2c94c]' />
                         </div>
                         <div>
-                            <Tag className='p-2 bg-white rounded-md items-center text-sm mt-4 w-[81px]'>
+                            <Tag className='p-2 bg-white-900 rounded-md items-center text-sm mt-4 w-[81px]'>
                                 This is tag
                             </Tag>
                         </div>

@@ -9,6 +9,14 @@ export type MessageFormUIProps = {
     handleKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 };
 
+export type chatModel = {
+    id: string;
+    chatId: string;
+    contactId: string;
+    value: string;
+    createdAt: string;
+};
+
 export type AiAssistProps = {
     props: any; //temp
     activeChat: any; //temp

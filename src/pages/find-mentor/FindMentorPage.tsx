@@ -15,7 +15,7 @@ export default function FindMentorPage() {
             <div className='relative max-w-[1369px] mx-auto pt-[69px] px-4'>
                 <div className='flex items-start w-full gap-8'>
                     <div className='w-[435px]'>
-                        <div className='w-full bg-white rounded-lg'>
+                        <div className='w-full bg-white-900 rounded-lg'>
                             <div className='p-6'>
                                 <h3 className='font-bold text-lg m-0 mb-8'>
                                     Thông tin buổi trao đổi
@@ -74,7 +74,7 @@ export default function FindMentorPage() {
                                     </p>
                                 </div>
 
-                                <div className='w-full h-12 border-[1px] border-solid border-[#D9D9D9] rounded-lg bg-white'>
+                                <div className='w-full h-12 border-[1px] border-solid border-[#D9D9D9] rounded-lg bg-white-900'>
                                     <div className='flex items-center justify-between h-full px-4 text-[#838B8F] text-base '>
                                         https://meet.google.com/abc-def-ghi
                                         <CopyToClipboard
@@ -93,7 +93,7 @@ export default function FindMentorPage() {
                             </div>
                         </div>
                     </div>
-                    <div className=' bg-white p-8 rounded-md text-center flex flex-col gap-8'>
+                    <div className='bg-white-900 p-8 rounded-md text-center flex flex-col gap-8'>
                         <div>
                             <h3 className='font-bold text-lg m-0'>This is title for questions</h3>
                             <p className='text-[16px] leading-6 text-[#838B8F] m-0'>
@@ -102,7 +102,7 @@ export default function FindMentorPage() {
                         </div>
 
                         <div className='flex gap-x-8 justify-between'>
-                            <div className='flex flex-col items-center max-w-[402px] bg-white shadow-lg rounded-lg overflow-hidden'>
+                            <div className='flex flex-col items-center max-w-[402px] bg-white-900 shadow-lg rounded-lg overflow-hidden'>
                                 <Image
                                     height={200}
                                     preview={false}
@@ -120,7 +120,7 @@ export default function FindMentorPage() {
                                     />
                                 </div>
                             </div>
-                            <div className='flex flex-col items-center max-w-[402px] bg-white shadow-lg rounded-lg overflow-hidden'>
+                            <div className='flex flex-col items-center max-w-[402px] bg-white-900 shadow-lg rounded-lg overflow-hidden'>
                                 <Image
                                     preview={false}
                                     src={images.userFindings.src}

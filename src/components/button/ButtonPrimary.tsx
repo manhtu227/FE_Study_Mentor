@@ -18,7 +18,7 @@ export default function ButtonPrimary({
         <Button
             type='primary'
             className={clsx(
-                'w-full rounded-lg h-[52px] bg-[#3D64EE] text-white font-bold',
+                'w-full rounded-lg h-[52px] bg-[#3D64EE] text-white-900 font-bold',
                 className,
             )}
             {...rest}

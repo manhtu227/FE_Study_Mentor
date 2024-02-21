@@ -53,10 +53,10 @@ function Homepage() {
                 <Image src={images.hero1} alt='Hero' className='relative opacity-50' />
                 <div className='absolute top-0 left-0 right-0 h-[650px] bg-[#0A2277] opacity-90'>
                     <div className='mb-[52px]'>
-                        <h2 className='text-center font-bold text-[50px] max-w-[650px] mx-auto text-white'>
+                        <h2 className='text-center font-bold text-[50px] max-w-[650px] mx-auto text-white-900'>
                             Upgrade Yourself, and Prepare a Better Future
                         </h2>
-                        <div className='mx-auto text-white text-center font-medium text-2xl max-w-[640px]'>
+                        <div className='mx-auto text-white-900 text-center font-medium text-2xl max-w-[640px]'>
                             Something bigger to achive your dreams so we provide all of these great
                             things for you.
                         </div>
@@ -100,7 +100,7 @@ function Homepage() {
                     <h4 className='font-bold text-[32px] text-center mb-6'>
                         <span className='text-blue-600'>Quy trình</span> làm việc của Study Mentor
                     </h4>
-                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-grayText'>
+                    <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-gray-700'>
                         Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
                         website của bạn độc đáo, duy nhất, có giá trị thực
                     </div>
@@ -114,27 +114,27 @@ function Homepage() {
                             className='relative -right-40'
                         />
                         <div className='absolute top-28 right-20 rotate-6'>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
-                            <div className='py-6 px-8 bg-white mb-3 rounded-md'>
+                            <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
                                 tư vấn giải pháp web phù hợp
                             </div>
@@ -152,12 +152,13 @@ function Homepage() {
                         </div>
                         <div className='font-bold text-[32px]'>consectetur adipiscing elit</div>
                     </div>
-                    <div className='font-medium text-lg text-grayText mb-8'>
+                    <div className='font-medium text-lg text-gray-700 mb-8'>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua.
                     </div>
-                    <Button className='h-[75px] w-full uppercase text-lg text-white bg-gradient-to-r from-[#3D64EE] to-[#5BB9E2] hover:!text-white hover:opacity-80'>
-                        XEM THÊM THÔNG TIN VỀ STUDY MENTOR <RightOutlined className='text-white' />
+                    <Button className='h-[75px] w-full uppercase text-lg text-white-900 bg-gradient-to-r from-[#3D64EE] to-[#5BB9E2] hover:!text-white-900 hover:opacity-80'>
+                        XEM THÊM THÔNG TIN VỀ STUDY MENTOR{' '}
+                        <RightOutlined className='text-white-900' />
                     </Button>
                 </div>
                 <div className='w-1/2 mt-[100px] mr-10'>

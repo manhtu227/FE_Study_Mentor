@@ -1,10 +1,8 @@
-'use client';
 import { Form, Input } from 'antd';
 import { FormItemProps, Rule } from 'antd/es/form';
-import clsx from 'clsx';
 const { TextArea } = Input;
 
-export type CustomTextInputProps<T extends object> = {
+export type CustomTextAreaInputProps<T extends object> = {
     placeholder?: string;
     spanCol?: number;
     disabled?: boolean;
@@ -16,12 +14,14 @@ export type CustomTextInputProps<T extends object> = {
     suffix?: React.ReactNode;
     label?: React.ReactNode;
     rules?: Rule[];
+    rows?: number;
+    draggable?: boolean;
     value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     autoFocus?: boolean;
 } & FormItemProps<T>;
 
-export const CustomTextInput = <T extends object>({
+export const CustomTextAreaInput = <T extends object>({
     label,
     name,
     rules,
@@ -30,33 +30,31 @@ export const CustomTextInput = <T extends object>({
     classNameInput,
     spanCol,
     classNameForm,
+    rows,
+    draggable,
     defaultValue,
-    prefix,
-    suffix,
-    type = 'text',
     value,
     onChange,
     autoFocus,
-}: CustomTextInputProps<T>) => {
+}: CustomTextAreaInputProps<T>) => {
     return (
         <Form.Item<T>
-            name={name as any}
+            name={name}
             rules={rules}
             label={label && <label className='whitespace-normal w-full'>{label}</label>}
             wrapperCol={{ span: spanCol }}
-            className={clsx('m-0', classNameForm)}
+            className={classNameForm}
         >
-            <Input
+            <TextArea
                 placeholder={placeholder}
                 defaultValue={defaultValue}
-                prefix={prefix}
-                autoFocus={autoFocus}
-                suffix={suffix}
-                type={type}
-                className={`h-[48px] ${classNameInput} `}
-                disabled={disabled}
                 value={value}
                 onChange={onChange}
+                className={`h-full ${classNameInput}`}
+                disabled={disabled}
+                rows={rows}
+                draggable={draggable}
+                autoFocus={autoFocus}
             />
         </Form.Item>
     );

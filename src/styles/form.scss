@@ -6,4 +6,17 @@
     .placeholder-color .ant-select-selection-placeholder {
         color: #313636 !important;
     }
+
+    .overflow-y-auto::-webkit-scrollbar,
+    .overflow-x-auto::-webkit-scrollbar,
+    .overflow-auto::-webkit-scrollbar,
+    .ant-table-content::-webkit-scrollbar {
+        @apply w-1 h-2 bg-primary-400 rounded-[10px];
+    }
+    .overflow-y-auto::-webkit-scrollbar-thumb,
+    .overflow-x-auto::-webkit-scrollbar-thumb,
+    .overflow-auto::-webkit-scrollbar-thumb,
+    .ant-table-content::-webkit-scrollbar-thumb {
+        @apply bg-primary-800 rounded-[10px] border border-primary-800;
+    }
 }

@@ -24,16 +24,16 @@ const Header = () => {
     ];
     return (
         <header className='h-[100px] min-h-[100px] w-full items-center '>
-            <nav className='flex h-full items-center px-[44px] bg-white'>
+            <nav className='flex h-full items-center px-[44px] bg-white-900'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' />
-                    <Button type='link' className='text-darkBlue text-base font-bold '>
+                    <Button type='link' className='text-primary-900 text-base font-bold '>
                         <Dropdown menu={{ items }}>
                             <div className='flex items-center gap-2 font-bold'>
                                 <CatalogIcon
                                     className={clsx({
                                         'h-6 w-6': true,
-                                        'text-darkBlue': true,
+                                        'text-primary-900': true,
                                     })}
                                 />
                                 <span>Danh mục</span>
@@ -41,12 +41,12 @@ const Header = () => {
                             </div>
                         </Dropdown>
                     </Button>
-                    <Button type='link' className='text-darkBlue text-base font-bold '>
+                    <Button type='link' className='text-primary-900 text-base font-bold '>
                         Dành cho người hướng dẫn
                     </Button>
                     <Button
                         type='link'
-                        className='text-darkBlue text-base font-bold'
+                        className='text-primary-900 text-base font-bold'
                         href='/study-method'
                     >
                         Dành cho học viên
@@ -65,7 +65,7 @@ const Header = () => {
                         type='default'
                         size='large'
                         shape='round'
-                        className='bg-lightBlue border text-base font-bold text-white hover:!text-white hover:opacity-85'
+                        className='bg-lightBlue border text-base font-bold text-white-900 hover:!text-white-900 hover:opacity-85'
                     >
                         Đăng ký
                     </Button>
