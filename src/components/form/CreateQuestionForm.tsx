@@ -54,6 +54,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             <Form
                 name='questionForm'
                 onFinish={handleSubmit}
+                form={form}
                 //cancel
 
                 autoComplete='off'
@@ -69,6 +70,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         <Select
                             className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn cấp độ'
+                            onChange={(e) => form.setFieldsValue({ questionLevel: e.target.value })}
                         />
                     </Form.Item>
                     <Form.Item
@@ -83,6 +85,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                         <Select
                             className='h-12 font-medium text-base text-gray-700'
                             placeholder='Chọn lớp'
+                            onChange={(e) => form.setFieldsValue({ class: e.target.value })}
                         />
                     </Form.Item>
                 </Form.Item>

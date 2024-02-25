@@ -39,7 +39,10 @@ export default function MessageForm({ onSubmit }: MessageFormProps) {
                     placeholder='Nhập nội dung tin nhắn'
                     autoFocus
                     suffix={
-                        <div className='cursor-pointer' onClick={() => form.submit()}>
+                        <div
+                            className='cursor-pointer flex items-center'
+                            onClick={() => form.submit()}
+                        >
                             <SendIcon />
                         </div>
                     }
