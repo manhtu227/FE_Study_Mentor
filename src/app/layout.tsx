@@ -1,4 +1,5 @@
 import AntDesignProvider from '@core/provider/AntDesignProvider';
+import { Providers } from '@core/store/provider';
 import '@styles/globals.scss';
 import Layout from '../components/layout/Layout';
 
@@ -7,7 +8,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang='en'>
             <body>
                 <AntDesignProvider>
-                    <Layout>{children}</Layout>
+                    <Providers>
+                        <Layout>{children}</Layout>
+                    </Providers>
                 </AntDesignProvider>
             </body>
         </html>
