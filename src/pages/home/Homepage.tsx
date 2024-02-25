@@ -50,7 +50,7 @@ function Homepage() {
         <div className='w-full h-full bg-[#F3F9FA]'>
             {/* section 1 */}
             <section className='relative mb-[300px]'>
-                <Image src={images.hero1} alt='Hero' className='relative opacity-50' />
+                <Image src={images.hero1} alt='Hero' className='relative opacity-50 max-w-full' />
                 <div className='absolute top-0 left-0 right-0 h-[650px] bg-[#0A2277] opacity-90'>
                     <div className='mb-[52px]'>
                         <h2 className='text-center font-bold text-[50px] max-w-[650px] mx-auto text-white-900'>
