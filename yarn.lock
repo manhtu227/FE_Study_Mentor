@@ -807,7 +807,7 @@ ansi-styles@^6.1.0:
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
-antd@^5.14.2:
+antd@5.14.2:
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.14.2.tgz#3a9ca59f87ca8d016ebdfe649b785952d541287c"
   integrity sha512-ur0oBI9U7hAeON4ZRs1cAF1suIpTR+uj3YliTZacWkiVxNTZYPaaTdnLuAZDRMT9P2IZ007dCQTqxn5t1Z+Dxw==
