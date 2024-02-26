@@ -1,14 +1,32 @@
 'use client';
 
+import { RightOutlined } from '@ant-design/icons';
 import CameraIcon from '@assets/icons/camera';
 import EyeIcon from '@assets/icons/eye';
 import UpgradeIcon from '@assets/icons/upgrade';
 import ProfileForm from '@components/form/ProfileForm';
 import type { GetProp, UploadProps } from 'antd';
-import { Button, Upload, message } from 'antd';
+import { Breadcrumb, Button, Upload, message } from 'antd';
 import { useState } from 'react';
 
 function ProfilePage() {
+    const breadcrumbList = [
+        {
+            title: 'Home',
+            href: '/',
+            className: 'font-bold text-sm !text-primary-800',
+        },
+        {
+            title: 'Dành cho người hướng dẫn',
+            href: '',
+            className: 'font-bold text-sm !text-primary-800',
+        },
+        {
+            title: 'Trang cá nhân',
+            href: '/profile',
+            className: 'font-bold text-sm !text-black',
+        },
+    ];
     const isVerified = true;
     type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -49,7 +67,10 @@ function ProfilePage() {
 
     return (
         <div className='w-full bg-[#F3F9FA]'>
-            <div className='pt-[70px] px-[180px] pb-[100px]'>
+            <div className='px-[180px] pb-[100px]'>
+                <div className='py-6'>
+                    <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} />
+                </div>
                 <div className='flex gap-8 w-full'>
                     <div className='w-1/3'>
                         <div className='p-8 flex items-start gap-4 bg-white-900 rounded-md mb-8'>
