@@ -17,9 +17,11 @@ import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
 import mentorMethod from './mentor-method.png';
+import self from './self.png';
 import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
 import studyMethodBg from './study-method-bg.png';
+import system from './system.png';
 
 const images = {
     aiMethod: aiMethod,
@@ -44,6 +46,8 @@ const images = {
     userFindings: userFindings,
     sidebarChatActive: sidebarChatActive,
     sidebarChatDefault: sidebarChatDefault,
+    system: system,
+    self: self,
 };
 
 export default images;
