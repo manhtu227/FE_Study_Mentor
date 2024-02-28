@@ -1,3 +1,4 @@
+'use client';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { SidebarChatItem } from '@components/chat/SideBarChatItem';
