@@ -26,7 +26,7 @@ function CreateQuestionByFilePage() {
             id: 0,
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 0 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tl-lg rounded-bl-lg justify-center gap-2 `}
                 >
@@ -44,7 +44,7 @@ function CreateQuestionByFilePage() {
             id: 1,
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 1 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
@@ -61,7 +61,7 @@ function CreateQuestionByFilePage() {
         {
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 2 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
@@ -78,7 +78,7 @@ function CreateQuestionByFilePage() {
         {
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 3 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tr-lg rounded-br-lg justify-center gap-2 `}
                 >
