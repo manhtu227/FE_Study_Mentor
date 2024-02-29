@@ -22,3 +22,8 @@ export type AnswerQuestion = {
     contentEditor: string;
     fileContent: any;
 };
+
+export type ReportAnswer = {
+    reportContent: string;
+    fileContent: any;
+};

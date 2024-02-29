@@ -1,111 +1,111 @@
 'use client';
-import CreateQuestionIcon from '@assets/icons/create-question';
-import GraduationIcon from '@assets/icons/graduation';
-import QuestionIcon from '@assets/icons/question';
-import StarIcon from '@assets/icons/star';
-import QuestionByForm from '@components/form/CreateQuestionForm';
-import { Steps, theme } from 'antd';
+import images from '@assets/images';
+import ButtonPrimary from '@components/button/ButtonPrimary';
+import { SidebarChatItem } from '@components/chat/SideBarChatItem';
+import { ChatTitleModel } from '@core/models/chat.model';
+import { Image } from 'antd';
 import { useState } from 'react';
 
+const listDefault: ChatTitleModel[] = [
+    {
+        id: 1,
+        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+    },
+    {
+        id: 2,
+        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+    },
+    {
+        id: 3,
+        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+    },
+    {
+        id: 4,
+        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+    },
+    {
+        id: 5,
+        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
+    },
+];
+
 export default function FindMentorBySystemPage() {
-    const { token } = theme.useToken();
-    const [current, setCurrent] = useState(0);
-
-    const next = () => {
-        setCurrent(current + 1);
-    };
-
-    const prev = () => {
-        setCurrent(current - 1);
-    };
-
-    const handleNextStep = () => next();
-
-    const steps = [
-        {
-            id: 0,
-            title: (
-                <div
-                    className={`h-[60px] w-[333px] ${
-                        current >= 0 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center rounded-tl-lg rounded-bl-lg justify-center gap-2 `}
-                >
-                    <QuestionIcon
-                        className='h-6 w-6'
-                        color={`${current >= 0 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Đặt câu hỏi</span>
-                </div>
-            ),
-            content: <QuestionByForm onNext={handleNextStep} />,
-            icon: <></>,
-        },
-        {
-            id: 1,
-            title: (
-                <div
-                    className={`h-[60px] w-[333px] ${
-                        current >= 1 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center justify-center gap-2 `}
-                >
-                    <GraduationIcon
-                        className='h-6 w-6'
-                        color={`${current >= 1 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Người hướng dẫn</span>
-                </div>
-            ),
-            content: <div className='text-center'>Second-content</div>,
-            icon: <></>,
-        },
-        {
-            title: (
-                <div
-                    className={`h-[60px] w-[333px] ${
-                        current >= 2 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center justify-center gap-2 `}
-                >
-                    <CreateQuestionIcon
-                        className='h-6 w-6'
-                        color={`${current >= 2 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Trò chuyện</span>
-                </div>
-            ),
-            content: <div className='text-center'>Third-content</div>,
-            icon: <></>,
-        },
-        {
-            title: (
-                <div
-                    className={`h-[60px] w-[333px] ${
-                        current >= 3 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center rounded-tr-lg rounded-br-lg justify-center gap-2 `}
-                >
-                    <StarIcon className='h-6 w-6' color={`${current >= 3 ? 'white' : 'black'}`} />
-                    <span className='font-bold text-base'>Đánh giá</span>
-                </div>
-            ),
-            content: <div className='text-center'>Four-content</div>,
-            icon: <></>,
-        },
-    ];
-
-    const items = steps.map((item) => ({ key: item.title, title: item.title, icon: item.icon }));
-    const contentStyle: React.CSSProperties = {
-        lineHeight: '260px',
-        color: token.colorTextTertiary,
-        backgroundColor: 'white',
-        borderRadius: token.borderRadiusLG,
-        border: `1px dashed ${token.colorBorder}`,
-        marginTop: 16,
-    };
-
+    const [activeChat, setActiveChat] = useState<string | number | null>(1);
     return (
         <div>
-            <div className='w-full'>
-                {/* <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} /> */}
-                <Steps current={current} items={items} className='w-full' />
+            <div className='flex items-start w-full gap-8'>
+                <div className='w-[435px]'>
+                    <div className='w-full bg-white-900 rounded-lg'>
+                        <div className='p-6 flex flex-col gap-8'>
+                            <div className='text-black-800 text-lg font-bold flex items-center'>
+                                Câu hỏi hiện có
+                            </div>
+                            <div className='max-h-[368px] overflow-auto'>
+                                <div className='flex flex-col gap-4'>
+                                    {listDefault.map((item) => (
+                                        <SidebarChatItem
+                                            key={item.id}
+                                            active={activeChat === item.id}
+                                            title={item.name}
+                                            onClick={() => {
+                                                setActiveChat(item.id);
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-full bg-white-900 p-8 rounded-md text-center flex flex-col gap-8'>
+                    <div>
+                        <h3 className='text-black-800 font-bold text-lg m-0'>
+                            This is title for questions
+                        </h3>
+                        <p className='text-[16px] leading-6 text-[#838B8F] m-0'>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
+
+                    <div className='flex gap-x-8 justify-between'>
+                        <div className='flex flex-col items-center max-w-[402px] bg-white-900 shadow-lg rounded-lg overflow-hidden'>
+                            <Image
+                                height={200}
+                                preview={false}
+                                src={images.system.src}
+                                className='w-full'
+                            />
+                            <div className='p-8'>
+                                <p className='text-lg m-0 w-full text-black-800 font-bold'>
+                                    Nhờ hệ thống tìm kiếm người hướng dẫn phù hợp
+                                </p>
+                            </div>
+                            <ButtonPrimary
+                                title='Hệ thống tìm kiếm'
+                                className='w-full pt-0 rounded-none'
+                                isRightIcon
+                            />
+                        </div>
+                        <div className='flex flex-col items-center max-w-[402px] bg-white-900 shadow-lg rounded-lg overflow-hidden'>
+                            <Image
+                                preview={false}
+                                src={images.self.src}
+                                className='w-full'
+                                height={200}
+                            />
+                            <div className='px-4 py-8'>
+                                <p className='text-lg m-0 w-full text-black-800 font-bold'>
+                                    Tự tìm kiếm người hướng dẫn theo tiêu chí của bản thân
+                                </p>
+                            </div>
+                            <ButtonPrimary
+                                title='Tự tìm kiếm'
+                                className='w-full pt-0 rounded-none'
+                                isRightIcon
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
