@@ -22,6 +22,7 @@ import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
 import studyMethodBg from './study-method-bg.png';
 import system from './system.png';
+import vector from './vector.png';
 
 const images = {
     aiMethod: aiMethod,
@@ -48,6 +49,7 @@ const images = {
     sidebarChatDefault: sidebarChatDefault,
     system: system,
     self: self,
+    vector: vector,
 };
 
 export default images;
