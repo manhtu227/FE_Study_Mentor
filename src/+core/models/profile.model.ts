@@ -1,4 +1,5 @@
 import { SelectProps } from 'antd';
+import { StaticImageData } from 'next/image';
 
 export type PersonalInformationInput = {
     fullName: string;
@@ -16,4 +17,13 @@ export type EducationInformationInput = {
 
 export type CertificatesInformationInput = {
     certificatesContent: any;
+};
+
+export type Mentor = {
+    id: number;
+    image: StaticImageData;
+    name: string;
+    age: number;
+    rating: number;
+    tags: Array<string>;
 };

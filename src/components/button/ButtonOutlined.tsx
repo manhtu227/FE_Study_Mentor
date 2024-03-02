@@ -1,17 +1,20 @@
-import { RightOutlined } from '@ant-design/icons';
+import { FilterOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, ButtonProps } from 'antd';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
+
 type ButtonOutlinedProps = {
     className?: string;
     title: ReactNode;
     isRightIcon?: boolean;
+    isFilterIcon?: boolean;
 } & ButtonProps;
 
 export default function ButtonOutlined({
     title,
     className,
     isRightIcon,
+    isFilterIcon,
     ...rest
 }: ButtonOutlinedProps) {
     return (
@@ -25,6 +28,7 @@ export default function ButtonOutlined({
         >
             {title}
             {isRightIcon && <RightOutlined />}
+            {isFilterIcon && <FilterOutlined />}
         </Button>
     );
 }
