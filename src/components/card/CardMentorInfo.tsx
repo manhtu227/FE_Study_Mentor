@@ -1,26 +1,31 @@
 import { StarFilled } from '@ant-design/icons';
-import images from '@assets/images';
-import { Image, Tag } from 'antd';
+import { Mentor } from '@core/models/profile.model';
+import { Avatar, Image, Tag } from 'antd';
 
-export function CardMentorInfo() {
+export function CardMentorInfo({ mentor }: { mentor: Mentor }) {
     return (
         <div className='w-full border-solid bg-white-900 border-[1px] rounded-lg border-[#D9D9D9]'>
             <div className='p-4'>
                 <div className='flex items-start gap-4'>
                     <div className='w-[100px] h-[100px]'>
-                        <Image
-                            src={images.charac1.src}
-                            className='object-cover'
-                            width={100}
-                            height={100}
-                            preview={false}
+                        <Avatar
+                            size={100}
+                            icon={
+                                <Image
+                                    alt={'image of question'}
+                                    loading='lazy'
+                                    src={mentor.image.src}
+                                />
+                            }
                         />
                     </div>
 
                     <div className='flex flex-col w-full'>
                         <div className='flex items-center justify-between'>
-                            <span className='text-lg font-bold items-start'>Nguyễn Hưng</span>
-                            <span className='text-sm font-bold text-[#838B8F] '>| Tuổi 23</span>
+                            <span className='text-lg font-bold items-start'>{mentor.name}</span>
+                            <span className='text-sm font-bold text-[#838B8F] '>
+                                | Tuổi {mentor.age}
+                            </span>
                         </div>
 
                         <div className='flex items-center gap-1'>
@@ -30,10 +35,19 @@ export function CardMentorInfo() {
                             <StarFilled className='text-[#f2c94c]' />
                             <StarFilled className='text-[#f2c94c]' />
                         </div>
-                        <div>
-                            <Tag className='p-2 bg-white-900 rounded-md items-center text-sm mt-4 w-[81px]'>
-                                This is tag
-                            </Tag>
+                        <div className='flex mt-[10px] gap-2 flex-wrap'>
+                            {mentor.tags &&
+                                mentor.tags.length > 0 &&
+                                mentor.tags.map((tag) => {
+                                    return (
+                                        <Tag
+                                            className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'
+                                            key={tag}
+                                        >
+                                            {tag}
+                                        </Tag>
+                                    );
+                                })}
                         </div>
                     </div>
                 </div>
