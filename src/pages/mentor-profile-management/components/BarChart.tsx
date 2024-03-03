@@ -18,7 +18,7 @@ export const options = {
     responsive: true,
     plugins: {
         legend: {
-            display: false, // Set to false to hide the legend
+            display: false,
         },
     },
     scales: {
@@ -32,9 +32,8 @@ export const options = {
             grid: {
                 display: false,
             },
-
-            gridLines: {
-                display: false,
+            ticks: {
+                color: '#FFFFFF',
             },
         },
     },
