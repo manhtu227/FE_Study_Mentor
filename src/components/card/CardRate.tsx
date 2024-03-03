@@ -10,7 +10,7 @@ export const CardRate = () => {
             </div>
             <div className='flex items-center gap-4'>
                 <div className='rounded-full bg-primary-600 flex flex-col h-[120px] min-w-[120px] items-center justify-center'>
-                    <span className='font-bold text-white-800 text-10'>32</span>
+                    <span className='font-bold text-white-800 text-[40px]'>32</span>
                     <span className='text-white-800 font-bold text-xs'>Lượt đánh giá</span>
                 </div>
                 <div className='text-sm font-normal text-black-800'>
