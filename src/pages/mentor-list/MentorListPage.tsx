@@ -40,6 +40,7 @@ const items: TabsProps['items'] = [
     {
         key: '2',
         label: 'Đang theo dõi',
+        children: <CardListPage />,
     },
 ];
 export default function MentorListPage() {
