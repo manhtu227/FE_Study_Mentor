@@ -17,6 +17,7 @@ import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
 import mentorMethod from './mentor-method.png';
+import qrImage from './qr-image.png';
 import self from './self.png';
 import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
@@ -50,6 +51,7 @@ const images = {
     system: system,
     self: self,
     vector: vector,
+    qrImage: qrImage,
 };
 
 export default images;
