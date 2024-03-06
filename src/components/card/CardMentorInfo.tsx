@@ -22,7 +22,9 @@ export function CardMentorInfo({ mentor }: { mentor: Mentor }) {
 
                     <div className='flex flex-col w-full'>
                         <div className='flex items-center justify-between'>
-                            <span className='text-lg font-bold items-start'>{mentor.name}</span>
+                            <span className='text-lg font-bold items-start text-black-800'>
+                                {mentor.name}
+                            </span>
                             <span className='text-sm font-bold text-[#838B8F] '>
                                 | Tuổi {mentor.age}
                             </span>
