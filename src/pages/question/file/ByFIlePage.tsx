@@ -6,6 +6,7 @@ import StarIcon from '@assets/icons/star';
 import QuestionByForm from '@components/form/CreateQuestionForm';
 import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
+import ChatMentorPage from '../../chat-mentor/ChatMentorPage';
 import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
 import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
@@ -74,7 +75,7 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Trò chuyện</span>
                 </div>
             ),
-            content: <div className='text-center'>Third-content</div>,
+            content: <ChatMentorPage />,
             icon: <></>,
         },
         {

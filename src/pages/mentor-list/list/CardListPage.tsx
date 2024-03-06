@@ -2,12 +2,13 @@
 
 import images from '@assets/images';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
+import { Mentor } from '@core/models/profile.model';
 import { Col, Row } from 'antd';
 
-const mentors = [
+const mentors: Mentor[] = [
     {
         id: 1,
-        image: images.feedback,
+        image: images.feedback.src,
         name: 'Nguyễn Hưng',
         age: 23,
         rating: 5,
@@ -15,7 +16,7 @@ const mentors = [
     },
     {
         id: 2,
-        image: images.feedback,
+        image: images.feedback.src,
         name: 'Nguyễn Hùng',
         age: 23,
         rating: 5,
@@ -23,7 +24,7 @@ const mentors = [
     },
     {
         id: 3,
-        image: images.feedback,
+        image: images.feedback.src,
         name: 'Nguyễn Hào',
         age: 23,
         rating: 5,
@@ -31,7 +32,7 @@ const mentors = [
     },
     {
         id: 4,
-        image: images.feedback,
+        image: images.feedback.src,
         name: 'Nguyễn Hương',
         age: 23,
         rating: 5,
