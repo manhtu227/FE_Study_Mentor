@@ -6,6 +6,15 @@ import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { Image } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
+const mentor = {
+    id: 1,
+    image: images.feedback,
+    name: 'Nguyễn Hưng',
+    age: 23,
+    rating: 5,
+    tags: ['tag1', 'tag2', 'tag3'],
+};
+
 export default function FindMentorPage() {
     return (
         <div className='relative '>
@@ -86,7 +95,7 @@ export default function FindMentorPage() {
                                 </div>
                                 <div>
                                     <h3 className='text-lg font-bold'>Người hướng dẫn</h3>
-                                    <CardMentorInfo />
+                                    <CardMentorInfo mentor={mentor} />
                                 </div>
 
                                 <ButtonPrimary title='Tham gia' className='h-12' />
