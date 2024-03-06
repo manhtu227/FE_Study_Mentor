@@ -58,7 +58,7 @@ export const data = {
 
 export function BarChart() {
     return (
-        <div className=' bg-white-900 p-4'>
+        <div className=' bg-white-900 p-4 rounded-md'>
             <div className='h-[210px] bar-chart px-4 pt-4'>
                 <Bar options={options} data={data} />
             </div>

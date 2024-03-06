@@ -5,9 +5,10 @@ import DocumentIcon from '@assets/icons/document-icon';
 import GlobeIcon from '@assets/icons/globe-icon';
 import WalletIcon from '@assets/icons/wallet-icon';
 import { CardTitleIcon } from '@components/card/CardTitleIcon';
-import { SideBarMentorProfile } from './components/SideBarMentorPorfile';
 import { AreaChart } from './components/AreaChart';
 import { BarChart } from './components/BarChart';
+import { HistoryQuestion } from './components/HistoryQuestion';
+import { SideBarMentorProfile } from './components/SideBarMentorPorfile';
 
 export default function MentorProfileManagementPage() {
     return (
@@ -44,11 +45,12 @@ export default function MentorProfileManagementPage() {
                             />
                         </div>
                     </div>
-                    <div className='grid grid-cols-2 gap-8 mt-8'>
+                    <div className='grid grid-cols-2 gap-8 my-8'>
                         <BarChart />
                         <AreaChart />
                     </div>
                     {/* <Chat chatList={dataChat} setChatList={handleDataChat} /> */}
+                    <HistoryQuestion />
                 </div>
             </div>
         </div>

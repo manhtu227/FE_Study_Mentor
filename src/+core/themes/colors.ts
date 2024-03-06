@@ -11,6 +11,7 @@ export default {
         700: '#838B8F',
         600: '#D9D9D9',
         500: '#A0AEC0',
+        400: '#718096',
     },
     white: {
         900: '#FFFFFF',
@@ -19,6 +20,12 @@ export default {
     },
     green: {
         900: '#48BB78',
+    },
+    red: {
+        900: '#E5342F',
+    },
+    orange: {
+        900: '#EF8943',
     },
     black: {
         800: '#313636',

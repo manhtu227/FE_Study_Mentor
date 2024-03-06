@@ -67,7 +67,7 @@ export const data = {
 
 export function AreaChart() {
     return (
-        <div className='px-[9.5px] bg-white-900 '>
+        <div className='px-[9.5px] bg-white-900 rounded-md'>
             <div className='flex flex-col mt-[34px] mb-14'>
                 <span className='text-lg font-bold text-black-500'>Doanh thu</span>
                 <span className='text-sm font-bold text-green-900'>
