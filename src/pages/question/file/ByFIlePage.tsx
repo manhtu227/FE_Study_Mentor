@@ -8,6 +8,7 @@ import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
 import ChatMentorPage from '../../chat-mentor/ChatMentorPage';
 import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
+import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
 function CreateQuestionByFilePage() {
     const { token } = theme.useToken();
@@ -88,7 +89,7 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đánh giá</span>
                 </div>
             ),
-            content: <div className='text-center'>Four-content</div>,
+            content: <div className='text-center'><RatingAnswerPage /></div>,
             icon: <></>,
         },
     ];
