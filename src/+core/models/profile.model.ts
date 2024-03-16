@@ -17,3 +17,12 @@ export type EducationInformationInput = {
 export type CertificatesInformationInput = {
     certificatesContent: any;
 };
+
+export type Mentor = {
+    id: number;
+    image: string;
+    name: string;
+    age: number;
+    rating: number;
+    tags: Array<string>;
+};

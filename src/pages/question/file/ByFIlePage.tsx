@@ -6,6 +6,9 @@ import StarIcon from '@assets/icons/star';
 import QuestionByForm from '@components/form/CreateQuestionForm';
 import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
+import ChatMentorPage from '../../chat-mentor/ChatMentorPage';
+import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
+import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
 function CreateQuestionByFilePage() {
     const { token } = theme.useToken();
@@ -55,7 +58,7 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Người hướng dẫn</span>
                 </div>
             ),
-            content: <div className='text-center'>Second-content</div>,
+            content: <FindMentorBySystemPage />,
             icon: <></>,
         },
         {
@@ -72,7 +75,7 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Trò chuyện</span>
                 </div>
             ),
-            content: <div className='text-center'>Third-content</div>,
+            content: <ChatMentorPage />,
             icon: <></>,
         },
         {
@@ -86,16 +89,16 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đánh giá</span>
                 </div>
             ),
-            content: <div className='text-center'>Four-content</div>,
+            content: <div className='text-center'><RatingAnswerPage /></div>,
             icon: <></>,
         },
     ];
 
     const items = steps.map((item) => ({ key: item.title, title: item.title, icon: item.icon }));
     const contentStyle: React.CSSProperties = {
-        lineHeight: '260px',
+        // lineHeight: '260px',
         color: token.colorTextTertiary,
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         borderRadius: token.borderRadiusLG,
         border: `1px dashed ${token.colorBorder}`,
         marginTop: 16,

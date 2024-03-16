@@ -1,33 +1,34 @@
-import { RightOutlined } from '@ant-design/icons';
+import { FilterOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, ButtonProps } from 'antd';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
-type ButtonPrimaryProps = {
+
+type ButtonOutlinedProps = {
     className?: string;
-    title: string | ReactNode;
+    title: ReactNode;
     isRightIcon?: boolean;
-    prefix?: ReactNode;
+    isFilterIcon?: boolean;
 } & ButtonProps;
 
-export default function ButtonPrimary({
+export default function ButtonOutlined({
     title,
     className,
     isRightIcon,
-    prefix,
+    isFilterIcon,
     ...rest
-}: ButtonPrimaryProps) {
+}: ButtonOutlinedProps) {
     return (
         <Button
-            type='primary'
+            type='text'
             className={clsx(
-                'w-full rounded-lg h-[52px] bg-primary-800 text-white-900 font-bold flex justify-center items-center',
+                'w-full rounded-lg h-[52px] border-primary-800 border-solid border-[2px] text-primary-800 font-bold',
                 className,
             )}
             {...rest}
         >
-            {prefix}
             {title}
             {isRightIcon && <RightOutlined />}
+            {isFilterIcon && <FilterOutlined />}
         </Button>
     );
 }
