@@ -1,10 +1,10 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import UploadIconIcon from '@assets/icons/upload';
-import { AnswerQuestion, QuestionInput } from '@core/models/question.model';
+import { AnswerQuestion } from '@core/models/question.model';
 import type { UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { useRef } from 'react';
-import { CustomEditorInput } from './CustomEditorInput';
+import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function AnswerQuestionForm() {
     const [form] = Form.useForm<AnswerQuestion>();
@@ -63,16 +63,16 @@ function AnswerQuestionForm() {
             >
                 {/* Question content */}
                 <Form.Item name='questionContent'>
-                    <CustomEditorInput<QuestionInput>
+                    <CustomEditorInput
                         name='contentEditor'
-                        refEditor={refEditor}
-                        // rules={[{ required: true, message: 'Please input your report content!' }]}
-                        onChange={(value) => {
-                            console.log(refEditor.current.currentContent);
+                        // refEditor={refEditor}
+                        // // rules={[{ required: true, message: 'Please input your report content!' }]}
+                        // onChange={(value) => {
+                        //     console.log(refEditor.current.currentContent);
 
-                            form.setFieldValue('content', value);
-                            form.validateFields(['content']);
-                        }}
+                        //     form.setFieldValue('content', value);
+                        //     form.validateFields(['content']);
+                        // }}
                     />
                     <Form.Item name='fileContent'>
                         <Dragger {...props} ref={refFile}>
