@@ -19,8 +19,8 @@ export type CertificatesInformationInput = {
 };
 
 export type Mentor = {
-    id: number;
-    image: string;
+    id: string;
+    image: string | null;
     name: string;
     age: number;
     rating: number;
