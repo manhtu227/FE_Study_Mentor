@@ -1,7 +1,8 @@
 'use client';
 import { SidebarChatItem } from '@components/chat/SideBarChatItem';
 import { ChatTitleModel } from '@core/models/chat.model';
-import { Pagination, Tabs, TabsProps } from 'antd';
+import { Tabs, TabsProps } from 'antd';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import CardListPage from './list/CardListPage';
 
@@ -28,9 +29,6 @@ const listDefault: ChatTitleModel[] = [
     },
 ];
 
-const onChange = (key: string) => {
-    console.log(key);
-};
 const items: TabsProps['items'] = [
     {
         key: '1',
@@ -45,6 +43,9 @@ const items: TabsProps['items'] = [
 ];
 export default function MentorListPage() {
     const [activeChat, setActiveChat] = useState<string | number | null>(1);
+    const router = useRouter();
+
+    const onChange = (key: string) => {};
 
     return (
         <div>
@@ -77,11 +78,6 @@ export default function MentorListPage() {
                         <Tabs defaultActiveKey='1' items={items} onChange={onChange} />
                     </div>
                     {/* <ButtonOutlined className='max-w-[142px]' title='Tất cả' isFilterIcon /> */}
-                    <Pagination
-                        defaultCurrent={1}
-                        total={50}
-                        className='py-8 flex justify-center'
-                    />
                 </div>
             </div>
         </div>

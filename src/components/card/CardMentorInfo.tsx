@@ -2,22 +2,36 @@ import { StarFilled } from '@ant-design/icons';
 import { Mentor } from '@core/models/profile.model';
 import { Avatar, Image, Tag } from 'antd';
 
-export function CardMentorInfo({ mentor }: { mentor?: Mentor }) {
+export function CardMentorInfo({
+    mentor,
+    isAvatar = true,
+}: {
+    mentor?: Mentor;
+    isAvatar?: boolean;
+}) {
     return (
         <div className='w-full border-solid bg-white-900 border-[1px] rounded-lg border-[#D9D9D9]'>
             <div className='p-4'>
                 <div className='flex items-start gap-4'>
                     <div className='w-[100px] h-[100px]'>
-                        <Avatar
-                            size={100}
-                            icon={
-                                <Image
-                                    alt={'image of question'}
-                                    loading='lazy'
-                                    src={mentor?.image}
-                                />
-                            }
-                        />
+                        {isAvatar ? (
+                            <Avatar
+                                size={100}
+                                icon={
+                                    <Image
+                                        alt={'image of question'}
+                                        loading='lazy'
+                                        src={mentor?.image || ''}
+                                    />
+                                }
+                            />
+                        ) : (
+                            <img
+                                className='object-cover w-[100px] h-[100px] rounded-lg '
+                                src={mentor?.image || ''}
+                                alt='mento'
+                            />
+                        )}
                     </div>
 
                     <div className='flex flex-col w-full'>
@@ -38,18 +52,16 @@ export function CardMentorInfo({ mentor }: { mentor?: Mentor }) {
                             <StarFilled className='text-[#f2c94c]' />
                         </div>
                         <div className='flex mt-[10px] gap-2 flex-wrap'>
-                            {mentor?.tags &&
-                                mentor?.tags.length > 0 &&
-                                mentor?.tags.map((tag) => {
-                                    return (
-                                        <Tag
-                                            className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'
-                                            key={tag}
-                                        >
-                                            {tag}
-                                        </Tag>
-                                    );
-                                })}
+                            {mentor?.tags?.map((tag) => {
+                                return (
+                                    <Tag
+                                        className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'
+                                        key={tag}
+                                    >
+                                        {tag}
+                                    </Tag>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
