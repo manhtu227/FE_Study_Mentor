@@ -4,7 +4,7 @@ import { AnswerQuestion, QuestionInput } from '@core/models/question.model';
 import type { UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { useRef } from 'react';
-import { CustomEditorInput } from './CustomEditorInput';
+import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function AnswerQuestionForm() {
     const [form] = Form.useForm<AnswerQuestion>();
@@ -17,21 +17,15 @@ function AnswerQuestionForm() {
         listType: 'text',
         action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
         onChange(info) {
-            console.log(info);
-
             const { status } = info.file;
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
+
             if (status === 'done') {
                 message.success(`${info.file.name} file uploaded successfully.`);
             } else if (status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
             }
         },
-        onDrop(e) {
-            console.log('Dropped files', e.dataTransfer.files);
-        },
+        onDrop(e) {},
     };
 
     const handleSubmit = (values: AnswerQuestion) => {
@@ -64,15 +58,15 @@ function AnswerQuestionForm() {
                 {/* Question content */}
                 <Form.Item name='questionContent'>
                     <CustomEditorInput<QuestionInput>
-                        name='contentEditor'
-                        refEditor={refEditor}
-                        // rules={[{ required: true, message: 'Please input your report content!' }]}
-                        onChange={(value) => {
-                            console.log(refEditor.current.currentContent);
+                        name='content'
+                        // refEditor={refEditor}
+                        // // rules={[{ required: true, message: 'Please input your report content!' }]}
+                        // onChange={(value) => {
+                        //     console.log(refEditor.current.currentContent);
 
-                            form.setFieldValue('content', value);
-                            form.validateFields(['content']);
-                        }}
+                        //     form.setFieldValue('content', value);
+                        //     form.validateFields(['content']);
+                        // }}
                     />
                     <Form.Item name='fileContent'>
                         <Dragger {...props} ref={refFile}>

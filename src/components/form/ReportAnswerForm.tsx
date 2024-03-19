@@ -5,7 +5,7 @@ import { ReportAnswer } from '@core/models/question.model';
 import type { UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { useRef } from 'react';
-import { CustomEditorInput } from './CustomEditorInput';
+import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function ReportAnswerForm() {
     const [form] = Form.useForm<ReportAnswer>();
