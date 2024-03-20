@@ -1,5 +1,11 @@
 import { api } from '@core/https/http';
-import { GradeResp, LevelResp, QuestionInput } from '@core/models/question.model';
+import {
+    GradeResp,
+    InfoExchangeInput,
+    LevelResp,
+    QuestionInput,
+    RatingReq,
+} from '@core/models/question.model';
 import { objectToFormData } from '@core/parser/form-data.parser';
 import { OptionItem } from '@core/types/option.type';
 import { initKeys } from '@core/utilities/query-key.utility';
@@ -29,4 +35,15 @@ export const createQuestions = (data: QuestionInput) => {
             headers: { 'Content-Type': 'multipart/form-data' },
         },
     );
+};
+
+export const updateRatingApi = async (body: RatingReq, id: string) => {
+    return api.post<void>(`questions/rating`, body);
+};
+
+export const infoDiscusKeys = initKeys('info-discuss-keys');
+export const getInfoDiscussApi = async () => {
+    return api.get<{
+        data: InfoExchangeInput[];
+    }>(`/questions/info-discuss`);
 };

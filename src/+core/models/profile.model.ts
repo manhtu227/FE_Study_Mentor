@@ -19,7 +19,7 @@ export type CertificatesInformationInput = {
     name: string;
 };
 
-export type Mentor = {
+export type MentorType = {
     id: string;
     image: string | null;
     name: string;

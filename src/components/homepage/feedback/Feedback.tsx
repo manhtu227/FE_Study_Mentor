@@ -8,7 +8,6 @@ function Feedback() {
                 <div className='text-lg font-bold text-[#0A2277]'>Tom Smith</div>
                 <div className='text-xs font-bold text-gray-500 mb-4'>Doctor</div>
                 <div className='font-bold text-base'>
-                    {' '}
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                     incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
                 </div>

@@ -3,17 +3,28 @@
 import { RightOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
+import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
-import { Avatar, Divider, Form, Image, Input, Rate } from 'antd';
+import { USER_ID } from '@core/constants/commons.constant';
+import { MentorType } from '@core/models/profile.model';
+import { RatingInput, RatingReq } from '@core/models/question.model';
+import {
+    getInfoDiscussApi,
+    infoDiscusKeys,
+    updateRatingApi,
+} from '@core/services/questions.service';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Avatar, Divider, Form, Image, Input, message, Rate, Spin } from 'antd';
 
-const mentor = {
-    id: 1,
-    image: images.feedback,
+const mentor: MentorType = {
+    id: '1',
+    image: images.feedback.src,
     name: 'Nguyễn Hưng',
     age: 23,
     rating: 5,
     tags: ['tag1'],
 };
+
 const subject = {
     id: 1,
     name: 'Lập trình Javascript',
@@ -22,51 +33,36 @@ const subject = {
     price: '130 Xu',
     teacher: mentor,
 };
+
 export default function RatingAnswerPage() {
+    const [form] = Form.useForm<RatingInput>();
+
+    const mutateCreate = useMutation({
+        mutationFn: (data: RatingReq) => updateRatingApi(data, USER_ID),
+        onSuccess: () => {
+            message.success('Cập nhật thông tin thành công');
+        },
+    });
+
+    const infoDiscussQuery = useQuery({
+        queryKey: infoDiscusKeys.all,
+        queryFn: () => getInfoDiscussApi(),
+        select: (resp) => resp.data.data[0],
+    });
+
+    const handleFinish = (values: RatingInput) => {
+        mutateCreate.mutate({
+            ...values,
+            tutorId: '8d116df8-29f3-40d2-b3c0-9b554c78f59e',
+            answerId: '4d6350fd-5f44-4b52-8ac7-3d03be8e63c4',
+        });
+    };
+
     return (
-        <div>
+        <Spin spinning={mutateCreate.isPending} size='large'>
             <div className='flex items-start w-full gap-8'>
                 <div className='w-[561px]'>
-                    <div className='w-full bg-white-900 rounded-lg text-black-800'>
-                        <div className='p-8'>
-                            <h3 className='font-bold text-lg m-0 mb-8'>Thông tin buổi trao đổi</h3>
-                            <div className='flex flex-col gap-4'>
-                                <div className='flex items-center gap-x-3'>
-                                    <Image preview={false} src={images.clock.src} />
-                                    <h4 className='text-sm text-[#838B8F] font-thin m-0'>
-                                        Thời gian:
-                                    </h4>
-                                    <p className='text-base font-bold m-0'>1 giờ 15 phút </p>
-                                </div>
-                                <div className='flex items-center gap-x-3'>
-                                    <Image preview={false} src={images.anchor.src} />
-                                    <h4 className='text-sm text-[#838B8F] font-thin m-0'>
-                                        Chủ đề:
-                                    </h4>
-                                    <p className='text-base font-bold m-0'>Lập trình </p>
-                                </div>
-                                <div className='flex items-center gap-x-3'>
-                                    <Image preview={false} src={images.layer.src} />
-                                    <h4 className='text-sm text-[#838B8F] font-thin m-0'>
-                                        Lớp / Cấp độ:
-                                    </h4>
-                                    <p className='text-base font-bold m-0'>Đại học </p>
-                                </div>
-                                <div className='flex items-center gap-x-3'>
-                                    <Image preview={false} src={images.cardCredit.src} />
-                                    <h4 className='text-sm text-[#838B8F] font-thin m-0'>
-                                        Thanh toán:
-                                    </h4>
-                                    <p className='text-base font-bold m-0'>Tài khoản ngân hàng </p>
-                                </div>
-                                <div className='flex items-center gap-x-3'>
-                                    <Image preview={false} src={images.cardCredit.src} />
-                                    <h4 className='text-sm text-[#838B8F] font-thin m-0'>Giá:</h4>
-                                    <p className='text-base font-bold m-0'>130 Xu</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <CardInfoExchange data={infoDiscussQuery.data} />
                     <div>
                         <h3 className='flex flex-coltext-lg font-bold text-black-800'>
                             Người hướng dẫn
@@ -98,7 +94,7 @@ export default function RatingAnswerPage() {
                                     <Image
                                         alt={'image of question'}
                                         loading='lazy'
-                                        src={subject.teacher.image.src}
+                                        src={subject.teacher.image || ''}
                                     />
                                 }
                             />
@@ -107,27 +103,41 @@ export default function RatingAnswerPage() {
                             {subject.teacher.name}
                         </h3>
 
-                        <Rate />
-
-                        <Form.Item
-                            name='detail'
-                            // rules={[{ required: true, message: 'Please input!' }]}
-                            className='w-full text-left'
+                        <Form
+                            name='rating'
+                            form={form}
+                            onFinish={handleFinish}
+                            autoComplete='off'
+                            className='w-full'
                         >
+                            <Form.Item<RatingInput>
+                                name='starNumber'
+                                rules={[{ required: true, message: 'please rating' }]}
+                                className='flex  justify-center'
+                            >
+                                <Rate />
+                            </Form.Item>
                             <div className='font-bold text-base mb-2'>Chi tiết</div>
-                            <Input
-                                className='h-[150px] font-medium text-base text-gray-700'
-                                placeholder='Nhập đánh giá chi tiết'
+                            <Form.Item<RatingInput>
+                                name='comment'
+                                rules={[{ required: true, message: 'Please input!' }]}
+                                className='w-full text-left'
+                            >
+                                <Input
+                                    className='h-[150px] font-medium text-base text-gray-700'
+                                    placeholder='Nhập đánh giá chi tiết'
+                                />
+                            </Form.Item>
+                            <ButtonPrimary
+                                title='Gửi đánh giá'
+                                htmlType='submit'
+                                className='w-full pt-0 rounded-lg'
+                                isRightIcon
                             />
-                        </Form.Item>
-                        <ButtonPrimary
-                            title='Gửi đánh giá'
-                            className='w-full pt-0 rounded-lg'
-                            isRightIcon
-                        />
+                        </Form>
                     </div>
                 </div>
             </div>
-        </div>
+        </Spin>
     );
 }

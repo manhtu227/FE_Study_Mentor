@@ -1,12 +1,12 @@
 import { StarFilled } from '@ant-design/icons';
-import { Mentor } from '@core/models/profile.model';
+import { MentorType } from '@core/models/profile.model';
 import { Avatar, Image, Tag } from 'antd';
 
 export function CardMentorInfo({
     mentor,
     isAvatar = true,
 }: {
-    mentor?: Mentor;
+    mentor?: MentorType;
     isAvatar?: boolean;
 }) {
     return (

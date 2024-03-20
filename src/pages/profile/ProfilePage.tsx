@@ -11,6 +11,7 @@ import { Breadcrumb, Button, Form, message, Spin } from 'antd';
 import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
+    const [form] = Form.useForm();
     const breadcrumbList = [
         {
             title: 'Home',
@@ -43,9 +44,7 @@ function ProfilePage() {
     });
 
     const handleSubmitAvatar = (values: any) => {
-        mutateUpdate.mutate({
-            avatar: values,
-        });
+        mutateUpdate.mutate(values);
     };
 
     return (
@@ -58,13 +57,17 @@ function ProfilePage() {
                     <div className='flex gap-8 w-full'>
                         <div className='w-1/3'>
                             <div className='p-8 flex items-start gap-4 bg-white-900 rounded-md mb-8'>
-                                <Form name='personalInformationForm' onFinish={handleSubmitAvatar}>
+                                <Form name='avatar' onFinish={handleSubmitAvatar} form={form}>
                                     <CustomUploadAvatarInput
                                         image={
                                             userQuery.data?.Avatar
                                                 ? `${process.env.NEXT_PUBLIC_BACKEND_API_ENDPOINT}${userQuery.data?.Avatar}`
                                                 : undefined
                                         }
+                                        name='avatar'
+                                        onChange={() => {
+                                            form.submit();
+                                        }}
                                     />
                                 </Form>
 

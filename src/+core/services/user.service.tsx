@@ -33,7 +33,7 @@ export const updateCertificateSectionApi = async (
 };
 
 export const updateAvatarApi = async (data: { avatar: any }, id: string) => {
-    return api.put<void>(`users/${id}/avatar`, objectToFormData(data), {
+    return api.patch<void>(`users/${id}/avatar`, objectToFormData(data), {
         headers: {
             'Content-Type': 'multipart/form-data',
         },

@@ -7,7 +7,6 @@ import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
 import CheckQAPage from '../../check-qa/CheckQAPage';
 import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
-import MentorListPage from '../../mentor-list/MentorListPage';
 import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
 function CreateQuestionByFilePage() {
@@ -41,7 +40,8 @@ function CreateQuestionByFilePage() {
                 </div>
             ),
             // content: <CreateQuestionForm onNext={handleNextStep} />,
-            content: <MentorListPage />,
+            // content: <MentorListPage />,
+            content: <RatingAnswerPage />,
             icon: <></>,
         },
         {
