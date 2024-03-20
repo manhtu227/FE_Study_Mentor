@@ -44,7 +44,6 @@ function ProfilePage() {
     });
 
     const handleSubmitAvatar = (values: any) => {
-        console.log('first');
         mutateUpdate.mutate(values);
     };
 
@@ -67,7 +66,6 @@ function ProfilePage() {
                                         }
                                         name='avatar'
                                         onChange={() => {
-                                            console.log('hhh');
                                             form.submit();
                                         }}
                                     />
