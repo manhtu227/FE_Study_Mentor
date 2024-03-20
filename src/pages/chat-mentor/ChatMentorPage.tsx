@@ -4,13 +4,13 @@ import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { ChatModel, ChatTitleModel } from '@core/models/chat.model';
-import { Mentor } from '@core/models/profile.model';
+import { MentorType } from '@core/models/profile.model';
 import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Chat from './components/Chat';
 import { mockData } from './components/mockData';
 
-const mockDataInfo: Mentor = {
+const mockDataInfo: MentorType = {
     id: 4,
     image: images.feedback.src,
     name: 'Nguyễn Hương',

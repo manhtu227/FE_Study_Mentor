@@ -27,7 +27,7 @@ export default function CardListPage() {
         return { initialPaging, initialFilter };
     }, [searchParams]);
 
-    const { filter, handleFilterChange, handlePageChange } = usePagingFilter<MentorListFilter>({
+    const { filter, handlePageChange } = usePagingFilter<MentorListFilter>({
         initialPaging,
         initialFilter,
     });

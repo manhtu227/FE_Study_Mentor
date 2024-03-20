@@ -27,9 +27,10 @@ const beforeUpload = (file: RcFile) => {
 type CustomUploadAvatarInputProps = {
     image?: string;
     name?: string;
+    onChange?: () => void;
 };
 
-const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) => {
+const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarInputProps) => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
 
@@ -46,6 +47,7 @@ const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) 
 
         if (info.file.status === 'done') {
             getBase64(info.file.originFileObj as RcFile, (url) => {
+                onChange && onChange();
                 setLoading(false);
                 setImageUrl(url);
             });
@@ -53,7 +55,7 @@ const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) 
     };
 
     return (
-        <div className='relative'>
+        <div className='relative h-[100px]'>
             <div>
                 {/* {isVerified ? ( */}
                 <div className='bg-gray-800 text-white-800 text-[10px] px-2 leading-[18px] font-bold absolute top-0 right-0'>
@@ -65,7 +67,7 @@ const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) 
             </div>
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
                 {imageUrl ? <img src={imageUrl} alt='avatar' className='w-full h-full' /> : <></>}
-                <Form.Item name={name}>
+                <Form.Item name={name} className='absolute z-50 right-0 bottom-0 m-0'>
                     <Upload
                         name='avatar'
                         // listType='picture-circle'
@@ -77,7 +79,7 @@ const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) 
                     >
                         <Button
                             className={clsx(
-                                'w-10 h-10 absolute bottom-0 right-0 rounded-full',
+                                'w-10 h-10 rounded-full',
                                 'bg-primary-600 hover:!bg-primary-600 p-0 flex items-center justify-center',
                             )}
                         >

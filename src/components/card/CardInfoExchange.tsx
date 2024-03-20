@@ -1,7 +1,12 @@
 import images from '@assets/images';
+import { InfoExchangeInput } from '@core/models/question.model';
 import { Image } from 'antd';
 
-export function CardInfoExchange() {
+type CardInfoExchangeProps = {
+    data?: InfoExchangeInput;
+};
+
+export function CardInfoExchange({ data }: CardInfoExchangeProps) {
     return (
         <div className='w-full bg-white-900 rounded-lg'>
             <div className='p-6'>
@@ -10,7 +15,7 @@ export function CardInfoExchange() {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.clock.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Thời gian:</h4>
-                        <p className='text-base font-bold m-0'>1 giờ 15 phút </p>
+                        <p className='text-base font-bold m-0'>{data?.answerTime} phút </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.anchor.src} />
@@ -20,7 +25,7 @@ export function CardInfoExchange() {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.layer.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Lớp / Cấp độ:</h4>
-                        <p className='text-base font-bold m-0'>Đại học </p>
+                        <p className='text-base font-bold m-0'>{data?.levelName} </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
@@ -30,7 +35,7 @@ export function CardInfoExchange() {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Giá:</h4>
-                        <p className='text-base font-bold m-0'>130 Xu</p>
+                        <p className='text-base font-bold m-0'>{data?.price} Xu</p>
                     </div>
                 </div>
             </div>
