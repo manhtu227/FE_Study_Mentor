@@ -1,16 +1,19 @@
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
+import { ModalPayment } from '@components/modal/modal-payment';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetGrade } from '@core/hooks/options/useGetGrade';
 import { useGetLevel } from '@core/hooks/options/useGetLevel';
 import { QuestionInput } from '@core/models/question.model';
 import { createQuestions } from '@core/services/questions.service';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Input, message, Select, Spin } from 'antd';
+import { Button, Form, Input, message, Modal, Select, Spin } from 'antd';
 import Link from 'next/link';
+import { useState } from 'react';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const [form] = Form.useForm<QuestionInput>();
+    const [isOpen, setIsOpen] = useState(false);
 
     /* get options api */
     const levelOpts = useGetLevel();
@@ -24,7 +27,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                 type: 'success',
                 content: 'This is a success message',
             });
-            onNext();
+            setIsOpen(true);
         },
     });
 
@@ -35,6 +38,17 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
 
     return (
         <Spin spinning={mutateCreateQuestions.isPending}>
+            <Modal
+                centered
+                okButtonProps={{ style: { display: 'none' } }}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                onCancel={() => setIsOpen(false)}
+                closable={false}
+                open={isOpen}
+                width={1200}
+            >
+                <ModalPayment />
+            </Modal>
             <div className='p-8 bg-white-900'>
                 <div className='w-full font-bold text-lg text-black mb-8'>Nội dung câu hỏi</div>
                 <div className='bg-blue-800 w-full h-[100px] rounded-md mb-8' />
