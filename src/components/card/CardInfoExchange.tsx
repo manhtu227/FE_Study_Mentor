@@ -15,7 +15,7 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.clock.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Thời gian:</h4>
-                        <p className='text-base font-bold m-0'>{data?.answerTime} phút </p>
+                        <p className='text-base font-bold m-0'>{data?.AnswerTime} phút </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.anchor.src} />
@@ -25,7 +25,7 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.layer.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Lớp / Cấp độ:</h4>
-                        <p className='text-base font-bold m-0'>{data?.levelName} </p>
+                        <p className='text-base font-bold m-0'>{data?.LevelName} </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
@@ -35,7 +35,7 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Giá:</h4>
-                        <p className='text-base font-bold m-0'>{data?.price} Xu</p>
+                        <p className='text-base font-bold m-0'>{data?.Price} Xu</p>
                     </div>
                 </div>
             </div>

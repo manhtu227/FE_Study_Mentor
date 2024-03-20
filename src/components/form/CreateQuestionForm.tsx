@@ -48,7 +48,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn cấp độ'
                                 options={levelOpts.data}
                                 onChange={(e) => {
@@ -68,7 +68,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn lớp'
                                 options={gradeOpts}
                             />
@@ -86,7 +86,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn số sao'
                                 options={starOptions}
                             />
@@ -101,7 +101,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Input
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn tiêu chí'
                             />
                         </Form.Item>
@@ -114,7 +114,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                     >
                         <Input
                             type='number'
-                            className='h-12 font-medium text-base text-gray-700'
+                            className='h-12 font-medium text-base'
                             placeholder='Nhập số phút'
                         />
                     </Form.Item>
