@@ -4,7 +4,7 @@ import { useGetLevel } from '@core/hooks/options/useGetLevel';
 import { EducationInformationInput, UserResp } from '@core/models/profile.model';
 import { updateEducationSectionApi } from '@core/services/user.service';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Input, message, Select } from 'antd';
+import { Button, Form, Input, message, Select, Spin } from 'antd';
 import { useEffect } from 'react';
 
 export function EducationInfoSection({ data }: { data?: UserResp }) {
@@ -37,75 +37,77 @@ export function EducationInfoSection({ data }: { data?: UserResp }) {
     };
 
     return (
-        <div className='w-full mb-8'>
-            <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
-                <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
-                Thông tin giáo dục quan tâm
-            </div>
-            <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8' />
-            <Form
-                name='educationInformationForm'
-                form={form}
-                onFinish={handleSubmitEducationInformationForm}
-                autoComplete='off'
-            >
-                {/* Subjects */}
-                <div className='font-bold text-base mb-2'>Môn/ Kỹ năng</div>
-                <Form.Item<EducationInformationInput>
-                    name='skill'
-                    rules={[{ required: true, message: 'Please input!' }]}
-                >
-                    <Input
-                        className='h-12 font-medium text-base'
-                        placeholder='Nhập môn/ kỹ năng quan tâm'
-                    />
-                </Form.Item>
-
-                <div className='flex items-center gap-8 w-full'>
-                    {/* School level */}
-                    <div className='w-1/2'>
-                        <div className='font-bold text-base mb-2'>Cấp học</div>
-                        <Form.Item<EducationInformationInput>
-                            name='levelId'
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Select
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn cấp học'
-                                onChange={(e) => mutateGrades.mutate(e)}
-                                options={levelOpts.data}
-                            />
-                        </Form.Item>
-                    </div>
-
-                    {/* Class */}
-                    <div className='w-1/2'>
-                        <div className='font-bold text-base mb-2'>Lớp</div>
-                        <Form.Item<EducationInformationInput>
-                            name='gradeId'
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Select
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn lớp'
-                                onChange={(e) => form.setFieldsValue({ gradeId: e })}
-                                options={gradeOpts}
-                            />
-                        </Form.Item>
-                    </div>
+        <Spin spinning={mutateUpdate.isPending} size='large'>
+            <div className='w-full mb-8'>
+                <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
+                    <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
+                    Thông tin giáo dục quan tâm
                 </div>
-
-                <Form.Item colon={false}>
-                    <Button
-                        type='primary'
-                        htmlType='submit'
-                        size='large'
-                        className='!h-12 !w-[200px] font-bold text-base bg-primary-800'
+                <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8' />
+                <Form
+                    name='educationInformationForm'
+                    form={form}
+                    onFinish={handleSubmitEducationInformationForm}
+                    autoComplete='off'
+                >
+                    {/* Subjects */}
+                    <div className='font-bold text-base mb-2'>Môn/ Kỹ năng</div>
+                    <Form.Item<EducationInformationInput>
+                        name='skill'
+                        rules={[{ required: true, message: 'Please input!' }]}
                     >
-                        Lưu
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+                        <Input
+                            className='h-12 font-medium text-base'
+                            placeholder='Nhập môn/ kỹ năng quan tâm'
+                        />
+                    </Form.Item>
+
+                    <div className='flex items-center gap-8 w-full'>
+                        {/* School level */}
+                        <div className='w-1/2'>
+                            <div className='font-bold text-base mb-2'>Cấp học</div>
+                            <Form.Item<EducationInformationInput>
+                                name='levelId'
+                                rules={[{ required: true, message: 'Please input!' }]}
+                            >
+                                <Select
+                                    className='h-12 font-medium text-base'
+                                    placeholder='Chọn cấp học'
+                                    onChange={(e) => mutateGrades.mutate(e)}
+                                    options={levelOpts.data}
+                                />
+                            </Form.Item>
+                        </div>
+
+                        {/* Class */}
+                        <div className='w-1/2'>
+                            <div className='font-bold text-base mb-2'>Lớp</div>
+                            <Form.Item<EducationInformationInput>
+                                name='gradeId'
+                                rules={[{ required: true, message: 'Please input!' }]}
+                            >
+                                <Select
+                                    className='h-12 font-medium text-base'
+                                    placeholder='Chọn lớp'
+                                    onChange={(e) => form.setFieldsValue({ gradeId: e })}
+                                    options={gradeOpts}
+                                />
+                            </Form.Item>
+                        </div>
+                    </div>
+
+                    <Form.Item colon={false}>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            size='large'
+                            className='!h-12 !w-[200px] font-bold text-base bg-primary-800'
+                        >
+                            Lưu
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
+        </Spin>
     );
 }

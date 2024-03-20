@@ -5,6 +5,7 @@
 @import './fonts.scss';
 @import './form.scss';
 @import './pack.scss';
+@import 'nprogress/nprogress.css';
 
 body {
     margin: 0;
@@ -26,6 +27,11 @@ body {
 
 :where(.css-dev-only-do-not-override-3mqfnx).ant-steps .ant-steps-item:last-child {
     flex: 1;
+}
+
+#nprogress .bar {
+    height: 4px;
+    @apply bg-primary-800;
 }
 
 .tox-statusbar__path-item,
