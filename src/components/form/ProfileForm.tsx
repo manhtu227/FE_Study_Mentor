@@ -99,7 +99,7 @@ function ProfileForm() {
                                 placeholder='Nhập số điện thoại'
                                 onChange={(e) =>
                                     personalInformationForm.setFieldsValue({
-                                        phoneNumber: e.target.value,
+                                        phone: e.target.value,
                                     })
                                 }
                             />
@@ -137,7 +137,7 @@ function ProfileForm() {
                                 placeholder='Nhập năm sinh'
                                 onChange={(e) =>
                                     personalInformationForm.setFieldsValue({
-                                        yearOfBirth: +e.target.value,
+                                        dateOfBirth: +e.target.value,
                                     })
                                 }
                             />
@@ -203,9 +203,7 @@ function ProfileForm() {
                             mode='tags'
                             className='h-12 font-medium text-base text-gray-700'
                             placeholder='Nhập môn/ kỹ năng quan tâm'
-                            onChange={(e) =>
-                                educationInformationForm.setFieldsValue({ subjects: e })
-                            }
+                            onChange={(e) => educationInformationForm.setFieldsValue({ skill: e })}
                         />
                     </Form.Item>
 
@@ -221,7 +219,7 @@ function ProfileForm() {
                                 className='h-12 font-medium text-base text-gray-700'
                                 placeholder='Chọn cấp học'
                                 onChange={(e) =>
-                                    educationInformationForm.setFieldsValue({ schoolLevel: e })
+                                    educationInformationForm.setFieldsValue({ levelId: e })
                                 }
                                 options={[
                                     { value: 1, label: 'Cấp 1' },
@@ -242,7 +240,7 @@ function ProfileForm() {
                                 className='h-12 font-medium text-base text-gray-700'
                                 placeholder='Chọn lớp'
                                 onChange={(e) =>
-                                    educationInformationForm.setFieldsValue({ class: e })
+                                    educationInformationForm.setFieldsValue({ gradeId: e })
                                 }
                                 options={[
                                     { value: 1, label: '1' },

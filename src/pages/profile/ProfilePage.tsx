@@ -1,13 +1,11 @@
 'use client';
 
 import { RightOutlined } from '@ant-design/icons';
-import CameraIcon from '@assets/icons/camera';
 import EyeIcon from '@assets/icons/eye';
 import UpgradeIcon from '@assets/icons/upgrade';
-import ProfileForm from '@components/form/ProfileForm';
-import type { GetProp, UploadProps } from 'antd';
-import { Breadcrumb, Button, Upload, message } from 'antd';
-import { useState } from 'react';
+import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
+import { Breadcrumb, Button } from 'antd';
+import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
     const breadcrumbList = [
@@ -27,43 +25,6 @@ function ProfilePage() {
             className: 'font-bold text-sm !text-black',
         },
     ];
-    const isVerified = true;
-    type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-    const getBase64 = (img: FileType, callback: (url: string) => void) => {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result as string));
-        reader.readAsDataURL(img);
-    };
-
-    const beforeUpload = (file: FileType) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    };
-
-    const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string>();
-
-    const handleUploadAvatar: UploadProps['onChange'] = (info) => {
-        if (info.file.status === 'uploading') {
-            setLoading(true);
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj as FileType, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-            });
-        }
-    };
 
     return (
         <div className='w-full bg-[#F3F9FA]'>
@@ -74,41 +35,7 @@ function ProfilePage() {
                 <div className='flex gap-8 w-full'>
                     <div className='w-1/3'>
                         <div className='p-8 flex items-start gap-4 bg-white-900 rounded-md mb-8'>
-                            <div className='relative'>
-                                <div>
-                                    {isVerified ? (
-                                        <div className='bg-gray-800 uppercase text-white-800 w-max text-sm px-2 py-1 font-semibold absolute top-0 right-0'>
-                                            VERIFIED
-                                        </div>
-                                    ) : (
-                                        <div className='bg-gray-800 uppercase text-white-800'>
-                                            NO VERIFIED
-                                        </div>
-                                    )}
-                                </div>
-                                <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
-                                    {imageUrl && (
-                                        <img
-                                            src={imageUrl}
-                                            alt='avatar'
-                                            style={{ width: '100%' }}
-                                        />
-                                    )}
-                                </div>
-                                <Upload
-                                    name='avatar'
-                                    listType='picture-circle'
-                                    className='avatar-uploader !w-10 !h-10 absolute bottom-0 right-0'
-                                    showUploadList={false}
-                                    action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-                                    beforeUpload={beforeUpload}
-                                    onChange={handleUploadAvatar}
-                                >
-                                    <Button className='w-10 h-10 rounded-full bg-primary-600 hover:!bg-primary-600 p-0 flex items-center justify-center'>
-                                        <CameraIcon className='h-6 w-6' />
-                                    </Button>
-                                </Upload>
-                            </div>
+                            <CustomUploadAvatarInput />
                             <div>
                                 <div className='text-black-800 text-xl mb-2'>
                                     Chào mừng bạn trở lại
@@ -116,7 +43,10 @@ function ProfilePage() {
                                 <div className='text-black-800 font-bold text-[27px] mb-2'>
                                     Sterling
                                 </div>
-                                {isVerified ? (
+                                <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
+                                    Tài khoản đã xác thực
+                                </Button>
+                                {/* {isVerified ? (
                                     <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
                                         Tài khoản đã xác thực
                                     </Button>
@@ -127,7 +57,7 @@ function ProfilePage() {
                                     >
                                         Tài khoản chưa xác thực
                                     </Button>
-                                )}
+                                )} */}
                                 <Button className='w-full bg-primary-800 hover:!bg-primary-800 rounded-full text-lg hover:opacity-90 hover:!text-white-900 font-semibold h-12 text-white-900 mt-2'>
                                     <UpgradeIcon className='mr-2' />
                                     Nâng cấp tài khoản
@@ -161,9 +91,7 @@ function ProfilePage() {
                             </Button>
                         </div>
                     </div>
-                    <div className='w-2/3 p-8 bg-white-900'>
-                        <ProfileForm />
-                    </div>
+                    <ProfileForm />
                 </div>
             </div>
         </div>

@@ -1,19 +1,19 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import CameraIcon from '@assets/icons/camera';
-import type { GetProp, UploadProps } from 'antd';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
 import { Button, Upload, message } from 'antd';
+import { RcFile, UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: FileType) => {
+const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
@@ -29,28 +29,20 @@ const CustomUploadAvatarInput: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
 
-    const handleChange: UploadProps['onChange'] = (info) => {
+    /* Handler */
+    const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
+
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj as FileType, (url) => {
+            getBase64(info.file.originFileObj as RcFile, (url) => {
                 setLoading(false);
                 setImageUrl(url);
             });
         }
     };
-
-    const uploadButton = (
-        <button className='border-0 bg-none' type='button'>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div className='mt-2'>Upload</div>
-        </button>
-    );
-
-    console.log(imageUrl);
 
     return (
         <div className='relative'>
