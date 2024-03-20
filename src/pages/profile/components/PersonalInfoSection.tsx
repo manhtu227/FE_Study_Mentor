@@ -50,10 +50,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                     name='fullName'
                     rules={[{ required: true, message: 'Please input!' }]}
                 >
-                    <Input
-                        className='h-12 font-medium text-base text-gray-700'
-                        placeholder='Nhập họ và tên'
-                    />
+                    <Input className='h-12 font-medium text-base' placeholder='Nhập họ và tên' />
                 </Form.Item>
 
                 <div className='flex items-center gap-8 w-full'>
@@ -65,7 +62,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Input
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Nhập số điện thoại'
                             />
                         </Form.Item>
@@ -79,7 +76,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Input
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Nhập email'
                             />
                         </Form.Item>
@@ -95,7 +92,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <DatePicker
-                                className='h-12 font-medium text-base text-gray-700 w-full'
+                                className='h-12 font-medium text-base w-full'
                                 placeholder='Nhập năm sinh'
                                 picker='year'
                             />
@@ -110,7 +107,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn giới tính'
                                 onChange={(e) => form.setFieldsValue({ gender: e })}
                                 options={[

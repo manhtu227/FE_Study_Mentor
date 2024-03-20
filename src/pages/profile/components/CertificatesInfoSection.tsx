@@ -1,12 +1,33 @@
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
+import { USER_ID } from '@core/constants/commons.constant';
 import { CertificatesInformationInput, UserResp } from '@core/models/profile.model';
-import { Button, Form, Input } from 'antd';
+import { updateCertificateSectionApi } from '@core/services/user.service';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Form, Input, message } from 'antd';
+import { useEffect } from 'react';
 
 export function CertificatesInfoSection({ data }: { data?: UserResp }) {
-    const [certificatesInformationForm] = Form.useForm<CertificatesInformationInput>();
+    const [form] = Form.useForm<CertificatesInformationInput>();
+
+    const mutateUpdate = useMutation({
+        mutationFn: (data: CertificatesInformationInput) =>
+            updateCertificateSectionApi(data, USER_ID),
+        onSuccess: () => {
+            message.success('Cập nhật thông tin thành công');
+        },
+    });
+
+    useEffect(() => {
+        if (data) {
+            form.setFieldsValue({
+                name: data.CertificateName,
+                certificateFile: data.CertificateImageUrl,
+            });
+        }
+    }, [data]);
 
     const handleSubmitCertificatesInformationForm = (values: CertificatesInformationInput) => {
-        console.log(values);
+        mutateUpdate.mutate(values);
     };
 
     return (
@@ -18,7 +39,7 @@ export function CertificatesInfoSection({ data }: { data?: UserResp }) {
             <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8' />
             <Form
                 name='certificatesInformationForm'
-                form={certificatesInformationForm}
+                form={form}
                 onFinish={handleSubmitCertificatesInformationForm}
                 //cancel
 
@@ -26,15 +47,15 @@ export function CertificatesInfoSection({ data }: { data?: UserResp }) {
             >
                 <div className='font-bold text-base mb-2'>Tên chứng chỉ</div>
                 <Form.Item<CertificatesInformationInput>
-                    name='fullName'
+                    name='name'
                     rules={[{ required: true, message: 'Please input!' }]}
                 >
                     <Input
-                        className='h-12 font-medium text-base text-gray-700'
+                        className='h-12 font-medium text-base'
                         placeholder='Nhập tên chứng chỉ'
                     />
                 </Form.Item>
-                <CustomDragDropFile<CertificatesInformationInput> name='certificatesContent' />
+                <CustomDragDropFile<CertificatesInformationInput> name='certificateFile' />
                 <Form.Item colon={false}>
                     <Button
                         type='primary'

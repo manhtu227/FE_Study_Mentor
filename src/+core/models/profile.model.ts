@@ -15,8 +15,8 @@ export type EducationInformationInput = {
 };
 
 export type CertificatesInformationInput = {
-    certificatesContent: any;
-    fullName: string;
+    certificateFile: any;
+    name: string;
 };
 
 export type Mentor = {
@@ -49,27 +49,6 @@ export type UserResp = {
     GradeName: string;
     Order: number;
     CertificateImageUrl: string;
-
-    /*
-     "Id": "8d116df8-29f3-40d2-b3c0-9b554c78f59e",
-        "Email": "daniel@example.com",
-        "Gender": 1,
-        "Avatar": "uploads\\54153446-27e5-4111-8bc7-7778c645da54.jpg",
-        "Skill": "khong cos",
-        "FullName": "Jacky",
-        "Role": 1,
-        "Phone": "07062512432",
-        "DateOfBirth": "1989-12-31T03:00:00.000Z",
-        "IsActive": true,
-        "LevelId": "fa8b179e-8a35-4683-826b-21a1050d3061",
-        "GradeId": "8d116df8-29f3-40d2-b3c0-9b554c78f59e",
-        "AverageRate": 0,
-        "LevelName": "Cấp 2",
-        "Description": null,
-        "CreatedAt": null,
-        "UpdatedAt": null,
-        "GradeName": "Lớp 1",
-        "Order": 1,
-        "CertificateImageUrl": "uploads\\f5b70f16-38a9-4b4e-8e39-719b691d51f6.csv"
-    */
+    CertificateName: string;
+    CertificateFileName: string;
 };

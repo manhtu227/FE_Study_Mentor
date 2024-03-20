@@ -48,7 +48,7 @@ function ProfileForm() {
 
     const handleSubmitCertificatesInformationForm = (values: CertificatesInformationInput) => {
         if (refFile.current) {
-            values.certificatesContent = refFile.current.fileList;
+            values.certificateFile = refFile.current.fileList;
         }
 
         console.log(values);

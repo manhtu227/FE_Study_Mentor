@@ -56,7 +56,7 @@ export function EducationInfoSection({ data }: { data?: UserResp }) {
                     rules={[{ required: true, message: 'Please input!' }]}
                 >
                     <Input
-                        className='h-12 font-medium text-base text-gray-700'
+                        className='h-12 font-medium text-base'
                         placeholder='Nhập môn/ kỹ năng quan tâm'
                     />
                 </Form.Item>
@@ -70,7 +70,7 @@ export function EducationInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn cấp học'
                                 onChange={(e) => mutateGrades.mutate(e)}
                                 options={levelOpts.data}
@@ -86,7 +86,7 @@ export function EducationInfoSection({ data }: { data?: UserResp }) {
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
                             <Select
-                                className='h-12 font-medium text-base text-gray-700'
+                                className='h-12 font-medium text-base'
                                 placeholder='Chọn lớp'
                                 onChange={(e) => form.setFieldsValue({ gradeId: e })}
                                 options={gradeOpts}
