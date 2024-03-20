@@ -4,6 +4,7 @@ import aiMethod from './ai-method.png';
 import anchor from './anchor.png';
 import clock from './clock-3.png';
 import cardCredit from './credit-card.png';
+import credit from './credit.png';
 import feedback from './feedback.png';
 import fileMethod from './file-method.png';
 import frame from './frame.png';
@@ -17,6 +18,8 @@ import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
 import mentorMethod from './mentor-method.png';
+import momo from './momo.png';
+import napas from './napas.png';
 import qrImage from './qr-image.png';
 import self from './self.png';
 import sidebarChatActive from './sidebar-chat-active.png';
@@ -24,6 +27,7 @@ import sidebarChatDefault from './sidebar-chat-default.png';
 import studyMethodBg from './study-method-bg.png';
 import system from './system.png';
 import vector from './vector.png';
+import zalo from './zalo.png';
 
 const images = {
     aiMethod: aiMethod,
@@ -52,6 +56,10 @@ const images = {
     self: self,
     vector: vector,
     qrImage: qrImage,
+    zalo: zalo,
+    momo: momo,
+    napas: napas,
+    credit: credit,
 };
 
 export default images;
