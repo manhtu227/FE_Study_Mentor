@@ -1,19 +1,19 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import CameraIcon from '@assets/icons/camera';
-import type { GetProp, UploadProps } from 'antd';
-import { Button, Upload, message } from 'antd';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
+import { Button, Form, Upload, message } from 'antd';
+import { RcFile, UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: FileType) => {
+const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
@@ -24,33 +24,33 @@ const beforeUpload = (file: FileType) => {
     }
     return isJpgOrPng && isLt2M;
 };
+type CustomUploadAvatarInputProps = {
+    image?: string;
+    name?: string;
+};
 
-const CustomUploadAvatarInput: React.FC = () => {
+const CustomUploadAvatarInput = ({ image, name }: CustomUploadAvatarInputProps) => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
 
-    const handleChange: UploadProps['onChange'] = (info) => {
+    useEffect(() => {
+        image && setImageUrl(image);
+    }, [image]);
+
+    /* Handler */
+    const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
             return;
         }
+
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj as FileType, (url) => {
+            getBase64(info.file.originFileObj as RcFile, (url) => {
                 setLoading(false);
                 setImageUrl(url);
             });
         }
     };
-
-    const uploadButton = (
-        <button className='border-0 bg-none' type='button'>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div className='mt-2'>Upload</div>
-        </button>
-    );
-
-    console.log(imageUrl);
 
     return (
         <div className='relative'>
@@ -65,24 +65,26 @@ const CustomUploadAvatarInput: React.FC = () => {
             </div>
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
                 {imageUrl ? <img src={imageUrl} alt='avatar' className='w-full h-full' /> : <></>}
-                <Upload
-                    name='avatar'
-                    // listType='picture-circle'
-                    //  className='h-full w-full'
-                    showUploadList={false}
-                    action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-                    beforeUpload={beforeUpload}
-                    onChange={handleChange}
-                >
-                    <Button
-                        className={clsx(
-                            'w-10 h-10 absolute bottom-0 right-0 rounded-full',
-                            'bg-primary-600 hover:!bg-primary-600 p-0 flex items-center justify-center',
-                        )}
+                <Form.Item name={name}>
+                    <Upload
+                        name='avatar'
+                        // listType='picture-circle'
+                        //  className='h-full w-full'
+                        showUploadList={false}
+                        action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
                     >
-                        <CameraIcon className='h-6 w-6' />
-                    </Button>
-                </Upload>
+                        <Button
+                            className={clsx(
+                                'w-10 h-10 absolute bottom-0 right-0 rounded-full',
+                                'bg-primary-600 hover:!bg-primary-600 p-0 flex items-center justify-center',
+                            )}
+                        >
+                            <CameraIcon className='h-6 w-6' />
+                        </Button>
+                    </Upload>
+                </Form.Item>
             </div>
         </div>
     );
