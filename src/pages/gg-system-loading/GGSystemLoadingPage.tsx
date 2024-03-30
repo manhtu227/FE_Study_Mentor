@@ -3,6 +3,7 @@ import images from '@assets/images';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { Image, Progress, ProgressProps } from 'antd';
+import { useRouter } from 'next/navigation';
 
 const twoColors: ProgressProps['strokeColor'] = {
     '0%': '#108ee9',
@@ -10,6 +11,11 @@ const twoColors: ProgressProps['strokeColor'] = {
 };
 
 export default function GGSystemLoadingPage() {
+    const router = useRouter();
+
+    const handleClickByCancel = () => {
+        router.back();
+    };
     return (
         <div className='relative '>
             <div className='absolute top-0'>
@@ -28,7 +34,7 @@ export default function GGSystemLoadingPage() {
                             Vui lòng chờ một lát nhé
                         </div>
                         <div className='flex gap-8 max-w-[547px]'>
-                            <ButtonOutlined title='Hủy tìm kiếm' />
+                            <ButtonOutlined title='Hủy tìm kiếm' onClick={handleClickByCancel} />
                             <ButtonPrimary
                                 title='Tự tìm kiếm người hướng dẫn'
                                 className='w-full pt-0 rounded-lg'
