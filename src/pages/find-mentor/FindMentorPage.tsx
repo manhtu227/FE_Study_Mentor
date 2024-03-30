@@ -3,18 +3,25 @@ import { CopyOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { Image } from 'antd';
+import { usePathname, useRouter } from 'next/navigation';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-const mentor = {
-    id: 1,
-    image: images.feedback,
-    name: 'Nguyễn Hưng',
-    age: 23,
-    rating: 5,
-    tags: ['tag1', 'tag2', 'tag3'],
-};
+// const mentor = {
+//     id: 1,
+//     image: images.feedback,
+//     name: 'Nguyễn Hưng',
+//     age: 23,
+//     rating: 5,
+//     tags: ['tag1', 'tag2', 'tag3'],
+// };
 
 export default function FindMentorPage() {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleClickBySystem = () => {
+        router.push(`${pathname}/system/gg`);
+    };
     return (
         <div className='relative '>
             <div className='absolute top-0'>
@@ -125,6 +132,7 @@ export default function FindMentorPage() {
                                         title='Hệ thống tìm kiếm'
                                         className='max-w-60'
                                         isRightIcon
+                                        onClick={handleClickBySystem}
                                     />
                                 </div>
                             </div>
