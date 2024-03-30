@@ -1,8 +1,7 @@
-import React from 'react';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { Input, Button, Image, Space } from 'antd';
-import DropDownField from '../../components/drop-down-fied/DropDownField';
 import images from '@assets/images';
+import CustomSelectInput from '@components/form-input/CustomSelectInput';
+import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import { Button } from 'antd';
 import Link from 'next/link';
 
 export default function ModalGGMeet() {
@@ -19,39 +18,29 @@ export default function ModalGGMeet() {
                                 <p className='text-[16px] leading-6 font-bold mb-2 text-gray-900 dark:text-white'>
                                     Thời gian giải đáp
                                 </p>
-                                <Input
-                                    className=' shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light'
-                                    placeholder='Nhập số phút'
-                                    required
-                                />
+                                <CustomTextInput placeholder='Nhập số phút' />
                             </div>
                             <div className='mb-5'>
                                 <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
                                     Cấp độ câu hỏi
                                 </p>
-                                <DropDownField
-                                    className='px-3 py-4 flex items-center w-[530px] h-[41.6px] text-[#838B8F]'
-                                    title='Chọn cấp độ'
-                                />
+                                <CustomSelectInput placeholder='Chọn cấp độ' optionsSelect={[]} />
                             </div>
                             <div className='mb-5'>
                                 <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
                                     Lớp
                                 </p>
-                                <DropDownField
-                                    className='px-3 py-4 flex items-center justify-between w-[530px] h-[41.6px] text-[#838B8F]'
-                                    title='Chọn lớp'
+                                <CustomSelectInput
+                                    classNameForm=' w-[530px]'
+                                    placeholder='Chọn lớ'
+                                    optionsSelect={[]}
                                 />
                             </div>
                             <div className='mb-5'>
                                 <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
                                     Thời gian
                                 </p>
-                                <Input
-                                    className=' shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light'
-                                    placeholder='Nhập số phút'
-                                    required
-                                />
+                                <CustomTextInput placeholder='Nhập số phút' />
                             </div>
                         </div>
                     </div>
@@ -60,7 +49,7 @@ export default function ModalGGMeet() {
                     </Button>
                 </form>
                 <div className='float-right mt-24 '>
-                    <img src={images.gg.src} />
+                    <img src={images.gg.src} alt='' />
                 </div>
             </div>
             <div className='text-center text-[14px] leading-[21px] '>
