@@ -2,7 +2,6 @@
 'use client';
 import { RightOutlined } from '@ant-design/icons';
 import DocumentIcon from '@assets/icons/document-icon';
-import GlobeIcon from '@assets/icons/globe-icon';
 import WalletIcon from '@assets/icons/wallet-icon';
 import { CardTitleIcon } from '@components/card/CardTitleIcon';
 import { AreaChart } from './components/AreaChart';
@@ -36,12 +35,6 @@ export default function MentorProfileManagementPage() {
                                 value='120'
                                 percent='+55%'
                                 icon={<DocumentIcon />}
-                            />
-                            <CardTitleIcon
-                                title='Thời gian truy cập'
-                                value='32 giờ'
-                                percent='+55%'
-                                icon={<GlobeIcon />}
                             />
                         </div>
                     </div>

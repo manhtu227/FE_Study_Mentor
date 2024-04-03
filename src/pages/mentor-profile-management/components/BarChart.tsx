@@ -26,7 +26,9 @@ export const options = {
             grid: {
                 display: false,
             },
-            display: false,
+            ticks: {
+                color: '#FFFFFF',
+            },
         },
         y: {
             grid: {
@@ -39,15 +41,31 @@ export const options = {
     },
 };
 
-const labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+const generateRandomData = () => {
+    return daysOfWeek.map(() => faker.datatype.number({ min: 0, max: 1000 }));
+};
+
+const currentWeekData = generateRandomData(); // Dữ liệu của tuần hiện tại
+const previousWeekData = generateRandomData(); // Dữ liệu của tuần trước
 
 export const data = {
-    labels,
+    labels: daysOfWeek, // Sử dụng các ngày trong tuần làm nhãn trục Ox
     datasets: [
         {
-            label: 'Dataset 1',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+            label: 'Tuần này',
+            data: currentWeekData,
             backgroundColor: '#FFFFFF',
+            borderRadius: 500,
+            borderSkipped: false,
+            width: 10,
+            barPercentage: 0.4,
+        },
+        {
+            label: 'Tuần trước',
+            data: previousWeekData,
+            backgroundColor: '#FF0000', // Màu của dataset tuần trước (ví dụ: đỏ)
             borderRadius: 500,
             borderSkipped: false,
             width: 10,

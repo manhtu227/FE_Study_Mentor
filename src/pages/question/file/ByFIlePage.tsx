@@ -3,10 +3,12 @@ import CreateQuestionIcon from '@assets/icons/create-question';
 import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
-import QuestionByForm from '@components/form/CreateQuestionForm';
+import CreateQuestionForm from '@components/form/CreateQuestionForm';
 import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
+import CheckQAPage from '../../check-qa/CheckQAPage';
 import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
+import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
 function CreateQuestionByFilePage() {
     const { token } = theme.useToken();
@@ -38,7 +40,9 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đặt câu hỏi</span>
                 </div>
             ),
-            content: <QuestionByForm onNext={handleNextStep} />,
+            content: <CreateQuestionForm onNext={handleNextStep} />,
+            // content: <MentorListPage />,
+            // content: <RatingAnswerPage />,
             icon: <></>,
         },
         {
@@ -73,7 +77,7 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Trò chuyện</span>
                 </div>
             ),
-            content: <div className='text-center'>Third-content</div>,
+            content: <CheckQAPage />,
             icon: <></>,
         },
         {
@@ -87,7 +91,11 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đánh giá</span>
                 </div>
             ),
-            content: <div className='text-center'>Four-content</div>,
+            content: (
+                <div className='text-center'>
+                    <RatingAnswerPage />
+                </div>
+            ),
             icon: <></>,
         },
     ];

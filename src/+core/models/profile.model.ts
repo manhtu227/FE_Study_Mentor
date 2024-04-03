@@ -1,29 +1,54 @@
-import { SelectProps } from 'antd';
-import { StaticImageData } from 'next/image';
+import { Dayjs } from 'dayjs';
 
 export type PersonalInformationInput = {
     fullName: string;
-    phoneNumber: string;
+    phone: string;
     email: string;
-    yearOfBirth: number;
+    dateOfBirth: Dayjs;
     gender: number;
 };
 
 export type EducationInformationInput = {
-    subjects: SelectProps;
-    schoolLevel: number;
-    class: number;
+    skill: string;
+    levelId: string;
+    gradeId: string;
 };
 
 export type CertificatesInformationInput = {
-    certificatesContent: any;
+    certificateFile: any;
+    name: string;
 };
 
-export type Mentor = {
-    id: number;
-    image: StaticImageData;
+export type MentorType = {
+    id: string;
+    image: string | null;
     name: string;
     age: number;
     rating: number;
     tags: Array<string>;
+};
+
+export type UserResp = {
+    Id: string;
+    Email: string;
+    Gender: number;
+    Avatar: string;
+    Skill: string;
+    LevelId: string;
+    FullName: string;
+    Role: number;
+    Phone: string;
+    DateOfBirth: string;
+    IsActive: boolean;
+    GradeId: string;
+    AverageRate: number;
+    LevelName: string;
+    Description: string | null;
+    CreatedAt: string | null;
+    UpdatedAt: string | null;
+    GradeName: string;
+    Order: number;
+    CertificateImageUrl: string;
+    CertificateName: string;
+    CertificateFileName: string;
 };
