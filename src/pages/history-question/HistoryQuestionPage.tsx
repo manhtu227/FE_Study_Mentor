@@ -11,9 +11,9 @@ export default function HistoryQuestionPage() {
     return (
         <div className='pack-layout pb-16 px-4'>
             <div className='h-[69px] flex items-center gap-4 text-sm font-bold text-primary-800'>
-                <span>Người hướng dẫn</span>
+                <span>Học viên</span>
                 <RightOutlined />
-                <span>Quản lý và thống kê doanh thu</span>
+                <span>Quản lý và thống kê</span>
             </div>
             <div className='flex items-start w-full gap-8'>
                 <div className='w-[435px]'>
@@ -23,21 +23,21 @@ export default function HistoryQuestionPage() {
                     <div className='mb-8'>
                         <div className='flex gap-4 justify-between'>
                             <CardTitleIcon
-                                title='Doanh thu'
+                                title='Số tiền đã thanh toán'
                                 value='4.500 Xu'
-                                percent='+55%'
+                                percent='0'
                                 icon={<WalletIcon />}
                             />
                             <CardTitleIcon
-                                title='Số câu trả lời'
+                                title='Số câu hỏi đã hỏi'
                                 value='120'
-                                percent='+55%'
+                                percent='0'
                                 icon={<DocumentIcon />}
                             />
                             <CardTitleIcon
-                                title='Thời gian truy cập'
-                                value='32 giờ'
-                                percent='+55%'
+                                title='Số câu hỏi được trả lời'
+                                value='32'
+                                percent='0'
                                 icon={<GlobeIcon />}
                             />
                         </div>
