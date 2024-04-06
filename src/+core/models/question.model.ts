@@ -56,9 +56,9 @@ export type GradeResp = {
 };
 
 export type InfoExchangeInput = {
-    price: string;
-    answerTime: string;
-    subject: string;
-    levelName: string;
+    Price: string;
+    AnswerTime: string;
+    Subject: string;
+    LevelName: string;
     payment: string;
 };

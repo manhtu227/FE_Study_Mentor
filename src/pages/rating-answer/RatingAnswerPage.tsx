@@ -46,7 +46,10 @@ export default function RatingAnswerPage() {
 
     const infoDiscussQuery = useQuery({
         queryKey: infoDiscusKeys.all,
-        queryFn: () => getInfoDiscussApi(),
+        queryFn: () =>
+            getInfoDiscussApi({
+                questionId: '65974321-27ff-47f1-8513-8696930c76f5',
+            }),
         select: (resp) => resp.data.data[0],
     });
 

@@ -1,15 +1,13 @@
-/* eslint-disable unused-imports/no-unused-imports */
 'use client';
 import { RightOutlined } from '@ant-design/icons';
 import DocumentIcon from '@assets/icons/document-icon';
+import GlobeIcon from '@assets/icons/globe-icon';
 import WalletIcon from '@assets/icons/wallet-icon';
 import { CardTitleIcon } from '@components/card/CardTitleIcon';
-import { AreaChart } from './components/AreaChart';
-import { BarChart } from './components/BarChart';
-import { HistoryQuestion } from './components/HistoryQuestion';
+import { HistoryPayment } from './components/HistoryPayment';
 import { SideBarMentorProfile } from './components/SideBarMentorPorfile';
 
-export default function MentorProfileManagementPage() {
+export default function HistoryPaymentPage() {
     return (
         <div className='pack-layout pb-16 px-4'>
             <div className='h-[69px] flex items-center gap-4 text-sm font-bold text-primary-800'>
@@ -22,7 +20,7 @@ export default function MentorProfileManagementPage() {
                     <SideBarMentorProfile />
                 </div>
                 <div className='min-w-[500px] flex-grow'>
-                    <div>
+                    <div className='mb-8'>
                         <div className='flex gap-4 justify-between'>
                             <CardTitleIcon
                                 title='Doanh thu'
@@ -36,14 +34,15 @@ export default function MentorProfileManagementPage() {
                                 percent='+55%'
                                 icon={<DocumentIcon />}
                             />
+                            <CardTitleIcon
+                                title='Thời gian truy cập'
+                                value='32 giờ'
+                                percent='+55%'
+                                icon={<GlobeIcon />}
+                            />
                         </div>
                     </div>
-                    <div className='grid grid-cols-2 gap-8 my-8'>
-                        <BarChart />
-                        <AreaChart />
-                    </div>
-                    {/* <Chat chatList={dataChat} setChatList={handleDataChat} /> */}
-                    <HistoryQuestion />
+                    <HistoryPayment />
                 </div>
             </div>
         </div>

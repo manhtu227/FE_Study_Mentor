@@ -2,20 +2,26 @@
 import { CopyOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { Image } from 'antd';
+import { usePathname, useRouter } from 'next/navigation';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-const mentor = {
-    id: 1,
-    image: images.feedback,
-    name: 'Nguyễn Hưng',
-    age: 23,
-    rating: 5,
-    tags: ['tag1', 'tag2', 'tag3'],
-};
+// const mentor = {
+//     id: 1,
+//     image: images.feedback,
+//     name: 'Nguyễn Hưng',
+//     age: 23,
+//     rating: 5,
+//     tags: ['tag1', 'tag2', 'tag3'],
+// };
 
 export default function FindMentorPage() {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleClickBySystem = () => {
+        router.push(`${pathname}/system/gg`);
+    };
     return (
         <div className='relative '>
             <div className='absolute top-0'>
@@ -93,12 +99,12 @@ export default function FindMentorPage() {
                                         </CopyToClipboard>
                                     </div>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <h3 className='text-lg font-bold'>Người hướng dẫn</h3>
                                     <CardMentorInfo mentor={mentor} />
                                 </div>
 
-                                <ButtonPrimary title='Tham gia' className='h-12' />
+                                <ButtonPrimary title='Tham gia' className='h-12' /> */}
                             </div>
                         </div>
                     </div>
@@ -118,7 +124,7 @@ export default function FindMentorPage() {
                                     src={images.systemFindings.src}
                                     className='w-full'
                                 />
-                                <div className='px-4 pb-4'>
+                                <div className='px-4 pb-4 flex flex-col items-center justify-center'>
                                     <p className='text-lg m-0 w-full py-6'>
                                         Nhờ hệ thống tìm kiếm người hướng dẫn phù hợp
                                     </p>
@@ -126,6 +132,7 @@ export default function FindMentorPage() {
                                         title='Hệ thống tìm kiếm'
                                         className='max-w-60'
                                         isRightIcon
+                                        onClick={handleClickBySystem}
                                     />
                                 </div>
                             </div>
@@ -136,7 +143,7 @@ export default function FindMentorPage() {
                                     className='w-full'
                                     height={200}
                                 />
-                                <div className='px-4 pb-4'>
+                                <div className='px-4 pb-4 flex flex-col items-center justify-center'>
                                     <p className='text-lg m-0 w-full py-6'>
                                         Tự tìm kiếm người hướng dẫn theo tiêu chí của mình
                                     </p>

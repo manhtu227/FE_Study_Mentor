@@ -42,8 +42,8 @@ export const updateRatingApi = async (body: RatingReq, id: string) => {
 };
 
 export const infoDiscusKeys = initKeys('info-discuss-keys');
-export const getInfoDiscussApi = async () => {
+export const getInfoDiscussApi = async (params: { questionId: string }) => {
     return api.get<{
         data: InfoExchangeInput[];
-    }>(`/questions/info-discuss`);
+    }>(`/questions/info-discuss`, { params });
 };

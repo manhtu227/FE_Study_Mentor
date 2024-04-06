@@ -12,6 +12,7 @@ export type EducationInformationInput = {
     skill: string;
     levelId: string;
     gradeId: string;
+    tags: string[];
 };
 
 export type CertificatesInformationInput = {
