@@ -13,7 +13,9 @@ export function CardTitleIcon({ title, icon, value, percent }: CardTitleIconProp
                     <span className='font-bold text-sm text-gray-700'>{title}</span>
                     <div className='flex items-center gap-[2px]'>
                         <span className='text-lg font-bold'>{value}</span>
-                        <span className='text-sm font-normal text-primary-800'>{percent}</span>
+                        {percent !== '0' && (
+                            <span className='text-sm font-normal text-primary-800'>{percent}</span>
+                        )}
                     </div>
                 </div>
                 <div className='w-[45px] h-[45px] bg-primary-600 flex items-center justify-center rounded-lg'>
