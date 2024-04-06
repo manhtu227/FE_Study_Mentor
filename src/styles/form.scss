@@ -19,4 +19,8 @@
     .ant-table-content::-webkit-scrollbar-thumb {
         @apply bg-primary-800 rounded-[10px] border border-primary-800;
     }
+
+    .ant-input-suffix {
+        @apply flex items-center justify-center;
+    }
 }

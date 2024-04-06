@@ -30,7 +30,7 @@ const CustomSelectInput = <T extends object>({
     ...rest
 }: CustomSelectInputProps<T>) => {
     return (
-        <Form.Item name={name} rules={rules} label={label} className={classNameForm}>
+        <Form.Item name={name} rules={rules} label={label} className={`${classNameForm} m-0`}>
             <Select
                 className={`h-[48px]  ${classNameSelect}`}
                 disabled={disabled}

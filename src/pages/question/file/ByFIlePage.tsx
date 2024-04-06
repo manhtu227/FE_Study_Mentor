@@ -3,9 +3,12 @@ import CreateQuestionIcon from '@assets/icons/create-question';
 import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
-import QuestionByForm from '@components/form/CreateQuestionForm';
+import CreateQuestionForm from '@components/form/CreateQuestionForm';
 import { Button, Steps, message, theme } from 'antd';
 import { useState } from 'react';
+import CheckQAPage from '../../check-qa/CheckQAPage';
+import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
+import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
 
 function CreateQuestionByFilePage() {
     const { token } = theme.useToken();
@@ -26,7 +29,7 @@ function CreateQuestionByFilePage() {
             id: 0,
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 0 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tl-lg rounded-bl-lg justify-center gap-2 `}
                 >
@@ -37,14 +40,16 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đặt câu hỏi</span>
                 </div>
             ),
-            content: <QuestionByForm onNext={handleNextStep} />,
+            content: <CreateQuestionForm onNext={handleNextStep} />,
+            // content: <MentorListPage />,
+            // content: <RatingAnswerPage />,
             icon: <></>,
         },
         {
             id: 1,
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 1 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
@@ -55,13 +60,13 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Người hướng dẫn</span>
                 </div>
             ),
-            content: <div className='text-center'>Second-content</div>,
+            content: <FindMentorBySystemPage />,
             icon: <></>,
         },
         {
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 2 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center justify-center gap-2 `}
                 >
@@ -72,13 +77,13 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Trò chuyện</span>
                 </div>
             ),
-            content: <div className='text-center'>Third-content</div>,
+            content: <CheckQAPage />,
             icon: <></>,
         },
         {
             title: (
                 <div
-                    className={`h-[60px] w-[333px] ${
+                    className={`h-[60px] w-full ${
                         current >= 3 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
                     } flex items-center rounded-tr-lg rounded-br-lg justify-center gap-2 `}
                 >
@@ -86,16 +91,20 @@ function CreateQuestionByFilePage() {
                     <span className='font-bold text-base'>Đánh giá</span>
                 </div>
             ),
-            content: <div className='text-center'>Four-content</div>,
+            content: (
+                <div className='text-center'>
+                    <RatingAnswerPage />
+                </div>
+            ),
             icon: <></>,
         },
     ];
 
     const items = steps.map((item) => ({ key: item.title, title: item.title, icon: item.icon }));
     const contentStyle: React.CSSProperties = {
-        lineHeight: '260px',
+        // lineHeight: '260px',
         color: token.colorTextTertiary,
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         borderRadius: token.borderRadiusLG,
         border: `1px dashed ${token.colorBorder}`,
         marginTop: 16,
