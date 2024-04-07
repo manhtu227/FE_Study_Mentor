@@ -2,6 +2,7 @@
 
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
+import { AI, MENTOR } from '@core/constants/routes.constant';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -10,12 +11,20 @@ function StudyMethodPage() {
     const pathname = usePathname();
 
     const handleClickMentorMethod = () => {
-        router.push(`${pathname}/mentor`);
+        router.push(`${pathname}${MENTOR}`);
+    };
+
+    const handleClickAIMethod = () => {
+        router.push(`${pathname}${AI}`);
     };
 
     return (
-        <div className='relative pb-[300px] h-[500px]'>
-            <Image src={images.studyMethodBg} alt='Hero' className='relative opacity-50' />
+        <div className='relative pb-[300px] h-[500px] max-w-full'>
+            <Image
+                src={images.studyMethodBg}
+                alt='Hero'
+                className='relative opacity-50 max-w-full'
+            />
             <div className='absolute top-0 left-0 right-0 opacity-90 pt-20'>
                 <div className='mb-[52px]'>
                     <div className='font-semibold text-[33px] py-3 border-b-[2px] border-solid border-r-0 border-t-0 border-l-0 w-[250px] text-[#313636] text-center mx-auto'>
@@ -29,11 +38,12 @@ function StudyMethodPage() {
                         titleButton='Trải nghiệm ngay'
                         type={1}
                         className='max-w-[542px]'
+                        onClick={handleClickAIMethod}
                     />
                     <MethodItem
                         image={images.mentorMethod}
-                        title='Tìm kiếm người hướng dẫn'
-                        titleButton='Tìm người hướng dẫn'
+                        title='Giải đáp bởi người hướng dẫn'
+                        titleButton='Trải nghiệm ngay'
                         type={1}
                         onClick={handleClickMentorMethod}
                         className='max-w-[542px]'

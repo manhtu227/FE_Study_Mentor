@@ -1,6 +1,7 @@
 'use client';
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
+import { FILE, GOOGLE_MEET } from '@core/constants/routes.constant';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -9,11 +10,20 @@ function MentorMethodPage() {
     const pathname = usePathname();
 
     const handleClickByFile = () => {
-        router.push(`${pathname}/file`);
+        router.push(`${pathname}${FILE}`);
     };
+
+    const handleClickByGGMeet = () => {
+        router.push(`${pathname}/${GOOGLE_MEET}`);
+    };
+
     return (
-        <div className='relative pb-[300px] h-[500px]'>
-            <Image src={images.studyMethodBg} alt='Hero' className='relative opacity-50' />
+        <div className='relative pb-[300px] h-[500px] max-w-full'>
+            <Image
+                src={images.studyMethodBg}
+                alt='Hero'
+                className='relative opacity-50 max-w-full'
+            />
             <div className='absolute top-0 left-0 right-0 opacity-90 pt-20'>
                 <div className='mb-[52px]'>
                     <div className='font-semibold text-[33px] py-3 border-b-[2px] border-solid border-r-0 border-t-0 border-l-0 w-[250px] text-[#313636] text-center mx-auto'>
@@ -27,6 +37,7 @@ function MentorMethodPage() {
                         titleButton='Trải nghiệm ngay'
                         type={1}
                         className='max-w-[542px]'
+                        onClick={handleClickByGGMeet}
                     />
                     <MethodItem
                         image={images.fileMethod}

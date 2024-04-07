@@ -4,8 +4,11 @@ import images from '@assets/images';
 import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
+import { AI, MENTOR, STUDY_METHOD } from '@core/constants/routes.constant';
 import { Button } from 'antd';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import Carousel, { ResponsiveType } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
@@ -46,6 +49,16 @@ function Homepage() {
             description: 'Giúp bạn sở hữu trọn vẹn kiến thức dù có vắng học đột xuất.',
         },
     ];
+    const router = useRouter();
+
+    const handleClickMentorMethod = () => {
+        router.push(`${STUDY_METHOD}${MENTOR}`);
+    };
+
+    const handleClickAIMethod = () => {
+        router.push(`${STUDY_METHOD}${AI}`);
+    };
+
     return (
         <div className='w-full h-full bg-[#F3F9FA]'>
             {/* section 1 */}
@@ -68,13 +81,15 @@ function Homepage() {
                             titleButton='Trải nghiệm ngay'
                             type={1}
                             className='max-w-[658px]'
+                            onClick={handleClickAIMethod}
                         />
                         <MethodItem
                             image={images.mentorMethod}
-                            title='Tìm kiếm người hướng dẫn'
-                            titleButton='Tìm người hướng dẫn'
+                            title='Giải đáp bởi người hướng dẫn'
+                            titleButton='Trải nghiệm ngay'
                             type={1}
                             className='max-w-[658px]'
+                            onClick={handleClickMentorMethod}
                         />
                     </div>
                 </div>
