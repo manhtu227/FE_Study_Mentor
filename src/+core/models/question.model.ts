@@ -9,6 +9,12 @@ export type QuestionInput = {
     content: string;
     attachFiles: any;
     tutorCriteria: string;
+    subject: string;
+    class: string;
+    timeForAnswerQuestion: number;
+    contentEditor: string;
+    fileContent: any;
+    numberOfStars: number;
 };
 
 export type RatingInput = {

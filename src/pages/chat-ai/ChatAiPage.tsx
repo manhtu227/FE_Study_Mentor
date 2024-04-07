@@ -7,7 +7,7 @@ import Chat from './components/Chat';
 import SideBarChat from './components/SideBarChat';
 import { mockData } from './components/mockData';
 
-export default function ChatAiPage() {
+export default function ChatAiPage({ type }: { type: string }) {
     const [dataChat, setDataChat] = useState<ChatModel[]>(mockData);
     const [titleOriginal, setTitleOriginal] = useState<ChatTitleModel>();
 

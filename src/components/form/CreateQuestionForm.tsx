@@ -1,3 +1,4 @@
+import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { ModalPayment } from '@components/modal/modal-payment';
 import { starOptions } from '@core/constants/options.contanst';
@@ -7,6 +8,7 @@ import { QuestionInput } from '@core/models/question.model';
 import { createQuestions } from '@core/services/questions.service';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, message, Modal, Select, Spin } from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
@@ -51,42 +53,68 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             </Modal>
             <div className='p-8 bg-white-900'>
                 <div className='w-full font-bold text-lg text-black mb-8'>Nội dung câu hỏi</div>
-                <div className='bg-blue-800 w-full h-[100px] rounded-md mb-8' />
+                <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8'>
+                    <Image
+                        src={images.createQuestion}
+                        alt='Create a new question'
+                        className='w-full h-full object-cover'
+                    />
+                </div>
                 <Form name='questionForm' onFinish={handleSubmit} form={form} autoComplete='off'>
                     {/* Question level */}
                     <Form.Item className='mb-2'>
                         <div className='font-bold text-base mb-2'>Cấp độ câu hỏi</div>
-                        <Form.Item<QuestionInput>
-                            name='levelId'
-                            style={{ display: 'inline-block', width: 'calc(50% - 28px)' }}
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Select
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn cấp độ'
-                                options={levelOpts.data}
-                                onChange={(e) => {
-                                    console.log(e);
-                                    form.setFieldsValue({ levelId: e });
-                                    mutateGrades.mutate(e);
+                        <div className='flex items-center justify-between'>
+                            <Form.Item<QuestionInput>
+                                name='levelId'
+                                style={{
+                                    display: 'inline-block',
+                                    width: '30%',
                                 }}
-                            />
-                        </Form.Item>
-                        <Form.Item<QuestionInput>
-                            name='grade'
-                            style={{
-                                display: 'inline-block',
-                                width: 'calc(50% - 8px)',
-                                margin: '0 0 0 32px',
-                            }}
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Select
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn lớp'
-                                options={gradeOpts}
-                            />
-                        </Form.Item>
+                                rules={[{ required: true, message: 'Please input!' }]}
+                            >
+                                <Select
+                                    className='h-12 font-medium text-base'
+                                    placeholder='Chọn cấp độ'
+                                    options={levelOpts.data}
+                                    onChange={(e) => {
+                                        console.log(e);
+                                        form.setFieldsValue({ levelId: e });
+                                        mutateGrades.mutate(e);
+                                    }}
+                                />
+                            </Form.Item>
+                            <Form.Item<QuestionInput>
+                                name='grade'
+                                style={{
+                                    display: 'inline-block',
+                                    width: '30%',
+                                }}
+                                rules={[{ required: true, message: 'Please input!' }]}
+                            >
+                                <Select
+                                    className='h-12 font-medium text-base'
+                                    placeholder='Chọn lớp'
+                                    options={gradeOpts}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name='subject'
+                                style={{
+                                    display: 'inline-block',
+                                    width: '30%',
+                                }}
+                                // rules={[{ required: true, message: 'Please input!' }]}
+                            >
+                                <Select
+                                    className='h-12 font-medium text-base text-gray-700'
+                                    placeholder='Chọn chủ đề'
+                                    onChange={(e) =>
+                                        form.setFieldsValue({ subject: e.target.value })
+                                    }
+                                />
+                            </Form.Item>
+                        </div>
                     </Form.Item>
                     {/* Requirement for mentor */}
                     <div className='mb-2'>
