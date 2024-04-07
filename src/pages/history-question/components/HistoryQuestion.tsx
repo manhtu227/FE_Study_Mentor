@@ -116,7 +116,7 @@ export function HistoryQuestion() {
     const [filter, setFilter] = useState(FilterQuestionType.ALL);
     return (
         <div className='bg-white-900 p-8 flex flex-col gap-8 rounded-md'>
-            <span className='font-bold text-lg'>Lịch sử câu hỏi đã trả lời</span>
+            <span className='font-bold text-lg'>Lịch sử câu hỏi</span>
             <div className='flex justify-between items-center'>
                 <CustomSelectInput
                     classNameForm='w-[167px]'

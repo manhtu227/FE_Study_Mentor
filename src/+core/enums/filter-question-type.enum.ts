@@ -1,7 +1,7 @@
 export enum FilterQuestionType {
     ALL = 'Tất cả',
-    COMPLETED = 'Hoàn tất',
-    NOT_COMPLETED = 'Chưa hoàn tất',
+    COMPLETED = 'Hoàn thành',
+    NOT_COMPLETED = 'Đang xử lý',
     CANCELED = 'Đã hủy',
 }
 

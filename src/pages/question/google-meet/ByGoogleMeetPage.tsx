@@ -1,138 +1,81 @@
-'use client';
-import CreateQuestionIcon from '@assets/icons/create-question';
-import GraduationIcon from '@assets/icons/graduation';
-import QuestionIcon from '@assets/icons/question';
-import StarIcon from '@assets/icons/star';
-import CreateQuestionForm from '@components/form/CreateQuestionForm';
-import { Button, Steps, message, theme } from 'antd';
-import { useState } from 'react';
-import CheckQAPage from '../../check-qa/CheckQAPage';
-import FindMentorBySystemPage from '../../find-mentor-by-system/FindMentorBySystemPage';
-import RatingAnswerPage from '../../rating-answer/RatingAnswerPage';
+import images from '@assets/images';
+import CustomSelectInput from '@components/form-input/CustomSelectInput';
+import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import { Button } from 'antd';
+import Link from 'next/link';
 
-function CreateQuestionByFilePage() {
-    const { token } = theme.useToken();
-    const [current, setCurrent] = useState(0);
-
-    const next = () => {
-        setCurrent(current + 1);
-    };
-
-    const prev = () => {
-        setCurrent(current - 1);
-    };
-
-    const handleNextStep = () => next();
-
-    const steps = [
-        {
-            id: 0,
-            title: (
-                <div
-                    className={`h-[60px] w-full ${
-                        current >= 0 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center rounded-tl-lg rounded-bl-lg justify-center gap-2 `}
-                >
-                    <QuestionIcon
-                        className='h-6 w-6'
-                        color={`${current >= 0 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Đặt câu hỏi</span>
-                </div>
-            ),
-            content: <CreateQuestionForm onNext={handleNextStep} />,
-            // content: <MentorListPage />,
-            // content: <RatingAnswerPage />,
-            icon: <></>,
-        },
-        {
-            id: 1,
-            title: (
-                <div
-                    className={`h-[60px] w-full ${
-                        current >= 1 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center justify-center gap-2 `}
-                >
-                    <GraduationIcon
-                        className='h-6 w-6'
-                        color={`${current >= 1 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Người hướng dẫn</span>
-                </div>
-            ),
-            content: <FindMentorBySystemPage />,
-            icon: <></>,
-        },
-        {
-            title: (
-                <div
-                    className={`h-[60px] w-full ${
-                        current >= 2 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center justify-center gap-2 `}
-                >
-                    <CreateQuestionIcon
-                        className='h-6 w-6'
-                        color={`${current >= 2 ? 'white' : 'black'}`}
-                    />
-                    <span className='font-bold text-base'>Trò chuyện</span>
-                </div>
-            ),
-            content: <CheckQAPage />,
-            icon: <></>,
-        },
-        {
-            title: (
-                <div
-                    className={`h-[60px] w-full ${
-                        current >= 3 ? 'bg-primary-500 text-white-900' : 'bg-white-900 text-black'
-                    } flex items-center rounded-tr-lg rounded-br-lg justify-center gap-2 `}
-                >
-                    <StarIcon className='h-6 w-6' color={`${current >= 3 ? 'white' : 'black'}`} />
-                    <span className='font-bold text-base'>Đánh giá</span>
-                </div>
-            ),
-            content: (
-                <div className='text-center'>
-                    <RatingAnswerPage />
-                </div>
-            ),
-            icon: <></>,
-        },
-    ];
-
-    const items = steps.map((item) => ({ key: item.title, title: item.title, icon: item.icon }));
-    const contentStyle: React.CSSProperties = {
-        // lineHeight: '260px',
-        color: token.colorTextTertiary,
-        backgroundColor: 'transparent',
-        borderRadius: token.borderRadiusLG,
-        border: `1px dashed ${token.colorBorder}`,
-        marginTop: 16,
-    };
-
+export default function CreateQuestionByGoogleMeetPage() {
     return (
-        <div className='w-full'>
-            <Steps current={current} items={items} className='w-full' />
-            <div style={contentStyle}>{steps[current].content}</div>
-            <div style={{ marginTop: 24 }}>
-                {current < steps.length - 1 && current !== 0 && (
-                    <Button type='primary' onClick={handleNextStep}>
-                        Next
+        <div className='w-full p-8 shadow-lg'>
+            <h2 className='text-3xl leading-[27px] text-center'>Trả lời thông qua Google meet</h2>
+            <div className='w-full flex justify-center'>
+                <form className='p-4 w-1/2'>
+                    <div className='flex flex-row gap-8'>
+                        <div>
+                            <div className='mb-5'>
+                                <p className='text-[16px] leading-6 font-bold mb-2 text-gray-900 dark:text-white'>
+                                    Thời gian giải đáp
+                                </p>
+                                <CustomTextInput placeholder='Nhập số phút' />
+                            </div>
+                            <div className='mb-5'>
+                                <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
+                                    Cấp độ câu hỏi
+                                </p>
+                                <CustomSelectInput placeholder='Chọn cấp độ' optionsSelect={[]} />
+                            </div>
+                            <div className='mb-5'>
+                                <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
+                                    Lớp
+                                </p>
+                                <CustomSelectInput
+                                    classNameForm=' w-[530px]'
+                                    placeholder='Chọn lớp'
+                                    optionsSelect={[]}
+                                />
+                            </div>
+                            <div className='mb-5'>
+                                <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
+                                    Chủ đề
+                                </p>
+                                <CustomSelectInput
+                                    classNameForm=' w-[530px]'
+                                    placeholder='Chọn chủ đề'
+                                    optionsSelect={[]}
+                                />
+                            </div>
+                            <div className='mb-5'>
+                                <p className=' mb-2 text-[16px] leading-6 font-bold text-gray-900 dark:text-white'>
+                                    Thời gian bạn muốn hệ thống tìm kiếm
+                                </p>
+                                <CustomSelectInput
+                                    classNameForm=' w-[530px]'
+                                    placeholder='Chọn thời gian bạn muốn hệ thống tìm kiếm'
+                                    optionsSelect={[]}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <Button className='flex items-center justify-center text-white bg-blue-700 group text-[15px] leading-[22.5px] py-6 px-10'>
+                        <span className='text-white-900 group-hover:text-blue-700'>
+                            Tìm kiếm người hướng dẫn
+                        </span>
                     </Button>
-                )}
-                {current === steps.length - 1 && (
-                    <Button type='primary' onClick={() => message.success('Processing complete!')}>
-                        Done
-                    </Button>
-                )}
-                {current > 0 && (
-                    <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                        Previous
-                    </Button>
-                )}
+                </form>
+                <div className='float-right mt-24 '>
+                    <img src={images.gg.src} alt='' />
+                </div>
+            </div>
+            <div className='text-center text-[14px] leading-[21px] '>
+                Bạn cảm thấy mức giá không phù hợp?
+                <Link
+                    href='https://ant.design'
+                    target='_blank'
+                    className='text-[#3D64EE] font-bold text-[15px] leading-[22.5px] ml-2 no-underline'
+                >
+                    Tùy chọn khác
+                </Link>
             </div>
         </div>
     );
 }
-
-export default CreateQuestionByFilePage;
