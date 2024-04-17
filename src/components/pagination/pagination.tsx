@@ -1,4 +1,4 @@
-import { initialPagingState, PagingReq } from '@core/types/paging.type';
+import { initialPagingState, IPaginationInfo } from '@core/types/paging.type';
 import { Pagination } from 'antd';
 
 export const PaginationCore = ({
@@ -10,10 +10,10 @@ export const PaginationCore = ({
     total?: number;
     pageSize?: number;
     current?: number;
-    onPageNumberChange?: ({ page, limit }: PagingReq) => void;
+    onPageNumberChange?: ({ page, pageSize }: IPaginationInfo) => void;
 }) => {
-    const handlePageChange = (page: number, limit: number) => {
-        onPageNumberChange && onPageNumberChange({ page, limit });
+    const handlePageChange = (page: number, pageSize: number) => {
+        onPageNumberChange && onPageNumberChange({ page, pageSize });
     };
 
     return (
@@ -23,7 +23,7 @@ export const PaginationCore = ({
                 total={total}
                 className='py-8 flex justify-center'
                 onChange={handlePageChange}
-                pageSize={pageSize || initialPagingState.limit}
+                pageSize={pageSize || initialPagingState.pageSize}
                 current={current || initialPagingState.page}
             />
         </div>

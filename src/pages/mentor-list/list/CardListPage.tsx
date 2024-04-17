@@ -3,49 +3,63 @@
 import images from '@assets/images';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { PaginationCore } from '@components/pagination/pagination';
-import { usePagingFilter } from '@core/hooks/usePagingFilter';
+import { USER_ID } from '@core/constants/commons.constant';
 import { MentorListFilter } from '@core/models/mentor.model';
-import { getMentorListApi, mentorListKeys } from '@core/services/mentors.service';
-import { initialPagingState, PagingReq } from '@core/types/paging.type';
+import {
+    getFavoriteMentorListApi,
+    getMentorListApi,
+    mentorListKeys,
+} from '@core/services/mentors.service';
+import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { calculateAge } from '@core/utilities/caculate-age.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Col, Row, Spin } from 'antd';
 import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useState } from 'react';
 
 export default function CardListPage() {
     const searchParams = useSearchParams();
-    const { initialPaging, initialFilter } = useMemo(() => {
-        const initialFilter = {
-            levelId: searchParams?.get('levelId') || '9b9cccf5-6a4b-45bc-9325-996cc582b756',
-            gradeId: searchParams?.get('gradeId') || '8d116df8-29f3-40d2-b3c0-9b554c78f59e',
-        };
-        const initialPaging: PagingReq = {
-            limit: +(searchParams?.get('limit') || initialPagingState.limit),
-            page: +(searchParams?.get('page') || initialPagingState.page),
-        };
-        return { initialPaging, initialFilter };
-    }, [searchParams]);
+    const initialPaging: IPaginationInfo = {
+        pageSize: +(searchParams?.get('pageSize') ?? initialPagingState.pageSize),
+        page: +(searchParams?.get('page') ?? initialPagingState.page),
+    };
+    const subjectId = searchParams?.get('subjectId');
+    const currentTab = searchParams?.get('searchYourSelfTab') ?? '1';
+    const isTutorOnline = searchParams?.get('isTutorOnline') ?? true;
 
-    const { filter, handlePageChange } = usePagingFilter<MentorListFilter>({
-        initialPaging,
-        initialFilter,
+    const [filter, setFilter] = useState<MentorListFilter>({
+        subjectId: subjectId ?? 'e4e0697e-56c7-4650-9ea2-52b5d8f5e55f',
+        page: initialPaging.page,
+        pageSize: 1 ?? initialPaging.pageSize,
     });
 
+    console.log(isTutorOnline as boolean, currentTab);
+
     const mentorListQuery = useQuery({
-        queryKey: mentorListKeys.list(filter),
-        queryFn: () => getMentorListApi(filter),
+        queryKey: [...mentorListKeys.list(filter), currentTab],
+        queryFn: () =>
+            isTutorOnline === 'true'
+                ? getMentorListApi(filter)
+                : getFavoriteMentorListApi({
+                      page: filter.page,
+                      pageSize: filter.pageSize,
+                      userId: USER_ID,
+                  }),
         select: (resp) => {
             return {
                 data: resp.data.data,
                 pagingInfo: {
-                    page: resp.data.currentPage,
-                    limit: filter.limit,
-                    total: resp.data.totalPages,
+                    page: resp.data.paginationInfo.page,
+                    pageSize: filter.pageSize,
+                    total: resp.data.paginationInfo.total,
                 },
             };
         },
     });
+
+    const handlePageChange = ({ page, pageSize }: IPaginationInfo) => {
+        setFilter((prev) => ({ ...prev, page, pageSize }));
+    };
 
     return (
         <Spin spinning={mentorListQuery.isFetching}>
@@ -71,7 +85,7 @@ export default function CardListPage() {
                 </Row>
                 <PaginationCore
                     onPageNumberChange={handlePageChange}
-                    pageSize={mentorListQuery.data?.pagingInfo.limit}
+                    pageSize={mentorListQuery.data?.pagingInfo.pageSize}
                     current={mentorListQuery.data?.pagingInfo.page}
                     total={mentorListQuery.data?.pagingInfo.total}
                 />

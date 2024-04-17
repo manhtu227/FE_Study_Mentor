@@ -20,6 +20,8 @@ export default function FindMentorPage() {
     const pathname = usePathname();
 
     const handleClickBySystem = () => {
+        console.log('checkkk');
+
         router.push(`${pathname}/system/gg`);
     };
     return (

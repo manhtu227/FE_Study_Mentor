@@ -1,15 +1,20 @@
-export type PagingReq = {
-    limit: number;
+export interface IPaginationInfo {
     page: number;
-};
+    pageSize: number;
+    total?: number;
+    previousPage?: number | undefined;
+    nextPage?: number | undefined;
+    totalPages?: number;
+}
 
-export const initialPagingState: PagingReq = {
-    limit: 10,
+export const initialPagingState: IPaginationInfo = {
+    pageSize: 10,
     page: 1,
 };
 
 export type PagingResp<T> = {
+    success: boolean;
+    message: string;
     data: T;
-    totalPages: number;
-    currentPage: number;
+    paginationInfo: IPaginationInfo;
 };

@@ -9,10 +9,9 @@ export type PersonalInformationInput = {
 };
 
 export type EducationInformationInput = {
-    skill: string;
-    levelId: string;
-    gradeId: string;
-    tags: string[];
+    subjectIds: string[];
+    levelIds: string[];
+    gradeIds: string[];
 };
 
 export type CertificatesInformationInput = {
@@ -30,26 +29,34 @@ export type MentorType = {
 };
 
 export type UserResp = {
-    Id: string;
-    Email: string;
-    Gender: number;
-    Avatar: string;
-    Skill: string;
-    LevelId: string;
-    FullName: string;
-    Role: number;
-    Phone: string;
-    DateOfBirth: string;
-    IsActive: boolean;
-    GradeId: string;
-    AverageRate: number;
-    LevelName: string;
-    Description: string | null;
-    CreatedAt: string | null;
-    UpdatedAt: string | null;
-    GradeName: string;
-    Order: number;
-    CertificateImageUrl: string;
-    CertificateName: string;
-    CertificateFileName: string;
+    id: string;
+    fullName: string;
+    email: string;
+    role: number;
+    phone: string;
+    dateOfBirth: Date;
+    gender: number;
+    isActive: boolean;
+    averageRate: number;
+};
+
+export type EducationInfoResp = {
+    subjects: ISubject[];
+    grades: IGrade[];
+    levels: ILevel[];
+};
+
+export type ISubject = {
+    id: string;
+    name: string;
+};
+
+export type IGrade = {
+    id: string;
+    name: string;
+};
+
+export type ILevel = {
+    id: string;
+    name: string;
 };

@@ -3,18 +3,30 @@ import { StaticImageData } from 'next/image';
 export type QuestionInput = {
     questionLevel: string;
     levelId: string;
-    grade: string;
+    gradeId: string;
     timeAnswer: number;
     tutorRating: number;
     content: string;
     attachFiles: any;
     tutorCriteria: string;
-    subject: string;
+    subjectId: string;
     class: string;
     timeForAnswerQuestion: number;
     contentEditor: string;
     fileContent: any;
     numberOfStars: number;
+};
+
+export type CreateFileQuestionRequest = {
+    userId: string;
+    subjectId: string;
+    timeAnswer: number;
+    content: string;
+    attachFiles: any;
+};
+
+export type CreateFileQuestionResp = {
+    price: number;
 };
 
 export type RatingInput = {
@@ -46,19 +58,24 @@ export type ReportAnswer = {
     fileContent: any;
 };
 
-export type LevelResp = {
-    Id: string;
-    LevelName: string;
-    Description: string;
-    CreatedAt: string;
-    UpdatedAt: string;
+export type StructureEducationsResp = {
+    id: string;
+    levelName: string;
+    description: string;
+    grades: GradeResp[];
 };
 
 export type GradeResp = {
-    Id: string;
-    GradeName: string;
-    LevelId: string;
-    Order: number;
+    id: string;
+    gradeName: string;
+    order: number;
+    subjects: SubjectResp[];
+};
+
+export type SubjectResp = {
+    id: string;
+    name: string;
+    description: string;
 };
 
 export type InfoExchangeInput = {

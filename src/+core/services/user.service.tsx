@@ -1,7 +1,7 @@
 import { api } from '@core/https/http';
 import {
     CertificatesInformationInput,
-    EducationInformationInput,
+    EducationInfoResp,
     PersonalInformationInput,
     UserResp,
 } from '@core/models/profile.model';
@@ -9,16 +9,23 @@ import { objectToFormData } from '@core/parser/form-data.parser';
 import { initKeys } from '@core/utilities/query-key.utility';
 
 export const userDetailKeys = initKeys('user-detail-keys');
+
+export const educationInfoKeys = initKeys('education-info-keys');
+
 export const getUserDetailApi = async (id: string) => {
-    return api.get<{ data: UserResp }>(`/users/${id}`);
+    return api.get<{ data: UserResp }>(`/api/users/${id}/profile`);
+};
+
+export const getEducationInfoApi = async (id: string) => {
+    return api.get<{ data: EducationInfoResp }>(`/api/users/${id}/profile/education-interest`);
 };
 
 export const updateProfileSectionApi = async (data: PersonalInformationInput, id: string) => {
     return api.patch<void>(`/users/${id}`, data);
 };
 
-export const updateEducationSectionApi = async (data: EducationInformationInput, id: string) => {
-    return api.patch<void>(`/users/${id}/education-interest`, data);
+export const updateEducationSectionApi = async (data: string[], id: string) => {
+    return api.patch<void>(`/api/users/${id}/profile/education-interest`, { subjectIds: data });
 };
 
 export const updateCertificateSectionApi = async (
