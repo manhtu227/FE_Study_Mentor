@@ -2,17 +2,19 @@ import { USER_ID } from '@core/constants/commons.constant';
 import { PersonalInformationInput, UserResp } from '@core/models/profile.model';
 import { updateProfileSectionApi } from '@core/services/user.service';
 import { useMutation } from '@tanstack/react-query';
-import { Button, DatePicker, Form, Input, message, Select, Spin } from 'antd';
+import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function PersonalInfoSection({ data }: { data?: UserResp }) {
     const [form] = Form.useForm<PersonalInformationInput>();
+    const [initialDataForm, setInitialDataForm] = useState<PersonalInformationInput>();
 
     const mutateUpdate = useMutation({
         mutationFn: (data: PersonalInformationInput) => updateProfileSectionApi(data, USER_ID),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
+            setIsEdit(false);
         },
     });
 
@@ -23,14 +25,24 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
-                fullName: data.FullName,
-                phone: data.Phone,
-                email: data.Email,
-                dateOfBirth: dayjs(data.DateOfBirth),
-                gender: data.Gender,
+                fullName: data.fullName,
+                phone: data.phone,
+                email: data.email,
+                dateOfBirth: dayjs(data.dateOfBirth),
+                gender: data.gender,
             });
         }
     }, [data]);
+
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+
+    const handleCancelUpdate = () => {
+        setIsEdit(false);
+        if (initialDataForm) {
+            form.setFieldsValue(initialDataForm);
+        }
+    };
+
     return (
         <Spin spinning={mutateUpdate.isPending} size='large'>
             <div className='w-full mb-8'>
@@ -44,6 +56,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                     form={form}
                     onFinish={handleSubmitPersonalInformationForm}
                     autoComplete='off'
+                    disabled={!isEdit}
                 >
                     {/* Full name */}
                     <div className='font-bold text-base mb-2'>Họ và tên</div>
@@ -124,17 +137,40 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                         </div>
                     </div>
 
-                    <Form.Item colon={false}>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            size='large'
-                            className='!h-12 !w-[200px] font-bold text-base bg-primary-800'
-                        >
-                            Lưu
-                        </Button>
-                    </Form.Item>
+                    <div className='flex gap-4'>
+                        {isEdit && (
+                            <Button
+                                size='large'
+                                className='!h-12 !w-[200px] font-bold text-base bg-gray-300'
+                                onClick={handleCancelUpdate}
+                            >
+                                Hủy
+                            </Button>
+                        )}
+                        {isEdit && (
+                            <Form.Item colon={false}>
+                                <Button
+                                    type='primary'
+                                    htmlType='submit'
+                                    size='large'
+                                    className='!h-12 !w-[200px] font-bold text-base bg-primary-800'
+                                >
+                                    Lưu
+                                </Button>
+                            </Form.Item>
+                        )}
+                    </div>
                 </Form>
+                {!isEdit && (
+                    <Button
+                        size='large'
+                        type='primary'
+                        className='!h-12 !w-[200px] font-bold text-base'
+                        onClick={() => setIsEdit(true)}
+                    >
+                        Cập nhật
+                    </Button>
+                )}
             </div>
         </Spin>
     );

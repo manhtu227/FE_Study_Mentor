@@ -1,41 +1,97 @@
 import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { ModalPayment } from '@components/modal/modal-payment';
+import { USER_ID } from '@core/constants/commons.constant';
 import { starOptions } from '@core/constants/options.contanst';
-import { useGetGrade } from '@core/hooks/options/useGetGrade';
-import { useGetLevel } from '@core/hooks/options/useGetLevel';
-import { QuestionInput } from '@core/models/question.model';
-import { createQuestions } from '@core/services/questions.service';
+import { useGetLevels } from '@core/hooks/options/useGetLevels';
+import { CreateFileQuestionRequest, QuestionInput } from '@core/models/question.model';
+import {
+    ConvertGradeToOption,
+    ConvertLevelToOption,
+    ConvertSubjectToOption,
+    createQuestions,
+} from '@core/services/questions.service';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Input, message, Modal, Select, Spin } from 'antd';
+import { Button, Form, Input, Modal, Select, Spin, message } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const [form] = Form.useForm<QuestionInput>();
     const [isOpen, setIsOpen] = useState(false);
+    const [selectedLevel, setSelectedLevel] = useState<string>('');
+    const [selectedGrade, setSelectedGrade] = useState<string>('');
+    const [selectedSubject, setSelectedSubject] = useState<string>('');
+    const [price, setPrice] = useState<number>(0);
 
-    /* get options api */
-    const levelOpts = useGetLevel();
-    const { mutateGrades, gradeOpts } = useGetGrade();
+    const levelData = useGetLevels();
+    const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
+    // Filter grades based on selected levels
+    const filteredGrades = levelData?.find((level) => level.id === selectedLevel)?.grades ?? [];
+
+    const gradeOptions = filteredGrades.map(ConvertGradeToOption);
+    const subjectData = filteredGrades.find((grade) => grade.id === selectedGrade)?.subjects ?? [];
+    const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
 
     /* create question api */
     const mutateCreateQuestions = useMutation({
-        mutationFn: (data: QuestionInput) => createQuestions(data),
+        mutationFn: (data: CreateFileQuestionRequest) => createQuestions(data),
         onSuccess: () => {
             message.open({
                 type: 'success',
                 content: 'This is a success message',
             });
-            setIsOpen(true);
         },
     });
 
+    useEffect(() => {
+        const newPrice = mutateCreateQuestions.data?.data.data.price;
+
+        if (newPrice) setPrice(newPrice);
+    }, [mutateCreateQuestions.data]);
+
     /* Handler */
     const handleSubmit = (values: QuestionInput) => {
-        mutateCreateQuestions.mutate(values);
+        const request: CreateFileQuestionRequest = {
+            userId: USER_ID,
+            subjectId: selectedSubject,
+            timeAnswer: +values.timeAnswer,
+            content: values.content,
+            attachFiles: values.attachFiles,
+        };
+        mutateCreateQuestions.mutate(request);
+    };
+
+    const handleChangeLevels = (newLevel: string) => {
+        setSelectedLevel(newLevel);
+        form.setFieldsValue({ levelId: newLevel });
+
+        handleUpdateGradesWhenChanging();
+        handleUpdateSubjectsWhenChanging();
+    };
+
+    const handleChangeGrades = (newGrades: string) => {
+        setSelectedGrade(newGrades);
+        form.setFieldsValue({ gradeId: newGrades });
+
+        handleUpdateSubjectsWhenChanging();
+    };
+
+    const handleUpdateSubjectsWhenChanging = () => {
+        setSelectedSubject('');
+        form.setFieldsValue({ subjectId: undefined });
+    };
+
+    const handleUpdateGradesWhenChanging = () => {
+        setSelectedGrade('');
+        form.setFieldsValue({ gradeId: undefined });
+    };
+
+    const handleChangeSubjects = (value: string) => {
+        setSelectedSubject(value);
+        form.setFieldsValue({ subjectId: value });
     };
 
     return (
@@ -48,6 +104,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                 closable={false}
                 open={isOpen}
                 width={1200}
+                maskClosable={false}
             >
                 <ModalPayment />
             </Modal>
@@ -64,28 +121,25 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                     {/* Question level */}
                     <Form.Item className='mb-2'>
                         <div className='font-bold text-base mb-2'>Cấp độ câu hỏi</div>
-                        <div className='flex items-center justify-between'>
+                        <div className='flex items-center justify-between h-max'>
                             <Form.Item<QuestionInput>
                                 name='levelId'
                                 style={{
                                     display: 'inline-block',
                                     width: '30%',
+                                    height: 'max-content',
                                 }}
                                 rules={[{ required: true, message: 'Please input!' }]}
                             >
                                 <Select
                                     className='h-12 font-medium text-base'
-                                    placeholder='Chọn cấp độ'
-                                    options={levelOpts.data}
-                                    onChange={(e) => {
-                                        console.log(e);
-                                        form.setFieldsValue({ levelId: e });
-                                        mutateGrades.mutate(e);
-                                    }}
+                                    placeholder='Chọn cấp học'
+                                    options={levelOptions}
+                                    onChange={handleChangeLevels}
                                 />
                             </Form.Item>
                             <Form.Item<QuestionInput>
-                                name='grade'
+                                name='gradeId'
                                 style={{
                                     display: 'inline-block',
                                     width: '30%',
@@ -94,24 +148,24 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             >
                                 <Select
                                     className='h-12 font-medium text-base'
-                                    placeholder='Chọn lớp'
-                                    options={gradeOpts}
+                                    placeholder='Chọn khối/ lớp'
+                                    options={gradeOptions}
+                                    onChange={handleChangeGrades}
                                 />
                             </Form.Item>
                             <Form.Item
-                                name='subject'
+                                name='subjectId'
                                 style={{
                                     display: 'inline-block',
                                     width: '30%',
                                 }}
-                                // rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Please input!' }]}
                             >
                                 <Select
                                     className='h-12 font-medium text-base text-gray-700'
-                                    placeholder='Chọn chủ đề'
-                                    onChange={(e) =>
-                                        form.setFieldsValue({ subject: e.target.value })
-                                    }
+                                    placeholder='Chọn môn học/ kỹ năng'
+                                    options={subjectOptions}
+                                    onChange={handleChangeSubjects}
                                 />
                             </Form.Item>
                         </div>
@@ -123,7 +177,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             name='tutorRating'
                             style={{
                                 display: 'inline-block',
-                                width: 'calc(50% - 28px)',
+                                width: '100%',
                             }}
                             rules={[{ required: true, message: 'Please input!' }]}
                         >
@@ -133,23 +187,11 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                                 options={starOptions}
                             />
                         </Form.Item>
-                        <Form.Item<QuestionInput>
-                            name='tutorCriteria'
-                            style={{
-                                display: 'inline-block',
-                                width: 'calc(50% - 8px)',
-                                margin: '0 0 0 32px',
-                            }}
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Input
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn tiêu chí'
-                            />
-                        </Form.Item>
                     </div>
                     {/* Time for handle the question */}
-                    <div className='font-bold text-base mb-2'>Thời gian giải đáp</div>
+                    <div className='font-bold text-base mb-2'>
+                        Thời gian bạn muốn tìm kiếm câu trả lời cho hỏi
+                    </div>
                     <Form.Item<QuestionInput>
                         name='timeAnswer'
                         rules={[{ required: true, message: 'Please input!' }]}
@@ -172,18 +214,29 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             // rules={[{ required: true, message: 'Please input!' }]}
                         />
                     </Form.Item>
-                    <Form.Item label=' ' colon={false}>
+                    <div className='flex items-center justify-between'>
+                        <Form.Item label=' ' colon={false}>
+                            <Button
+                                type='primary'
+                                size='large'
+                                className='!h-12 font-bold text-base'
+                                disabled={!price}
+                                onClick={() => setIsOpen(true)}
+                            >
+                                Giá: {price} VND &nbsp; | &nbsp; Thanh toán
+                            </Button>
+                        </Form.Item>
                         <Button
                             type='primary'
-                            htmlType='submit'
                             size='large'
+                            htmlType='submit'
                             className='!h-12 font-bold text-base'
                         >
-                            Giá: 22.999 USD &nbsp; | &nbsp; Thanh toán
+                            Xem phí
                         </Button>
-                    </Form.Item>
+                    </div>
                 </Form>
-                <div className='font-medium text-sm text-[#313636]'>
+                <div className='font-medium text-sm text-left text-[#313636]'>
                     Bạn cảm thấy mức giá không phù hợp?
                     <Link className='font-bold text-base text-primary-900 no-underline' href={'#'}>
                         Tùy chọn khác

@@ -1,5 +1,3 @@
-import { PagingReq } from '@core/types/paging.type';
-
 export type MentorListResp = {
     Id: string;
     Email: string;
@@ -24,8 +22,13 @@ export type MentorListResp = {
 };
 
 export type MentorListFilter = {
-    levelId?: string;
-    gradeId?: string;
+    subjectId: string;
+    page: number;
+    pageSize: number;
 };
 
-export type MentorListReq = MentorListFilter & PagingReq;
+export type FavoriteMentorListFilter = {
+    userId: string;
+    page: number;
+    pageSize: number;
+};

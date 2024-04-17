@@ -1,12 +1,12 @@
 import { removeEmptyParams } from '@core/helpers/remove-params.helper';
-import { initialPagingState, PagingReq } from '@core/types/paging.type';
+import { initialPagingState, IPaginationInfo } from '@core/types/paging.type';
 import { debounce } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
 
 export type PagingFilterType<T> = {
-    initialPaging?: PagingReq;
+    initialPaging?: IPaginationInfo;
     initialFilter?: T;
     debounceTime?: number;
     searchParamDefault?: string[];
@@ -18,10 +18,10 @@ export function usePagingFilter<T extends object>({
     debounceTime = 0,
     searchParamDefault,
 }: PagingFilterType<T>) {
-    const [filter, setFilter] = useState<T & PagingReq>({
+    const [filter, setFilter] = useState<T & IPaginationInfo>({
         ...initialPaging,
         ...initialFilter,
-    } as T & PagingReq);
+    } as T & IPaginationInfo);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -45,7 +45,7 @@ export function usePagingFilter<T extends object>({
     const resetFilterPaging = (obj?: any) => {
         setFilter({
             page: initialPaging.page,
-            limit: initialPaging.limit,
+            pageSize: initialPaging.pageSize,
             ...obj,
         } as any);
     };
@@ -62,7 +62,7 @@ export function usePagingFilter<T extends object>({
         }
         router.push(
             `${pathname}?${queryString.stringify({
-                ...removeEmptyParams<T & PagingReq>(filter),
+                ...removeEmptyParams<T & IPaginationInfo>(filter),
             })}&${newParams.toString()}`,
         );
     }, [filter]);
