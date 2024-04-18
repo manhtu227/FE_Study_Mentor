@@ -2,7 +2,7 @@
 
 import { ChatModel } from '@core/models/chat.model';
 import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
-import { Avatar } from 'antd';
+import { Avatar, Image } from 'antd';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { ReactNode, useEffect, useRef } from 'react';
@@ -35,12 +35,13 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
         });
     }
 
-    const handleSubmit = async (value: string) => {
+    const handleSubmit = async (value: string, files: string[]) => {
         const newChat = {
             id: uuidv4(),
             chatId: '',
             contactId: '',
             value: value,
+            files: files,
             createdAt: parseDateTimeISO8601(dayjs()),
         };
         setChatList([...chatList, newChat], true);
@@ -80,6 +81,7 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
                                 value={item.value}
                                 createdAt={item.createdAt}
                                 isAvatar={checked}
+                                files={item.files}
                             />
                         </div>
                     );
@@ -94,9 +96,10 @@ type ChatItemProps = {
     value: ReactNode;
     createdAt?: string;
     isAvatar?: boolean;
+    files?: string[];
 };
 
-function ChatItem({ value, createdAt, isAvatar }: ChatItemProps) {
+function ChatItem({ value, createdAt, isAvatar, files }: ChatItemProps) {
     return (
         <div className='flex gap-4 items-start'>
             {isAvatar ? (
@@ -107,10 +110,30 @@ function ChatItem({ value, createdAt, isAvatar }: ChatItemProps) {
             ) : (
                 <div className='w-10'></div>
             )}
-            <div className='flex flex-col gap-[10px]'>
+            <div
+                className={clsx('flex flex-col gap-[10px]', isAvatar ? 'items-start' : 'items-end')}
+            >
                 <div className='flex items-center max-w-full'>
                     <div className='bg-white-800 rounded-full py-2 px-4 text-base'>{value}</div>
                 </div>
+                {files && (
+                    <div
+                        className={clsx(
+                            'flex flex-wrap gap-2 max-w-[416px]',
+                            isAvatar ? 'justify-start' : 'justify-end',
+                        )}
+                    >
+                        {files.map((file) => (
+                            <div key={file} className='flex gap-2 items-center'>
+                                <Image
+                                    className='max-w-[200px] max-h-[100px] rounded-lg'
+                                    src={file}
+                                    alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
