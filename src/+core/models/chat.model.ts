@@ -3,6 +3,7 @@ export type ChatModel = {
     chatId: string;
     contactId: string;
     value: string;
+    files?: string[];
     createdAt: string;
 };
 
