@@ -45,7 +45,14 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     });
 
     const handleSubmitEducationInformationForm = (values: EducationInformationInput) => {
-        mutateUpdate.mutate(values.subjectIds);
+        if (JSON.stringify(values.subjectIds) === JSON.stringify(initialDataForm?.subjectIds)) {
+            setIsEdit(false);
+            message.warning('Bạn chưa thay đổi thông tin môn học nên không thể cập nhật!');
+            initialDataForm && form.setFieldsValue(initialDataForm);
+        } else if (JSON.stringify(values) !== JSON.stringify(initialDataForm)) {
+            mutateUpdate.mutate(values.subjectIds);
+            setInitialDataForm(values);
+        }
     };
 
     const handleChangeSubjects = (values: string[]) => {

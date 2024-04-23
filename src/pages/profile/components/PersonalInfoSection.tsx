@@ -1,6 +1,12 @@
 import { USER_ID } from '@core/constants/commons.constant';
-import { PersonalInformationInput, UserResp } from '@core/models/profile.model';
-import { updateProfileSectionApi } from '@core/services/user.service';
+import { DATE_FORMAT } from '@core/constants/date.constant';
+import { Gender } from '@core/enums/common.enum';
+import {
+    PersonalInformationInput,
+    UpdatePersonalInformationInput,
+    UserResp,
+} from '@core/models/profile.model';
+import { updateUserDetailApi } from '@core/services/user.service';
 import { useMutation } from '@tanstack/react-query';
 import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
 import dayjs from 'dayjs';
@@ -11,7 +17,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
     const [initialDataForm, setInitialDataForm] = useState<PersonalInformationInput>();
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: PersonalInformationInput) => updateProfileSectionApi(data, USER_ID),
+        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, USER_ID),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
             setIsEdit(false);
@@ -19,18 +25,26 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
     });
 
     const handleSubmitPersonalInformationForm = (values: PersonalInformationInput) => {
-        mutateUpdate.mutate(values);
+        const request: UpdatePersonalInformationInput = {
+            ...values,
+            dateOfBirth: dayjs(values.dateOfBirth).format(DATE_FORMAT.DATE.HYPHEN), // '25/01/2019',
+        };
+
+        mutateUpdate.mutate(request);
     };
 
     useEffect(() => {
         if (data) {
-            form.setFieldsValue({
+            const formData = {
                 fullName: data.fullName,
                 phone: data.phone,
                 email: data.email,
                 dateOfBirth: dayjs(data.dateOfBirth),
                 gender: data.gender,
-            });
+            };
+
+            setInitialDataForm(formData);
+            form.setFieldsValue(formData);
         }
     }, [data]);
 
@@ -38,6 +52,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
 
     const handleCancelUpdate = () => {
         setIsEdit(false);
+
         if (initialDataForm) {
             form.setFieldsValue(initialDataForm);
         }
@@ -111,7 +126,6 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                                 <DatePicker
                                     className='h-12 font-medium text-base w-full'
                                     placeholder='Nhập năm sinh'
-                                    picker='year'
                                 />
                             </Form.Item>
                         </div>
@@ -128,9 +142,8 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                                     placeholder='Chọn giới tính'
                                     onChange={(e) => form.setFieldsValue({ gender: e })}
                                     options={[
-                                        { value: 1, label: 'Male' },
-                                        { value: 2, label: 'Female' },
-                                        { value: 3, label: 'Other' },
+                                        { value: Gender.Male, label: 'Male' },
+                                        { value: Gender.Female, label: 'Female' },
                                     ]}
                                 />
                             </Form.Item>

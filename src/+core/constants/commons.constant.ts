@@ -7,5 +7,5 @@ export const AUTHORIZATION_BASIC = 'Basic';
 export const FILL_OUT_THIS_FILED_MESSAGE = 'Please fill out this field';
 export const FIXED_PRICE = 2;
 export const DATE_FORMAT = 'dd/MM/yyyy';
-export const USER_ID = '0e3cbd8b-7d30-42c4-ba7a-2b6d8d8a114f';
+export const USER_ID = 'de149c7e-3550-4c73-bec2-93ad9d98f058';
 export const DEFAULT_USER_NAME = 'User';

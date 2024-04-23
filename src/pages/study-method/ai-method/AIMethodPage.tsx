@@ -3,6 +3,7 @@ import images from '@assets/images';
 import AIItem from '@components/ai/ai-item/AIItem';
 import MethodItem from '@components/study-method/StudyMethod';
 import { FREE, PAID } from '@core/constants/routes.constant';
+import { DescriptionEnum } from '@core/enums/common.enum';
 import { Modal } from 'antd';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -15,10 +16,6 @@ function AIMethodPage() {
 
     const handleClickFreeAI = () => {
         setOpenModal(true);
-    };
-
-    const handleClickPaidAI = () => {
-        router.push(`${pathname}${PAID}`);
     };
 
     const FreeAIList = [
@@ -46,7 +43,7 @@ function AIMethodPage() {
     ];
 
     const handleClickAIItem = (id: number) => {
-        router.push(`${pathname}${FREE}?type=${id}`);
+        router.replace(`${pathname}${FREE}?type=${id}`);
     };
 
     return (
@@ -67,7 +64,7 @@ function AIMethodPage() {
                         image={images.freeAI}
                         title='Trả lời với AI miễn phí'
                         titleButton='Bắt đầu ngay'
-                        type={1}
+                        type={DescriptionEnum.FreeAI}
                         className='max-w-[542px]'
                         onClick={handleClickFreeAI}
                     />
@@ -75,9 +72,9 @@ function AIMethodPage() {
                         image={images.paidAI}
                         title='Trả lời với AI có phí'
                         titleButton='Bắt đầu ngay'
-                        type={1}
+                        type={DescriptionEnum.PaidAI}
                         className='max-w-[542px]'
-                        onClick={handleClickPaidAI}
+                        href={`${pathname}${PAID}`}
                     />
                 </div>
             </div>
@@ -87,6 +84,8 @@ function AIMethodPage() {
                     centered
                     open={openModal}
                     footer={null}
+                    closable={true}
+                    onCancel={() => setOpenModal(false)}
                 >
                     {FreeAIList &&
                         FreeAIList.length > 0 &&

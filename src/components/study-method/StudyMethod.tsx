@@ -1,59 +1,81 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import { DescriptionEnum } from '@core/enums/common.enum';
 import Image, { StaticImageData } from 'next/image';
+import Link from 'next/link';
 
 function MethodItem({
     image,
     titleButton,
     type,
     title,
-    onClick,
+    href,
     className,
+    onClick,
 }: {
     image: StaticImageData;
     titleButton: string;
     title: string;
     type: number;
-    onClick?: () => void;
+    href?: string;
     className?: string;
+    onClick?: () => void;
 }) {
     const listDescriptions = [
         {
-            type: 1,
+            type: DescriptionEnum.AI,
             title: 'AI',
             description: [
-                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
-                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
-                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
-                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
+                '1. Tốc độ: Giải đáp nhanh chóng, 24/7.',
+                '2. Khả năng: Xử lý dữ liệu lớn, đưa ra câu trả lời chính xác.',
+                '3. Tính khách quan: Loại bỏ cảm xúc, định kiến, mang tính trung lập.',
+                '4. Chi phí: Hiệu quả, tiết kiệm chi phí.',
             ],
         },
         {
-            type: 2,
+            type: DescriptionEnum.Mentor,
             title: 'Mentor',
             description: [
-                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
-                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
+                '1. Sự thấu hiểu: người hướng dẫn có khả năng hiểu được các sắc thái của ngôn ngữ và ý định của người dùng, do đó có thể cung cấp câu trả lời phù hợp và hiệu quả hơn.',
+                '2. Sáng tạo: sử dụng tư duy sáng tạo để giải quyết các vấn đề phức tạp và đưa ra những giải pháp mới mẻ.',
+                '3. Kỹ năng giao tiếp: có thể giao tiếp hiệu quả với người dùng, giúp họ dễ dàng hiểu được câu trả lời và giải quyết vấn đề.',
+                '4. Khả năng xây dựng mối quan hệ: Tạo dựng lòng tin, thu hút người dùng quay lại.',
             ],
         },
         {
-            type: 3,
+            type: DescriptionEnum.GoogleMeet,
             title: 'Google-meet',
             description: [
-                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
-                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
+                '1. Cho phép bạn tham gia giải đáp thắc mắc dù bất kể vị trí địa lý nào.',
+                '2. Có thể tham gia cuộc họp từ bất kỳ thiết bị nào có kết nối internet, bao gồm máy tính, máy tính bảng và điện thoại thông minh.',
+                '3. Cung cấp các tính năng tương tác như chia sẻ màn hình, trò chuyện và thăm dò để giúp bạn thu hút người tham gia và đảm bảo họ hiểu bài học.',
+                '4. Có thể ghi lại các phiên họp để người tham gia có thể xem lại sau hoặc những người không thể tham dự có thể xem lại.',
             ],
         },
         {
-            type: 4,
+            type: DescriptionEnum.File,
             title: 'File',
             description: [
-                '1. Mini App Trên Zalo là gì? Cách Mini App trên Zalo Hỗ Trợ Kinh Doanh Cực Hiệu Quả',
-                '2. Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-                '3. AI Marketing là gì? 11 Cách ứng dụng trí tuệ nhân tạo trong Marketing',
+                '1. Có thể học tập theo tốc độ của riêng mình và xem lại tệp nhiều lần nếu cần.',
+                '2. Có thể dễ dàng tham khảo tệp để ôn tập lại tài liệu hoặc tra cứu thông tin cụ thể.',
+                '3. Tiết kiệm thời gian, có thể đặt nhiều câu hỏi mà không cần phải trực tiếp gặp mặt người hướng dẫn.',
+            ],
+        },
+        {
+            type: DescriptionEnum.FreeAI,
+            title: 'Free-AI',
+            description: [
+                '1. Cho phép mọi người truy cập mà không cần trả phí.',
+                '2. Tốc độ phản hồi nhanh chóng.',
+                '3. Trả lời được hầu hết các câu hỏi liên quan đến học tập.',
+            ],
+        },
+        {
+            type: DescriptionEnum.PaidAI,
+            title: 'Paid-AI',
+            description: [
+                '1. Ngoài dữ liệu của AI miễn phí, AI có phí còn sử dụng dữ liệu riêng biệt của website giúp trả lời được nhiều câu hỏi mà AI miễn phí không trả lời được.',
+                '2. Có thể đặt câu hỏi với hình ảnh, hoặc file.',
+                '3. Sử dụng nguồn thông tin mới nhất, được cập nhật hằng tuần.',
             ],
         },
     ];
@@ -96,15 +118,16 @@ function MethodItem({
                 </div>
             </div>
 
-            <button
+            <Link
+                href={href ?? ''}
                 onClick={onClick}
-                className='justify-center items-stretch bg-blue-600 flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
+                className='no-underline justify-center items-stretch bg-blue-600 inline-flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
             >
                 <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
                     {titleButton}
                 </div>
                 <RightOutlined className='text-white-900' />
-            </button>
+            </Link>
         </div>
     );
 }

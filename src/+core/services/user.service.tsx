@@ -2,7 +2,7 @@ import { api } from '@core/https/http';
 import {
     CertificatesInformationInput,
     EducationInfoResp,
-    PersonalInformationInput,
+    UpdatePersonalInformationInput,
     UserResp,
 } from '@core/models/profile.model';
 import { objectToFormData } from '@core/parser/form-data.parser';
@@ -16,12 +16,12 @@ export const getUserDetailApi = async (id: string) => {
     return api.get<{ data: UserResp }>(`/api/users/${id}/profile`);
 };
 
-export const getEducationInfoApi = async (id: string) => {
-    return api.get<{ data: EducationInfoResp }>(`/api/users/${id}/profile/education-interest`);
+export const updateUserDetailApi = async (data: UpdatePersonalInformationInput, id: string) => {
+    return api.patch<void>(`/api/users/${id}/profile`, data);
 };
 
-export const updateProfileSectionApi = async (data: PersonalInformationInput, id: string) => {
-    return api.patch<void>(`/users/${id}`, data);
+export const getEducationInfoApi = async (id: string) => {
+    return api.get<{ data: EducationInfoResp }>(`/api/users/${id}/profile/education-interest`);
 };
 
 export const updateEducationSectionApi = async (data: string[], id: string) => {
