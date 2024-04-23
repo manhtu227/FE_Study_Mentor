@@ -5,9 +5,9 @@ import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
 import { AI, MENTOR, STUDY_METHOD } from '@core/constants/routes.constant';
+import { DescriptionEnum } from '@core/enums/common.enum';
 import { Button } from 'antd';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import Carousel, { ResponsiveType } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -49,15 +49,6 @@ function Homepage() {
             description: 'Giúp bạn sở hữu trọn vẹn kiến thức dù có vắng học đột xuất.',
         },
     ];
-    const router = useRouter();
-
-    const handleClickMentorMethod = () => {
-        router.push(`${STUDY_METHOD}${MENTOR}`);
-    };
-
-    const handleClickAIMethod = () => {
-        router.push(`${STUDY_METHOD}${AI}`);
-    };
 
     return (
         <div className='w-full h-full bg-[#F3F9FA]'>
@@ -66,12 +57,11 @@ function Homepage() {
                 <Image src={images.hero1} alt='Hero' className='relative opacity-50 max-w-full' />
                 <div className='absolute top-0 left-0 right-0 h-[650px] bg-[#0A2277] opacity-90'>
                     <div className='mb-[52px]'>
-                        <h2 className='text-center font-bold text-[50px] max-w-[650px] mx-auto text-white-900'>
-                            Upgrade Yourself, and Prepare a Better Future
-                        </h2>
+                        <h3 className='text-center font-bold text-[3.2rem] max-w-[650px] mx-auto text-white-900'>
+                            Kiến thức là sức mạnh, chia sẻ là niềm vui!
+                        </h3>
                         <div className='mx-auto text-white-900 text-center font-medium text-2xl max-w-[640px]'>
-                            Something bigger to achive your dreams so we provide all of these great
-                            things for you.
+                            Cùng nhau học hỏi - Cùng nhau tiến bộ
                         </div>
                     </div>
                     <div className='flex items-center gap-[52px] w-full justify-center'>
@@ -79,17 +69,17 @@ function Homepage() {
                             image={images.aiMethod}
                             title='Trả lời bằng AI'
                             titleButton='Trải nghiệm ngay'
-                            type={1}
+                            type={DescriptionEnum.AI}
                             className='max-w-[658px]'
-                            onClick={handleClickAIMethod}
+                            href={`${STUDY_METHOD}${AI}`}
                         />
                         <MethodItem
                             image={images.mentorMethod}
                             title='Giải đáp bởi người hướng dẫn'
                             titleButton='Trải nghiệm ngay'
-                            type={1}
+                            type={DescriptionEnum.Mentor}
                             className='max-w-[658px]'
-                            onClick={handleClickMentorMethod}
+                            href={`${STUDY_METHOD}${MENTOR}`}
                         />
                     </div>
                 </div>

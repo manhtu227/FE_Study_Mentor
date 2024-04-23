@@ -6,23 +6,12 @@ import { Image } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-// const mentor = {
-//     id: 1,
-//     image: images.feedback,
-//     name: 'Nguyễn Hưng',
-//     age: 23,
-//     rating: 5,
-//     tags: ['tag1', 'tag2', 'tag3'],
-// };
-
 export default function FindMentorPage() {
     const router = useRouter();
     const pathname = usePathname();
 
     const handleClickBySystem = () => {
-        console.log('checkkk');
-
-        router.push(`${pathname}/system/gg`);
+        router.replace(`${pathname}/system/gg`);
     };
     return (
         <div className='relative '>

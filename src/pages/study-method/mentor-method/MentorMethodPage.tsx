@@ -2,20 +2,12 @@
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
 import { FILE, GOOGLE_MEET } from '@core/constants/routes.constant';
+import { DescriptionEnum } from '@core/enums/common.enum';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 function MentorMethodPage() {
-    const router = useRouter();
     const pathname = usePathname();
-
-    const handleClickByFile = () => {
-        router.push(`${pathname}${FILE}`);
-    };
-
-    const handleClickByGGMeet = () => {
-        router.push(`${pathname}/${GOOGLE_MEET}`);
-    };
 
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
@@ -35,17 +27,17 @@ function MentorMethodPage() {
                         image={images.ggMeetMethod}
                         title='Trả lời thông qua Zoom/ Google meet'
                         titleButton='Trải nghiệm ngay'
-                        type={1}
+                        type={DescriptionEnum.GoogleMeet}
                         className='max-w-[542px]'
-                        onClick={handleClickByGGMeet}
+                        href={`${pathname}/${GOOGLE_MEET}`}
                     />
                     <MethodItem
                         image={images.fileMethod}
                         title='Trả lời thông qua File hướng dẫn (PDF, DOC, ...)'
                         titleButton='Tìm người hướng dẫn'
-                        type={1}
+                        type={DescriptionEnum.File}
                         className='max-w-[542px]'
-                        onClick={handleClickByFile}
+                        href={`${pathname}${FILE}`}
                     />
                 </div>
             </div>

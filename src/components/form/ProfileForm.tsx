@@ -1,6 +1,7 @@
 'use client';
 
 import UploadIconIcon from '@assets/icons/upload';
+import { Gender } from '@core/enums/common.enum';
 import {
     CertificatesInformationInput,
     EducationInformationInput,
@@ -157,9 +158,8 @@ function ProfileForm() {
                                     personalInformationForm.setFieldsValue({ gender: e })
                                 }
                                 options={[
-                                    { value: 1, label: 'Male' },
-                                    { value: 2, label: 'Female' },
-                                    { value: 3, label: 'Other' },
+                                    { value: Gender.Male, label: 'Male' },
+                                    { value: Gender.Female, label: 'Female' },
                                 ]}
                             />
                         </Form.Item>
@@ -203,7 +203,9 @@ function ProfileForm() {
                             mode='tags'
                             className='h-12 font-medium text-base text-gray-700'
                             placeholder='Nhập môn/ kỹ năng quan tâm'
-                            onChange={(e) => educationInformationForm.setFieldsValue({ skill: e })}
+                            onChange={(e) =>
+                                educationInformationForm.setFieldsValue({ subjectIds: e })
+                            }
                         />
                     </Form.Item>
 
@@ -219,7 +221,7 @@ function ProfileForm() {
                                 className='h-12 font-medium text-base text-gray-700'
                                 placeholder='Chọn cấp học'
                                 onChange={(e) =>
-                                    educationInformationForm.setFieldsValue({ levelId: e })
+                                    educationInformationForm.setFieldsValue({ levelIds: e })
                                 }
                                 options={[
                                     { value: 1, label: 'Cấp 1' },
@@ -240,7 +242,7 @@ function ProfileForm() {
                                 className='h-12 font-medium text-base text-gray-700'
                                 placeholder='Chọn lớp'
                                 onChange={(e) =>
-                                    educationInformationForm.setFieldsValue({ gradeId: e })
+                                    educationInformationForm.setFieldsValue({ gradeIds: e })
                                 }
                                 options={[
                                     { value: 1, label: '1' },

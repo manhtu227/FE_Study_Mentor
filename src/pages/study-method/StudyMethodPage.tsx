@@ -3,20 +3,12 @@
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
 import { AI, MENTOR } from '@core/constants/routes.constant';
+import { DescriptionEnum } from '@core/enums/common.enum';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 function StudyMethodPage() {
-    const router = useRouter();
     const pathname = usePathname();
-
-    const handleClickMentorMethod = () => {
-        router.push(`${pathname}${MENTOR}`);
-    };
-
-    const handleClickAIMethod = () => {
-        router.push(`${pathname}${AI}`);
-    };
 
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
@@ -36,16 +28,16 @@ function StudyMethodPage() {
                         image={images.aiMethod}
                         title='Trả lời bằng AI'
                         titleButton='Trải nghiệm ngay'
-                        type={1}
+                        type={DescriptionEnum.AI}
                         className='max-w-[542px]'
-                        onClick={handleClickAIMethod}
+                        href={`${pathname}${AI}`}
                     />
                     <MethodItem
                         image={images.mentorMethod}
                         title='Giải đáp bởi người hướng dẫn'
                         titleButton='Trải nghiệm ngay'
-                        type={1}
-                        onClick={handleClickMentorMethod}
+                        type={DescriptionEnum.Mentor}
+                        href={`${pathname}${MENTOR}`}
                         className='max-w-[542px]'
                     />
                 </div>

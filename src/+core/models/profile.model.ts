@@ -1,3 +1,4 @@
+import { Gender } from '@core/enums/common.enum';
 import { Dayjs } from 'dayjs';
 
 export type PersonalInformationInput = {
@@ -5,7 +6,15 @@ export type PersonalInformationInput = {
     phone: string;
     email: string;
     dateOfBirth: Dayjs;
-    gender: number;
+    gender: Gender;
+};
+
+export type UpdatePersonalInformationInput = {
+    fullName: string;
+    phone: string;
+    email: string;
+    dateOfBirth: string;
+    gender: Gender;
 };
 
 export type EducationInformationInput = {
