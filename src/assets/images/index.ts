@@ -23,6 +23,7 @@ import hero1 from './home-hero-1.png';
 import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
+import loginScreen from './loginScreen.jpg';
 import mentorMethod from './mentor-method.png';
 import momo from './momo.png';
 import napas from './napas.png';
@@ -74,6 +75,7 @@ const images = {
     gemini: gemini,
     createQuestion: createQuestion,
     copilot: copilot,
+    loginScreen: loginScreen,
 };
 
 export default images;
