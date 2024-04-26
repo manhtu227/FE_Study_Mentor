@@ -34,6 +34,7 @@ import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
 import studyMethodBg from './study-method-bg.png';
 import system from './system.png';
+import teacher from './teacher.png';
 import vector from './vector.png';
 import zalo from './zalo.png';
 
@@ -76,6 +77,7 @@ const images = {
     createQuestion: createQuestion,
     copilot: copilot,
     loginScreen: loginScreen,
+    teacher: teacher,
 };
 
 export default images;
