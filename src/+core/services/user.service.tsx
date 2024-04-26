@@ -1,7 +1,11 @@
 import { api } from '@core/https/http';
+import { BaseResp } from '@core/models/base.model';
 import {
     CertificatesInformationInput,
     EducationInfoResp,
+    FileObject,
+    IUserProfileResp,
+    SignedUrlResp,
     UpdatePersonalInformationInput,
     UserResp,
 } from '@core/models/profile.model';
@@ -39,10 +43,20 @@ export const updateCertificateSectionApi = async (
     });
 };
 
-export const updateAvatarApi = async (data: { avatar: any }, id: string) => {
-    return api.patch<void>(`users/${id}/avatar`, objectToFormData(data), {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
+export const getSignedUrlApi = async (fileName: string) => {
+    return api.post<BaseResp<SignedUrlResp>>(`/api/files/signed-url`, { fileName });
+};
+
+export const downloadFileApi = async (fileKey: string) => {
+    return api.get<Blob>(`/api/files/download?filekey=${fileKey}`, {
+        responseType: 'blob',
     });
+};
+
+export const previewFileApi = async (fileKey: string) => {
+    return api.get<string>(`/api/files/link-preview?filekey=${fileKey}`);
+};
+
+export const updateAvatarApi = async (data: FileObject, id: string) => {
+    return api.patch<IUserProfileResp>(`api/users/${id}/profile/avatar`, data);
 };

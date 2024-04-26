@@ -1,3 +1,5 @@
+import { RightOutlined } from '@ant-design/icons';
+import NextBreadcrumb from '@components/bread-crumb/BreadCrumb';
 import Layout from '@components/layout/Layout';
 import AntDesignProvider from '@core/provider/AntDesignProvider';
 import ReactQueryProvider from '@core/provider/ReactQueryProvider';
@@ -11,7 +13,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ReactQueryProvider>
                     <AntDesignProvider>
                         <Providers>
-                            <Layout>{children}</Layout>
+                            <Layout>
+                                <NextBreadcrumb
+                                    homeElement={'Home'}
+                                    separator={
+                                        <span>
+                                            {' '}
+                                            <RightOutlined />{' '}
+                                        </span>
+                                    }
+                                    activeClasses=''
+                                    containerClasses='flex bg-transparent list-none'
+                                    listClasses='hover:underline mx-2 font-bold'
+                                    capitalizeLinks
+                                />
+                                {children}
+                            </Layout>
                         </Providers>
                     </AntDesignProvider>
                 </ReactQueryProvider>

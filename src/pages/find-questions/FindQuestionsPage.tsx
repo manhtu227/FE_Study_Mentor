@@ -1,5 +1,5 @@
-import { RightOutlined, SearchOutlined } from '@ant-design/icons';
-import { Breadcrumb, Col, Pagination, Row } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Col, Pagination, Row } from 'antd';
 
 import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
@@ -64,29 +64,8 @@ export default function FindQuestionsPage() {
         },
     ];
 
-    const breadcrumbList = [
-        {
-            title: 'Home',
-            href: '/',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Dành cho người hướng dẫn',
-            href: '',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Tìm kiếm câu hỏi',
-            href: '/find-questions',
-            className: 'font-bold text-sm !text-black',
-        },
-    ];
-
     return (
         <div>
-            <div className='py-6'>
-                <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} />
-            </div>
             <div className='flex mb-8 justify-between flex-wrap gap-2'>
                 {/* <DropDownField className='px-6 py-3 flex items-center' title='Sắp xếp theo' /> */}
                 <CustomSelectInput

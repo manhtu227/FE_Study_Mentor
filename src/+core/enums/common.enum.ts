@@ -6,8 +6,3 @@ export enum DescriptionEnum {
     FreeAI = 5,
     PaidAI = 6,
 }
-
-export enum Gender {
-    Male = 0,
-    Female = 1,
-}

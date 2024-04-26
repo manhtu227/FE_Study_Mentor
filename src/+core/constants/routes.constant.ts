@@ -5,3 +5,5 @@ export const FREE = '/free';
 export const PAID = '/paid';
 export const FILE = '/file';
 export const GOOGLE_MEET = '/google-meet';
+export const LOGIN = '/login';
+export const SIGNUP = '/sign-up';
