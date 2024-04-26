@@ -1,4 +1,4 @@
-import { Gender } from '@core/enums/common.enum';
+import { Gender } from '@core/enums/user.enum';
 import { Dayjs } from 'dayjs';
 
 export type PersonalInformationInput = {
@@ -13,7 +13,7 @@ export type UpdatePersonalInformationInput = {
     fullName: string;
     phone: string;
     email: string;
-    dateOfBirth: string;
+    dateOfBirth: number;
     gender: Gender;
 };
 
@@ -68,4 +68,28 @@ export type IGrade = {
 export type ILevel = {
     id: string;
     name: string;
+};
+
+export type SignedUrlResp = {
+    fileKey: string;
+    fileName: string;
+    url: string;
+};
+
+export type FileObject = {
+    fileKey: string;
+    fileName: string;
+};
+
+export type IUserProfileResp = {
+    id: string;
+    email: string;
+    gender: Gender;
+    avatar?: FileObject;
+    fullName: string;
+    role: any;
+    phone: string;
+    dateOfBirth?: Date;
+    isActive: boolean;
+    averageRate: number;
 };

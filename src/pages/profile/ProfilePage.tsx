@@ -1,44 +1,31 @@
 'use client';
 
-import { RightOutlined } from '@ant-design/icons';
 import EyeIcon from '@assets/icons/eye';
-import UpgradeIcon from '@assets/icons/upgrade';
 import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
 import { DEFAULT_USER_NAME, USER_ID } from '@core/constants/commons.constant';
+import { api } from '@core/https/http';
+import { SignedUrlResp } from '@core/models/profile.model';
 import {
     educationInfoKeys,
     getEducationInfoApi,
+    getSignedUrlApi,
     getUserDetailApi,
     updateAvatarApi,
     userDetailKeys,
 } from '@core/services/user.service';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Breadcrumb, Button, Form, Spin, Switch, message } from 'antd';
+import { Button, Form, Spin, Switch, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
     const [form] = Form.useForm();
-    const breadcrumbList = [
-        {
-            title: 'Home',
-            href: '/',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Dành cho người hướng dẫn',
-            href: '',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Trang cá nhân',
-            href: '/profile',
-            className: 'font-bold text-sm !text-black',
-        },
-    ];
+    const [isUpdatePersonalInfo, setIsUpdatePersonalInfo] = useState<boolean>(false);
+    const [avatar, setAvatar] = useState<any>();
+    const [avatarObject, setAvatarObject] = useState<SignedUrlResp>();
 
     const personalInfoQuery = useQuery({
-        queryKey: userDetailKeys.list({ USER_ID }),
+        queryKey: userDetailKeys.list({ USER_ID, isUpdatePersonalInfo }),
         queryFn: () => getUserDetailApi(USER_ID),
         select: (resp) => resp.data.data,
     });
@@ -58,9 +45,43 @@ function ProfilePage() {
         },
     });
 
+    const mutateSignUrl = useMutation({
+        mutationFn: (fileName: string) => getSignedUrlApi(fileName),
+        onSuccess: () => {},
+    });
+
     const handleSubmitAvatar = (values: any) => {
-        mutateUpdate.mutate(values);
+        console.log(values);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            values.avatar.file.base64 = e?.target?.result;
+            setAvatar(values.avatar.file.base64);
+        };
+        reader.readAsDataURL(values.avatar.file.originFileObj);
+        console.log(values.avatar.file.base64);
+
+        const dataObject = mutateSignUrl.mutate(values.avatar.file.name);
+        setAvatar(values.avatar.file.base64);
+        // mutateUpdate.mutate(values);
     };
+
+    console.log(avatar);
+
+    useEffect(() => {
+        if (mutateSignUrl.data) {
+            const url = mutateSignUrl.data.data?.data?.url;
+            console.log(avatar);
+
+            api.put(url, avatar, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }).then((res) => {
+                console.log(res);
+            });
+        }
+    }, [mutateSignUrl.data]);
 
     useEffect(() => {
         if (personalInfoQuery.data?.isActive) setIsActive(personalInfoQuery.data.isActive);
@@ -70,9 +91,6 @@ function ProfilePage() {
         <Spin spinning={personalInfoQuery.isFetching || educationInfoQuery.isFetching} size='large'>
             <div className='w-full bg-[#F3F9FA]'>
                 <div className='px-[180px] pb-[100px]'>
-                    <div className='py-6'>
-                        <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} />
-                    </div>
                     <div className='flex gap-8 w-full'>
                         <div className='w-1/3'>
                             <div className='flex p-8 flex-col bg-white-900 mb-8 rounded-md'>
@@ -109,10 +127,10 @@ function ProfilePage() {
                                         Tài khoản chưa xác thực
                                     </Button>
                                 )} */}
-                                        <Button className='w-full bg-primary-800 hover:!bg-primary-800 rounded-full text-lg hover:opacity-90 hover:!text-white-900 font-semibold h-12 text-white-900 mt-2'>
+                                        {/* <Button className='w-full bg-primary-800 hover:!bg-primary-800 rounded-full text-lg hover:opacity-90 hover:!text-white-900 font-semibold h-12 text-white-900 mt-2'>
                                             <UpgradeIcon className='mr-2' />
                                             Nâng cấp tài khoản
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                 </div>
                                 <div className='w-full border-solid border-[1px] border-gray-200 border-r-0 border-l-0 border-b-0 mt-8 pt-8'>
@@ -168,6 +186,9 @@ function ProfilePage() {
                         <ProfileForm
                             personalData={personalInfoQuery.data}
                             educationData={educationInfoQuery.data}
+                            onUpdatePersonalInfo={() =>
+                                setIsUpdatePersonalInfo(!isUpdatePersonalInfo)
+                            }
                         />
                     </div>
                 </div>

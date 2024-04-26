@@ -1,10 +1,10 @@
 'use client';
 
-import { DownOutlined, RightOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
-import { Avatar, Breadcrumb, Button, Col, Pagination, Row, Tag } from 'antd';
+import { Avatar, Button, Col, Pagination, Row, Tag } from 'antd';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -67,33 +67,9 @@ function DetailedQuestionPage() {
     ];
 
     const [showForm, setShowForm] = useState<boolean>(false);
-    const breadcrumbList = [
-        {
-            title: 'Home',
-            href: '/',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Dành cho người hướng dẫn',
-            href: '',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Tìm kiếm câu hỏi',
-            href: '/find-questions',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            className: 'font-bold text-sm !text-black',
-        },
-    ];
 
     return (
         <div className='px-[180px] pb-[64px] bg-[#F3F9FA]'>
-            <div className='py-6'>
-                <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} />
-            </div>
             <div className='w-full flex gap-8'>
                 <div className='w-2/3 '>
                     <div className='w-full transition-all'>

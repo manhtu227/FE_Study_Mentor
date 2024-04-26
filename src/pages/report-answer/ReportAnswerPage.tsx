@@ -1,31 +1,8 @@
-import { DownloadOutlined, RightOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@ant-design/icons';
 import ReportAnswerForm from '@components/form/ReportAnswerForm';
-import { Breadcrumb } from 'antd';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 
 function ReportAnswerPage() {
-    const breadcrumbList = [
-        {
-            title: 'Home',
-            href: '/',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Dành cho người hướng dẫn',
-            href: '',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Câu hỏi số 1',
-            href: '/find-questions',
-            className: 'font-bold text-sm !text-primary-800',
-        },
-        {
-            title: 'Báo cáo câu hỏi',
-            className: 'font-bold text-sm !text-black',
-        },
-    ];
-
     const questionFile = {
         extension: 'docx',
         fileName: 'FileCauHoi.docx',
@@ -39,9 +16,6 @@ function ReportAnswerPage() {
 
     return (
         <div className='px-[180px] pb-[64px] bg-[#F3F9FA]'>
-            <div className='py-6'>
-                <Breadcrumb separator={<RightOutlined />} items={breadcrumbList} />
-            </div>
             <div className='w-full flex gap-8'>
                 <div className='w-2/5 rounded-lg bg-white-900 p-8'>
                     <div className='flex items-center gap-4'>
