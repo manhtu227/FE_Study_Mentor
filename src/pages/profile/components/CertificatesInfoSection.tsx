@@ -1,30 +1,31 @@
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
-import { USER_ID } from '@core/constants/commons.constant';
 import { CertificatesInformationInput, UserResp } from '@core/models/profile.model';
 import { updateCertificateSectionApi } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Input, message, Spin } from 'antd';
-import { useEffect } from 'react';
+import { Button, Form, Input, Spin, message } from 'antd';
+import { useSelector } from 'react-redux';
 
 export function CertificatesInfoSection({ data }: { data?: UserResp }) {
     const [form] = Form.useForm<CertificatesInformationInput>();
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateUpdate = useMutation({
         mutationFn: (data: CertificatesInformationInput) =>
-            updateCertificateSectionApi(data, USER_ID),
+            updateCertificateSectionApi(data, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
         },
     });
 
-    useEffect(() => {
-        if (data) {
-            form.setFieldsValue({
-                name: data.CertificateName,
-                certificateFile: data.CertificateImageUrl,
-            });
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (data) {
+    //         form.setFieldsValue({
+    //             name: data.CertificateName,
+    //             certificateFile: data.CertificateImageUrl,
+    //         });
+    //     }
+    // }, [data]);
 
     const handleSubmitCertificatesInformationForm = (values: CertificatesInformationInput) => {
         mutateUpdate.mutate(values);

@@ -1,7 +1,6 @@
 import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { ModalPayment } from '@components/modal/modal-payment';
-import { USER_ID } from '@core/constants/commons.constant';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -60,7 +59,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const handleSubmit = async (values: QuestionInput) => {
         const attachFiles = await file.uploadMultipleFiles(values.attachFiles.fileList);
         const request: CreateFileQuestionRequestModel = {
-            userId: data?.user.user.id || USER_ID,
+            userId: data?.user.user.id || '',
             subjectId: selectedSubject,
             timeFindTutor: values.timeAnswer,
             numberOfStar: values.tutorRating,

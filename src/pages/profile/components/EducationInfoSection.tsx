@@ -1,4 +1,3 @@
-import { USER_ID } from '@core/constants/commons.constant';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { EducationInfoResp, EducationInformationInput } from '@core/models/profile.model';
 import { GradeResp, StructureEducationsResp } from '@core/models/question.model';
@@ -8,9 +7,11 @@ import {
     ConvertSubjectToOption,
 } from '@core/services/questions.service';
 import { updateEducationSectionApi } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Select, Spin, message } from 'antd';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const [form] = Form.useForm<EducationInformationInput>();
@@ -19,6 +20,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const [levels, setLevels] = useState<string[]>([]);
     const [grades, setGrades] = useState<string[]>([]);
     const [subjects, setSubjects] = useState<string[]>([]);
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
@@ -37,7 +39,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
 
     const mutateUpdate = useMutation({
-        mutationFn: (subjectIds: string[]) => updateEducationSectionApi(subjectIds, USER_ID),
+        mutationFn: (subjectIds: string[]) => updateEducationSectionApi(subjectIds, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
             setIsEdit(false);
