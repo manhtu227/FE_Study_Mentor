@@ -53,7 +53,6 @@ export const useUploadFileApi = () => {
     };
 
     const uploadMultipleFiles = async (files: UploadFile[]): Promise<FileReq[]> => {
-        console.log('files', files);
         return Promise.all(files.map((file) => uploadFile(file)));
     };
 
