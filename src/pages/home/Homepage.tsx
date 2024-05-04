@@ -4,10 +4,9 @@ import images from '@assets/images';
 import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
-import { AI, MENTOR, STUDY_METHOD } from '@core/constants/routes.constant';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import { Button } from 'antd';
-import Image from 'next/image';
+import { Button, Image } from 'antd';
 
 import Carousel, { ResponsiveType } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -54,7 +53,11 @@ function Homepage() {
         <div className='w-full h-full bg-[#F3F9FA]'>
             {/* section 1 */}
             <section className='relative mb-[300px]'>
-                <Image src={images.hero1} alt='Hero' className='relative opacity-50 max-w-full' />
+                <Image
+                    src={images.hero1.src}
+                    alt='Hero'
+                    className='relative opacity-50 max-w-full'
+                />
                 <div className='absolute top-0 left-0 right-0 h-[650px] bg-[#0A2277] opacity-90'>
                     <div className='mb-[52px]'>
                         <h3 className='text-center font-bold text-[3.2rem] max-w-[650px] mx-auto text-white-900'>
@@ -71,7 +74,7 @@ function Homepage() {
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.AI}
                             className='max-w-[658px]'
-                            href={`${STUDY_METHOD}${AI}`}
+                            href={MY_ROUTE.AI.self}
                         />
                         <MethodItem
                             image={images.mentorMethod}
@@ -79,7 +82,7 @@ function Homepage() {
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.Mentor}
                             className='max-w-[658px]'
-                            href={`${STUDY_METHOD}${MENTOR}`}
+                            href={MY_ROUTE.MENTOR.self}
                         />
                     </div>
                 </div>
@@ -111,10 +114,10 @@ function Homepage() {
                     </div>
                 </div>
                 <div className='flex items-center'>
-                    <Image src={images.process1} alt='Quy trình làm việc của Study Mentor' />
+                    <Image src={images.process1.src} alt='Quy trình làm việc của Study Mentor' />
                     <div className='relative'>
                         <Image
-                            src={images.process2}
+                            src={images.process2.src}
                             alt='Quy trình làm việc của Study Mentor'
                             className='relative -right-40'
                         />
@@ -167,7 +170,7 @@ function Homepage() {
                     </Button>
                 </div>
                 <div className='w-1/2 mt-[100px] mr-10'>
-                    <Image src={images.homeContact} alt='XEM THÊM THÔNG TIN VỀ STUDY MENTOR' />
+                    <Image src={images.homeContact.src} alt='XEM THÊM THÔNG TIN VỀ STUDY MENTOR' />
                 </div>
             </section>
             {/* section 5 */}

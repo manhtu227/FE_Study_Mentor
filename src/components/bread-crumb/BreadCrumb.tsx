@@ -17,7 +17,7 @@ const NextBreadcrumb = ({
     const pathNames = paths && paths.split('/').filter((path) => path);
 
     return paths !== '/' ? (
-        <div>
+        <div className='bg-transparent'>
             <ul className={containerClasses}>
                 <li className={listClasses}>
                     <Link href={'/'} className='no-underline text-blue-800'>

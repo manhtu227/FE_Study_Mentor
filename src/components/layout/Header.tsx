@@ -5,13 +5,12 @@ import BellIcon from '@assets/icons/bell';
 import CatalogIcon from '@assets/icons/catalog';
 import ChatIcon from '@assets/icons/chat';
 import Logo from '@components/logo/Logo';
-import { LOGIN, SIGNUP } from '@core/constants/routes.constant';
-import { RootState } from '@core/store';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Button, Dropdown, MenuProps } from 'antd';
 import clsx from 'clsx';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
 const Header = () => {
     const items: MenuProps['items'] = [
         {
@@ -38,21 +37,28 @@ const Header = () => {
             key: '0',
         },
         {
-            label: <Link href='/logout'>Logout</Link>,
-            key: '1',
+            label: (
+                <div
+                    onClick={() => {
+                        signOut();
+                    }}
+                >
+                    Logout
+                </div>
+            ),
+            key: '2',
         },
     ];
 
     const router = useRouter();
-    const accessToken = useSelector((state: RootState) => state.authentication)?.accessToken ?? '';
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
+    const { status: authStatus, data } = useSession();
 
     const handleClickLogin = () => {
-        router.push(LOGIN);
+        router.push(MY_ROUTE.LOGIN);
     };
 
     const handleClickSignUp = () => {
-        router.push(SIGNUP);
+        router.push(MY_ROUTE.SIGN_UP);
     };
 
     return (
@@ -85,7 +91,7 @@ const Header = () => {
                         Dành cho học viên
                     </Button>
                 </div>
-                {accessToken ? (
+                {data?.user.user ? (
                     <div className='flex w-1/3 items-center justify-end gap-4'>
                         <Button
                             className='h-12 w-12 flex items-center justify-center'
@@ -110,17 +116,12 @@ const Header = () => {
                                 <div className='flex items-center gap-2 '>
                                     <div className='rounded-full w-10 h-10 bg-[#D9D9D9]' />
                                     <span className='text-primary-900 text-xl'>
-                                        {user.fullName}
+                                        {data.user.user.fullName}
                                     </span>
                                     <RightOutlined />
                                 </div>
                             </Dropdown>
                         </Button>
-                        {/* <div >
-                            <div className='rounded-full w-10 h-10 bg-[#D9D9D9]' />
-                            <span className='text-primary-900 text-xl'>Sterling</span>
-                            <RightOutlined />
-                        </div> */}
                     </div>
                 ) : (
                     <div className='flex w-1/3 items-center justify-end gap-8'>
