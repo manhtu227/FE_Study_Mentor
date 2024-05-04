@@ -4,7 +4,7 @@ import images from '@assets/images';
 import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
-import { AI, MENTOR, STUDY_METHOD } from '@core/constants/routes.constant';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
 import { Button } from 'antd';
 import Image from 'next/image';
@@ -71,7 +71,7 @@ function Homepage() {
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.AI}
                             className='max-w-[658px]'
-                            href={`${STUDY_METHOD}${AI}`}
+                            href={MY_ROUTE.AI.self}
                         />
                         <MethodItem
                             image={images.mentorMethod}
@@ -79,7 +79,7 @@ function Homepage() {
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.Mentor}
                             className='max-w-[658px]'
-                            href={`${STUDY_METHOD}${MENTOR}`}
+                            href={MY_ROUTE.MENTOR.self}
                         />
                     </div>
                 </div>

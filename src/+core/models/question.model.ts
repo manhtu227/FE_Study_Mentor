@@ -1,4 +1,5 @@
 import { StaticImageData } from 'next/image';
+import { FileAntd, FileReq } from './file.model';
 
 export type QuestionInput = {
     questionLevel: string;
@@ -7,7 +8,7 @@ export type QuestionInput = {
     timeAnswer: number;
     tutorRating: number;
     content: string;
-    attachFiles: any;
+    attachFiles: FileAntd;
     tutorCriteria: string;
     subjectId: string;
     class: string;
@@ -17,12 +18,16 @@ export type QuestionInput = {
     numberOfStars: number;
 };
 
-export type CreateFileQuestionRequest = {
+export type CreateFileQuestionRequestModel = {
     userId: string;
     subjectId: string;
-    timeAnswer: number;
+    numberOfStar: number;
+    // price?: number
+    // tutorRating: TutorRating
+    // tutorCriteria?: TutorRating
+    timeFindTutor: number;
     content: string;
-    attachFiles: any;
+    attachFiles: FileReq[];
 };
 
 export type CreateFileQuestionResp = {

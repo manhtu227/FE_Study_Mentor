@@ -3,48 +3,41 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { LoginInput } from '@core/models/authentication.model';
-import { loginApi } from '@core/services/authentication.service';
-import { RootState } from '@core/store';
-import { setAccessToken, setUser } from '@core/store/reducers/authentication.reducer';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, message } from 'antd';
+import { Button, Form } from 'antd';
+import { signIn, SignInOptions, useSession } from 'next-auth/react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 const LoginPage = () => {
     const [form] = Form.useForm<LoginInput>();
     const router = useRouter();
-    const dispatch = useDispatch();
-    const accessToken = useSelector((state: RootState) => state.authentication)?.accessToken ?? '';
+    const { data: authData, status: authStatus } = useSession();
 
-    const loginMutate = useMutation({
-        mutationFn: (data: LoginInput) => loginApi(data),
-        onSuccess: () => {
-            message.success('Đăng nhập thành công');
-        },
+    /* Action */
+    const loginMutation = useMutation({
+        mutationFn: (form: LoginInput) =>
+            signIn('credentials', {
+                email: form.email,
+                password: form.password,
+                redirect: false,
+            } as LoginInput & SignInOptions),
     });
 
     const handleSubmitLogin = (values: LoginInput) => {
-        loginMutate.mutate(values);
+        loginMutation.mutate(values);
     };
 
+    /* Effect */
     useEffect(() => {
-        if (accessToken) {
-            router.push('/');
-        }
-    }, []);
-
-    useEffect(() => {
-        loginMutate.data?.data.data.token &&
-            dispatch(setAccessToken(loginMutate.data?.data.data.token)) &&
-            dispatch(setUser(loginMutate.data?.data.data.user)) &&
-            router.push('/');
-    }, [loginMutate.data?.data.data.token]);
+        if (authStatus !== 'authenticated') return;
+        router.push(MY_ROUTE.HOME);
+    }, [authStatus, authData]);
 
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
