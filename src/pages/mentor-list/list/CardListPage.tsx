@@ -3,19 +3,20 @@
 import images from '@assets/images';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { PaginationCore } from '@components/pagination/pagination';
-import { USER_ID } from '@core/constants/commons.constant';
 import { MentorListFilter } from '@core/models/mentor.model';
 import {
     getFavoriteMentorListApi,
     getMentorListApi,
     mentorListKeys,
 } from '@core/services/mentors.service';
+import { RootState } from '@core/store';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { calculateAge } from '@core/utilities/caculate-age.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Col, Row, Spin } from 'antd';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function CardListPage() {
     const searchParams = useSearchParams();
@@ -26,6 +27,7 @@ export default function CardListPage() {
     const subjectId = searchParams?.get('subjectId');
     const currentTab = searchParams?.get('searchYourSelfTab') ?? '1';
     const isTutorOnline = searchParams?.get('isTutorOnline') ?? true;
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const [filter, setFilter] = useState<MentorListFilter>({
         subjectId: subjectId ?? 'e4e0697e-56c7-4650-9ea2-52b5d8f5e55f',
@@ -43,7 +45,7 @@ export default function CardListPage() {
                 : getFavoriteMentorListApi({
                       page: filter.page,
                       pageSize: filter.pageSize,
-                      userId: USER_ID,
+                      userId: user?.id,
                   }),
         select: (resp) => {
             return {

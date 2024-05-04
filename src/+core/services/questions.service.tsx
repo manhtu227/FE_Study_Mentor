@@ -1,4 +1,3 @@
-import { USER_ID } from '@core/constants/commons.constant';
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
@@ -45,10 +44,10 @@ export const gradesKeys = initKeys('grades-keys');
 
 export const subjectsKeys = initKeys('subjects-keys');
 
-export const createQuestions = (data: CreateFileQuestionRequest) => {
+export const createQuestions = (data: CreateFileQuestionRequest, userId: string) => {
     return api.post<BaseResp<CreateFileQuestionResp>>(
         '/api/questions',
-        objectToFormData({ ...data, userId: USER_ID }),
+        objectToFormData({ ...data, userId: userId }),
         {
             headers: { 'Content-Type': 'multipart/form-data' },
         },
