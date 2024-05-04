@@ -2,7 +2,7 @@
 
 import EyeIcon from '@assets/icons/eye';
 import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
-import { DEFAULT_USER_NAME, USER_ID } from '@core/constants/commons.constant';
+import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
 import { api } from '@core/https/http';
 import { SignedUrlResp } from '@core/models/profile.model';
 import {
@@ -13,9 +13,11 @@ import {
     updateAvatarApi,
     userDetailKeys,
 } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Spin, Switch, message } from 'antd';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
@@ -23,23 +25,24 @@ function ProfilePage() {
     const [isUpdatePersonalInfo, setIsUpdatePersonalInfo] = useState<boolean>(false);
     const [avatar, setAvatar] = useState<any>();
     const [avatarObject, setAvatarObject] = useState<SignedUrlResp>();
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const personalInfoQuery = useQuery({
-        queryKey: userDetailKeys.list({ USER_ID, isUpdatePersonalInfo }),
-        queryFn: () => getUserDetailApi(USER_ID),
+        queryKey: userDetailKeys.list({ id: user?.id, isUpdatePersonalInfo }),
+        queryFn: () => getUserDetailApi(user?.id),
         select: (resp) => resp.data.data,
     });
 
     const educationInfoQuery = useQuery({
-        queryKey: educationInfoKeys.list({ USER_ID }),
-        queryFn: () => getEducationInfoApi(USER_ID),
+        queryKey: educationInfoKeys.list({ id: user?.id }),
+        queryFn: () => getEducationInfoApi(user?.id),
         select: (resp) => resp.data.data,
     });
 
     const [isActive, setIsActive] = useState<boolean>(personalInfoQuery.data?.isActive ?? false);
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: any) => updateAvatarApi(data, USER_ID),
+        mutationFn: (data: any) => updateAvatarApi(data, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
         },

@@ -1,4 +1,3 @@
-import { USER_ID } from '@core/constants/commons.constant';
 import { Gender } from '@core/enums/user.enum';
 import {
     PersonalInformationInput,
@@ -6,10 +5,12 @@ import {
     UserResp,
 } from '@core/models/profile.model';
 import { updateUserDetailApi } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
 import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export function PersonalInfoSection({
     data,
@@ -20,9 +21,10 @@ export function PersonalInfoSection({
 }) {
     const [form] = Form.useForm<PersonalInformationInput>();
     const [initialDataForm, setInitialDataForm] = useState<PersonalInformationInput>();
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, USER_ID),
+        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
             setIsEdit(false);
@@ -32,7 +34,6 @@ export function PersonalInfoSection({
             message.error('Cập nhật thông tin thất bại');
         },
     });
-
     const handleSubmitPersonalInformationForm = (values: PersonalInformationInput) => {
         const request: UpdatePersonalInformationInput = {
             ...values,

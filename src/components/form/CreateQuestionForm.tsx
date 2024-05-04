@@ -1,7 +1,6 @@
 import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { ModalPayment } from '@components/modal/modal-payment';
-import { USER_ID } from '@core/constants/commons.constant';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { CreateFileQuestionRequest, QuestionInput } from '@core/models/question.model';
@@ -11,11 +10,13 @@ import {
     ConvertSubjectToOption,
     createQuestions,
 } from '@core/services/questions.service';
+import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, Modal, Select, Spin, message } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function CreateQuestionForm({ onNext }: { onNext: () => void }) {
@@ -25,6 +26,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const [selectedGrade, setSelectedGrade] = useState<string>('');
     const [selectedSubject, setSelectedSubject] = useState<string>('');
     const [price, setPrice] = useState<number>(0);
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
@@ -37,7 +39,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
 
     /* create question api */
     const mutateCreateQuestions = useMutation({
-        mutationFn: (data: CreateFileQuestionRequest) => createQuestions(data),
+        mutationFn: (data: CreateFileQuestionRequest) => createQuestions(data, user?.id),
         onSuccess: () => {
             message.open({
                 type: 'success',
@@ -55,7 +57,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     /* Handler */
     const handleSubmit = (values: QuestionInput) => {
         const request: CreateFileQuestionRequest = {
-            userId: USER_ID,
+            userId: user?.id,
             subjectId: selectedSubject,
             timeAnswer: +values.timeAnswer,
             content: values.content,

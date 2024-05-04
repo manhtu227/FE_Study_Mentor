@@ -5,7 +5,6 @@ import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
-import { USER_ID } from '@core/constants/commons.constant';
 import { MentorType } from '@core/models/profile.model';
 import { RatingInput, RatingReq } from '@core/models/question.model';
 import {
@@ -13,8 +12,10 @@ import {
     infoDiscusKeys,
     updateRatingApi,
 } from '@core/services/questions.service';
+import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Avatar, Divider, Form, Image, Input, message, Rate, Spin } from 'antd';
+import { Avatar, Divider, Form, Image, Input, Rate, Spin, message } from 'antd';
+import { useSelector } from 'react-redux';
 
 const mentor: MentorType = {
     id: '1',
@@ -36,9 +37,10 @@ const subject = {
 
 export default function RatingAnswerPage() {
     const [form] = Form.useForm<RatingInput>();
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateCreate = useMutation({
-        mutationFn: (data: RatingReq) => updateRatingApi(data, USER_ID),
+        mutationFn: (data: RatingReq) => updateRatingApi(data, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
         },
