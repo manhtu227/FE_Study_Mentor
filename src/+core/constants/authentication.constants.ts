@@ -15,3 +15,4 @@ export const AN_ERROR_OCCURRED = 'An error occurred. Please try again.';
 export const PASSWORD_SECURITY_RULE_SIGN_IN_MESSAGE =
     'At least 12 characters, mix of uppercase and lowercase letters, numbers, and special characters (e.g., !, @, #, $, %)';
 export const IS_LOGIN = 'isLogin';
+export const AUTHENTICATED = 'authenticated';

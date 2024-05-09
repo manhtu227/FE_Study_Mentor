@@ -1,11 +1,24 @@
 'use client';
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
+import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 function MentorSelectMethodPage() {
+    const router = useRouter();
+    const { data: authData, status: authStatus } = useSession();
+
+    useEffect(() => {
+        if (authStatus === AUTHENTICATED) return;
+
+        router.push(MY_ROUTE.LOGIN);
+    }, [authData, authStatus]);
+
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
             <Image

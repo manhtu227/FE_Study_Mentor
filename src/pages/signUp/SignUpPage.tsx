@@ -6,22 +6,21 @@ import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { Button, Form, message } from 'antd';
 
+import { AUTHENTICATED } from '@core/constants/authentication.constants';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, TypeUser } from '@core/enums/user.enum';
 import { SignUpInput } from '@core/models/authentication.model';
 import { signUpApi } from '@core/services/authentication.service';
-import { RootState } from '@core/store';
-import { setAccessToken, setUser } from '@core/store/reducers/authentication.reducer';
 import { useMutation } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 const SignUpPage = () => {
     const [form] = Form.useForm<SignUpInput>();
     const router = useRouter();
-    const dispatch = useDispatch();
-    const accessToken = useSelector((state: RootState) => state.authentication)?.accessToken ?? '';
+    const { data: authData, status: authStatus } = useSession();
 
     const signUpMutate = useMutation({
         mutationFn: (data: SignUpInput) => signUpApi(data),
@@ -31,22 +30,13 @@ const SignUpPage = () => {
     });
 
     const handleSubmitSignUp = (values: SignUpInput) => {
-        console.log('Submit', values);
         signUpMutate.mutate(values);
     };
 
     useEffect(() => {
-        if (accessToken) {
-            router.push('/');
-        }
-    }, []);
-
-    useEffect(() => {
-        signUpMutate.data?.data.data.token &&
-            dispatch(setAccessToken(signUpMutate.data?.data.data.token)) &&
-            dispatch(setUser(signUpMutate.data?.data.data.user)) &&
-            router.push('/');
-    }, [signUpMutate.data?.data.data.token]);
+        if (authStatus !== AUTHENTICATED) return;
+        router.push(MY_ROUTE.HOME);
+    }, [authStatus, authData]);
 
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
