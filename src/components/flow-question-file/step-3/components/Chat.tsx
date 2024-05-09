@@ -50,7 +50,7 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
             newChat,
             {
                 ...newChat,
-                id: uuidv4(),
+                questionId: uuidv4(),
                 value: response,
                 contactId: 'cfaad35d-07a3-4447-a6c3-d8c3d54fd5df',
             },
@@ -69,7 +69,7 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
                     }
                     return (
                         <div
-                            key={item.id}
+                            key={item.questionId}
                             className={clsx(
                                 `flex flex-col gap-4`,
                                 item.contactId ? 'items-start' : 'items-end',

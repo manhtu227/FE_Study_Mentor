@@ -15,7 +15,8 @@ export type LoginInput = {
 };
 
 export type IAuthenResponseModel = {
-    token: string;
+    accessToken: string;
+    resetToken: string;
     user: UserResp;
 };
 

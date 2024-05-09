@@ -3,11 +3,28 @@ import images from '@assets/images';
 import AIItem from '@components/ai/ai-item/AIItem';
 import MethodItem from '@components/study-method/StudyMethod';
 import { MY_ROUTE } from '@core/constants/routes.constant';
+import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { DescriptionEnum } from '@core/enums/common.enum';
 import { Modal } from 'antd';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+const FreeAIList = [
+    {
+        id: CategoryAiEnum.CHAT_GPT,
+        title: 'Chat GPT',
+        description:
+            'Sử dụng mạng Neural Transformer để học và trả lời câu hỏi, ChatGPT có thể đáp ứng yêu cầu trả lời nhanh và chính xác của bạn',
+        image: images.chatPGT,
+    },
+    {
+        id: CategoryAiEnum.GEMINI,
+        title: 'Gemini',
+        image: images.gemini,
+        description:
+            'Sử dụng deep learning trên lượng lớn dữ liệu về nhiều lĩnh vực khác nhau, đảm bảo có thể đưa ra câu trả lời về bất kỳ lĩnh vực nào mà bạn muốn',
+    },
+];
 
 function AISelectMethodPage() {
     const router = useRouter();
@@ -18,32 +35,8 @@ function AISelectMethodPage() {
         setOpenModal(true);
     };
 
-    const FreeAIList = [
-        {
-            id: 1,
-            title: 'Chat GPT',
-            description:
-                'Sử dụng mạng Neural Transformer để học và trả lời câu hỏi, ChatGPT có thể đáp ứng yêu cầu trả lời nhanh và chính xác của bạn',
-            image: images.chatPGT,
-        },
-        {
-            id: 2,
-            title: 'Gemini',
-            image: images.gemini,
-            description:
-                'Sử dụng deep learning trên lượng lớn dữ liệu về nhiều lĩnh vực khác nhau, đảm bảo có thể đưa ra câu trả lời về bất kỳ lĩnh vực nào mà bạn muốn',
-        },
-        {
-            id: 3,
-            title: 'Copilot',
-            image: images.copilot,
-            description:
-                'Có khả năng dẫn dắt các cuộc hội thoại một cách tự nhiên và giống người thật, mang lại cảm giác dễ chịu và thoải mái khi trò chuyện cùng',
-        },
-    ];
-
-    const handleClickAIItem = (id: number) => {
-        // router.replace(`${pathname}${FREE}?type=${id}`);
+    const handleClickAIItem = (id: string) => {
+        router.replace(`${MY_ROUTE.AI.FREE}?type=${id}`);
     };
 
     return (

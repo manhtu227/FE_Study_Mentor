@@ -11,6 +11,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: MY_ROUTE.LOGIN,
     },
+    secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
     providers: [
         CredentialsProvider({
             name: 'Credentials',
@@ -36,6 +37,9 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    session: {
+        strategy: 'jwt',
+    },
     callbacks: {
         session: async ({ session, token }) => {
             session.user = token as any;
