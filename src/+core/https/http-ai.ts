@@ -1,12 +1,13 @@
 import { getSessionToken } from '@core/utilities/auth.utility';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { signOut } from 'next-auth/react';
 import nProgress from 'nprogress';
 
 const DEFAULT_CONFIG_ENDPOINTS = ['auth'];
 const WHITELIST_ENDPOINTS = ['auth/token/account-information'];
 
-export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_API_ENDPOINT,
+export const apiAi = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_AI_API_ENDPOINT,
 });
 
 const nProgressHandler = (type: 'start' | 'stop') => {
@@ -15,7 +16,7 @@ const nProgressHandler = (type: 'start' | 'stop') => {
     else nProgress.done();
 };
 
-api.interceptors.request.use(
+apiAi.interceptors.request.use(
     async (config: AxiosRequestConfig): Promise<any> => {
         nProgressHandler('start');
         const path = config.url;
@@ -33,14 +34,14 @@ api.interceptors.request.use(
     },
 );
 
-api.interceptors.response.use(
+apiAi.interceptors.response.use(
     (response: AxiosResponse): AxiosResponse => {
         nProgressHandler('stop');
         return response;
         // return response.data;
     },
     (error: AxiosError): Promise<AxiosError> => {
-        // if (error.response?.status === 401) signOut();
+        if (error.response?.status === 401) signOut();
         nProgressHandler('stop');
         return Promise.reject(error);
     },

@@ -1,23 +1,44 @@
 'use client';
 
-import { ChatModel } from '@core/models/chat.model';
+import { CategoryAiEnum } from '@core/enums/ai.enum';
+import { ChatModel, RoomReq } from '@core/models/chat.model';
 import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
-import { Avatar, Image } from 'antd';
+import { getEnum } from '@core/parser/enum.parser';
+import {
+    chatAIRoomListKeys,
+    chatWithAiApi,
+    ChatWithAiReq,
+    createRoomIdApi,
+} from '@core/services/chat.service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Avatar, Image, Spin } from 'antd';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { ReactNode, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { v4 as uuidv4 } from 'uuid';
-import sendMessageToChatGPT from './ChatGPTService';
-import ChatHeader from './ChatHeader';
 import MessageForm from './MessageForm';
 
 type ChatProps = {
     chatList: ChatModel[];
     setChatList: (chatList: ChatModel[], isTitle?: boolean) => void;
+    avatar: string;
+    isFetchingData?: boolean;
 };
 
-export default function Chat({ chatList, setChatList }: ChatProps) {
+export default function Chat({ chatList, setChatList, isFetchingData, avatar }: ChatProps) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const searchParams = useSearchParams();
+    const { data } = useSession();
+    const categoryAi = useMemo(
+        () =>
+            (searchParams && getEnum<CategoryAiEnum>(searchParams.get('type'), CategoryAiEnum)) ||
+            CategoryAiEnum.CHAT_GPT,
+        [searchParams],
+    );
+    const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
 
     useEffect(() => {
         if (chatList) {
@@ -34,53 +55,76 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
             behavior: 'smooth',
         });
     }
+    const mutateChat = useMutation({
+        mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
+        onSuccess: (resp) => {
+            setChatList([...chatList, resp.data]);
+            console.log('chatList', chatList);
+            queryClient.invalidateQueries({
+                queryKey: chatAIRoomListKeys.lists(),
+            });
+        },
+    });
 
+    const mutateCreateRoom = useMutation({
+        mutationFn: (body: RoomReq) => createRoomIdApi(data!.user.user.id, categoryAi, body),
+        onSuccess: (resp) => {
+            mutateChat.mutateAsync({
+                question: chatList[chatList.length - 1].value,
+                roomId: resp.data.RoomId,
+            });
+        },
+    });
+
+    const queryClient = useQueryClient();
     const handleSubmit = async (value: string, files: string[]) => {
-        const newChat = {
-            id: uuidv4(),
-            chatId: '',
+        const newChat: ChatModel = {
+            questionId: uuidv4(),
+            senderId: data!.user.user.id,
             contactId: '',
             value: value,
             files: files,
             createdAt: parseDateTimeISO8601(dayjs()),
         };
         setChatList([...chatList, newChat], true);
-        const response = await sendMessageToChatGPT(value);
-        setChatList([
-            ...chatList,
-            newChat,
-            {
-                ...newChat,
-                id: uuidv4(),
-                value: response,
-                contactId: 'cfaad35d-07a3-4447-a6c3-d8c3d54fd5df',
-            },
-        ]);
-    };
+        if (chatList.length === 0) {
+            mutateCreateRoom.mutate({
+                TitleRoom: value,
+            });
 
+            return;
+        }
+        if (roomId)
+            mutateChat.mutateAsync({
+                question: value,
+                roomId: roomId,
+            });
+    };
+    console.log('chatList', chatList);
     return (
-        <div className='bg-white-900 p-8'>
-            <ChatHeader />
+        <Spin spinning={isFetchingData || mutateChat.isPending}>
             <div className='mt-4 h-[576px] p-6 overflow-auto' ref={chatContainerRef}>
                 {chatList.map((item, index) => {
-                    const checkedMine = item.contactId !== chatList[index - 1]?.contactId;
-                    let checked = !!item.contactId;
+                    const checkedMine = item.senderId === data?.user.user.id;
+                    let checked = !checkedMine;
                     if (index !== 0 && item.contactId && chatList[index - 1]?.contactId) {
                         checked = chatList[index - 1]?.contactId !== item.contactId;
                     }
+                    console.log(index, item, checked);
                     return (
                         <div
-                            key={item.id}
+                            key={index}
                             className={clsx(
                                 `flex flex-col gap-4`,
-                                item.contactId ? 'items-start' : 'items-end',
-                                index !== 0 ? (checkedMine ? 'mt-8' : 'mt-[10px]') : '',
+
+                                index !== 0 ? (checked ? 'mt-8' : 'mt-[10px]') : '',
                             )}
                         >
                             <ChatItem
                                 value={item.value}
                                 createdAt={item.createdAt}
-                                isAvatar={checked}
+                                checkedMine={checkedMine}
+                                avatar={checked ? (!checkedMine ? avatar : undefined) : undefined}
                                 files={item.files}
                             />
                         </div>
@@ -88,39 +132,44 @@ export default function Chat({ chatList, setChatList }: ChatProps) {
                 })}
             </div>
             <MessageForm onSubmit={handleSubmit} />
-        </div>
+        </Spin>
     );
 }
 
 type ChatItemProps = {
-    value: ReactNode;
+    value: string;
     createdAt?: string;
-    isAvatar?: boolean;
+    avatar?: string;
     files?: string[];
+    checkedMine: boolean;
 };
 
-function ChatItem({ value, createdAt, isAvatar, files }: ChatItemProps) {
+function ChatItem({ value, avatar, files, checkedMine }: ChatItemProps) {
     return (
-        <div className='flex gap-4 items-start'>
-            {isAvatar ? (
-                <Avatar
-                    size={40}
-                    src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                />
+        <div className={clsx('flex gap-4  w-full', !checkedMine ? 'justify-start' : 'justify-end')}>
+            {avatar ? (
+                <div style={{ flex: `0 0 40px` }}>
+                    <Avatar size={40} src={avatar} />
+                </div>
             ) : (
-                <div className='w-10'></div>
+                <div style={{ flex: `0 0 40px` }}></div>
             )}
             <div
-                className={clsx('flex flex-col gap-[10px]', isAvatar ? 'items-start' : 'items-end')}
+                className={clsx('flex flex-col gap-[10px] ', avatar ? 'items-start' : 'items-end')}
             >
-                <div className='flex items-center max-w-full'>
-                    <div className='bg-white-800 rounded-full py-2 px-4 text-base'>{value}</div>
+                <div className='flex items-center w-fit'>
+                    <div
+                        className='bg-white-800 rounded-2xl py-2 px-4 text-base w-fit tag-p'
+                        style={{ whiteSpace: checkedMine ? 'pre-line' : '' }}
+                    >
+                        <ReactMarkdown>{value}</ReactMarkdown>
+                    </div>
                 </div>
                 {files && (
                     <div
                         className={clsx(
                             'flex flex-wrap gap-2 max-w-[416px]',
-                            isAvatar ? 'justify-start' : 'justify-end',
+                            avatar ? 'justify-start' : 'justify-end',
                         )}
                     >
                         {files.map((file) => (

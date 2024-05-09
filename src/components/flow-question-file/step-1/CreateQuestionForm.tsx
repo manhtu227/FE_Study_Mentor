@@ -4,7 +4,7 @@ import { ModalPayment } from '@components/modal/modal-payment';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
-import { CreateFileQuestionRequestModel, QuestionInput } from '@core/models/question.model';
+import { CreateFileQuestionRequestModel, QuestionInput } from '@core/m.vodels/question.model';
 import {
     ConvertGradeToOption,
     ConvertLevelToOption,

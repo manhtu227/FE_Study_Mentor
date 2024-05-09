@@ -5,10 +5,15 @@ import SideBarChatActive from '@assets/icons/sidebar-chat-active';
 import SideBarChatDefault from '@assets/icons/sidebar-chat-default';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
-import { ChatModel, ChatTitleModel } from '@core/models/chat.model';
+import { CategoryAiEnum } from '@core/enums/ai.enum';
+import { ChatModel } from '@core/models/chat.model';
+import { chatAIRoomListKeys, getChatAIRoomListApi } from '@core/services/chat.service';
+import { UseMutationResult, useQuery } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
 import clsx from 'clsx';
-import { memo, useEffect, useState } from 'react';
-import { mockData } from './mockData';
+import { useSession } from 'next-auth/react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { memo, useEffect, useMemo } from 'react';
 
 const more = [
     { icon: <DeleteIcon />, title: 'Xóa tất cả câu hỏi' },
@@ -17,50 +22,60 @@ const more = [
     { icon: <DeleteIcon />, title: 'Trợ giúp & FAQ' },
 ];
 
-const listDefault: ChatTitleModel[] = [
-    {
-        id: 1,
-        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-        data: mockData,
-    },
-    {
-        id: 2,
-        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-    },
-    {
-        id: 3,
-        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-    },
-    {
-        id: 4,
-        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-    },
-    {
-        id: 5,
-        name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-    },
-];
-
 type SidebarChatProps = {
-    onSelectData: (dataChat: ChatModel[]) => void;
-    title?: ChatTitleModel;
+    onSetData: (dataChat: ChatModel[]) => void;
+    categoryAi: CategoryAiEnum;
+    mutateGetMessageByRoomId: UseMutationResult<
+        AxiosResponse<ChatModel[], any>,
+        Error,
+        string,
+        unknown
+    >;
 };
 
-function SideBarChat({ onSelectData: onSelect, title }: SidebarChatProps) {
-    const [activeChat, setActiveChat] = useState<string | number | null>(1);
-    const [listTitle, setListTitle] = useState<ChatTitleModel[]>(listDefault);
+function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: SidebarChatProps) {
+    // const [listTitle, setListTitle] = useState<RoomModel[]>([]);
+    const { data } = useSession();
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const activeChat = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
+
+    const listQuestion = useQuery({
+        queryKey: chatAIRoomListKeys.list({
+            userId: data?.user.user.id,
+            categoryAi,
+        }),
+        queryFn: () => getChatAIRoomListApi(data!.user.user.id, categoryAi),
+        select: (resp) => resp.data,
+        enabled: !!data?.user.user.id,
+    });
 
     useEffect(() => {
-        if (title?.id && !listTitle.find((item) => item.id === title?.id)) {
-            setActiveChat(title.id);
-            setListTitle([title, ...listTitle]);
+        if (listQuestion.data && listQuestion.data.length >= 1) {
+            upParams(listQuestion.data[0].roomId);
+            mutateGetMessageByRoomId.mutate(listQuestion.data[0].roomId);
         }
-    }, [title]);
+    }, [listQuestion.data, mutateGetMessageByRoomId.mutate]);
 
     /* Handle */
     const handleAddNewQuestion = () => {
-        onSelect([]);
-        setActiveChat(null);
+        onSetData([]);
+        const newParams = new URLSearchParams(searchParams || '');
+        newParams.delete('room');
+        router.push(`${pathname}?${newParams.toString()}`);
+    };
+
+    const handleSelectRoom = (roomId: string) => {
+        upParams(roomId);
+        mutateGetMessageByRoomId.mutate(roomId);
+    };
+
+    const upParams = (roomId: string) => {
+        const newParams = new URLSearchParams(searchParams || '');
+        newParams.set('room', roomId);
+        router.push(`${pathname}?${newParams.toString()}`);
     };
 
     return (
@@ -70,7 +85,7 @@ function SideBarChat({ onSelectData: onSelect, title }: SidebarChatProps) {
                     <div className='text-black-800 text-lg font-bold flex items-center'>
                         Đoạn chát
                         <div className='w-8 h-6 rounded-full bg-white-800 ml-4 text-center text-sm'>
-                            {listTitle.length}
+                            {(listQuestion.data || []).length}
                         </div>
                     </div>
                     <ButtonPrimary
@@ -82,14 +97,13 @@ function SideBarChat({ onSelectData: onSelect, title }: SidebarChatProps) {
                 <CustomTextInput placeholder='Vui lòng nhập' prefix={<SearchIcon />} />
                 <div className='max-h-[368px] overflow-auto'>
                     <div className='flex flex-col gap-4'>
-                        {listTitle.map((item) => (
+                        {(listQuestion.data || []).map((item) => (
                             <SidebarChatItem
-                                key={item.id}
-                                active={activeChat === item.id}
-                                title={item.name}
+                                key={item.roomId}
+                                active={activeChat === item.roomId}
+                                title={item.Title}
                                 onClick={() => {
-                                    onSelect(item.data || []);
-                                    setActiveChat(item.id);
+                                    handleSelectRoom(item.roomId);
                                 }}
                             />
                         ))}

@@ -19,7 +19,7 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-    interface JWT extends AuthSignInDTO {}
+    interface JWT extends IAuthenResponseModel {}
 }
 
 /*

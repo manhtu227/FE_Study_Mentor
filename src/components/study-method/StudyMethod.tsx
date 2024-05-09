@@ -117,17 +117,29 @@ function MethodItem({
                         })}
                 </div>
             </div>
-
-            <Link
-                href={href ?? ''}
-                onClick={onClick}
-                className='no-underline justify-center items-stretch bg-blue-600 inline-flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
-            >
-                <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
-                    {titleButton}
-                </div>
-                <RightOutlined className='text-white-900' />
-            </Link>
+            <div>
+                {onClick ? (
+                    <div
+                        onClick={onClick}
+                        className='no-underline justify-center items-stretch bg-blue-600 inline-flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
+                    >
+                        <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
+                            {titleButton}
+                        </div>
+                        <RightOutlined className='text-white-900' />
+                    </div>
+                ) : (
+                    <Link
+                        href={href || ''}
+                        className='no-underline justify-center items-stretch bg-blue-600 inline-flex gap-4 mt-6 px-14 py-4 rounded-lg max-md:px-5 cursor-pointer outline-none border-none hover:opacity-85'
+                    >
+                        <div className='text-slate-100 text-base font-bold leading-6 tracking-normal'>
+                            {titleButton}
+                        </div>
+                        <RightOutlined className='text-white-900' />
+                    </Link>
+                )}
+            </div>
         </div>
     );
 }
