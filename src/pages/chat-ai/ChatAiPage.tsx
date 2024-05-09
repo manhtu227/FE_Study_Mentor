@@ -40,7 +40,6 @@ export default function ChatAiPage({ type }: { type: AIFreeOrPaidEnum }) {
         },
         [dataChat],
     );
-    console.log(dataChat, 'dataChat');
 
     return (
         <div className='pack-layout pb-16 px-4'>

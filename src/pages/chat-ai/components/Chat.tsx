@@ -59,7 +59,6 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
         mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
         onSuccess: (resp) => {
             setChatList([...chatList, resp.data]);
-            console.log('chatList', chatList);
             queryClient.invalidateQueries({
                 queryKey: chatAIRoomListKeys.lists(),
             });
@@ -110,7 +109,6 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
                     if (index !== 0 && item.contactId && chatList[index - 1]?.contactId) {
                         checked = chatList[index - 1]?.contactId !== item.contactId;
                     }
-                    console.log(index, item, checked);
                     return (
                         <div
                             key={index}
