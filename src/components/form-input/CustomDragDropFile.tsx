@@ -9,11 +9,9 @@ export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemPr
         listType: 'text',
         action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
         onChange(info) {
-            console.log(info);
-
             const { status } = info.file;
             if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
+                // console.log(info.file, info.fileList);
             }
             if (status === 'done') {
                 message.success(`${info.file.name} file uploaded successfully.`);
@@ -22,7 +20,7 @@ export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemPr
             }
         },
         onDrop(e) {
-            console.log('Dropped files', e.dataTransfer.files);
+            // console.log('Dropped files', e.dataTransfer.files);
         },
     };
 

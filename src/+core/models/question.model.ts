@@ -27,11 +27,12 @@ export type CreateFileQuestionRequestModel = {
     // tutorCriteria?: TutorRating
     timeFindTutor: number;
     content: string;
-    attachFiles: FileReq[];
+    attachFiles: FileReq[] | null;
 };
 
 export type CreateFileQuestionResp = {
     price: number;
+    questionId: string;
 };
 
 export type RatingInput = {

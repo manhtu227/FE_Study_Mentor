@@ -3,11 +3,12 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { LoginInput } from '@core/models/authentication.model';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form } from 'antd';
-import { signIn, SignInOptions, useSession } from 'next-auth/react';
+import { SignInOptions, signIn, useSession } from 'next-auth/react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -35,7 +36,7 @@ const LoginPage = () => {
 
     /* Effect */
     useEffect(() => {
-        if (authStatus !== 'authenticated') return;
+        if (authStatus !== AUTHENTICATED) return;
         router.push(MY_ROUTE.HOME);
     }, [authStatus, authData]);
 
