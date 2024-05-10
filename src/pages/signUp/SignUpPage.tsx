@@ -1,26 +1,29 @@
 'use client';
-import { LockOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { Button, Form, message } from 'antd';
 
-import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, TypeUser } from '@core/enums/user.enum';
 import { SignUpInput } from '@core/models/authentication.model';
 import { signUpApi } from '@core/services/authentication.service';
+import { RootState } from '@core/store';
+import { setAccessToken, setUser } from '@core/store/reducers/authentication.reducer';
 import { useMutation } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Link from 'next/link';
 
 const SignUpPage = () => {
     const [form] = Form.useForm<SignUpInput>();
     const router = useRouter();
-    const { data: authData, status: authStatus } = useSession();
+    const dispatch = useDispatch();
+    const accessToken = useSelector((state: RootState) => state.authentication)?.accessToken ?? '';
 
     const signUpMutate = useMutation({
         mutationFn: (data: SignUpInput) => signUpApi(data),
@@ -30,16 +33,25 @@ const SignUpPage = () => {
     });
 
     const handleSubmitSignUp = (values: SignUpInput) => {
+        console.log('Submit', values);
         signUpMutate.mutate(values);
     };
 
     useEffect(() => {
-        if (authStatus !== AUTHENTICATED) return;
-        router.push(MY_ROUTE.HOME);
-    }, [authStatus, authData]);
+        if (accessToken) {
+            router.push('/');
+        }
+    }, []);
+
+    useEffect(() => {
+        signUpMutate.data?.data.data.token &&
+            dispatch(setAccessToken(signUpMutate.data?.data.data.token)) &&
+            dispatch(setUser(signUpMutate.data?.data.data.user)) &&
+            router.push('/');
+    }, [signUpMutate.data?.data.data.token]);
 
     return (
-        <div className='relative pb-[300px] h-[500px] max-w-full'>
+        <div className='relative pb-[350px] h-[500px] max-w-full overflow-hidden'>
             <Image src={images.loginScreen} alt='Hero' className='relative' />
             <div className='absolute top-0 left-0 right-0 opacity-90 pt-20'>
                 <div className='mb-[52px]'>
@@ -75,7 +87,7 @@ const SignUpPage = () => {
                         >
                             <CustomTextInput
                                 placeholder='Nhập họ và tên của bạn...'
-                                classNameForm='w-[300px]'
+                                classNameForm='w-[350px]'
                             />
                         </Form.Item>
 
@@ -90,16 +102,13 @@ const SignUpPage = () => {
                                 },
                             ]}
                         >
-                            <CustomTextInput
-                                placeholder='Nhập email...'
-                                classNameForm='w-[300px]'
-                            />
+                            <CustomTextInput placeholder='Nhập email...' />
                         </Form.Item>
 
                         <div className='font-bold text-base mb-2 text-[White]'>Giới tính</div>
                         <Form.Item
                             name='gender'
-                            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+                            rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
                         >
                             <CustomSelectInput
                                 placeholder='Chọn giới tính...'
@@ -116,19 +125,22 @@ const SignUpPage = () => {
                             rules={[
                                 { required: true, message: 'Vui lòng nhập mật khẩu' },
                                 {
-                                    pattern: new RegExp(
-                                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                    ),
-                                    message: 'Mật khẩu sai định dạng',
+                                    pattern: new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
+                                    message:
+                                        'Mật khẩu tối thiểu 8 ký tự, ít nhất 1 chữ cái và 1 số',
                                 },
                             ]}
                         >
-                            <CustomPasswordInput
-                                placeholder='Nhập mật khẩu...'
-                                classNameForm='w-[300px]'
-                                prefix={<LockOutlined />}
-                            />
+                            <CustomPasswordInput placeholder='Nhập mật khẩu...' />
                         </Form.Item>
+
+                        <div className='flex gap-2 text-center'>
+                            <span>Bạn đã sẵn có tài khoản?</span>
+                            <Link href={MY_ROUTE.LOGIN} className='text-[White]'>
+                                Đăng nhập
+                            </Link>
+                        </div>
+
                         <Form.Item colon={false}>
                             <Button htmlType='submit' size='large' className='mt-[30px] w-full'>
                                 Đăng ký
