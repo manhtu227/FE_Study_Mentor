@@ -2,16 +2,16 @@ import systemFindings from './Rectangle5560.png';
 import userFindings from './Rectangle5561.png';
 import aiMethod from './ai-method.png';
 import anchor from './anchor.png';
-import chatPGT from './chat-gpt.jpg';
+import chatGpt from './chat-gpt.png';
 import clock from './clock-3.png';
-import copilot from './copilot.jpg';
+import copilot from './copilot.png';
 import createQuestion from './create-question.jpg';
 import cardCredit from './credit-card.png';
 import credit from './credit.png';
 import feedback from './feedback.png';
 import fileMethod from './file-method.png';
 import frame from './frame.png';
-import freeAI from './free-ai.jpg';
+import freeAI from './free-ai.png';
 import gemini from './gemini.png';
 import ggMeetMethod from './gg-meet-method.png';
 import gg from './gg.png';
@@ -23,17 +23,18 @@ import hero1 from './home-hero-1.png';
 import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
-import loginScreen from './loginScreen.jpg';
+import loginScreen from './loginScreen.png';
 import mentorMethod from './mentor-method.png';
 import momo from './momo.png';
 import napas from './napas.png';
-import paidAI from './paid-ai.jpg';
+import paidAI from './paid-ai.png';
 import qrImage from './qr-image.png';
 import self from './self.png';
 import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
 import studyMethodBg from './study-method-bg.png';
 import system from './system.png';
+import teacher from './teacher.png';
 import vector from './vector.png';
 import zalo from './zalo.png';
 
@@ -71,11 +72,12 @@ const images = {
     credit: credit,
     freeAI: freeAI,
     paidAI: paidAI,
-    chatPGT: chatPGT,
+    chatPGT: chatGpt,
     gemini: gemini,
     createQuestion: createQuestion,
     copilot: copilot,
     loginScreen: loginScreen,
+    teacher: teacher,
 };
 
 export default images;

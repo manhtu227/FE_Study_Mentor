@@ -1,33 +1,43 @@
-import { USER_ID } from '@core/constants/commons.constant';
-import { DATE_FORMAT } from '@core/constants/date.constant';
-import { Gender } from '@core/enums/common.enum';
+import { Gender } from '@core/enums/user.enum';
 import {
     PersonalInformationInput,
     UpdatePersonalInformationInput,
     UserResp,
 } from '@core/models/profile.model';
 import { updateUserDetailApi } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
 import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-export function PersonalInfoSection({ data }: { data?: UserResp }) {
+export function PersonalInfoSection({
+    data,
+    onUpdatePersonalInfo,
+}: {
+    data?: UserResp;
+    onUpdatePersonalInfo: () => void;
+}) {
     const [form] = Form.useForm<PersonalInformationInput>();
     const [initialDataForm, setInitialDataForm] = useState<PersonalInformationInput>();
+    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, USER_ID),
+        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, user?.id),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
             setIsEdit(false);
+            onUpdatePersonalInfo();
+        },
+        onError: () => {
+            message.error('Cập nhật thông tin thất bại');
         },
     });
-
     const handleSubmitPersonalInformationForm = (values: PersonalInformationInput) => {
         const request: UpdatePersonalInformationInput = {
             ...values,
-            dateOfBirth: dayjs(values.dateOfBirth).format(DATE_FORMAT.DATE.HYPHEN), // '25/01/2019',
+            dateOfBirth: dayjs(values.dateOfBirth).get('year'), // '25/01/2019',
         };
 
         mutateUpdate.mutate(request);
@@ -126,6 +136,7 @@ export function PersonalInfoSection({ data }: { data?: UserResp }) {
                                 <DatePicker
                                     className='h-12 font-medium text-base w-full'
                                     placeholder='Nhập năm sinh'
+                                    picker='year'
                                 />
                             </Form.Item>
                         </div>

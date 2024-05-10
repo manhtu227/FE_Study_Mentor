@@ -37,7 +37,7 @@ function ReportAnswerForm() {
 
     const handleSubmit = (values: ReportAnswer) => {
         if (refEditor.current) {
-            values.contentEditor = refEditor.current.currentContent;
+            // values.contentEditor = refEditor.current.currentContent;
         }
 
         if (refFile.current) {
@@ -65,14 +65,14 @@ function ReportAnswerForm() {
                 {/* Report content */}
                 <CustomEditorInput<ReportAnswer>
                     name='reportContent'
-                    refEditor={refEditor}
+                    // refEditor={refEditor}
                     // rules={[{ required: true, message: 'Please input your report content!' }]}
-                    onChange={(value) => {
-                        console.log(refEditor.current.currentContent);
+                    // onChange={(value) => {
+                    //     console.log(refEditor.current.currentContent);
 
-                        form.setFieldValue('content', value);
-                        form.validateFields(['content']);
-                    }}
+                    //     form.setFieldValue('content', value);
+                    //     form.validateFields(['content']);
+                    // }}
                 />
                 <Form.Item name='fileContent'>
                     <div className='w-full font-bold text-lg text-black my-4 '>Minh chứng</div>

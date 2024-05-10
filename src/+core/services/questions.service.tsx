@@ -1,8 +1,7 @@
-import { USER_ID } from '@core/constants/commons.constant';
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
-    CreateFileQuestionRequest,
+    CreateFileQuestionRequestModel,
     CreateFileQuestionResp,
     GradeResp,
     InfoExchangeInput,
@@ -10,7 +9,6 @@ import {
     StructureEducationsResp,
     SubjectResp,
 } from '@core/models/question.model';
-import { objectToFormData } from '@core/parser/form-data.parser';
 import { OptionItem } from '@core/types/option.type';
 import { initKeys } from '@core/utilities/query-key.utility';
 
@@ -45,14 +43,8 @@ export const gradesKeys = initKeys('grades-keys');
 
 export const subjectsKeys = initKeys('subjects-keys');
 
-export const createQuestions = (data: CreateFileQuestionRequest) => {
-    return api.post<BaseResp<CreateFileQuestionResp>>(
-        '/api/questions',
-        objectToFormData({ ...data, userId: USER_ID }),
-        {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        },
-    );
+export const createQuestions = (data: CreateFileQuestionRequestModel) => {
+    return api.post<BaseResp<CreateFileQuestionResp>>('/api/questions', data);
 };
 
 export const updateRatingApi = async (body: RatingReq, id: string) => {

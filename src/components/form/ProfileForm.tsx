@@ -1,7 +1,7 @@
 'use client';
 
 import UploadIconIcon from '@assets/icons/upload';
-import { Gender } from '@core/enums/common.enum';
+import { Gender } from '@core/enums/user.enum';
 import {
     CertificatesInformationInput,
     EducationInformationInput,
