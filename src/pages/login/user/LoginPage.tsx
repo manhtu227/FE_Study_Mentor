@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { LoginInput } from '@core/models/authentication.model';
 import { useMutation } from '@tanstack/react-query';
@@ -22,7 +23,7 @@ const LoginPage = () => {
     /* Action */
     const loginMutation = useMutation({
         mutationFn: (form: LoginInput) =>
-            signIn('credentials', {
+            signIn('custom-login', {
                 email: form.email,
                 password: form.password,
                 redirect: false,
@@ -35,7 +36,7 @@ const LoginPage = () => {
 
     /* Effect */
     useEffect(() => {
-        if (authStatus !== 'authenticated') return;
+        if (authStatus !== AUTHENTICATED) return;
         router.push(MY_ROUTE.HOME);
     }, [authStatus, authData]);
 

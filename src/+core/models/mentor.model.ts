@@ -1,10 +1,11 @@
 export type MentorListResp = {
-    Id: string;
+    id: string;
     Email: string;
+    age: number;
     Gender: number;
     Avatar: string | null;
     Skill: string;
-    FullName: string;
+    fullName: string;
     Password: string;
     Role: number;
     Phone: string;
@@ -12,7 +13,7 @@ export type MentorListResp = {
     IsActive: boolean;
     LevelId: string;
     GradeId: string;
-    AverageRate: number;
+    averageRate: number;
     LevelName: string;
     Description: string | null;
     CreatedAt: string | null; // or Date type if you prefer
@@ -22,6 +23,7 @@ export type MentorListResp = {
 };
 
 export type MentorListFilter = {
+    userId?: string;
     subjectId: string;
     page: number;
     pageSize: number;

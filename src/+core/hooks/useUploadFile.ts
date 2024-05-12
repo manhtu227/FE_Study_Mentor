@@ -11,6 +11,6 @@ export function useUploadFile() {
         });
         reader.readAsDataURL(img);
     };
-    console.log(files.length, 'files');
+
     return { getBase64, files, setFiles };
 }

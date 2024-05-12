@@ -3,21 +3,20 @@
 import EyeIcon from '@assets/icons/eye';
 import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
 import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
-import { api } from '@core/https/http';
+import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
+import { FileAntd } from '@core/models/file.model';
 import { SignedUrlResp } from '@core/models/profile.model';
 import {
     educationInfoKeys,
     getEducationInfoApi,
-    getSignedUrlApi,
     getUserDetailApi,
     updateAvatarApi,
     userDetailKeys,
 } from '@core/services/user.service';
-import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Spin, Switch, message } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
@@ -25,66 +24,34 @@ function ProfilePage() {
     const [isUpdatePersonalInfo, setIsUpdatePersonalInfo] = useState<boolean>(false);
     const [avatar, setAvatar] = useState<any>();
     const [avatarObject, setAvatarObject] = useState<SignedUrlResp>();
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
+    const { data } = useSession();
+    const file = useUploadFileApi();
 
     const personalInfoQuery = useQuery({
-        queryKey: userDetailKeys.list({ id: user?.id, isUpdatePersonalInfo }),
-        queryFn: () => getUserDetailApi(user?.id),
+        queryKey: userDetailKeys.list({ id: data?.user?.user?.id, isUpdatePersonalInfo }),
+        queryFn: () => getUserDetailApi(),
         select: (resp) => resp.data.data,
     });
 
     const educationInfoQuery = useQuery({
-        queryKey: educationInfoKeys.list({ id: user?.id }),
-        queryFn: () => getEducationInfoApi(user?.id),
+        queryKey: educationInfoKeys.list({ id: data?.user?.user?.id }),
+        queryFn: () => getEducationInfoApi(),
         select: (resp) => resp.data.data,
     });
 
     const [isActive, setIsActive] = useState<boolean>(personalInfoQuery.data?.isActive ?? false);
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: any) => updateAvatarApi(data, user?.id),
+        mutationFn: (data: any) => updateAvatarApi(data),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
         },
     });
 
-    const mutateSignUrl = useMutation({
-        mutationFn: (fileName: string) => getSignedUrlApi(fileName),
-        onSuccess: () => {},
-    });
-
-    const handleSubmitAvatar = (values: any) => {
-        console.log(values);
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            values.avatar.file.base64 = e?.target?.result;
-            setAvatar(values.avatar.file.base64);
-        };
-        reader.readAsDataURL(values.avatar.file.originFileObj);
-        console.log(values.avatar.file.base64);
-
-        const dataObject = mutateSignUrl.mutate(values.avatar.file.name);
-        setAvatar(values.avatar.file.base64);
-        // mutateUpdate.mutate(values);
+    const handleSubmitAvatar = (values: FileAntd) => {
+        file.uploadFile(values?.file);
+        mutateUpdate.mutate(values);
     };
-
-    console.log(avatar);
-
-    useEffect(() => {
-        if (mutateSignUrl.data) {
-            const url = mutateSignUrl.data.data?.data?.url;
-            console.log(avatar);
-
-            api.put(url, avatar, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                },
-            }).then((res) => {
-                console.log(res);
-            });
-        }
-    }, [mutateSignUrl.data]);
 
     useEffect(() => {
         if (personalInfoQuery.data?.isActive) setIsActive(personalInfoQuery.data.isActive);

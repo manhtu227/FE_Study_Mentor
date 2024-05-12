@@ -8,47 +8,43 @@ import { Button, Form, message } from 'antd';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, TypeUser } from '@core/enums/user.enum';
 import { SignUpInput } from '@core/models/authentication.model';
-import { signUpApi } from '@core/services/authentication.service';
-import { RootState } from '@core/store';
-import { setAccessToken, setUser } from '@core/store/reducers/authentication.reducer';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
+import { AUTHENTICATED } from '@core/constants/authentication.constants';
+import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const SignUpPage = () => {
     const [form] = Form.useForm<SignUpInput>();
     const router = useRouter();
-    const dispatch = useDispatch();
-    const accessToken = useSelector((state: RootState) => state.authentication)?.accessToken ?? '';
+    const { data: authData, status: authStatus } = useSession();
 
     const signUpMutate = useMutation({
-        mutationFn: (data: SignUpInput) => signUpApi(data),
+        mutationFn: (data: SignUpInput) =>
+            signIn('custom-signup', {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+                fullName: data.fullName,
+                gender: data.gender,
+                type: data.type,
+            } as SignUpInput & SignInOptions),
         onSuccess: () => {
             message.success('Đăng ký thành công');
         },
     });
 
     const handleSubmitSignUp = (values: SignUpInput) => {
-        console.log('Submit', values);
         signUpMutate.mutate(values);
     };
 
     useEffect(() => {
-        if (accessToken) {
-            router.push('/');
-        }
-    }, []);
-
-    useEffect(() => {
-        signUpMutate.data?.data.data.token &&
-            dispatch(setAccessToken(signUpMutate.data?.data.data.token)) &&
-            dispatch(setUser(signUpMutate.data?.data.data.user)) &&
-            router.push('/');
-    }, [signUpMutate.data?.data.data.token]);
+        if (authStatus !== AUTHENTICATED) return;
+        router.push(MY_ROUTE.HOME);
+    }, [authStatus, authData]);
 
     return (
         <div className='relative pb-[350px] h-[500px] max-w-full overflow-hidden'>

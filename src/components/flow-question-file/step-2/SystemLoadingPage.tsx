@@ -2,8 +2,9 @@
 import images from '@assets/images';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { Image, Progress, ProgressProps } from 'antd';
+import { Image, ProgressProps, Spin } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { FindMentorEnum } from './FindMentorBySystemPage';
 
 const twoColors: ProgressProps['strokeColor'] = {
@@ -14,6 +15,7 @@ export default function SystemLoadingPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [isFound, setIsFound] = useState<boolean>(false);
 
     return (
         <div>
@@ -23,7 +25,7 @@ export default function SystemLoadingPage() {
                     <div className='text-black-800 font-bold text-lg'>
                         Hệ thống đang tìm kiếm người hướng dẫn phù hợp cho bạn
                     </div>
-                    <Progress percent={50} strokeColor={twoColors} className='px-[150px]' />
+                    <Spin size='large' spinning={isFound} />
 
                     <div className='text-black-800 font-normal text-base'>
                         Vui lòng chờ một lát nhé
@@ -43,6 +45,8 @@ export default function SystemLoadingPage() {
                             onClick={() => {
                                 const newParams = new URLSearchParams(searchParams || '');
                                 newParams.set('mode', FindMentorEnum.SELF);
+                                newParams.set('searchMySelfTab', '1');
+                                newParams.set('isTutorOnline', 'true');
                                 router.push(`${pathname}?${newParams.toString()}`);
                             }}
                             isRightIcon
