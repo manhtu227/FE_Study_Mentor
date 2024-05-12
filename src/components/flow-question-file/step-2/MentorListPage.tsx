@@ -1,6 +1,6 @@
 'use client';
 import { Tabs, TabsProps } from 'antd';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CardListPage from './CardListPage';
 
 const items: TabsProps['items'] = [
@@ -18,12 +18,14 @@ const items: TabsProps['items'] = [
 
 export default function MentorListPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const currentTab = searchParams?.get('searchMySelfTab') ?? '1';
 
     const onChange = (tab: string) => {
         router.push(
-            `?searchYourSelfTab=${tab}&${
+            `?searchMySelfTab=${tab}&${
                 tab === '1' ? 'isTutorOnline=true' : 'isTutorOnline=false'
-            }`,
+            }&step=1&mode=self`,
         );
     };
 
@@ -32,7 +34,7 @@ export default function MentorListPage() {
             <div className='flex items-start w-full gap-8'>
                 <div className='w-full bg-white-900 p-8 rounded-md text-center flex flex-col justify-between'>
                     <div>
-                        <Tabs defaultActiveKey='1' items={items} onChange={onChange} />
+                        <Tabs activeKey={currentTab} items={items} onChange={onChange} />
                     </div>
                     {/* <ButtonOutlined className='max-w-[142px]' title='Tất cả' isFilterIcon /> */}
                 </div>

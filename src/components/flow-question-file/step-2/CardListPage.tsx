@@ -2,20 +2,17 @@
 
 import images from '@assets/images';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
+import { MentorListFilter, MentorListResp } from '@core/models/mentor.model';
+
 import { PaginationCore } from '@components/pagination/pagination';
-import { MentorListFilter } from '@core/models/mentor.model';
-import {
-    getFavoriteMentorListApi,
-    getMentorListApi,
-    mentorListKeys,
-} from '@core/services/mentors.service';
+import { GET_TUTOR_FAVOURITE, GET_TUTOR_ONLINE } from '@core/constants/socket.constants';
+import useSocket from '@core/hooks/useSocket';
 import { RootState } from '@core/store';
-import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
-import { calculateAge } from '@core/utilities/caculate-age.utility';
-import { useQuery } from '@tanstack/react-query';
+import { IPaginationInfo, PagingResp, initialPagingState } from '@core/types/paging.type';
 import { Col, Row, Spin } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function CardListPage() {
@@ -24,60 +21,78 @@ export default function CardListPage() {
         pageSize: +(searchParams?.get('pageSize') ?? initialPagingState.pageSize),
         page: +(searchParams?.get('page') ?? initialPagingState.page),
     };
-    const subjectId = searchParams?.get('subjectId');
-    const currentTab = searchParams?.get('searchYourSelfTab') ?? '1';
     const isTutorOnline = searchParams?.get('isTutorOnline') ?? true;
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
+    const { data } = useSession();
+    const { isConnected, currentSocket } = useSocket();
+    const [response, setResponse] = useState<PagingResp<MentorListResp[]>>();
+    const questions = useSelector((state: RootState) => state.questions.questions);
+    const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
+    const [request, setRequest] = useState<MentorListFilter>();
 
-    const [filter, setFilter] = useState<MentorListFilter>({
-        subjectId: subjectId ?? 'e4e0697e-56c7-4650-9ea2-52b5d8f5e55f',
-        page: initialPaging.page,
-        pageSize: 1 ?? initialPaging.pageSize,
-    });
+    useEffect(() => {
+        handleFetchTutors();
+    }, [isConnected]);
 
-    console.log(isTutorOnline as boolean, currentTab);
+    useEffect(() => {
+        if (isConnected) {
+            handleFetchTutors();
+        }
+    }, [isTutorOnline, request?.page]);
 
-    const mentorListQuery = useQuery({
-        queryKey: [...mentorListKeys.list(filter), currentTab],
-        queryFn: () =>
-            isTutorOnline === 'true'
-                ? getMentorListApi(filter)
-                : getFavoriteMentorListApi({
-                      page: filter.page,
-                      pageSize: filter.pageSize,
-                      userId: user?.id,
-                  }),
-        select: (resp) => {
-            return {
-                data: resp.data.data,
-                pagingInfo: {
-                    page: resp.data.paginationInfo.page,
-                    pageSize: filter.pageSize,
-                    total: resp.data.paginationInfo.total,
-                },
-            };
-        },
-    });
+    const handleFetchTutors = () => {
+        if (!isConnected) return;
+
+        setRequest({
+            userId: data?.user?.user?.id ?? '',
+            subjectId:
+                questions?.find((question) => question.questionId === currentQuestionId)
+                    ?.subjectId ?? '',
+            page: 1,
+            pageSize: 11,
+        });
+
+        if (isTutorOnline === 'true') {
+            currentSocket?.emit(GET_TUTOR_ONLINE, request);
+            currentSocket?.on(GET_TUTOR_ONLINE, (data) => handleGetData(data));
+            currentSocket?.off(GET_TUTOR_FAVOURITE);
+        } else {
+            currentSocket?.emit(GET_TUTOR_FAVOURITE, request);
+            currentSocket?.on(GET_TUTOR_FAVOURITE, (data) => handleGetData(data));
+            currentSocket?.off(GET_TUTOR_ONLINE);
+        }
+    };
+
+    const handleGetData = (data: PagingResp<MentorListResp[]>) => {
+        console.log(data, data.data);
+
+        setResponse(data);
+    };
 
     const handlePageChange = ({ page, pageSize }: IPaginationInfo) => {
-        setFilter((prev) => ({ ...prev, page, pageSize }));
+        const newRequest = {
+            page,
+            pageSize,
+            subjectId: request?.subjectId ?? '',
+            userId: request?.userId ?? '',
+        };
+
+        setRequest(newRequest);
     };
 
     return (
-        <Spin spinning={mentorListQuery.isFetching}>
+        <Spin spinning={!response?.success}>
             <div className='max-w[837px]'>
                 <Row gutter={[32, 32]}>
-                    {mentorListQuery.data?.data.map((mentor) => {
+                    {response?.data?.map((mentor) => {
                         return (
-                            <Col span={12} xs={24} sm={12} key={mentor.Id}>
+                            <Col span={12} xs={24} sm={12} key={mentor.id}>
                                 <CardMentorInfo
                                     mentor={{
-                                        id: mentor.Id,
+                                        id: mentor.id,
                                         image: images.feedback.src,
-                                        name: mentor.FullName,
-                                        age: calculateAge(mentor.DateOfBirth),
-                                        rating: mentor.AverageRate,
-                                        tags: ['tag1', 'tag2', 'tag3'],
+                                        name: mentor.fullName,
+                                        age: mentor.age,
+                                        rating: mentor.averageRate,
                                     }}
                                     isAvatar={false}
                                 />
@@ -87,9 +102,9 @@ export default function CardListPage() {
                 </Row>
                 <PaginationCore
                     onPageNumberChange={handlePageChange}
-                    pageSize={mentorListQuery.data?.pagingInfo.pageSize}
-                    current={mentorListQuery.data?.pagingInfo.page}
-                    total={mentorListQuery.data?.pagingInfo.total}
+                    pageSize={response?.paginationInfo.pageSize ?? initialPaging.pageSize}
+                    current={response?.paginationInfo.page}
+                    total={response?.paginationInfo.total}
                 />
             </div>
         </Spin>

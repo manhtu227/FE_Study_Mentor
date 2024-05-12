@@ -30,6 +30,16 @@ export type CreateFileQuestionRequestModel = {
     attachFiles: FileReq[] | null;
 };
 
+export type CreateFileQuestionReducer = {
+    userId: string;
+    subjectId: string;
+    numberOfStar: number;
+    questionId?: string;
+    timeFindTutor: number;
+    content: string;
+    attachFiles: FileReq[] | null;
+};
+
 export type CreateFileQuestionResp = {
     price: number;
     questionId: string;

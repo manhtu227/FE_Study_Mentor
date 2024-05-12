@@ -34,7 +34,6 @@ export type MentorType = {
     name: string;
     age: number;
     rating: number;
-    tags: Array<string>;
 };
 
 export type UserResp = {

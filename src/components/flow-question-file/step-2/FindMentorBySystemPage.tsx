@@ -86,6 +86,8 @@ export default function FindMentorBySystemPage() {
                                     onClick={() => {
                                         const newParams = new URLSearchParams(searchParams || '');
                                         newParams.set('mode', FindMentorEnum.SELF);
+                                        newParams.set('searchMySelfTab', '1');
+                                        newParams.set('isTutorOnline', 'true');
                                         router.push(
                                             `${MY_ROUTE.MENTOR.FILE}?${newParams.toString()}`,
                                         );

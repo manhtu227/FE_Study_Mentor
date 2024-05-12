@@ -17,7 +17,7 @@ export const PaginationCore = ({
     };
 
     return (
-        <div className='py-8 flex justify-center'>
+        <div className='py-8 pb-2 flex justify-center'>
             <Pagination
                 defaultCurrent={1}
                 total={total}

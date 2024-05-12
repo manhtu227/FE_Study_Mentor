@@ -1,14 +1,29 @@
 import { StarFilled } from '@ant-design/icons';
 import { MentorType } from '@core/models/profile.model';
-import { Avatar, Image, Tag } from 'antd';
+import { Avatar, Button, Image, Modal } from 'antd';
+import { useState } from 'react';
 
 export function CardMentorInfo({
     mentor,
     isAvatar = true,
 }: {
-    mentor?: MentorType;
+    mentor: MentorType;
     isAvatar?: boolean;
 }) {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    const handleShowModalMentor = () => {
+        setIsOpen(true);
+    };
+
+    const handlePickMentor = () => {
+        setIsOpen(false);
+    };
+
+    const handleCancelMentor = () => {
+        setIsOpen(false);
+    };
+
     return (
         <div className='w-full border-solid bg-white-900 border-[1px] rounded-lg border-[#D9D9D9]'>
             <div className='p-4'>
@@ -52,20 +67,39 @@ export function CardMentorInfo({
                             <StarFilled className='text-[#f2c94c]' />
                         </div>
                         <div className='flex mt-[10px] gap-2 flex-wrap'>
-                            {mentor?.tags?.map((tag) => {
-                                return (
-                                    <Tag
-                                        className='px-3 py-2 bg-white-900 rounded-md text-[14px] leading-[21px]'
-                                        key={tag}
-                                    >
-                                        {tag}
-                                    </Tag>
-                                );
-                            })}
+                            <Button type='primary' onClick={handleShowModalMentor}>
+                                Xem chi tiết
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
+            <Modal
+                open={isOpen}
+                onOk={handlePickMentor}
+                onCancel={handleCancelMentor}
+                okText='Chọn người này'
+                cancelText='Hủy bỏ'
+            >
+                <div className='w-full'>
+                    <div className='flex items-center gap-4'>
+                        <Avatar
+                            size={100}
+                            icon={
+                                <Image
+                                    alt={'image of question'}
+                                    loading='lazy'
+                                    src={mentor?.image || ''}
+                                />
+                            }
+                        />
+                        <div className=''>
+                            <div className='font-bold text-2xl'>{mentor.name}</div>
+                            <div className='text-lg'>{mentor.rating} điểm độ tin cậy</div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

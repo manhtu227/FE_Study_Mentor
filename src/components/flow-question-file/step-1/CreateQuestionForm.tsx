@@ -4,7 +4,11 @@ import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { CreatePaymentRequestModel } from '@core/models/payment.model';
-import { CreateFileQuestionRequestModel, QuestionInput } from '@core/models/question.model';
+import {
+    CreateFileQuestionReducer,
+    CreateFileQuestionRequestModel,
+    QuestionInput,
+} from '@core/models/question.model';
 import { createNewPaymentRequestApi } from '@core/services/payment.service';
 import {
     ConvertGradeToOption,
@@ -12,6 +16,7 @@ import {
     ConvertSubjectToOption,
     createQuestions,
 } from '@core/services/questions.service';
+import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, InputNumber, Select, Spin, message } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
@@ -20,16 +25,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 
 function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const [form] = Form.useForm<QuestionInput>();
-    const [isOpen, setIsOpen] = useState(false);
     const [selectedLevel, setSelectedLevel] = useState<string>('');
     const [selectedGrade, setSelectedGrade] = useState<string>('');
     const [selectedSubject, setSelectedSubject] = useState<string>('');
     const [price, setPrice] = useState<number>(0);
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
@@ -83,8 +89,13 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             content: values.content,
             attachFiles: attachFiles ? attachFiles : null,
         };
-        mutateCreateQuestions.mutate(request);
-        // onNext();
+        const requestReducer: CreateFileQuestionReducer = request;
+
+        requestReducer.questionId = Math.floor(Math.random() * 1000000).toString();
+        dispatch(addQuestion(requestReducer));
+        dispatch(setCurrentQuestionId(requestReducer.questionId));
+        // mutateCreateQuestions.mutate(request);
+        onNext();
     };
 
     const handleChangeLevels = (newLevel: string) => {
