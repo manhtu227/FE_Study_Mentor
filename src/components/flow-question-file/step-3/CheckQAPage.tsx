@@ -39,7 +39,11 @@ export default function CheckQAPage() {
     const [isChat, setIsChat] = useState(false);
 
     return isChat ? (
-        <ChatMentorPage setIsChat={setIsChat} />
+        <ChatMentorPage
+            setIsChat={setIsChat}
+            idRoom='b9a66b1d-fdc6-4a86-966f-4016f2e5e927'
+            senderId='30110137-1685-4b28-b585-55f87886cb56'
+        />
     ) : (
         <div>
             <div className='flex items-start w-full gap-8'>
@@ -90,7 +94,7 @@ export default function CheckQAPage() {
                         </h3>
                         <CardMentorInfo mentor={mentor as any} />
                         <ButtonPrimary
-                            title='Quay lại đoạn chat'
+                            title='Tạo đoạn chat'
                             className='w-full pt-3 mt-5'
                             onClick={() => setIsChat(true)}
                             isRightIcon

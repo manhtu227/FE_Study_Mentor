@@ -2,7 +2,7 @@
 
 import { io } from 'socket.io-client';
 
-export const socket = (userId: string) =>
-    io(`http://188.166.176.114:3000?userId=${userId}`, {
+export const defaultSocket = (userId: string) =>
+    io(`${process.env.NEXT_PUBLIC_BACKEND_API_ENDPOINT}?userId=${userId}`, {
         transports: ['websocket'],
     });

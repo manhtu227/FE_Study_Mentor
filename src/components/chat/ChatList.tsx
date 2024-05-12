@@ -1,51 +1,20 @@
-'use client';
-
-import { CategoryAiEnum } from '@core/enums/ai.enum';
-import { ChatModel, RoomReq } from '@core/models/chat.model';
-import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
-import { getEnum } from '@core/parser/enum.parser';
-import {
-    chatAIRoomListKeys,
-    chatWithAiApi,
-    ChatWithAiReq,
-    createRoomIdApi,
-} from '@core/services/chat.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Image, Spin } from 'antd';
+import { ChatModel } from '@core/models/chat.model';
+import { FileReq } from '@core/models/file.model';
+import { Avatar, Image } from 'antd';
 import clsx from 'clsx';
-import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { v4 as uuidv4 } from 'uuid';
 import MessageForm from './MessageForm';
 
-type ChatProps = {
-    chatList: ChatModel[];
-    setChatList: (chatList: ChatModel[], isTitle?: boolean) => void;
+type Props = {
+    dataList: ChatModel[];
     avatar: string;
-    isFetchingData?: boolean;
+    onSubmit: (value: string, files?: FileReq[] | null) => void;
 };
-
-export default function Chat({ chatList, setChatList, isFetchingData, avatar }: ChatProps) {
+export function ChatList({ dataList, avatar, onSubmit }: Props) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const searchParams = useSearchParams();
     const { data } = useSession();
-    const categoryAi = useMemo(
-        () =>
-            (searchParams && getEnum<CategoryAiEnum>(searchParams.get('type'), CategoryAiEnum)) ||
-            CategoryAiEnum.CHAT_GPT,
-        [searchParams],
-    );
-    const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
-
-    useEffect(() => {
-        if (chatList) {
-            setTimeout(scrollToBottom);
-        }
-    }, [chatList]);
-
     function scrollToBottom() {
         if (!chatContainerRef.current) {
             return;
@@ -55,59 +24,21 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
             behavior: 'smooth',
         });
     }
-    const mutateChat = useMutation({
-        mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
-        onSuccess: (resp) => {
-            setChatList([...chatList, resp.data]);
-            queryClient.invalidateQueries({
-                queryKey: chatAIRoomListKeys.lists(),
-            });
-        },
-    });
 
-    const mutateCreateRoom = useMutation({
-        mutationFn: (body: RoomReq) => createRoomIdApi(data!.user.user.id, categoryAi, body),
-        onSuccess: (resp) => {
-            mutateChat.mutateAsync({
-                question: chatList[chatList.length - 1].content,
-                roomId: resp.data.RoomId,
-            });
-        },
-    });
-
-    const queryClient = useQueryClient();
-    const handleSubmit = async (value: string, files: string[]) => {
-        const newChat: ChatModel = {
-            questionId: uuidv4(),
-            senderId: data!.user.user.id,
-            recipientId: '',
-            content: value,
-            files: [],
-            createdAt: parseDateTimeISO8601(dayjs()),
-        };
-        setChatList([...chatList, newChat], true);
-        if (chatList.length === 0) {
-            mutateCreateRoom.mutate({
-                TitleRoom: value,
-            });
-
-            return;
+    useEffect(() => {
+        if (dataList) {
+            setTimeout(scrollToBottom);
         }
-        if (roomId)
-            mutateChat.mutateAsync({
-                question: value,
-                roomId: roomId,
-            });
-    };
+    }, [dataList]);
 
     return (
-        <Spin spinning={isFetchingData || mutateChat.isPending}>
+        <div>
             <div className='mt-4 h-[576px] p-6 overflow-auto' ref={chatContainerRef}>
-                {chatList.map((item, index) => {
+                {dataList.map((item, index) => {
                     const checkedMine = item.senderId === data?.user.user.id;
                     let checked = !checkedMine;
-                    if (index !== 0 && item.recipientId && chatList[index - 1]?.recipientId) {
-                        checked = chatList[index - 1]?.recipientId !== item.recipientId;
+                    if (index !== 0 && item.recipientId && dataList[index - 1]?.recipientId) {
+                        checked = dataList[index - 1]?.recipientId !== item.recipientId;
                     }
                     return (
                         <div
@@ -129,8 +60,8 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
                     );
                 })}
             </div>
-            <MessageForm onSubmit={handleSubmit} />
-        </Spin>
+            <MessageForm onSubmit={onSubmit} />
+        </div>
     );
 }
 

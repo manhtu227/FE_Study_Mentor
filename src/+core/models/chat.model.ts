@@ -1,3 +1,5 @@
+import { FileReq } from './file.model';
+
 export type RoomModel = {
     roomId: string;
     Title: string;
@@ -25,12 +27,13 @@ export type RoomReq = { TitleRoom: string };
 */
 
 export type ChatModel = {
-    questionId: string;
+    questionId?: string;
     senderId: string;
-    contactId: string;
-    value: string;
-    files?: string[];
-    createdAt: string;
+    recipientId: string;
+    roomId?: string;
+    content: string;
+    files?: FileReq[] | null;
+    createdAt?: string;
 };
 
 export type ChatTitleModel = {

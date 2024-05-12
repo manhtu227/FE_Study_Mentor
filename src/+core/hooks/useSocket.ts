@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { socket as defaultSocket } from '../../socket';
+import { defaultSocket } from '../../socket';
 
 function useSocket() {
     const { data } = useSession();
@@ -10,32 +10,33 @@ function useSocket() {
 
     useEffect(() => {
         // Khởi tạo currentSocket khi có dữ liệu từ session
-        if (data?.user?.user?.id) {
+        if (data?.user?.user?.id && currentSocketRef.current === null) {
             currentSocketRef.current = defaultSocket(data?.user?.user?.id);
-        }
 
-        const currentSocket = currentSocketRef.current;
+            const currentSocket = currentSocketRef.current;
 
-        if (currentSocket) {
-            const onConnect = () => {
-                setIsConnected(true);
-            };
+            if (currentSocket) {
+                const onConnect = () => {
+                    console.log('connect with id:', data?.user?.user?.id);
+                    setIsConnected(true);
+                };
 
-            const onDisconnect = () => {
-                setIsConnected(false);
-            };
+                const onDisconnect = () => {
+                    setIsConnected(false);
+                };
 
-            currentSocket.on('connect', onConnect);
-            currentSocket.on('disconnect', onDisconnect);
-            currentSocket.on('error', (error) => {
-                console.error('Socket error:', error);
-            });
+                currentSocket.on('connect', onConnect);
+                currentSocket.on('disconnect', onDisconnect);
+                currentSocket.on('error', (error) => {
+                    console.error('Socket error:', error);
+                });
 
-            return () => {
-                currentSocket.off('connect', onConnect);
-                currentSocket.off('disconnect', onDisconnect);
-                currentSocket.off('error');
-            };
+                return () => {
+                    currentSocket.off('connect', onConnect);
+                    currentSocket.off('disconnect', onDisconnect);
+                    currentSocket.off('error');
+                };
+            }
         }
     }, [data?.user?.user?.id]); // Thay đổi khi có thay đổi về user ID
 

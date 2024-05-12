@@ -6,11 +6,16 @@ import CatalogIcon from '@assets/icons/catalog';
 import ChatIcon from '@assets/icons/chat';
 import Logo from '@components/logo/Logo';
 import { MY_ROUTE } from '@core/constants/routes.constant';
+import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { Button, Dropdown, MenuProps } from 'antd';
 import clsx from 'clsx';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { defaultSocket } from '../../socket';
+
 const Header = () => {
     const items: MenuProps['items'] = [
         {
@@ -51,7 +56,7 @@ const Header = () => {
     ];
 
     const router = useRouter();
-    const { status: authStatus, data } = useSession();
+    const { data } = useSession();
 
     const handleClickLogin = () => {
         router.push(MY_ROUTE.LOGIN);
@@ -60,6 +65,36 @@ const Header = () => {
     const handleClickSignUp = () => {
         router.push(MY_ROUTE.SIGN_UP);
     };
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (data?.user.user.id) {
+            const socket = defaultSocket(data?.user?.user?.id);
+            if (socket) {
+                const onConnectSocket = () => {
+                    dispatch(onConnect(socket));
+                    console.log('connect with id:', data?.user?.user?.id);
+                };
+
+                const onDisconnectSocket = () => {
+                    dispatch(onDisconnect());
+                };
+
+                socket.on('connect', onConnectSocket);
+                socket.on('disconnect', onDisconnectSocket);
+                socket.on('error', (error) => {
+                    console.error('Socket error:', error);
+                });
+
+                return () => {
+                    socket.off('connect', onConnectSocket);
+                    socket.off('disconnect', onDisconnectSocket);
+                    socket.off('error');
+                };
+            }
+        }
+    }, [data?.user.user.id]);
 
     return (
         <header className='h-[80px] min-h-[80px] w-full items-center '>

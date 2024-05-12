@@ -3,12 +3,18 @@ import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
-import { ChatModel, ChatTitleModel } from '@core/models/chat.model';
+import { ChatList } from '@components/chat/ChatList';
+import { SEND_MESSAGE } from '@core/constants/socket.constants';
+import { SocketEvent } from '@core/enums/socket.enum';
+import { ChatModel } from '@core/models/chat.model';
 import { MentorType } from '@core/models/profile.model';
-import { useCallback, useState } from 'react';
+import { RootState } from '@core/store';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import Chat from './components/Chat';
-import { mockData } from './components/mockData';
+import { FileReq } from '../../../+core/models/file.model';
+import ChatHeader from './components/ChatHeader';
 
 const mockDataInfo: MentorType = {
     id: '4',
@@ -16,30 +22,43 @@ const mockDataInfo: MentorType = {
     name: 'Nguyễn Hương',
     age: 23,
     rating: 5,
-    tags: ['tag1', 'tag2', 'tag3'],
 };
 
 type Props = {
     setIsChat: (value: boolean) => void;
+    idRoom: string;
+    senderId: string;
 };
 
-export default function ChatMentorPage({ setIsChat }: Props) {
-    const [dataChat, setDataChat] = useState<ChatModel[]>(mockData);
-    const [titleOriginal, setTitleOriginal] = useState<ChatTitleModel>();
+export default function ChatMentorPage({ setIsChat, idRoom, senderId }: Props) {
+    const [dataChat, setDataChat] = useState<ChatModel[]>([]);
+    const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
-    const handleDataChat = useCallback(
-        (data: ChatModel[], isTitle?: boolean) => {
-            if (dataChat.length === 0 && isTitle) {
-                setTitleOriginal({
-                    id: uuidv4(),
-                    name: data[0].value,
-                    data: data,
-                });
-            }
-            setDataChat(data);
-        },
-        [dataChat],
-    );
+    useEffect(() => {
+        socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
+            setDataChat((prev) => [...prev, data]);
+        });
+        return () => {
+            socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
+        };
+    }, []);
+
+    const { data } = useSession();
+
+    const handleSubmit = async (value: string, files?: FileReq[] | null) => {
+        if (socketReducer) {
+            const chatContent: ChatModel = {
+                questionId: uuidv4(),
+                senderId: data?.user?.user?.id || '',
+                recipientId: senderId,
+                roomId: idRoom,
+                content: value,
+                files: files,
+            };
+            setDataChat((prev) => [...prev, chatContent]);
+            socketReducer.emit(SEND_MESSAGE, chatContent);
+        }
+    };
 
     return (
         <div className='pack-layout pb-16 '>
@@ -58,7 +77,10 @@ export default function ChatMentorPage({ setIsChat }: Props) {
                     />
                 </div>
                 <div className='w-full min-w-[500px]'>
-                    <Chat chatList={dataChat} setChatList={handleDataChat} />
+                    <div className='bg-white-900 p-8'>
+                        <ChatHeader />
+                        <ChatList avatar='' dataList={dataChat} onSubmit={handleSubmit} />
+                    </div>
                 </div>
             </div>
         </div>
