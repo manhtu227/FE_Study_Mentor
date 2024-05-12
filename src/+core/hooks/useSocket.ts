@@ -1,38 +1,45 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { socket } from '../../socket'; // Assuming this is a pre-configured socket instance
+import { socket as defaultSocket } from '../../socket';
 
 function useSocket() {
-    const { data: session } = useSession();
-    const socketRef = useRef<Socket | null>(null);
-
-    const [isConnected, setIsConnected] = useState(false); // Initial state is disconnected
+    const { data } = useSession();
+    const currentSocketRef = useRef<Socket | null>(null);
+    const [isConnected, setIsConnected] = useState<boolean | null>(null);
 
     useEffect(() => {
-        const userId = session?.user?.user?.id; // Extract user ID
-
-        // Create socket instance only if user ID is available and different
-        if (userId && (!socketRef.current || socketRef.current.id !== userId)) {
-            socketRef.current = socket(userId);
-
-            socketRef.current.connect();
-            socketRef.current.on('connect', () => setIsConnected(true));
-            socketRef.current.on('disconnect', () => setIsConnected(false));
-            socketRef.current.on('error', (error) => console.error('Socket error:', error));
+        // Khởi tạo currentSocket khi có dữ liệu từ session
+        if (data?.user?.user?.id) {
+            currentSocketRef.current = defaultSocket(data?.user?.user?.id);
         }
 
-        // Clean up on unmount
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.off('connect');
-                socketRef.current.off('disconnect');
-                socketRef.current.off('error');
-            }
-        };
-    }, [session]); // Track session changes for socket updates
+        const currentSocket = currentSocketRef.current;
 
-    return { currentSocket: socketRef.current, isConnected };
+        if (currentSocket) {
+            const onConnect = () => {
+                setIsConnected(true);
+            };
+
+            const onDisconnect = () => {
+                setIsConnected(false);
+            };
+
+            currentSocket.on('connect', onConnect);
+            currentSocket.on('disconnect', onDisconnect);
+            currentSocket.on('error', (error) => {
+                console.error('Socket error:', error);
+            });
+
+            return () => {
+                currentSocket.off('connect', onConnect);
+                currentSocket.off('disconnect', onDisconnect);
+                currentSocket.off('error');
+            };
+        }
+    }, [data?.user?.user?.id]); // Thay đổi khi có thay đổi về user ID
+
+    return { currentSocket: currentSocketRef.current, isConnected };
 }
 
 export default useSocket;
