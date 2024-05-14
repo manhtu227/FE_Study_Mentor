@@ -8,9 +8,9 @@ import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { MentorType } from '@core/models/profile.model';
 import { RatingInput, RatingReq } from '@core/models/question.model';
 import {
+    createRatingApi,
     getInfoDiscussApi,
     infoDiscusKeys,
-    updateRatingApi,
 } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -40,9 +40,14 @@ export default function RatingAnswerPage() {
     const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateCreate = useMutation({
-        mutationFn: (data: RatingReq) => updateRatingApi(data, user?.id),
+        // mutationFn: (data: RatingReq) => updateRatingApi(data, user?.id),
+        mutationFn: (data: RatingReq) =>
+            createRatingApi(data, '65974321-27ff-47f1-8513-8696930c76f5'),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
+        },
+        onError: (error: any) => {
+            message.error(`Đã xảy ra lỗi: ${error.message || 'Vui lòng thử lại.'}`);
         },
     });
 
@@ -59,7 +64,7 @@ export default function RatingAnswerPage() {
         mutateCreate.mutate({
             ...values,
             tutorId: '8d116df8-29f3-40d2-b3c0-9b554c78f59e',
-            answerId: '4d6350fd-5f44-4b52-8ac7-3d03be8e63c4',
+            // answerId: '4d6350fd-5f44-4b52-8ac7-3d03be8e63c4',
         });
     };
 
@@ -116,8 +121,8 @@ export default function RatingAnswerPage() {
                             className='w-full'
                         >
                             <Form.Item<RatingInput>
-                                name='starNumber'
-                                rules={[{ required: true, message: 'please rating' }]}
+                                name='numberOfStar'
+                                rules={[{ required: true, message: 'Please rating' }]}
                                 className='flex  justify-center'
                             >
                                 <Rate />
@@ -125,7 +130,12 @@ export default function RatingAnswerPage() {
                             <div className='font-bold text-base mb-2'>Chi tiết</div>
                             <Form.Item<RatingInput>
                                 name='comment'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your comment about this question',
+                                    },
+                                ]}
                                 className='w-full text-left'
                             >
                                 <Input
