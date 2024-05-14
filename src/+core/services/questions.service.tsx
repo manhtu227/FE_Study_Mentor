@@ -47,8 +47,12 @@ export const createQuestions = (data: CreateFileQuestionRequestModel) => {
     return api.post<BaseResp<CreateFileQuestionResp>>('/api/questions', data);
 };
 
-export const updateRatingApi = async (body: RatingReq, id: string) => {
-    return api.post<void>(`questions/rating`, body);
+// export const updateRatingApi = async (body: RatingReq, id: string) => {
+//     return api.post<void>(`questions/rating`, body);
+// };
+
+export const createRatingApi = async (body: RatingReq, questionId: string) => {
+    return api.post<void>(`/api/questions/${questionId}/rating`, body);
 };
 
 export const infoDiscusKeys = initKeys('info-discuss-keys');
