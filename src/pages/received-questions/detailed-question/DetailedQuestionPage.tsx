@@ -1,12 +1,22 @@
 'use client';
 
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
+import { DATE_FORMAT } from '@core/constants/date.constant';
+import { SocketEvent } from '@core/enums/socket.enum';
+import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
+import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import { RootState } from '@core/store';
+import { useQuery } from '@tanstack/react-query';
 import { Avatar, Button, Col, Pagination, Row, Tag } from 'antd';
+import { format } from 'date-fns';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function DetailedQuestionPage() {
     const questions = [
@@ -66,97 +76,124 @@ function DetailedQuestionPage() {
         },
     ];
 
+    const { data } = useSession();
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [currentQuestion, setCurrentQuestion] = useState<GetQuestionResponseModel | undefined>();
+    const router = useRouter();
+    const params = useParams();
+    const socketReducer = useSelector((state: RootState) => state.socket.socket);
+
+    const detailedQuestionQuery = useQuery({
+        queryKey: detailedQuestionKeys.all,
+        queryFn: () => getDetailedQuestionApi(params?.slug as string),
+    });
+
+    useEffect(() => {
+        if (!(params?.slug as string)) return;
+
+        setCurrentQuestion(detailedQuestionQuery?.data?.data?.data);
+    }, [detailedQuestionQuery?.data, params?.slug as string]);
+
+    useEffect(() => {
+        if (detailedQuestionQuery?.error) router.push('/404');
+    }, [detailedQuestionQuery?.error]);
+
+    useEffect(() => {}, [data?.user?.user?.id]);
+
+    const handleAnswerTheQuestion = () => {
+        if (!data?.user.user.id) return;
+
+        const requestAccept: AcceptQuestionModel = {
+            questionId: currentQuestion?.id as string,
+            studentId: currentQuestion?.student.id as string,
+            senderId: data?.user.user.id as string,
+        };
+
+        socketReducer?.emit(SocketEvent.ACCEPT, requestAccept);
+        setShowForm(true);
+    };
 
     return (
         <div className='px-[180px] pb-[64px] bg-[#F3F9FA]'>
             <div className='w-full flex gap-8'>
-                <div className='w-2/3 '>
-                    <div className='w-full transition-all'>
-                        <div className='text-[14px] leading-[21px] font-normal text-black-800 mb-3'>
-                            Đặt câu hỏi lúc 10:00 AM 25/02/2024
-                        </div>
-                        <div className='font-bold text-4xl text-black-800'>
-                            Procedural Python - Lập trình hàm trong Python
-                        </div>
-                        <div className='my-4 text-2xl'>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque enim
-                            quos explicabo expedita neque, recusandae velit! Iste cum sed vero, a
-                            quo, sunt totam eos veniam numquam voluptatem iusto voluptatum.
-                        </div>
-                        <div className='flex items-center gap-2 '>
-                            <Avatar
-                                size={44}
-                                icon={
-                                    <Image
-                                        alt={'image of question'}
-                                        loading='lazy'
-                                        src={images.charac1}
-                                    />
-                                }
-                            />
-                            <div className='flex flex-col'>
-                                <span className='text-[18px] leading-[27px] font-bold'>
-                                    Nguyễn Hưng
-                                </span>
-                                <span className='text-[14px] leading-[21px] font-normal text-[#838B8F]'>
-                                    Student
-                                </span>
+                {currentQuestion && (
+                    <div className='w-2/3 '>
+                        <div className='w-full transition-all'>
+                            <div className='text-[14px] leading-[21px] font-normal text-black-800 mb-3'>
+                                Đặt câu hỏi lúc{' '}
+                                {format(currentQuestion.createdAt, DATE_FORMAT.DATE_TIME.HYPHEN)}
                             </div>
+                            <div className='font-bold text-4xl text-black-800'>
+                                Nội dung câu hỏi
+                            </div>
+                            <div className='my-4 text-2xl'>{currentQuestion.content}</div>
+                            <div className='flex items-center gap-2 '>
+                                <Avatar
+                                    size={44}
+                                    icon={
+                                        <Image
+                                            alt={'image of question'}
+                                            loading='lazy'
+                                            src={images.charac1}
+                                        />
+                                    }
+                                />
+                                <div className='flex flex-col'>
+                                    <span className='text-[18px] leading-[27px] font-bold'>
+                                        {currentQuestion.student.fullName}
+                                    </span>
+                                    <span className='text-[14px] leading-[21px] font-normal text-[#838B8F]'>
+                                        Student
+                                    </span>
+                                </div>
+                            </div>
+                            {!showForm && (
+                                <Button
+                                    type='primary'
+                                    size='large'
+                                    className='!h-12 !w-[248px] font-bold text-base bg-primary-800 mt-4'
+                                    onClick={handleAnswerTheQuestion}
+                                >
+                                    Trả lời câu hỏi này
+                                    <DownOutlined
+                                        onPointerEnterCapture={undefined}
+                                        onPointerLeaveCapture={undefined}
+                                    />
+                                </Button>
+                            )}
                         </div>
-                        {!showForm ? (
-                            <Button
-                                type='primary'
-                                size='large'
-                                className='!h-12 !w-[248px] font-bold text-base bg-primary-800 mt-4'
-                                onClick={() => setShowForm(true)}
-                            >
-                                Trả lời câu hỏi này
-                                <DownOutlined />
-                            </Button>
+                        {showForm ? (
+                            <div className='mt-8 rounded-lg bg-white-900 transition-all'>
+                                <AnswerQuestionForm />
+                            </div>
                         ) : (
-                            <Button
-                                type='primary'
-                                size='large'
-                                className='!h-12 !w-[248px] font-bold text-base bg-red-500 hover:!bg-red-500 hover:opacity-80 mt-4'
-                                onClick={() => setShowForm(false)}
-                            >
-                                Hủy bỏ
-                                <UpOutlined />
-                            </Button>
+                            <></>
                         )}
-                    </div>
-                    {showForm ? (
-                        <div className='mt-8 rounded-lg bg-white-900 transition-all'>
-                            <AnswerQuestionForm />
+                        {/* the same topic of the question */}
+                        <div className='mt-8'>
+                            <div className='w-full font-bold text-2xl text-black mb-8 items-center flex'>
+                                <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
+                                Câu hỏi cùng chủ đề
+                            </div>
+                            <Row gutter={[32, 32]}>
+                                {questions &&
+                                    questions.length > 0 &&
+                                    questions.map((question) => {
+                                        return (
+                                            <Col xs={24} sm={12} md={12} key={question.id}>
+                                                <CardQuestion question={question} />
+                                            </Col>
+                                        );
+                                    })}
+                            </Row>
+                            <Pagination
+                                defaultCurrent={1}
+                                total={50}
+                                className='py-8 flex justify-center'
+                            />
                         </div>
-                    ) : (
-                        <></>
-                    )}
-                    {/* the same topic of the question */}
-                    <div className='mt-8'>
-                        <div className='w-full font-bold text-2xl text-black mb-8 items-center flex'>
-                            <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
-                            Câu hỏi cùng chủ đề
-                        </div>
-                        <Row gutter={[32, 32]}>
-                            {questions &&
-                                questions.length > 0 &&
-                                questions.map((question) => {
-                                    return (
-                                        <Col xs={24} sm={12} md={12} key={question.id}>
-                                            <CardQuestion question={question} />
-                                        </Col>
-                                    );
-                                })}
-                        </Row>
-                        <Pagination
-                            defaultCurrent={1}
-                            total={50}
-                            className='py-8 flex justify-center'
-                        />
                     </div>
-                </div>
+                )}
                 <div className='w-1/3'>
                     <div>
                         <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>

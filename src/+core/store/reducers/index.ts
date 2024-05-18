@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 import authenticationReducer from './authentication.reducer';
 import counterReducer from './counter.reducer';
+import notificationReducer from './notification.reducer';
 import questionReducer from './question.reducer';
+import receivedQuestionsReducer from './received-questions.reducer';
 import socketReducer from './socket.reducer';
 
 const rootReducer = combineReducers({
@@ -9,6 +11,8 @@ const rootReducer = combineReducers({
     authentication: authenticationReducer,
     questions: questionReducer,
     socket: socketReducer,
+    notification: notificationReducer,
+    receivedQuestions: receivedQuestionsReducer,
 });
 
 export default rootReducer;

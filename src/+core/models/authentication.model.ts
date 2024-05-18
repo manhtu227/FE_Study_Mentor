@@ -1,4 +1,4 @@
-import { Gender, TypeUser } from '@core/enums/user.enum';
+import { Gender, UserType } from '@core/enums/user.enum';
 import { UserResp } from './profile.model';
 
 export type SignUpInput = {
@@ -6,7 +6,7 @@ export type SignUpInput = {
     fullName: string;
     gender: Gender;
     password: string;
-    type: TypeUser;
+    type: UserType;
 };
 
 export type LoginInput = {

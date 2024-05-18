@@ -3,6 +3,7 @@ import { BaseResp } from '@core/models/base.model';
 import {
     CreateFileQuestionRequestModel,
     CreateFileQuestionResp,
+    GetQuestionResponseModel,
     GradeResp,
     InfoExchangeInput,
     RatingReq,
@@ -61,4 +62,10 @@ export const getInfoDiscussApi = async (params: { questionId: string }) => {
     return api.get<{
         data: InfoExchangeInput[];
     }>(`/questions/info-discuss`, { params });
+};
+
+export const detailedQuestionKeys = initKeys('detailed-question-keys');
+
+export const getDetailedQuestionApi = async (questionId: string) => {
+    return api.get<BaseResp<GetQuestionResponseModel>>(`/api/questions/${questionId}`);
 };

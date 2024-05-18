@@ -8,7 +8,7 @@ export const DATE_FORMAT = {
         STRING: 'MMMM DD, YYYY',
     },
     DATE_TIME: {
-        HYPHEN: 'YYYY-MM-DD hh:mm',
+        HYPHEN: 'yyyy-MM-dd hh:mm',
         SLASH: 'YYYY/MM/DD hh:mm',
         DOT: 'YYYY.MM.DD hh:mm',
         DOWNLOAD: 'YYYY-MM-DD_hh:mm',
