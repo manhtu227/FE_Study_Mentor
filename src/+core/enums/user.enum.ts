@@ -3,7 +3,7 @@ export enum Gender {
     Female = 1,
 }
 
-export enum TypeUser {
+export enum UserType {
     STUDENT = 0,
     TUTOR = 1,
 }

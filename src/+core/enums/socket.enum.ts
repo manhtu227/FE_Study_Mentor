@@ -12,6 +12,7 @@ export enum SocketEvent {
     GET_TUTORS_AVAILABLE = 'get-tutors-available',
     GET_TUTORS_FAVORITE = 'get-tutors-favorite',
     ERROR = 'error',
+    RECEIVE_NEW_QUESTION = 'new-question',
 }
 
 export const SOCKET_QUESTION_EMIT = (topic: string) => `question-${topic}`;

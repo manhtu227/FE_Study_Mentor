@@ -1,5 +1,6 @@
 import { StaticImageData } from 'next/image';
 import { FileAntd, FileReq } from './file.model';
+import { UserModel } from './user.model';
 
 export type QuestionInput = {
     questionLevel: string;
@@ -100,4 +101,73 @@ export type InfoExchangeInput = {
     Subject: string;
     LevelName: string;
     payment: string;
+};
+
+export type ReceiveNewQuestionModel = {
+    content: string;
+    price: number;
+    studentId: string;
+    questionId: string;
+    subject: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        description: string;
+    };
+    createdAt: Date;
+};
+
+export type ReceivedQuestion = {
+    questionId: string;
+    isWatchLater: boolean;
+};
+
+export type ReceivedQuestionList = {
+    receivedQuestionList: ReceivedQuestion[];
+};
+
+export type SubjectModel = {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    description?: string;
+};
+
+export type GetQuestionResponseModel = {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    answerTime: number;
+    content: string;
+    price: string;
+    status: number;
+    isPaid: boolean;
+    type: number;
+    fileQuestions: FileReq[] | null;
+    student: UserModel;
+    subject: SubjectModel;
+    answers: any[];
+};
+
+export type AcceptQuestionModel = {
+    studentId: string;
+    senderId: string;
+    questionId: string;
+};
+
+export type AcceptQuestionResp = {
+    content: string;
+    answerTime: number;
+    price: string;
+    status: number;
+    isPaid: boolean;
+    type: number;
+    user: { id: string };
+    subject: { id: string };
+    jobRunCount: number;
+    id: string;
+    createdAt: string;
+    updatedAt: string;
 };

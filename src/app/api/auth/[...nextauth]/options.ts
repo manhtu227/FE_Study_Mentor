@@ -2,7 +2,7 @@ import { isAxiosError } from 'axios';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { Gender, TypeUser } from '@core/enums/user.enum';
+import { Gender, UserType } from '@core/enums/user.enum';
 import { LoginInput, SignUpInput } from '@core/models/authentication.model';
 import { loginApi, signUpApi } from '@core/services/authentication.service';
 import type { NextAuthOptions } from 'next-auth';
@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
                         password: credentials.password,
                         fullName: credentials.fullName,
                         gender: credentials.gender as unknown as Gender, // Fix: Cast credentials.gender to Gender type
-                        type: credentials.type as unknown as TypeUser, // Fix: Cast credentials.type to TypeUser type
+                        type: credentials.type as unknown as UserType, // Fix: Cast credentials.type to UserType type
                     });
                     return data.data as any;
                 } catch (e: any) {

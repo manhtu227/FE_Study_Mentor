@@ -6,7 +6,7 @@ import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { Button, Form, message } from 'antd';
 
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { Gender, TypeUser } from '@core/enums/user.enum';
+import { Gender, UserType } from '@core/enums/user.enum';
 import { SignUpInput } from '@core/models/authentication.model';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -70,8 +70,8 @@ const SignUpPage = () => {
                             <CustomSelectInput
                                 placeholder='Chọn loại người dùng'
                                 optionsSelect={[
-                                    { label: 'Học viên', value: TypeUser.STUDENT },
-                                    { label: 'Người hướng dẫn', value: TypeUser.TUTOR },
+                                    { label: 'Học viên', value: UserType.STUDENT },
+                                    { label: 'Người hướng dẫn', value: UserType.TUTOR },
                                 ]}
                             />
                         </Form.Item>
