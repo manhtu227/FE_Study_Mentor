@@ -54,7 +54,7 @@ export const CustomTextAreaInput = <T extends object>({
     };
 
     return (
-        <div className='text-area w-full border-solid rounded-md border-gray-200'>
+        <div className='text-area w-full border-solid rounded-md border-gray-200 bg-white-900'>
             {file && <div className='p-2'>{file}</div>}
             <div className='flex items-end'>
                 <Form.Item<T>

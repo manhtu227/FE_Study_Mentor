@@ -102,3 +102,13 @@ body {
 .ant-skeleton-title + .ant-skeleton-paragraph {
     margin-block: 0px !important;
 }
+
+.sidebar-message {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.2s ease-in-out; /* Thời gian và hiệu ứng chuyển đổi */
+}
+
+.sidebar-message.active {
+    width: 350px; /* Chiều rộng khi mở */
+}
