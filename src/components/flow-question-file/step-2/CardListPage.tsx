@@ -1,14 +1,13 @@
 'use client';
 
-import images from '@assets/images';
-import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { MentorListFilter, MentorListResp } from '@core/models/mentor.model';
 
+import images from '@assets/images';
+import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { PaginationCore } from '@components/pagination/pagination';
-import { GET_TUTOR_FAVOURITE, GET_TUTOR_ONLINE } from '@core/constants/socket.constants';
-import useSocket from '@core/hooks/useSocket';
+import { SocketEvent } from '@core/enums/socket.enum';
 import { RootState } from '@core/store';
-import { IPaginationInfo, PagingResp, initialPagingState } from '@core/types/paging.type';
+import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { Col, Row, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
@@ -21,27 +20,29 @@ export default function CardListPage() {
         pageSize: +(searchParams?.get('pageSize') ?? initialPagingState.pageSize),
         page: +(searchParams?.get('page') ?? initialPagingState.page),
     };
-    const isTutorOnline = searchParams?.get('isTutorOnline') ?? true;
     const { data } = useSession();
-    const { isConnected, currentSocket } = useSocket();
-    const [response, setResponse] = useState<PagingResp<MentorListResp[]>>();
+    const socketReducer = useSelector((state: RootState) => state.socket.socket);
+    const [mentorList, setMentorList] = useState<MentorListResp[]>();
+    const [paginationInfo, setPaginationInfo] = useState<IPaginationInfo>(initialPaging);
     const questions = useSelector((state: RootState) => state.questions.questions);
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const [request, setRequest] = useState<MentorListFilter>();
 
     useEffect(() => {
-        handleFetchTutors();
-    }, [isConnected]);
-
-    useEffect(() => {
-        if (isConnected) {
+        if (socketReducer) {
             handleFetchTutors();
+            socketReducer?.on(SocketEvent.GET_TUTORS_AVAILABLE, (data) => {
+                setMentorList(data.data);
+                setPaginationInfo(data.paginationInfo);
+            });
         }
-    }, [isTutorOnline, request?.page]);
+
+        return () => {
+            socketReducer?.off(SocketEvent.TUTORS_AVAILABLE);
+        };
+    }, [request?.page, socketReducer]);
 
     const handleFetchTutors = () => {
-        if (!isConnected) return;
-
         setRequest({
             userId: data?.user?.user?.id ?? '',
             subjectId:
@@ -51,21 +52,7 @@ export default function CardListPage() {
             pageSize: 11,
         });
 
-        if (isTutorOnline === 'true') {
-            currentSocket?.emit(GET_TUTOR_ONLINE, request);
-            currentSocket?.on(GET_TUTOR_ONLINE, (data) => handleGetData(data));
-            currentSocket?.off(GET_TUTOR_FAVOURITE);
-        } else {
-            currentSocket?.emit(GET_TUTOR_FAVOURITE, request);
-            currentSocket?.on(GET_TUTOR_FAVOURITE, (data) => handleGetData(data));
-            currentSocket?.off(GET_TUTOR_ONLINE);
-        }
-    };
-
-    const handleGetData = (data: PagingResp<MentorListResp[]>) => {
-        console.log(data, data.data);
-
-        setResponse(data);
+        socketReducer?.emit(SocketEvent.TUTORS_AVAILABLE, request);
     };
 
     const handlePageChange = ({ page, pageSize }: IPaginationInfo) => {
@@ -75,15 +62,14 @@ export default function CardListPage() {
             subjectId: request?.subjectId ?? '',
             userId: request?.userId ?? '',
         };
-
         setRequest(newRequest);
     };
 
     return (
-        <Spin spinning={!response?.success}>
+        <Spin spinning={!mentorList}>
             <div className='max-w[837px]'>
                 <Row gutter={[32, 32]}>
-                    {response?.data?.map((mentor) => {
+                    {mentorList?.map((mentor) => {
                         return (
                             <Col span={12} xs={24} sm={12} key={mentor.id}>
                                 <CardMentorInfo
@@ -102,9 +88,9 @@ export default function CardListPage() {
                 </Row>
                 <PaginationCore
                     onPageNumberChange={handlePageChange}
-                    pageSize={response?.paginationInfo.pageSize ?? initialPaging.pageSize}
-                    current={response?.paginationInfo.page}
-                    total={response?.paginationInfo.total}
+                    pageSize={paginationInfo.pageSize ?? initialPaging.pageSize}
+                    current={paginationInfo.page}
+                    total={paginationInfo.total}
                 />
             </div>
         </Spin>
