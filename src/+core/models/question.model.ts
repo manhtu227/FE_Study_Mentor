@@ -46,13 +46,13 @@ export type CreateFileQuestionResp = {
 };
 
 export type RatingInput = {
-    starNumber: number;
+    numberOfStar: number;
     comment: string;
 };
 
 export type RatingReq = RatingInput & {
     tutorId: string;
-    answerId: string;
+    // answerId: string;
 };
 
 export type Question = {
