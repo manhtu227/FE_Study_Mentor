@@ -124,14 +124,14 @@ const dataMentor = [
 
 type Props = {
     className?: string;
-    ref?: RefObject<HTMLDivElement>;
+    sideBarRef?: RefObject<HTMLDivElement>;
 };
 
-export function SideBarMessage({ className, ref }: Props) {
+export function SideBarMessage({ className, sideBarRef }: Props) {
     const [keyActive, setKeyActive] = useState('1');
 
     return (
-        <div className={clsx('fixed z-50 top-16 right-0')} ref={ref}>
+        <div className={clsx('fixed z-50 top-16 right-0')} ref={sideBarRef}>
             <div className={clsx('shadow-lg bg-red-100 h-[calc(100vh-64px)]', className)}>
                 <div className='w-full bg-primary-700 p-2 flex justify-between absolute top-0 right-0 left-0'>
                     <div className='flex gap-2 items-center'>

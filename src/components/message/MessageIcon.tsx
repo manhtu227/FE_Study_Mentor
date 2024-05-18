@@ -18,12 +18,15 @@ export default function MessageIcon(props: NotificationPanelToggleButtonProps) {
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        console.log('first', sidebarRef?.current);
+        console.log(sidebarRef?.current?.contains(event.target as Node));
+        if (sidebarRef?.current && !sidebarRef.current.contains(event.target as Node) && active) {
             setActive(false);
         }
     };
 
     useEffect(() => {
+        console.log('sapp');
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -41,7 +44,7 @@ export default function MessageIcon(props: NotificationPanelToggleButtonProps) {
                 {children}
             </Button>
             <SideBarMessage
-                ref={sidebarRef}
+                sideBarRef={sidebarRef}
                 className={clsx('sidebar-message', active ? 'active' : ' ')}
             />
         </>
