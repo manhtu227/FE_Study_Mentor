@@ -3,8 +3,6 @@
 import { RightOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { CardInfoExchange } from '@components/card/CardInfoExchange';
-import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { MentorType } from '@core/models/profile.model';
 import { RatingInput, RatingReq } from '@core/models/question.model';
 import {
@@ -16,6 +14,7 @@ import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Avatar, Divider, Form, Image, Input, Rate, Spin, message } from 'antd';
 import { useSelector } from 'react-redux';
+import { SideBarMentor } from '../SideBarMentor';
 
 const mentor: MentorType = {
     id: '1',
@@ -23,7 +22,7 @@ const mentor: MentorType = {
     name: 'Nguyễn Hưng',
     age: 23,
     rating: 5,
-    tags: ['tag1'],
+    // tags: ['tag1'],
 };
 
 const subject = {
@@ -70,89 +69,79 @@ export default function RatingAnswerPage() {
 
     return (
         <Spin spinning={mutateCreate.isPending} size='large'>
-            <div className='flex items-start w-full gap-8'>
-                <div className='w-[561px]'>
-                    <CardInfoExchange data={infoDiscussQuery.data} />
-                    <div>
-                        <h3 className='flex flex-coltext-lg font-bold text-black-800'>
-                            Người hướng dẫn
-                        </h3>
-                        <CardMentorInfo mentor={mentor} />
-                        <ButtonPrimary
-                            title='Quay lại đoạn chat'
-                            className='w-full pt-3'
-                            isRightIcon
+            <SideBarMentor
+                className='p-8'
+                button={
+                    <ButtonPrimary title='Quay lại đoạn chat' className='w-full pt-3' isRightIcon />
+                }
+                mentor={mentor}
+            >
+                <div className='flex flex-col text-left gap-x-4'>
+                    <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
+                        {subject.name}
+                    </h3>
+                    <p className='text-[15px] leading-[22.5px] text-primary-800 m-0 font-bold'>
+                        Xem chi tiết <RightOutlined />
+                    </p>
+                    <Divider />
+                </div>
+
+                <div className='flex flex-col items-center gap-y-4 justify-between'>
+                    <div className='w-[100px] h-[100px]'>
+                        <Avatar
+                            size={100}
+                            icon={
+                                <Image
+                                    alt={'image of question'}
+                                    loading='lazy'
+                                    src={subject.teacher.image || ''}
+                                />
+                            }
                         />
                     </div>
-                </div>
-                <div className='w-full bg-white-900 rounded-md flex flex-col gap-8 p-8'>
-                    <div className='flex flex-col text-left gap-x-4'>
-                        <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
-                            {subject.name}
-                        </h3>
-                        <p className='text-[15px] leading-[22.5px] text-primary-800 m-0 font-bold'>
-                            Xem chi tiết <RightOutlined />
-                        </p>
-                        <Divider />
-                    </div>
+                    <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
+                        {subject.teacher.name}
+                    </h3>
 
-                    <div className='flex flex-col items-center gap-y-4 justify-between'>
-                        <div className='w-[100px] h-[100px]'>
-                            <Avatar
-                                size={100}
-                                icon={
-                                    <Image
-                                        alt={'image of question'}
-                                        loading='lazy'
-                                        src={subject.teacher.image || ''}
-                                    />
-                                }
-                            />
-                        </div>
-                        <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
-                            {subject.teacher.name}
-                        </h3>
-
-                        <Form
-                            name='rating'
-                            form={form}
-                            onFinish={handleFinish}
-                            autoComplete='off'
-                            className='w-full'
+                    <Form
+                        name='rating'
+                        form={form}
+                        onFinish={handleFinish}
+                        autoComplete='off'
+                        className='w-full'
+                    >
+                        <Form.Item<RatingInput>
+                            name='numberOfStar'
+                            rules={[{ required: true, message: 'Please rating' }]}
+                            className='flex  justify-center'
                         >
-                            <Form.Item<RatingInput>
-                                name='numberOfStar'
-                                rules={[{ required: true, message: 'Please rating' }]}
-                                className='flex  justify-center'
-                            >
-                                <Rate />
-                            </Form.Item>
-                            <div className='font-bold text-base mb-2'>Chi tiết</div>
-                            <Form.Item<RatingInput>
-                                name='comment'
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your comment about this question',
-                                    },
-                                ]}
-                                className='w-full text-left'
-                            >
-                                <Input
-                                    className='h-[150px] font-medium text-base text-gray-700'
-                                    placeholder='Nhập đánh giá chi tiết'
-                                />
-                            </Form.Item>
-                            <ButtonPrimary
-                                title='Gửi đánh giá'
-                                htmlType='submit'
-                                className='w-full pt-0 rounded-lg'
-                                isRightIcon
+                            <Rate />
+                        </Form.Item>
+                        <div className='font-bold text-base mb-2'>Chi tiết</div>
+                        <Form.Item<RatingInput>
+                            name='comment'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your comment about this question',
+                                },
+                            ]}
+                            className='w-full text-left'
+                        >
+                            <Input
+                                className='h-[150px] font-medium text-base text-gray-700'
+                                placeholder='Nhập đánh giá chi tiết'
                             />
-                        </Form>
-                    </div>
+                        </Form.Item>
+                        <ButtonPrimary
+                            title='Gửi đánh giá'
+                            htmlType='submit'
+                            className='w-full pt-0 rounded-lg'
+                            isRightIcon
+                        />
+                    </Form>
                 </div>
-            </div>
+            </SideBarMentor>
         </Spin>
     );
 }

@@ -1,3 +1,4 @@
+'use client';
 import ChatAiPage, { AIFreeOrPaidEnum } from '../../../pages/chat-ai/ChatAiPage';
 
 export default function ChatAi() {

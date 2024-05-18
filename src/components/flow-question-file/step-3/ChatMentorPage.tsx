@@ -1,8 +1,6 @@
 'use client';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { CardInfoExchange } from '@components/card/CardInfoExchange';
-import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { ChatList } from '@components/chat/ChatList';
 import { SEND_MESSAGE } from '@core/constants/socket.constants';
 import { SocketEvent } from '@core/enums/socket.enum';
@@ -14,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { FileReq } from '../../../+core/models/file.model';
+import { SideBarMentor } from '../SideBarMentor';
 import ChatHeader from './components/ChatHeader';
 
 const mockDataInfo: MentorType = {
@@ -62,27 +61,34 @@ export default function ChatMentorPage({ setIsChat, idRoom, senderId }: Props) {
 
     return (
         <div className='pack-layout pb-16 '>
-            <div className='flex items-start w-full gap-8'>
-                <div style={{ flex: `0 0 435px` }} className='flex flex-col gap-8'>
-                    {/* <SideBarChat onSelectData={handleDataChat} title={titleOriginal} /> */}
-                    <CardInfoExchange />
-                    <div className='flex flex-col gap-4'>
-                        <span className='font-bold text-lg text-black-800'>Người hướng dẫn</span>
-                        <CardMentorInfo mentor={mockDataInfo} />
-                    </div>
+            <SideBarMentor
+                button={
                     <ButtonPrimary
                         title='Xem câu trả lời'
                         className='w-full'
-                        onClick={() => setIsChat(false)}
+                        onClick={() => {
+                            console.log('chay vo nha');
+                            setIsChat(false);
+                        }}
                     />
-                </div>
-                <div className='w-full min-w-[500px]'>
-                    <div className='bg-white-900 p-8'>
-                        <ChatHeader />
-                        <ChatList avatar='' dataList={dataChat} onSubmit={handleSubmit} />
+                }
+                mentor={mockDataInfo}
+            >
+                <div className='fixed left-0 right-0 z-0'>
+                    <div className='pack-layout '>
+                        <div className='bg-white-900 relative  h-[calc(100vh-200px)] ml-[432px]'>
+                            <ChatHeader className='absolute top-4 left-4 right-4' />
+                            <ChatList
+                                avatar=''
+                                dataList={dataChat}
+                                onSubmit={handleSubmit}
+                                classNameMessage='absolute left-4 right-4 bottom-4'
+                                className='absolute left-4 right-4 top-20 max-h-[calc(100vh-356px)] overflow-auto'
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </SideBarMentor>
         </div>
     );
 }

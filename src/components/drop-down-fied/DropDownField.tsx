@@ -1,7 +1,6 @@
-import React from 'react';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Dropdown, message, Space, Tooltip } from 'antd';
+import { Button, Dropdown, Space } from 'antd';
 
 // const handleMenuClick: MenuProps['onClick'] = (e) => {
 //     message.info('Click on menu item.');

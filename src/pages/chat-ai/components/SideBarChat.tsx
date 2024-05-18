@@ -5,6 +5,7 @@ import SideBarChatActive from '@assets/icons/sidebar-chat-active';
 import SideBarChatDefault from '@assets/icons/sidebar-chat-default';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
+import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel } from '@core/models/chat.model';
 import { chatAIRoomListKeys, getChatAIRoomListApi } from '@core/services/chat.service';
@@ -96,18 +97,22 @@ function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: Sideba
                 </div>
                 <CustomTextInput placeholder='Vui lòng nhập' prefix={<SearchIcon />} />
                 <div className='max-h-[368px] overflow-auto'>
-                    <div className='flex flex-col gap-4'>
-                        {(listQuestion.data || []).map((item) => (
-                            <SidebarChatItem
-                                key={item.roomId}
-                                active={activeChat === item.roomId}
-                                title={item.Title}
-                                onClick={() => {
-                                    handleSelectRoom(item.roomId);
-                                }}
-                            />
-                        ))}
-                    </div>
+                    {listQuestion.isPending ? (
+                        <CustomSkeletonParagraph rows={5} gap={4} height={5 * 50} />
+                    ) : (
+                        <div className='flex flex-col gap-4 animate__animated animate__fadeIn'>
+                            {(listQuestion.data || []).map((item) => (
+                                <SidebarChatItem
+                                    key={item.roomId}
+                                    active={activeChat === item.roomId}
+                                    title={item.Title}
+                                    onClick={() => {
+                                        handleSelectRoom(item.roomId);
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div className='pack-border-t-primary-400'>
                     {more.map((item, index) => (

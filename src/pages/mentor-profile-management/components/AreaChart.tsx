@@ -9,7 +9,7 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import faker from 'faker';
+// import faker from 'faker';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -47,7 +47,7 @@ export const data = {
     datasets: [
         {
             label: 'Dataset 1',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 500 })),
+            data: [300, 50, 100, 200, 300, 500, 400],
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 0, 0)',
             fill: {
@@ -57,7 +57,7 @@ export const data = {
         },
         {
             label: 'Dataset 2',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 500 })),
+            data: [100, 200, 300, 400, 500, 600, 700],
             borderColor: 'rgb(53, 162, 235)',
             backgroundColor: 'rgba(53, 162, 235, 0.3)',
             fill: 'origin', // Set the fill options

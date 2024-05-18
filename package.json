@@ -21,6 +21,7 @@
         "@types/lodash": "^4.17.0",
         "@types/react-file-icon": "^1.0.4",
         "add": "2.0.6",
+        "animate.css": "^4.1.1",
         "antd": "5.14.2",
         "antd-img-crop": "^4.21.0",
         "axios": "^1.6.7",

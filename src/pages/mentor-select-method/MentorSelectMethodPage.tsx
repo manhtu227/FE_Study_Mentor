@@ -26,7 +26,7 @@ function MentorSelectMethodPage() {
                 alt='Hero'
                 className='relative opacity-50 max-w-full'
             />
-            <div className='absolute top-0 left-0 right-0 opacity-90 pt-20'>
+            <div className='absolute top-0 left-0 right-0 opacity-90 pt-10'>
                 <div className='mb-[52px]'>
                     <div className='font-semibold text-[33px] py-3 border-b-[2px] border-solid border-r-0 border-t-0 border-l-0 w-[250px] text-[#313636] text-center mx-auto'>
                         Đặt câu hỏi
