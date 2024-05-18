@@ -6,7 +6,7 @@ import { NotificationTitle, NotificationType } from '@core/enums/notification.en
 import { Notification } from '@core/models/notification.model';
 import { RootState } from '@core/store';
 import { clearNotifications, removeNotification } from '@core/store/reducers/notification.reducer';
-import { calculateTimeAgo } from '@core/utilities/time-ago';
+import { calculateTimeAgo } from '@core/utilities/calculate-time-ago';
 import { Badge, Button, Drawer, List } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
