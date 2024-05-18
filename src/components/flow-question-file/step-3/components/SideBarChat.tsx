@@ -8,7 +8,6 @@ import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { ChatModel, ChatTitleModel } from '@core/models/chat.model';
 import clsx from 'clsx';
 import { memo, useEffect, useState } from 'react';
-import { mockData } from './mockData';
 
 const more = [
     { icon: <DeleteIcon />, title: 'Xóa tất cả câu hỏi' },
@@ -21,7 +20,7 @@ const listDefault: ChatTitleModel[] = [
     {
         id: 1,
         name: 'Data Storytelling là gì? 5+ Cách để trực quan nội dung câu chuyện thú vị hơn',
-        data: mockData,
+        // data: mockData,
     },
     {
         id: 2,

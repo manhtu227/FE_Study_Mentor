@@ -1,9 +1,8 @@
-import React from 'react';
-import { Button, Card, Image, Input, Tag } from 'antd';
 import images from '@assets/images';
-import { Avatar, Row, Col, Pagination } from 'antd';
-import DropDownField from '../../components/drop-down-fied/DropDownField';
+import { Avatar, Button, Col, Image, Input, Pagination, Row, Tag } from 'antd';
+
 import { SearchOutlined } from '@ant-design/icons';
+import DropDownField from '../../components/drop-down-fied/DropDownField';
 
 export default function QuestionCardPage() {
     return (

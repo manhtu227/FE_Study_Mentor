@@ -1,3 +1,4 @@
+'use client';
 import SendIcon from '@assets/icons/send-icon';
 import UploadIcon from '@assets/icons/upload-icon';
 import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
@@ -10,6 +11,12 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import UploadFileMessage from './UploadFileMessage';
 
+const dummyRequest = ({ onSuccess }: any) => {
+    setTimeout(() => {
+        onSuccess('ok');
+    }, 0);
+};
+
 export type MessageInput = {
     text: string;
     fileList: UploadFile[];
@@ -17,9 +24,10 @@ export type MessageInput = {
 
 type MessageFormProps = {
     onSubmit: (value: string, files?: FileReq[] | null) => void;
+    className?: string;
 };
 
-export default function MessageForm({ onSubmit }: MessageFormProps) {
+export default function MessageForm({ onSubmit, className }: MessageFormProps) {
     const [form] = useForm<MessageInput>();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -47,6 +55,8 @@ export default function MessageForm({ onSubmit }: MessageFormProps) {
     const handleSubmit = async (values: MessageInput) => {
         const files = await uploadFile.uploadMultipleFiles(values.fileList);
         onSubmit(values.text, files);
+        setFileList([]);
+        form.resetFields();
     };
 
     return (
@@ -61,14 +71,14 @@ export default function MessageForm({ onSubmit }: MessageFormProps) {
                 }
             }}
             autoComplete='off'
+            className={className}
         >
             {/* <Spin spinning={loading}> */}
-            <div className='p-6 flex gap-6 items-end'>
+            <div className={clsx('flex gap-6 items-end')}>
                 <div className='cursor-pointer'>
                     <Upload
-                        action='https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload'
-                        listType='picture-card'
                         fileList={fileList}
+                        customRequest={dummyRequest}
                         onChange={handleChangeFile}
                         multiple
                         showUploadList={false}

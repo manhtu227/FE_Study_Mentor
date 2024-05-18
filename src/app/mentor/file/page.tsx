@@ -2,10 +2,10 @@ import QuestionByFilePage from '../../../pages/question-by-file/QuestionByFilePa
 
 function ByFile() {
     return (
-        <div className='bg-white-800'>
-            <div className='max-w-[1368px] mx-auto '>
-                <QuestionByFilePage />
-            </div>
+        <div className='bg-white-800 '>
+            {/* <div className='max-w-[1368px] mx-auto '> */}
+            <QuestionByFilePage />
+            {/* </div> */}
         </div>
     );
 }

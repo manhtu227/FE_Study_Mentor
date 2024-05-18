@@ -1,7 +1,9 @@
 'use client';
 
+import { ChatList } from '@components/chat/ChatList';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel, RoomReq } from '@core/models/chat.model';
+import { FileReq } from '@core/models/file.model';
 import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
 import { getEnum } from '@core/parser/enum.parser';
 import {
@@ -11,15 +13,11 @@ import {
     createRoomIdApi,
 } from '@core/services/chat.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Image, Spin } from 'antd';
-import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { v4 as uuidv4 } from 'uuid';
-import MessageForm from './MessageForm';
 
 type ChatProps = {
     chatList: ChatModel[];
@@ -76,7 +74,8 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
     });
 
     const queryClient = useQueryClient();
-    const handleSubmit = async (value: string, files: string[]) => {
+
+    const handleSubmit = async (value: string, files?: FileReq[] | null) => {
         const newChat: ChatModel = {
             questionId: uuidv4(),
             senderId: data!.user.user.id,
@@ -85,7 +84,7 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
             files: [],
             createdAt: parseDateTimeISO8601(dayjs()),
         };
-        setChatList([...chatList, newChat], true);
+        setChatList([...chatList, newChat]);
         if (chatList.length === 0) {
             mutateCreateRoom.mutate({
                 TitleRoom: value,
@@ -101,87 +100,15 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
     };
 
     return (
-        <Spin spinning={isFetchingData || mutateChat.isPending}>
-            <div className='mt-4 h-[576px] p-6 overflow-auto' ref={chatContainerRef}>
-                {chatList.map((item, index) => {
-                    const checkedMine = item.senderId === data?.user.user.id;
-                    let checked = !checkedMine;
-                    if (index !== 0 && item.recipientId && chatList[index - 1]?.recipientId) {
-                        checked = chatList[index - 1]?.recipientId !== item.recipientId;
-                    }
-                    return (
-                        <div
-                            key={index}
-                            className={clsx(
-                                `flex flex-col gap-4`,
-
-                                index !== 0 ? (checked ? 'mt-8' : 'mt-[10px]') : '',
-                            )}
-                        >
-                            <ChatItem
-                                value={item.content}
-                                createdAt={item.createdAt}
-                                checkedMine={checkedMine}
-                                avatar={checked ? (!checkedMine ? avatar : undefined) : undefined}
-                                files={item.files}
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-            <MessageForm onSubmit={handleSubmit} />
-        </Spin>
-    );
-}
-
-type ChatItemProps = {
-    value: string;
-    createdAt?: string;
-    avatar?: string;
-    files?: string[];
-    checkedMine: boolean;
-};
-
-function ChatItem({ value, avatar, files, checkedMine }: ChatItemProps) {
-    return (
-        <div className={clsx('flex gap-4  w-full', !checkedMine ? 'justify-start' : 'justify-end')}>
-            {avatar ? (
-                <div style={{ flex: `0 0 40px` }}>
-                    <Avatar size={40} src={avatar} />
-                </div>
-            ) : (
-                <div style={{ flex: `0 0 40px` }}></div>
-            )}
-            <div
-                className={clsx('flex flex-col gap-[10px] ', avatar ? 'items-start' : 'items-end')}
-            >
-                <div className='flex items-center w-fit'>
-                    <div
-                        className='bg-white-800 rounded-2xl py-2 px-4 text-base w-fit tag-p'
-                        style={{ whiteSpace: checkedMine ? 'pre-line' : '' }}
-                    >
-                        <ReactMarkdown>{value}</ReactMarkdown>
-                    </div>
-                </div>
-                {files && (
-                    <div
-                        className={clsx(
-                            'flex flex-wrap gap-2 max-w-[416px]',
-                            avatar ? 'justify-start' : 'justify-end',
-                        )}
-                    >
-                        {files.map((file) => (
-                            <div key={file} className='flex gap-2 items-center'>
-                                <Image
-                                    className='max-w-[200px] max-h-[100px] rounded-lg'
-                                    src={file}
-                                    alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                                />
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
+        // <Spin spinning={isFetchingData || mutateChat.isPending}>
+        <ChatList
+            avatar={avatar}
+            dataList={chatList}
+            onSubmit={handleSubmit}
+            classNameMessage='absolute left-4 right-4 bottom-4'
+            className='absolute left-4 right-4 top-20 max-h-[calc(100vh-100px)] overflow-auto'
+        />
+        // <MessageForm onSubmit={handleSubmit} className='absolute left-4 right-4 bottom-4' />
+        // </Spin>
     );
 }

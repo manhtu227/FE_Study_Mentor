@@ -9,7 +9,7 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import faker from 'faker';
+// import faker from 'faker';
 import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -44,7 +44,7 @@ export const options = {
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const generateRandomData = () => {
-    return daysOfWeek.map(() => faker.datatype.number({ min: 0, max: 1000 }));
+    return daysOfWeek.map(() => Math.floor(Math.random() * 1000));
 };
 
 const currentWeekData = generateRandomData(); // Dữ liệu của tuần hiện tại

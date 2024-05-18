@@ -1,14 +1,12 @@
 'use client';
 
 import RightOutlined from '@ant-design/icons/RightOutlined';
-import BellIcon from '@assets/icons/bell';
-import CatalogIcon from '@assets/icons/catalog';
-import ChatIcon from '@assets/icons/chat';
 import Logo from '@components/logo/Logo';
+import MessageIcon from '@components/message/MessageIcon';
+import NotificationPanelToggleButton from '@components/notification/NotificationPanelToggleButton';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { Button, Dropdown, MenuProps } from 'antd';
-import clsx from 'clsx';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -97,62 +95,33 @@ const Header = () => {
     }, [data?.user.user.id]);
 
     return (
-        <header className='h-[80px] min-h-[80px] w-full items-center '>
+        <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
             <nav className='flex h-full items-center px-[44px] bg-white-900'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' className='cursor-pointer' />
-                    <Button type='link' className='text-primary-900 text-base font-bold '>
-                        <Dropdown menu={{ items }}>
-                            <div className='flex items-center gap-2 font-bold'>
-                                <CatalogIcon
-                                    className={clsx({
-                                        'h-6 w-6': true,
-                                        'text-primary-900': true,
-                                    })}
-                                />
-                                <span>Danh mục</span>
-                                <RightOutlined />
-                            </div>
-                        </Dropdown>
-                    </Button>
-                    <Button type='link' className='text-primary-900 text-base font-bold '>
-                        Dành cho người hướng dẫn
-                    </Button>
-                    <Button
-                        type='link'
-                        className='text-primary-900 text-base font-bold'
-                        href='/study-method'
-                    >
-                        Dành cho học viên
-                    </Button>
                 </div>
                 {data?.user.user ? (
                     <div className='flex w-1/3 items-center justify-end gap-4'>
-                        <Button
+                        {/* <Button
                             className='h-12 w-12 flex items-center justify-center'
                             type='primary'
                             shape='circle'
                         >
                             <BellIcon />
-                        </Button>
-                        <Button
-                            className='h-12 w-12 flex items-center justify-center'
-                            type='primary'
-                            shape='circle'
-                        >
-                            <ChatIcon />
-                        </Button>
+                        </Button> */}
+                        <NotificationPanelToggleButton />
+                        <MessageIcon />
 
                         <Button
                             type='link'
-                            className='font-bold bg-[#F3F9FA] hover:!bg-[#F3F9FA] rounded-full h-max'
+                            className='font-bold bg-white-800 hover:!bg-white-800 rounded-full h-max'
                         >
                             <Dropdown menu={{ items: userItems }}>
                                 <div className='flex items-center gap-2 '>
-                                    <div className='rounded-full w-10 h-10 bg-[#D9D9D9]' />
-                                    <span className='text-primary-900 text-xl'>
+                                    <div className='rounded-full w-8 h-8 bg-[#D9D9D9]' />
+                                    <div className='text-primary-900 text-base'>
                                         {data.user.user.fullName}
-                                    </span>
+                                    </div>
                                     <RightOutlined />
                                 </div>
                             </Dropdown>

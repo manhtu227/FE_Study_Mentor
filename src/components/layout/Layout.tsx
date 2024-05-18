@@ -1,14 +1,13 @@
 import { PropsWithChildren } from 'react';
 
-import Footer from './Footer';
 import Header from './Header';
 
 export default function Layout({ children }: PropsWithChildren) {
     return (
         <>
             <Header />
-            {children}
-            <Footer />
+            <div className='pt-[64px]'>{children}</div>
+            {/* <Footer /> */}
         </>
     );
 }

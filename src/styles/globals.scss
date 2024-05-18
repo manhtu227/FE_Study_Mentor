@@ -6,6 +6,7 @@
 @import './form.scss';
 @import './pack.scss';
 @import 'nprogress/nprogress.css';
+// @import 'animate.css/animate.css';
 
 body {
     margin: 0;
@@ -67,4 +68,37 @@ body {
 .bar-chart {
     background: linear-gradient(82deg, #313860 2.25%, #151928 79.87%);
     border-radius: 12px;
+}
+
+.hover-scrollbar {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.hover-scrollbar:hover {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.hover-scrollbar::-webkit-scrollbar {
+    @apply w-1 h-2 rounded-[10px];
+}
+
+.hover-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white-900 rounded-[10px];
+}
+.hover-scrollbar:hover::-webkit-scrollbar-thumb {
+    @apply bg-primary-800 rounded-[10px];
+}
+
+.ant-skeleton-paragraph {
+    li:last-child {
+        width: 100% !important;
+    }
+    li {
+        flex-grow: 1;
+    }
+}
+
+.ant-skeleton-title + .ant-skeleton-paragraph {
+    margin-block: 0px !important;
 }
