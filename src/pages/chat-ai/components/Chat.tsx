@@ -106,7 +106,7 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
             dataList={chatList}
             onSubmit={handleSubmit}
             classNameMessage='absolute left-4 right-4 bottom-4'
-            className='absolute left-4 right-4 top-20 max-h-[calc(100vh-100px)] overflow-auto'
+            className='absolute left-4 right-4 top-20 max-h-[calc(100vh-254px)] hover-scrollbar'
         />
         // <MessageForm onSubmit={handleSubmit} className='absolute left-4 right-4 bottom-4' />
         // </Spin>
