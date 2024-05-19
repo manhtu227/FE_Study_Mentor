@@ -119,10 +119,7 @@ const NotificationBell: React.FC = () => {
                                     className='flex self-baseline cursor-pointer'
                                     onClick={() => handleRemoveNotification(item.id)}
                                 >
-                                    <CloseOutlined
-                                        onPointerEnterCapture={undefined}
-                                        onPointerLeaveCapture={undefined}
-                                    />
+                                    <CloseOutlined />
                                 </div>
                             </div>
                         </List.Item>

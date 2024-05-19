@@ -189,10 +189,7 @@ const Header = () => {
                                     <div className='text-primary-900 text-base'>
                                         {data.user.user.fullName}
                                     </div>
-                                    <RightOutlined
-                                        onPointerEnterCapture={undefined}
-                                        onPointerLeaveCapture={undefined}
-                                    />
+                                    <RightOutlined />
                                 </div>
                             </Dropdown>
                         </Button>

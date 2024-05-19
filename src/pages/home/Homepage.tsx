@@ -166,11 +166,7 @@ function Homepage() {
                     </div>
                     <Button className='h-[75px] w-full uppercase text-lg text-white-900 bg-gradient-to-r from-[#3D64EE] to-[#5BB9E2] hover:!text-white-900 hover:opacity-80'>
                         XEM THÊM THÔNG TIN VỀ STUDY MENTOR{' '}
-                        <RightOutlined
-                            className='text-white-900'
-                            onPointerEnterCapture={undefined}
-                            onPointerLeaveCapture={undefined}
-                        />
+                        <RightOutlined className='text-white-900' />
                     </Button>
                 </div>
                 <div className='w-1/2 mt-[100px] mr-10'>

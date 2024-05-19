@@ -155,10 +155,7 @@ function DetailedQuestionPage() {
                                     onClick={handleAnswerTheQuestion}
                                 >
                                     Trả lời câu hỏi này
-                                    <DownOutlined
-                                        onPointerEnterCapture={undefined}
-                                        onPointerLeaveCapture={undefined}
-                                    />
+                                    <DownOutlined />
                                 </Button>
                             )}
                         </div>
