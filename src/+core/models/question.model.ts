@@ -1,3 +1,4 @@
+import { Rule } from 'antd/es/form';
 import { StaticImageData } from 'next/image';
 import { FileAntd, FileReq } from './file.model';
 import { UserModel } from './user.model';
@@ -19,6 +20,12 @@ export type QuestionInput = {
     numberOfStars: number;
 };
 
+export type UploadQuestionProps = {
+    name: string;
+    rules?: Rule[];
+    isRemoveAll?: boolean;
+};
+
 export type CreateFileQuestionRequestModel = {
     userId: string;
     subjectId: string;
@@ -27,6 +34,13 @@ export type CreateFileQuestionRequestModel = {
     // tutorRating: TutorRating
     // tutorCriteria?: TutorRating
     timeFindTutor: number;
+    content: string;
+    attachFiles: FileReq[] | null;
+};
+
+export type AnswerRequestModel = {
+    questionId: string;
+    tutorId: string;
     content: string;
     attachFiles: FileReq[] | null;
 };
@@ -67,7 +81,7 @@ export type Question = {
 
 export type AnswerQuestion = {
     contentEditor: string;
-    fileContent: any;
+    attachFiles: FileAntd;
 };
 
 export type ReportAnswer = {
@@ -149,6 +163,7 @@ export type GetQuestionResponseModel = {
     student: UserModel;
     subject: SubjectModel;
     answers: any[];
+    isAnswered: boolean;
 };
 
 export type AcceptQuestionModel = {

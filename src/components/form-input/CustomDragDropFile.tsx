@@ -7,6 +7,7 @@ export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemPr
         name: 'file',
         multiple: true,
         listType: 'text',
+        accept: '.jpg, .jpeg, .png',
         action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
         onChange(info) {
             const { status } = info.file;

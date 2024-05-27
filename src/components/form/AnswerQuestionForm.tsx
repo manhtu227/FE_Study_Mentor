@@ -1,43 +1,45 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
-import UploadIconIcon from '@assets/icons/upload';
-import { AnswerQuestion, QuestionInput } from '@core/models/question.model';
-import type { UploadProps } from 'antd';
-import { Button, Form, Upload, message } from 'antd';
-import { useRef } from 'react';
+import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
+import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
+import { AnswerQuestion, AnswerRequestModel } from '@core/models/question.model';
+import { sendAnswerToStudentApi } from '@core/services/questions.service';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Form, message } from 'antd';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
-function AnswerQuestionForm() {
+function AnswerQuestionForm({
+    questionId,
+    tutorId,
+    onHideForm,
+}: {
+    questionId: string;
+    tutorId: string;
+    onHideForm: () => void;
+}) {
     const [form] = Form.useForm<AnswerQuestion>();
-    const refEditor = useRef<any>(null);
-    const refFile = useRef<any>(null);
-    const { Dragger } = Upload;
-    const props: UploadProps = {
-        name: 'file',
-        multiple: true,
-        listType: 'text',
-        action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-        onChange(info) {
-            const { status } = info.file;
 
-            if (status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully.`);
-            } else if (status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
+    const mutateSendAnswer = useMutation({
+        mutationFn: (values: AnswerRequestModel) => sendAnswerToStudentApi(values),
+        onSuccess: () => {
+            message.open({
+                type: 'success',
+                content: 'send answer to student successfully',
+            });
+            onHideForm();
         },
-        onDrop(e) {},
-    };
+    });
 
-    const handleSubmit = (values: AnswerQuestion) => {
-        if (refEditor.current) {
-            values.contentEditor = refEditor.current.currentContent;
-        }
+    const file = useUploadFileApi();
+    const handleSubmit = async (values: AnswerQuestion) => {
+        const attachFiles = file && (await file.uploadMultipleFiles(values?.attachFiles?.fileList));
+        const request: AnswerRequestModel = {
+            attachFiles: attachFiles ? attachFiles : null,
+            content: values.contentEditor,
+            questionId: questionId,
+            tutorId: tutorId,
+        };
 
-        if (refFile.current) {
-            values.fileContent = refFile.current.fileList;
-        }
-
-        console.log(values);
+        mutateSendAnswer.mutate(request);
     };
 
     return (
@@ -55,29 +57,16 @@ function AnswerQuestionForm() {
 
                 autoComplete='off'
             >
-                {/* Question content */}
-                <Form.Item name='questionContent'>
-                    <CustomEditorInput<QuestionInput>
-                        name='content'
-                        // refEditor={refEditor}
-                        // // rules={[{ required: true, message: 'Please input your report content!' }]}
-                        // onChange={(value) => {
-                        //     console.log(refEditor.current.currentContent);
-
-                        //     form.setFieldValue('content', value);
-                        //     form.validateFields(['content']);
-                        // }}
+                {/* Answer content */}
+                <Form.Item>
+                    <CustomEditorInput<AnswerQuestion>
+                        name='contentEditor'
+                        rules={[{ required: true, message: 'Please input!' }]}
                     />
-                    <Form.Item name='fileContent'>
-                        <Dragger {...props} ref={refFile}>
-                            <p className='ant-upload-drag-icon'>
-                                <UploadIconIcon />
-                            </p>
-                            <p className='font-bold text-base text-gray-700'>
-                                Tải lên hoặc thả tệp tại đây
-                            </p>
-                        </Dragger>
-                    </Form.Item>
+                    <CustomDragDropFile<AnswerQuestion>
+                        name='attachFiles'
+                        // rules={[{ required: true, message: 'Please input!' }]}
+                    />
                 </Form.Item>
                 <Form.Item colon={false}>
                     <Button

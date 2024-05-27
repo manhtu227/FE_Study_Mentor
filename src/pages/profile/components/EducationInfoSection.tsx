@@ -1,26 +1,47 @@
+import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
-import { EducationInfoResp, EducationInformationInput } from '@core/models/profile.model';
+import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
+import {
+    CertificatesInformationRequest,
+    CertificatesSubjectNotVerifyResp,
+    EducationInfoResp,
+    EducationInformationInput,
+} from '@core/models/profile.model';
 import { GradeResp, StructureEducationsResp } from '@core/models/question.model';
 import {
     ConvertGradeToOption,
     ConvertLevelToOption,
     ConvertSubjectToOption,
 } from '@core/services/questions.service';
-import { updateEducationSectionApi } from '@core/services/user.service';
-import { RootState } from '@core/store';
-import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Select, Spin, message } from 'antd';
+import {
+    deleteSubjectsCertificatesNotVerifyApi,
+    getListSubjectsCertificatesNotVerifyApi,
+    subjectsCertificatedNotVerifyKeys,
+    updateCertificatesAndSubjectsApi,
+} from '@core/services/user.service';
+import {
+    InvalidateQueryFilters,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query';
+import { Button, Form, Image, Select, Spin, message } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const [form] = Form.useForm<EducationInformationInput>();
-    const [initialDataForm, setInitialDataForm] = useState<EducationInformationInput>();
+    const [initialDataForm, setInitialDataForm] = useState<EducationInfoResp>();
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [levels, setLevels] = useState<string[]>([]);
     const [grades, setGrades] = useState<string[]>([]);
     const [subjects, setSubjects] = useState<string[]>([]);
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
+    const file = useUploadFileApi();
+    const [certificatesSubjectNotVerify, setCertificatesSubjectNotVerify] =
+        useState<CertificatesSubjectNotVerifyResp>();
+
+    const { data: dataUser } = useSession();
+    const queryClient = useQueryClient();
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
@@ -39,22 +60,43 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
 
     const mutateUpdate = useMutation({
-        mutationFn: (subjectIds: string[]) => updateEducationSectionApi(subjectIds, user?.id),
+        mutationFn: (request: CertificatesInformationRequest) =>
+            updateCertificatesAndSubjectsApi(request),
         onSuccess: () => {
-            message.success('Cập nhật thông tin thành công');
+            message.success('Gửi thành công');
             setIsEdit(false);
+            queryClient.invalidateQueries(
+                subjectsCertificatedNotVerifyKeys.all as InvalidateQueryFilters,
+            );
         },
     });
 
-    const handleSubmitEducationInformationForm = (values: EducationInformationInput) => {
-        if (JSON.stringify(values.subjectIds) === JSON.stringify(initialDataForm?.subjectIds)) {
-            setIsEdit(false);
-            message.warning('Bạn chưa thay đổi thông tin môn học nên không thể cập nhật!');
-            initialDataForm && form.setFieldsValue(initialDataForm);
-        } else if (JSON.stringify(values) !== JSON.stringify(initialDataForm)) {
-            mutateUpdate.mutate(values.subjectIds);
-            setInitialDataForm(values);
-        }
+    const deleteSubjectsCertificatesNotVerifyMutation = useMutation({
+        mutationFn: () => deleteSubjectsCertificatesNotVerifyApi(),
+        onSuccess: () => {
+            message.success('Hủy đăng ký môn học thành công');
+            queryClient.invalidateQueries(
+                subjectsCertificatedNotVerifyKeys.all as InvalidateQueryFilters,
+            );
+        },
+    });
+
+    const subjectsCertificatesQuery = useQuery({
+        queryKey: subjectsCertificatedNotVerifyKeys.all,
+        queryFn: () => getListSubjectsCertificatesNotVerifyApi(),
+    });
+
+    const handleSubmitEducationInformationForm = async (values: EducationInformationInput) => {
+        const attachFiles =
+            file && (await file.uploadMultipleFiles(values?.certificateFiles?.fileList));
+        const request: CertificatesInformationRequest = {
+            userId: dataUser?.user?.user?.id || '',
+            certificates: attachFiles,
+            subjectIds: values.subjectIds,
+        };
+
+        mutateUpdate.mutate(request);
+        form.resetFields();
     };
 
     const handleChangeSubjects = (values: string[]) => {
@@ -122,38 +164,40 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
         form.setFieldsValue({ gradeIds: newGrades });
     };
 
+    const handleCancelUpdate = () => {
+        setIsEdit(false);
+        form.resetFields();
+    };
+
     useEffect(() => {
         if (data) {
-            const initLevels = data.levels.map((level) => level.id);
-            const initGrades = data.grades.map((grade) => grade.id);
-            const initSubjects = data.subjects.map((subject) => subject.id);
-
-            setLevels(initLevels);
-            setGrades(initGrades);
-            setSubjects(initSubjects);
             setInitialDataForm({
-                levelIds: initLevels,
-                gradeIds: initGrades,
-                subjectIds: initSubjects,
+                subjects: data.subjects,
             });
-
-            form.setFieldsValue({ levelIds: initLevels });
-            form.setFieldsValue({ gradeIds: initGrades });
-            form.setFieldsValue({ subjectIds: initSubjects });
         }
     }, [data]);
 
-    const handleCancelUpdate = () => {
-        setIsEdit(false);
-
-        if (initialDataForm) {
-            form.setFieldsValue(initialDataForm);
-            setLevels(initialDataForm.levelIds);
-            setGrades(initialDataForm.gradeIds);
-            setSubjects(initialDataForm.subjectIds);
+    useEffect(() => {
+        if (
+            subjectsCertificatesQuery.data?.data?.data &&
+            subjectsCertificatesQuery.data?.data?.success
+        ) {
+            setCertificatesSubjectNotVerify(subjectsCertificatesQuery.data?.data.data);
+        } else {
+            setCertificatesSubjectNotVerify(undefined);
         }
+    }, [subjectsCertificatesQuery.data]);
+
+    const handleAddNewSubject = () => {
+        setIsEdit(true);
     };
 
+    const handleCancelUpdateCertificationsSubjects = () => {
+        deleteSubjectsCertificatesNotVerifyMutation.mutate();
+    };
+
+    const isDisabledAddNewSubject =
+        certificatesSubjectNotVerify && certificatesSubjectNotVerify?.subjects?.length !== 0;
     return (
         <Spin spinning={mutateUpdate.isPending} size='large'>
             <div className='w-full mb-8'>
@@ -161,7 +205,61 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
                     Thông tin giáo dục quan tâm
                 </div>
-                <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8' />
+                <div className='bg-gray-200 w-full min-h-[100px] rounded-md mb-8 p-4'>
+                    <div className='font-bold '>Danh sách môn học đã được duyệt</div>
+                    <ul className='mt-6'>
+                        {initialDataForm?.subjects && initialDataForm?.subjects.length > 0
+                            ? initialDataForm?.subjects.map((subject) => {
+                                  return <li key={subject.id}>{subject.name}</li>;
+                              })
+                            : 'Không có môn học nào được duyệt'}
+                    </ul>
+                </div>
+                <div className='bg-gray-200 w-full min-h-[100px] rounded-md mb-8 p-4'>
+                    <div className='font-bold '>
+                        Danh sách môn học chưa được duyệt và chứng chỉ đi kèm
+                    </div>
+                    {certificatesSubjectNotVerify?.subjects &&
+                    certificatesSubjectNotVerify?.subjects.length > 0 ? (
+                        <>
+                            <ul className='mt-6 '>
+                                {certificatesSubjectNotVerify?.subjects.map((subject) => {
+                                    return <li key={subject.id}>{subject.name}</li>;
+                                })}
+                            </ul>
+                            <ul className='flex gap-2 flex-wrap pl-0'>
+                                {certificatesSubjectNotVerify?.certificates?.map((certificate) => {
+                                    return (
+                                        <div
+                                            key={certificate.fileKey}
+                                            className='flex gap-2 items-center'
+                                        >
+                                            <Image
+                                                width={200}
+                                                height={100}
+                                                className='max-w-[200px] max-h-[100px] rounded-lg'
+                                                src={`https://storage.googleapis.com/study-mentor/${certificate.fileKey}`}
+                                                alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </ul>
+                            <Button
+                                size='large'
+                                type='dashed'
+                                className='!h-12 !w-[200px] font-bold text-base mt-10 bg-red-400 text-white-900 !hover:text-white-900 hover:bg-red-500'
+                                onClick={handleCancelUpdateCertificationsSubjects}
+                            >
+                                Hủy đăng ký môn học
+                            </Button>
+                        </>
+                    ) : (
+                        <div className='flex items-center justify-center mt-6'>
+                            Không có môn học nào chưa được duyệt
+                        </div>
+                    )}
+                </div>
                 <Form
                     name='educationInformationForm'
                     form={form}
@@ -213,38 +311,51 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                             value={subjects}
                         />
                     </Form.Item>
-                    <div className='flex gap-4'>
-                        {isEdit && (
+                    <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
+                        <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
+                        Tải lên chứng chỉ để minh chứng
+                    </div>
+                    <div className='font-bold text-base mb-2'>Tên chứng chỉ</div>
+                    <Form.Item<EducationInformationInput> name='certificateFiles'>
+                        <CustomDragDropFile<EducationInformationInput> name='certificateFiles' />
+                    </Form.Item>
+                    {isEdit && (
+                        <div className='flex items-center justify-center mt-10 gap-4'>
                             <Button
                                 size='large'
-                                className='!h-12 !w-[200px] font-bold text-base bg-gray-300'
+                                type='dashed'
+                                className='!h-12 !w-[200px] font-bold text-base bg-gray-400 text-white-900'
                                 onClick={handleCancelUpdate}
                             >
                                 Hủy
                             </Button>
-                        )}
-                        {isEdit && (
-                            <Form.Item colon={false}>
+                            <Form.Item className='mb-0'>
                                 <Button
                                     type='primary'
-                                    htmlType='submit'
                                     size='large'
-                                    className='!h-12 !w-[200px] font-bold text-base bg-primary-800'
+                                    htmlType='submit'
+                                    className='!h-12 font-bold text-base !w-[200px]'
                                 >
-                                    Lưu
+                                    Gửi
                                 </Button>
                             </Form.Item>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </Form>
+                {isDisabledAddNewSubject && (
+                    <div className='text-red-400 text-sm italic'>
+                        Đã có môn học đang chờ duyệt, không thể đăng ký thêm.
+                    </div>
+                )}
                 {!isEdit && (
                     <Button
                         size='large'
                         type='primary'
-                        className='!h-12 !w-[200px] font-bold text-base'
-                        onClick={() => setIsEdit(true)}
+                        disabled={isDisabledAddNewSubject}
+                        className='!h-12 !w-[200px] font-bold text-base mt-4'
+                        onClick={handleAddNewSubject}
                     >
-                        Cập nhật
+                        Đăng ký thêm môn học
                     </Button>
                 )}
             </div>

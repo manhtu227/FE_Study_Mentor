@@ -18,15 +18,12 @@ export default function MessageIcon(props: NotificationPanelToggleButtonProps) {
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
-        console.log('first', sidebarRef?.current);
-        console.log(sidebarRef?.current?.contains(event.target as Node));
         if (sidebarRef?.current && !sidebarRef.current.contains(event.target as Node) && active) {
             setActive(false);
         }
     };
 
     useEffect(() => {
-        console.log('sapp');
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);

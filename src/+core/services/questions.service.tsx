@@ -1,6 +1,7 @@
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
+    AnswerRequestModel,
     CreateFileQuestionRequestModel,
     CreateFileQuestionResp,
     GetQuestionResponseModel,
@@ -68,4 +69,8 @@ export const detailedQuestionKeys = initKeys('detailed-question-keys');
 
 export const getDetailedQuestionApi = async (questionId: string) => {
     return api.get<BaseResp<GetQuestionResponseModel>>(`/api/questions/${questionId}`);
+};
+
+export const sendAnswerToStudentApi = async (body: AnswerRequestModel) => {
+    return api.post<void>(`/api/users/tutor/answer`, body);
 };

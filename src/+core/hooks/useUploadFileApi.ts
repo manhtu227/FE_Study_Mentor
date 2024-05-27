@@ -1,6 +1,5 @@
 import { FileReq } from '@core/models/file.model';
-import { uploadFileToCloudApi } from '@core/services/file.service';
-import { getSignedUrlApi } from '@core/services/user.service';
+import { getSignedUrlApi, uploadFileToCloudApi } from '@core/services/file.service';
 import { useMutation } from '@tanstack/react-query';
 import { UploadFile } from 'antd';
 import { useState } from 'react';
