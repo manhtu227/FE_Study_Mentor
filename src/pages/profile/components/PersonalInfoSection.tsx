@@ -5,12 +5,10 @@ import {
     UserResp,
 } from '@core/models/profile.model';
 import { updateUserDetailApi } from '@core/services/user.service';
-import { RootState } from '@core/store';
 import { useMutation } from '@tanstack/react-query';
 import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 export function PersonalInfoSection({
     data,
@@ -21,10 +19,9 @@ export function PersonalInfoSection({
 }) {
     const [form] = Form.useForm<PersonalInformationInput>();
     const [initialDataForm, setInitialDataForm] = useState<PersonalInformationInput>();
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
 
     const mutateUpdate = useMutation({
-        mutationFn: (data: UpdatePersonalInformationInput) => updateUserDetailApi(data, user?.id),
+        mutationFn: (dataUpdate: UpdatePersonalInformationInput) => updateUserDetailApi(dataUpdate),
         onSuccess: () => {
             message.success('Cập nhật thông tin thành công');
             setIsEdit(false);
@@ -137,6 +134,7 @@ export function PersonalInfoSection({
                                     className='h-12 font-medium text-base w-full'
                                     placeholder='Nhập năm sinh'
                                     picker='year'
+                                    defaultValue={''}
                                 />
                             </Form.Item>
                         </div>

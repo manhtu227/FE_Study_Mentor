@@ -1,6 +1,6 @@
 'use client';
 
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
@@ -10,10 +10,9 @@ import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/ques
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
-import { Avatar, Button, Col, Pagination, Row, Tag } from 'antd';
+import { Avatar, Button, Col, Image, Modal, Pagination, Row, Tag } from 'antd';
 import { format } from 'date-fns';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -82,6 +81,20 @@ function DetailedQuestionPage() {
     const router = useRouter();
     const params = useParams();
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
+    const { confirm } = Modal;
+    const [isAnswered, setIsAnswered] = useState<boolean>(false);
+
+    const showConfirmAnswerQuestion = () => {
+        confirm({
+            title: 'Bạn có chắc chắn muốn trả lời câu hỏi này không?',
+            icon: <ExclamationCircleFilled />,
+            content: 'Nếu đồng ý, bạn sẽ không thể hủy bỏ hành động này',
+            onOk() {
+                handleAnswerTheQuestion();
+            },
+            onCancel() {},
+        });
+    };
 
     const detailedQuestionQuery = useQuery({
         queryKey: detailedQuestionKeys.all,
@@ -98,8 +111,6 @@ function DetailedQuestionPage() {
         if (detailedQuestionQuery?.error) router.push('/404');
     }, [detailedQuestionQuery?.error]);
 
-    useEffect(() => {}, [data?.user?.user?.id]);
-
     const handleAnswerTheQuestion = () => {
         if (!data?.user.user.id) return;
 
@@ -111,6 +122,7 @@ function DetailedQuestionPage() {
 
         socketReducer?.emit(SocketEvent.ACCEPT, requestAccept);
         setShowForm(true);
+        setIsAnswered(true);
     };
 
     return (
@@ -126,7 +138,27 @@ function DetailedQuestionPage() {
                             <div className='font-bold text-4xl text-black-800'>
                                 Nội dung câu hỏi
                             </div>
-                            <div className='my-4 text-2xl'>{currentQuestion.content}</div>
+                            <div className='my-4 text-2xl'>
+                                <div>{currentQuestion.content}</div>
+                                <ul className='flex gap-2 flex-wrap pl-0'>
+                                    {currentQuestion.fileQuestions?.map((file) => {
+                                        return (
+                                            <div
+                                                key={file.fileKey}
+                                                className='flex gap-2 items-center'
+                                            >
+                                                <Image
+                                                    className='max-w-[200px] max-h-[100px] rounded-lg'
+                                                    width={200}
+                                                    height={100}
+                                                    src={`https://storage.googleapis.com/study-mentor/${file.fileKey}`}
+                                                    alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
                             <div className='flex items-center gap-2 '>
                                 <Avatar
                                     size={44}
@@ -134,7 +166,7 @@ function DetailedQuestionPage() {
                                         <Image
                                             alt={'image of question'}
                                             loading='lazy'
-                                            src={images.charac1}
+                                            src={images.charac1.src} // Convert images.charac1 to a string by using the .src property
                                         />
                                     }
                                 />
@@ -152,7 +184,8 @@ function DetailedQuestionPage() {
                                     type='primary'
                                     size='large'
                                     className='!h-12 !w-[248px] font-bold text-base bg-primary-800 mt-4'
-                                    onClick={handleAnswerTheQuestion}
+                                    onClick={showConfirmAnswerQuestion}
+                                    disabled={currentQuestion.isAnswered || isAnswered}
                                 >
                                     Trả lời câu hỏi này
                                     <DownOutlined />
@@ -161,7 +194,11 @@ function DetailedQuestionPage() {
                         </div>
                         {showForm ? (
                             <div className='mt-8 rounded-lg bg-white-900 transition-all'>
-                                <AnswerQuestionForm />
+                                <AnswerQuestionForm
+                                    questionId={currentQuestion.id}
+                                    tutorId={data?.user?.user?.id ?? ''}
+                                    onHideForm={() => setShowForm(false)}
+                                />
                             </div>
                         ) : (
                             <></>

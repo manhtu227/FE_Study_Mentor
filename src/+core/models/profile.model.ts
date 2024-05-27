@@ -1,5 +1,6 @@
 import { Gender } from '@core/enums/user.enum';
 import { Dayjs } from 'dayjs';
+import { FileAntd, FileReq } from './file.model';
 
 export type PersonalInformationInput = {
     fullName: string;
@@ -21,10 +22,23 @@ export type EducationInformationInput = {
     subjectIds: string[];
     levelIds: string[];
     gradeIds: string[];
+    certificateFiles: FileAntd;
 };
 
-export type CertificatesInformationInput = {
-    certificateFile: any;
+export type CertificatesInformationRequest = {
+    certificates: FileReq[] | null;
+    subjectIds: string[];
+    userId: string;
+};
+
+export type CertificatesSubjectNotVerifyResp = {
+    userId: string;
+    certificates: FileReq[];
+    subjects: Subject[];
+};
+
+export type Subject = {
+    id: string;
     name: string;
 };
 
@@ -50,8 +64,6 @@ export type UserResp = {
 
 export type EducationInfoResp = {
     subjects: ISubject[];
-    grades: IGrade[];
-    levels: ILevel[];
 };
 
 export type ISubject = {
