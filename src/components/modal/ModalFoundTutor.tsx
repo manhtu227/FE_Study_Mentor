@@ -1,13 +1,20 @@
 'use client';
 import { StarFilled } from '@ant-design/icons';
 import images from '@assets/images';
+import { MY_ROUTE } from '@core/constants/routes.constant';
+import { UserModel } from '@core/models/user.model';
 import { Avatar, Modal } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function ModalFoundTutor() {
-    const [isModalOpen, setIsModalOpen] = useState(true);
+type Props = {
+    isModalOpen: boolean;
+    setIsModalOpen: (value: boolean) => void;
+    user?: UserModel;
+};
+
+export default function ModalFoundTutor({ isModalOpen, setIsModalOpen, user }: Props) {
     const [dots, setDots] = useState('');
     useEffect(() => {
         const interval = setInterval(() => {
@@ -24,18 +31,14 @@ export default function ModalFoundTutor() {
 
     const router = useRouter();
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
     const handleOk = () => {
-        // setIsModalOpen(false);
-        router.push('/study-method/mentor/file');
+        setIsModalOpen(false);
+        router.push(`${MY_ROUTE.MENTOR.FILE}?step=2&id=${user?.id}`);
     };
 
     const handleCancel = () => {
-        // setIsModalOpen(false);
-        router.push('/');
+        setIsModalOpen(false);
+        // router.push('/');
     };
     return (
         <div>
@@ -43,9 +46,8 @@ export default function ModalFoundTutor() {
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                okText='Đặt câu hỏi khác'
+                okText='Tiếp tục'
                 cancelText='Quay lại trang chủ'
-                // closable={false}
                 className='w-[500px] h-[500px] flex flex-col text-center items-center justify-center'
             >
                 <h2 className='text-[20px] leading-[27px] text-[NeutralDark1]'>
@@ -72,7 +74,7 @@ export default function ModalFoundTutor() {
                     <div className='flex flex-col w-full'>
                         <div className='flex items-center justify-between'>
                             <span className='text-sm font-bold items-start text-black-800'>
-                                Nguyễn Hưng
+                                {user?.fullName}
                             </span>
                         </div>
 

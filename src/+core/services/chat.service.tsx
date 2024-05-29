@@ -1,6 +1,7 @@
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { apiAi } from '@core/https/http-ai';
 import { ChatModel, RoomModel, RoomReq } from '@core/models/chat.model';
+import { FileReq } from '@core/models/file.model';
 import { initKeys } from '@core/utilities/query-key.utility';
 export const idAi = {
     [CategoryAiEnum.CHAT_GPT]: process.env.NEXT_PUBLIC_ID_CHAT_CHATGPT,
@@ -24,6 +25,7 @@ export const createRoomIdApi = (userId: string, categoryAi: CategoryAiEnum, body
 export type ChatWithAiReq = {
     question: string;
     roomId: string;
+    files?: FileReq[] | null;
 };
 
 export type ChatWithAiResp = {
@@ -34,7 +36,11 @@ export const chatWithAiApi = (
     categoryAi: CategoryAiEnum,
     request: ChatWithAiReq,
 ) => {
-    return apiAi.post<ChatModel>(`/ai/chatAI/${userId}/${idAi[categoryAi]}/${request.roomId}`, {
-        question: request.question,
-    });
+    return apiAi.post<ChatModel>(`/ai/chatAI`, {
+        content: request.question,
+        senderId: userId,
+        roomId: request.roomId,
+        recipientId: idAi[categoryAi],
+        files: request.files,
+    } as ChatModel);
 };

@@ -1,9 +1,10 @@
 import images from '@assets/images';
-import { InfoExchangeInput } from '@core/models/question.model';
+import { GetQuestionResponseModel } from '@core/models/question.model';
+import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { Image } from 'antd';
 
 type CardInfoExchangeProps = {
-    data?: InfoExchangeInput;
+    data?: GetQuestionResponseModel;
 };
 
 export function CardInfoExchange({ data }: CardInfoExchangeProps) {
@@ -15,17 +16,17 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.clock.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Thời gian:</h4>
-                        <p className='text-base font-bold m-0'>{data?.AnswerTime} phút </p>
+                        <p className='text-base font-bold m-0'>{data?.answerTime} phút </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.anchor.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Chủ đề:</h4>
-                        <p className='text-base font-bold m-0'>Lập trình </p>
+                        <p className='text-base font-bold m-0'>{data?.subject.name}</p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.layer.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Lớp / Cấp độ:</h4>
-                        <p className='text-base font-bold m-0'>{data?.LevelName} </p>
+                        <p className='text-base font-bold m-0'>{data?.subject.name} </p>
                     </div>
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
@@ -35,7 +36,9 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                     <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Giá:</h4>
-                        <p className='text-base font-bold m-0'>{data?.Price} Xu</p>
+                        <p className='text-base font-bold m-0'>
+                            {data?.price && formatPriceVND(+data.price)}
+                        </p>
                     </div>
                 </div>
             </div>

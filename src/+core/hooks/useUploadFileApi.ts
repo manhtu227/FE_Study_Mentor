@@ -21,6 +21,7 @@ export const useUploadFileApi = () => {
             uploadToBackend.mutate(file.name, {
                 onSuccess: (resp) => {
                     // upload to cloud
+
                     uploadFileToCloud.mutate(
                         {
                             file: file.originFileObj as File,

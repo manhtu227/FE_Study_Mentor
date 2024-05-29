@@ -20,7 +20,7 @@ export enum AIFreeOrPaidEnum {
 export default function ChatAiPage({ type }: { type: AIFreeOrPaidEnum }) {
     const [dataChat, setDataChat] = useState<ChatModel[]>([]);
     const searchParams = useSearchParams();
-    const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
+    // const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
 
     const mutateGetListMessage = useMutation({
         mutationFn: (id: string) => getDetailMessageChatAiApi(id),
@@ -77,6 +77,7 @@ export default function ChatAiPage({ type }: { type: AIFreeOrPaidEnum }) {
                                     chatList={dataChat}
                                     setChatList={handleDataChat}
                                     isFetchingData={mutateGetListMessage.isPending}
+                                    categoryAi={categoryAi}
                                     avatar={
                                         categoryAi === CategoryAiEnum.CHAT_GPT
                                             ? images.chatPGT.src

@@ -3,9 +3,13 @@ import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { getEnum } from '@core/parser/enum.parser';
-import { Image } from 'antd';
+import { findMentorBySystemApi } from '@core/services/questions.service';
+import { RootState } from '@core/store';
+import { useMutation } from '@tanstack/react-query';
+import { Image, message } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import MentorListPage from './MentorListPage';
 import SystemLoadingPage from './SystemLoadingPage';
 
@@ -24,6 +28,14 @@ export default function FindMentorBySystemPage() {
             FindMentorEnum.LIST,
         [searchParams],
     );
+    const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
+
+    const mutateFindMentor = useMutation({
+        mutationFn: () => findMentorBySystemApi(currentQuestionId),
+        onSuccess: () => {
+            message.success('Đang tìm kiếm vui lòng chờ');
+        },
+    });
 
     return (
         <>
@@ -64,6 +76,7 @@ export default function FindMentorBySystemPage() {
                                         router.push(
                                             `${MY_ROUTE.MENTOR.FILE}?${newParams.toString()}`,
                                         );
+                                        mutateFindMentor.mutate();
                                     }}
                                 />
                             </div>

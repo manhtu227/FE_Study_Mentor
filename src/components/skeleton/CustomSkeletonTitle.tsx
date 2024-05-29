@@ -3,13 +3,16 @@ type CustomSkeletonTitleProps = {
     isAvatar?: boolean;
     className?: string;
     height?: string;
+    width?: string;
     marginBottom?: string;
+    marginRight?: string;
 };
 
 export default function CustomSkeletonTitle({
     isAvatar,
     className,
     height = '30px',
+    width,
     marginBottom = '0px',
 }: CustomSkeletonTitleProps) {
     return (
@@ -21,6 +24,7 @@ export default function CustomSkeletonTitle({
                     margin: '0px',
                     marginBlockStart: '0px',
                     height: height,
+                    width: width,
                     marginBottom: marginBottom,
                 },
             }}

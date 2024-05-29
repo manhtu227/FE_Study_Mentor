@@ -1,5 +1,6 @@
 import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
+import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -16,9 +17,15 @@ import {
     ConvertSubjectToOption,
     createQuestions,
 } from '@core/services/questions.service';
+import {
+    convertVoucherToOption,
+    getListVoucherApi,
+    voucherKeys,
+} from '@core/services/user.service';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
-import { useMutation } from '@tanstack/react-query';
-import { Button, Form, InputNumber, Select, Spin, message } from 'antd';
+import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Form, Select, Spin, message } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -49,12 +56,6 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     /* create question api */
     const mutateCreateQuestions = useMutation({
         mutationFn: (data: CreateFileQuestionRequestModel) => createQuestions(data),
-        onSuccess: () => {
-            message.open({
-                type: 'success',
-                content: 'Create new question successfully',
-            });
-        },
     });
 
     // create new payment request api
@@ -68,13 +69,11 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
         },
     });
 
-    useEffect(() => {
-        const newPrice = mutateCreateQuestions.data?.data.data.price;
-
-        if (newPrice) {
-            setPrice(newPrice);
-        }
-    }, [mutateCreateQuestions.data]);
+    const voucherQuery = useQuery({
+        queryKey: voucherKeys.all,
+        queryFn: () => getListVoucherApi(),
+        select: (resp) => resp.data.data.map(convertVoucherToOption),
+    });
 
     /* Handler */
     const { data } = useSession();
@@ -87,15 +86,24 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             timeFindTutor: values.timeAnswer,
             numberOfStar: values.tutorRating,
             content: values.content,
-            attachFiles: attachFiles ? attachFiles : null,
+            attachFiles: attachFiles,
+            voucherCode: values.voucher,
         };
-        const requestReducer: CreateFileQuestionReducer = request;
+        mutateCreateQuestions.mutate(request, {
+            onSuccess: (resp) => {
+                const requestReducer: CreateFileQuestionReducer = request;
+                requestReducer.questionId = resp.data.data.questionId;
+                dispatch(addQuestion(requestReducer));
+                dispatch(setCurrentQuestionId(requestReducer.questionId));
+                setPrice(resp.data.data.price);
+                message.open({
+                    type: 'success',
+                    content: 'Create new question successfully',
+                });
+            },
+        });
 
-        requestReducer.questionId = Math.floor(Math.random() * 1000000).toString();
-        dispatch(addQuestion(requestReducer));
-        dispatch(setCurrentQuestionId(requestReducer.questionId));
-        // mutateCreateQuestions.mutate(request);
-        onNext();
+        // onNext();
     };
 
     const handleChangeLevels = (newLevel: string) => {
@@ -241,18 +249,22 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                     <div className='font-bold text-base mb-2'>
                         Thời gian bạn muốn tìm kiếm câu trả lời cho hỏi
                     </div>
-                    <Form.Item<QuestionInput>
+                    <CustomSelectInput<QuestionInput>
                         name='timeAnswer'
+                        showSearch
+                        optionsSelect={[
+                            { value: 10, label: '10 phút' },
+                            { value: 15, label: '15 phút' },
+                            { value: 20, label: '20 phút' },
+                            { value: 30, label: '30 phút' },
+                            { value: 45, label: '45 phút' },
+                            { value: 60, label: '60 phút' },
+                        ]}
                         rules={[{ required: true, message: 'Please input!' }]}
-                    >
-                        <InputNumber
-                            className='font-medium text-base !w-full'
-                            placeholder='Nhập số phút'
-                            controls={false}
-                        />
-                    </Form.Item>
+                    />
+
                     {/* Question content */}
-                    <Form.Item>
+                    <Form.Item className='mb-0'>
                         <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
                         <CustomEditorInput<QuestionInput>
                             name='content'
@@ -263,7 +275,17 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                             // rules={[{ required: true, message: 'Please input!' }]}
                         />
                     </Form.Item>
-                    <div className='flex items-center justify-between'>
+                    <Form.Item>
+                        <div className='font-bold text-base mb-2'>Hãy chọn voucher phù hợp</div>
+                        <CustomSelectInput<QuestionInput>
+                            name='voucher'
+                            allowClear
+                            optionsSelect={voucherQuery.data || []}
+                        />
+                    </Form.Item>
+                    {/* <div className='flex justify-end'></div> */}
+
+                    <div className='flex items-center justify-between '>
                         <Form.Item label=' ' colon={false}>
                             <Button
                                 type='primary'
@@ -272,7 +294,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                                 disabled={!price}
                                 onClick={handleSubmitPayment}
                             >
-                                Giá: {price} VND &nbsp; | &nbsp; Thanh toán
+                                Giá: {formatPriceVND(price)} &nbsp; | &nbsp; Thanh toán
                             </Button>
                         </Form.Item>
                         <Button

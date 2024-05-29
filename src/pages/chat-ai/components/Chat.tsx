@@ -5,7 +5,6 @@ import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel, RoomReq } from '@core/models/chat.model';
 import { FileReq } from '@core/models/file.model';
 import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
-import { getEnum } from '@core/parser/enum.parser';
 import {
     chatAIRoomListKeys,
     chatWithAiApi,
@@ -24,18 +23,20 @@ type ChatProps = {
     setChatList: (chatList: ChatModel[], isTitle?: boolean) => void;
     avatar: string;
     isFetchingData?: boolean;
+    categoryAi: CategoryAiEnum;
 };
 
-export default function Chat({ chatList, setChatList, isFetchingData, avatar }: ChatProps) {
+export default function Chat({
+    chatList,
+    setChatList,
+    isFetchingData,
+    avatar,
+    categoryAi,
+}: ChatProps) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const searchParams = useSearchParams();
     const { data } = useSession();
-    const categoryAi = useMemo(
-        () =>
-            (searchParams && getEnum<CategoryAiEnum>(searchParams.get('type'), CategoryAiEnum)) ||
-            CategoryAiEnum.CHAT_GPT,
-        [searchParams],
-    );
+
     const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
 
     useEffect(() => {
@@ -68,6 +69,7 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
         onSuccess: (resp) => {
             mutateChat.mutateAsync({
                 question: chatList[chatList.length - 1].content,
+                files: chatList[chatList.length - 1].files,
                 roomId: resp.data.RoomId,
             });
         },
@@ -79,9 +81,9 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
         const newChat: ChatModel = {
             questionId: uuidv4(),
             senderId: data!.user.user.id,
-            recipientId: '',
+            recipientId: chatList.length === 0 ? '' : chatList[0].recipientId,
             content: value,
-            files: [],
+            files: files,
             createdAt: parseDateTimeISO8601(dayjs()),
         };
         setChatList([...chatList, newChat]);
@@ -96,6 +98,7 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
             mutateChat.mutateAsync({
                 question: value,
                 roomId: roomId,
+                files: files,
             });
     };
 
@@ -104,6 +107,7 @@ export default function Chat({ chatList, setChatList, isFetchingData, avatar }: 
         <ChatList
             avatar={avatar}
             dataList={chatList}
+            isLoadingEnd={mutateChat.isPending}
             onSubmit={handleSubmit}
             classNameMessage='absolute left-4 right-4 bottom-4'
             className='absolute left-4 right-4 top-20 max-h-[calc(100vh-254px)] hover-scrollbar'

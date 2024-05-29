@@ -90,7 +90,7 @@ function QuestionByFilePage() {
                     index={2}
                 />
             ),
-            content: <CheckQAPage />,
+            content: <CheckQAPage onNext={handleNextStep} />,
             icon: <></>,
         },
         {

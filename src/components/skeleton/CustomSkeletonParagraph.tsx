@@ -6,6 +6,7 @@ type CustomSkeletonParagraphProps = {
     height?: number;
     gap?: number;
     rows?: number;
+    sizeAvatar?: number;
 };
 
 export default function CustomSkeletonParagraph({
@@ -14,6 +15,7 @@ export default function CustomSkeletonParagraph({
     gap = 4,
     rows = 1,
     height = 120,
+    sizeAvatar = 20,
 }: CustomSkeletonParagraphProps) {
     return (
         <Skeleton
@@ -35,7 +37,11 @@ export default function CustomSkeletonParagraph({
                 isAvatar
                     ? {
                           shape: 'circle',
-                          style: { width: '20px', height: '20px', alignSelf: 'center' },
+                          style: {
+                              width: `${sizeAvatar}px`,
+                              height: `${sizeAvatar}px`,
+                              alignSelf: 'center',
+                          },
                       }
                     : undefined
             }

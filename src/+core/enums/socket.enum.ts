@@ -5,20 +5,27 @@ export enum SocketEvent {
     RECEIVE_MESSAGE = 'receive-message',
     QUESTION = 'question',
     ACCEPT = 'accept',
+    ACCEPT_PICKED = 'accept-picked',
     SEND_NOTIFICATION = 'send-notification',
     TUTORS_AVAILABLE = 'tutors-available',
     TUTORS_FAVORITE = 'tutors-favorite',
     NOTIFICATION = 'notification',
     GET_TUTORS_AVAILABLE = 'get-tutors-available',
     GET_TUTORS_FAVORITE = 'get-tutors-favorite',
+    QUESTION_ACCEPTANCE_STATUS = 'question-acceptance-status',
+    GET_VOUCHER = 'get-voucher',
+    NEW_QUESTION = 'new-question',
+    TUTOR_ACCEPTED_QUESTION = 'tutor-accepted-question',
+    ANSWER = 'answer',
+    STUDENT_PICK_TUTOR = 'student-pick-tutor',
     ERROR = 'error',
-    RECEIVE_NEW_QUESTION = 'new-question',
-    GET_QUESTION_ACCEPTANCE_STATUS = 'question-acceptance-status',
+    // NEW_QUESTION = 'new-question',
+    // QUESTION_ACCEPTANCE_STATUS = 'question-acceptance-status',
 }
+
+export const SOCKET_QUESTION_EMIT = (topic: string) => `question-${topic}`;
 
 export enum SocketMessage {
     QUESTION_ACCEPTANCE_FAILURE = 'question acceptance failure',
     QUESTION_ACCEPTANCE_SUCCESS = 'question acceptance success',
 }
-
-export const SOCKET_QUESTION_EMIT = (topic: string) => `question-${topic}`;
