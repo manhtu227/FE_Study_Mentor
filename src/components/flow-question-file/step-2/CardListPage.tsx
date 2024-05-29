@@ -72,7 +72,6 @@ export default function CardListPage() {
     useEffect(() => {
         if (socketReducer) {
             socketReducer?.on(SocketEvent.GET_TUTORS_AVAILABLE, (data) => {
-                console.log(data);
                 setMentorList(data.data);
                 setPaginationInfo(data.paginationInfo);
             });

@@ -140,8 +140,6 @@ const Header = () => {
                     socket.on(
                         SocketEvent.TUTOR_ACCEPTED_QUESTION,
                         (data: { data: { questionId: string; tutor: UserModel } }) => {
-                            console.log('data co 2');
-                            console.log(data.data.tutor);
                             setIsOpenModalFoundTutor(true);
                             setUser(data.data.tutor);
                             dispatch(addTutor(data.data.tutor));

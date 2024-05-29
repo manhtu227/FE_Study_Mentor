@@ -60,19 +60,10 @@ export function ChatList({
                     dataList.map((item, index) => {
                         const checkedMine = item.senderId === data?.user.user.id;
                         let checked = !checkedMine;
-                        console.log(
-                            item.content,
-                            'item.content',
-                            dataList[index - 1]?.recipientId,
-                            'lo',
-                            item.recipientId,
-                        );
 
                         if (index !== 0 && item.recipientId && dataList[index - 1]?.recipientId) {
                             checked = dataList[index - 1]?.recipientId !== item.recipientId;
-                            console.log(checked, item.content, 'có vô k');
                         }
-                        console.log(checked, item.content);
 
                         return (
                             <div

@@ -79,9 +79,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const { data } = useSession();
     const file = useUploadFileApi();
     const handleSubmit = async (values: QuestionInput) => {
-        console.log('sao v');
         const attachFiles = file && (await file.uploadMultipleFiles(values?.attachFiles?.fileList));
-        console.log('chay vao day', attachFiles);
         const request: CreateFileQuestionRequestModel = {
             userId: data?.user.user.id || '',
             subjectId: selectedSubject,
@@ -95,7 +93,6 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
             onSuccess: (resp) => {
                 const requestReducer: CreateFileQuestionReducer = request;
                 requestReducer.questionId = resp.data.data.questionId;
-                console.log('requestReducer', requestReducer);
                 dispatch(addQuestion(requestReducer));
                 dispatch(setCurrentQuestionId(requestReducer.questionId));
                 setPrice(resp.data.data.price);
