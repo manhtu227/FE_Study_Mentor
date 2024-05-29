@@ -23,10 +23,7 @@ export type MentorListResp = {
 };
 
 export type MentorListFilter = {
-    userId?: string;
     subjectId: string;
-    page: number;
-    pageSize: number;
 };
 
 export type FavoriteMentorListFilter = {

@@ -55,9 +55,9 @@ export default function SystemLoadingPage() {
                             }}
                             isRightIcon
                         />
-                        <Button type='primary' onClick={handleFoundMentor}>
+                        {/* <Button type='primary' onClick={handleFoundMentor}>
                             Đã tìm được
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
             </div>

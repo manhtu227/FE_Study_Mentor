@@ -3,6 +3,7 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import Logo from '@components/logo/Logo';
 import MessageIcon from '@components/message/MessageIcon';
+import ModalFoundTutor from '@components/modal/ModalFoundTutor';
 import NewQuestionNotification from '@components/new-question-notification/NewQuestionNotification';
 import NotificationBell from '@components/notification-bell/NotificationBell';
 import { DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION } from '@core/constants/questions.constant';
@@ -11,13 +12,16 @@ import { NotificationType } from '@core/enums/notification.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
 import { ReceiveNewQuestionModel } from '@core/models/question.model';
+import { UserModel } from '@core/models/user.model';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
+import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import {
     addReceivedQuestion,
     setIsWatchedLater,
 } from '@core/store/reducers/received-questions.reducer';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
+import { addTutor } from '@core/store/reducers/tutor.reducer';
 import { Button, Dropdown, MenuProps } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -52,6 +56,8 @@ const Header = () => {
     const { data } = useSession();
     const [newQuestion, setNewQuestion] = useState<ReceiveNewQuestionModel>();
     const toastId = useRef<any>(null);
+    const [isOpenModalFoundTutor, setIsOpenModalFoundTutor] = useState(false);
+    const [user, setUser] = useState<UserModel>();
     const dispatch = useDispatch();
     const receivedQuestions = useSelector(
         (state: RootState) => state.receivedQuestions.receivedQuestions,
@@ -110,6 +116,8 @@ const Header = () => {
 
     useEffect(() => {
         if (data?.user.user.id) {
+            dispatch(onDisconnect());
+
             const socket = defaultSocket(data?.user?.user?.id);
 
             if (socket) {
@@ -123,10 +131,23 @@ const Header = () => {
                 };
 
                 if (data?.user?.user?.role === UserType.TUTOR) {
-                    socket.on(SocketEvent.RECEIVE_NEW_QUESTION, (data) => {
+                    socket.on(SocketEvent.NEW_QUESTION, (data) => {
                         data.data.createdAt = new Date();
                         setNewQuestion(data.data);
                     });
+                }
+                if (data?.user?.user?.role === UserType.STUDENT) {
+                    socket.on(
+                        SocketEvent.TUTOR_ACCEPTED_QUESTION,
+                        (data: { data: { questionId: string; tutor: UserModel } }) => {
+                            console.log('data co 2');
+                            console.log(data.data.tutor);
+                            setIsOpenModalFoundTutor(true);
+                            setUser(data.data.tutor);
+                            dispatch(addTutor(data.data.tutor));
+                            dispatch(setCurrentQuestionId(data.data.questionId));
+                        },
+                    );
                 }
 
                 socket.on('connect', onConnectSocket);
@@ -217,6 +238,11 @@ const Header = () => {
                     </div>
                 )}
             </nav>
+            <ModalFoundTutor
+                isModalOpen={isOpenModalFoundTutor}
+                setIsModalOpen={setIsOpenModalFoundTutor}
+                user={user}
+            />
         </header>
     );
 };

@@ -2,9 +2,9 @@ import { FileReq } from './file.model';
 
 export type RoomModel = {
     roomId: string;
-    Title: string;
-    SenderId: string;
-    RecipientId: string;
+    title: string;
+    senderId: string;
+    recipientId: string;
     createdAt: string;
 };
 

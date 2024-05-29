@@ -104,3 +104,10 @@ export type IUserProfileResp = {
     isActive: boolean;
     averageRate: number;
 };
+
+export type UserVoucherViewModel = {
+    code: string;
+    percentage: number;
+    endDate: Date;
+    quantity: number;
+};

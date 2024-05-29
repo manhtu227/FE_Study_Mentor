@@ -40,11 +40,9 @@ export default function MessageForm({ onSubmit, className }: MessageFormProps) {
         // xử lý sau
         if (info.file.status === 'uploading') {
             setFileList(info.fileList);
-        }
-        if (info.file.status === 'error') {
-            setFileList(info.fileList);
-        }
-        if (info.file.status === 'done') {
+        } else if (info.file.status === 'error') {
+            setFileList(info.fileList.map((file) => ({ ...file, status: 'done' })));
+        } else {
             setFileList(info.fileList);
         }
         form.setFieldsValue({ fileList: info.fileList });
@@ -66,7 +64,6 @@ export default function MessageForm({ onSubmit, className }: MessageFormProps) {
             onFinish={handleSubmit}
             onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
-                    console.log('vao');
                     form.submit();
                 }
             }}

@@ -18,6 +18,7 @@ export type QuestionInput = {
     contentEditor: string;
     fileContent: any;
     numberOfStars: number;
+    voucher?: string;
 };
 
 export type UploadQuestionProps = {
@@ -30,12 +31,10 @@ export type CreateFileQuestionRequestModel = {
     userId: string;
     subjectId: string;
     numberOfStar: number;
-    // price?: number
-    // tutorRating: TutorRating
-    // tutorCriteria?: TutorRating
     timeFindTutor: number;
     content: string;
     attachFiles: FileReq[] | null;
+    voucherCode?: string;
 };
 
 export type AnswerRequestModel = {
@@ -110,8 +109,8 @@ export type SubjectResp = {
 };
 
 export type InfoExchangeInput = {
-    Price: string;
-    AnswerTime: string;
+    price: string;
+    answerTime: string;
     Subject: string;
     LevelName: string;
     payment: string;
@@ -148,7 +147,13 @@ export type SubjectModel = {
     name: string;
     description?: string;
 };
-
+export interface AnswerResponseModel {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    content: string;
+    fileAttachmentAnswers: FileReq[];
+}
 export type GetQuestionResponseModel = {
     id: string;
     createdAt: Date;
@@ -162,7 +167,7 @@ export type GetQuestionResponseModel = {
     fileQuestions: FileReq[] | null;
     student: UserModel;
     subject: SubjectModel;
-    answers: any[];
+    answers: AnswerResponseModel[];
     isAnswered: boolean;
 };
 

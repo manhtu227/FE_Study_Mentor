@@ -1,4 +1,5 @@
 import { StarFilled } from '@ant-design/icons';
+import CustomSkeletonTitle from '@components/skeleton/CustomSkeletonTitle';
 import { MentorType } from '@core/models/profile.model';
 import { Avatar, Button, Image, Modal } from 'antd';
 import { useState } from 'react';
@@ -6,9 +7,13 @@ import { useState } from 'react';
 export function CardMentorInfo({
     mentor,
     isAvatar = true,
+    loading = false,
+    onPickMentor,
 }: {
     mentor: MentorType;
     isAvatar?: boolean;
+    loading?: boolean;
+    onPickMentor?: () => void;
 }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -18,6 +23,7 @@ export function CardMentorInfo({
 
     const handlePickMentor = () => {
         setIsOpen(false);
+        onPickMentor && onPickMentor();
     };
 
     const handleCancelMentor = () => {
@@ -29,7 +35,9 @@ export function CardMentorInfo({
             <div className='p-4'>
                 <div className='flex items-start gap-4'>
                     <div className='w-[100px] h-[100px]'>
-                        {isAvatar ? (
+                        {loading ? (
+                            <CustomSkeletonTitle height='100px' width='100px' />
+                        ) : isAvatar ? (
                             <Avatar
                                 size={100}
                                 icon={
@@ -48,30 +56,33 @@ export function CardMentorInfo({
                             />
                         )}
                     </div>
+                    {loading ? (
+                        <CustomSkeletonTitle height='100px' />
+                    ) : (
+                        <div className='flex flex-col w-full'>
+                            <div className='flex items-center justify-between'>
+                                <span className='text-lg font-bold items-start text-black-800'>
+                                    {mentor?.name}
+                                </span>
+                                <span className='text-sm font-bold text-[#838B8F] '>
+                                    | Tuổi {mentor?.age}
+                                </span>
+                            </div>
 
-                    <div className='flex flex-col w-full'>
-                        <div className='flex items-center justify-between'>
-                            <span className='text-lg font-bold items-start text-black-800'>
-                                {mentor?.name}
-                            </span>
-                            <span className='text-sm font-bold text-[#838B8F] '>
-                                | Tuổi {mentor?.age}
-                            </span>
+                            <div className='flex items-center gap-1'>
+                                <StarFilled className='text-[#f2c94c]' />
+                                <StarFilled className='text-[#f2c94c]' />
+                                <StarFilled className='text-[#f2c94c]' />
+                                <StarFilled className='text-[#f2c94c]' />
+                                <StarFilled className='text-[#f2c94c]' />
+                            </div>
+                            <div className='flex mt-[10px] gap-2 flex-wrap'>
+                                <Button type='primary' onClick={handleShowModalMentor}>
+                                    Xem chi tiết
+                                </Button>
+                            </div>
                         </div>
-
-                        <div className='flex items-center gap-1'>
-                            <StarFilled className='text-[#f2c94c]' />
-                            <StarFilled className='text-[#f2c94c]' />
-                            <StarFilled className='text-[#f2c94c]' />
-                            <StarFilled className='text-[#f2c94c]' />
-                            <StarFilled className='text-[#f2c94c]' />
-                        </div>
-                        <div className='flex mt-[10px] gap-2 flex-wrap'>
-                            <Button type='primary' onClick={handleShowModalMentor}>
-                                Xem chi tiết
-                            </Button>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </div>
             <Modal

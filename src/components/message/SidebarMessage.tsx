@@ -132,7 +132,7 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
 
     return (
         <div className={clsx('fixed z-50 top-16 right-0')} ref={sideBarRef}>
-            <div className={clsx('shadow-lg bg-red-100 h-[calc(100vh-64px)]', className)}>
+            <div className={clsx('shadow-lg bg-white-800 h-[calc(100vh-64px)]', className)}>
                 <div className='w-full bg-primary-700 p-2 flex justify-between absolute top-0 right-0 left-0'>
                     <div className='flex gap-2 items-center'>
                         <Avatar size={40} src={images.charac1.src} />

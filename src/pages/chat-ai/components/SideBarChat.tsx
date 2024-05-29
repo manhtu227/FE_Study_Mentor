@@ -105,7 +105,7 @@ function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: Sideba
                                 <SidebarChatItem
                                     key={item.roomId}
                                     active={activeChat === item.roomId}
-                                    title={item.Title}
+                                    title={item.title}
                                     onClick={() => {
                                         handleSelectRoom(item.roomId);
                                     }}

@@ -71,9 +71,7 @@ export default function RatingAnswerPage() {
         <Spin spinning={mutateCreate.isPending} size='large'>
             <SideBarMentor
                 className='p-8'
-                button={
-                    <ButtonPrimary title='Quay lại đoạn chat' className='w-full pt-3' isRightIcon />
-                }
+                button={<ButtonPrimary title='Quay lại đoạn chat' className='w-full' isRightIcon />}
                 mentor={mentor}
             >
                 <div className='flex flex-col text-left gap-x-4'>

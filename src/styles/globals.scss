@@ -112,3 +112,27 @@ body {
 .sidebar-message.active {
     width: 350px; /* Chiều rộng khi mở */
 }
+
+@keyframes mymove {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animation-delay-200 {
+    animation-delay: 200ms !important;
+}
+
+.animation-delay-100 {
+    animation-delay: 100ms !important;
+}
+
+.animation-message {
+    animation: mymove 1s infinite;
+}

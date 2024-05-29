@@ -21,6 +21,7 @@ export const useUploadFileApi = () => {
             uploadToBackend.mutate(file.name, {
                 onSuccess: (resp) => {
                     // upload to cloud
+
                     uploadFileToCloud.mutate(
                         {
                             file: file.originFileObj as File,
@@ -53,6 +54,7 @@ export const useUploadFileApi = () => {
 
     // temporary solution
     const uploadMultipleFiles = async (files: UploadFile[]): Promise<FileReq[] | null> => {
+        console.log('files', files);
         if (!files) return null;
 
         const uploadedFiles: FileReq[] = [];

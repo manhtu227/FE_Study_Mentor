@@ -8,7 +8,9 @@ import {
     IUserProfileResp,
     UpdatePersonalInformationInput,
     UserResp,
+    UserVoucherViewModel,
 } from '@core/models/profile.model';
+import { OptionItem } from '@core/types/option.type';
 import { initKeys } from '@core/utilities/query-key.utility';
 
 export const userDetailKeys = initKeys('user-detail-keys');
@@ -45,4 +47,36 @@ export const updateAvatarApi = async (data: FileAntd) => {
 
 export const deleteSubjectsCertificatesNotVerifyApi = async () => {
     return api.delete<void>(`api/users/profile/tutor-certificate`);
+};
+
+export const convertVoucherToOption = (data: UserVoucherViewModel): OptionItem => {
+    return {
+        label: data.code,
+        value: data.code,
+    };
+};
+
+export const voucherKeys = initKeys('voucher-keys');
+export const getListVoucherApi = async () => {
+    return api.get<BaseResp<UserVoucherViewModel[]>>(`api/users/student/voucher`);
+};
+
+export type TutorOnlineTypeReq = {
+    subjectId: string;
+    page: number;
+    pageSize: number;
+};
+
+export const tutorsKeys = initKeys('tutors-keys');
+export const getTutorOnline = async (params: TutorOnlineTypeReq) => {
+    return api.get<BaseResp<void>>(`api/users/tutor/online`, { params });
+};
+
+export type PickTutorReq = {
+    tutorId: string;
+    questionId: string;
+};
+
+export const pickTutor = (body: PickTutorReq) => {
+    return api.post<void>('api/users/student/pick-tutor', body);
 };

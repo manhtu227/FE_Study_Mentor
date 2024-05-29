@@ -74,3 +74,7 @@ export const getDetailedQuestionApi = async (questionId: string) => {
 export const sendAnswerToStudentApi = async (body: AnswerRequestModel) => {
     return api.post<void>(`/api/users/tutor/answer`, body);
 };
+
+export const findMentorBySystemApi = async (questionId: string) => {
+    return api.post<void>(`/api/questions/${questionId}/find-tutor/system`);
+};
