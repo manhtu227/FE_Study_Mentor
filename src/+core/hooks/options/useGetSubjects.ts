@@ -16,7 +16,6 @@ export const useGetSubjects = ({ levelId, gradeId }: { levelId?: string; gradeId
                 .find((level) => level.id === levelId)
                 ?.grades.find((grade) => grade.id === gradeId),
     });
-    console.log(levelId, gradeId);
 
     if (gradeQuery.data?.subjects && gradeQuery.data.subjects.length > 0)
         return gradeQuery.data.subjects.map(ConvertSubjectToOption);

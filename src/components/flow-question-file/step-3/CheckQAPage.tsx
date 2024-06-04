@@ -65,13 +65,11 @@ export default function CheckQAPage({ onNext }: Props) {
                         question: GetQuestionResponseModel;
                     };
                 }) => {
-                    console.log('sao thee', data.data.answer);
                     setAnswer(data.data.answer);
                 },
             );
         }
     }, [socketReducer, currentQuestionId]);
-    console.log(answer, 'answer');
 
     return (
         <div>

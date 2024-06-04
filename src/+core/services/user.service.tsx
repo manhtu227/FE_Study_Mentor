@@ -1,6 +1,6 @@
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
-import { FileAntd } from '@core/models/file.model';
+import { FileAntd, FileReq } from '@core/models/file.model';
 import {
     CertificatesInformationRequest,
     CertificatesSubjectNotVerifyResp,
@@ -79,4 +79,9 @@ export type PickTutorReq = {
 
 export const pickTutor = (body: PickTutorReq) => {
     return api.post<void>('api/users/student/pick-tutor', body);
+};
+
+export const avatarTutorKeys = initKeys('avatar-tutor-keys');
+export const getAvatarByIdTutor = (id: string) => {
+    return api.post<FileReq>(`api/users/avatar/${id}`);
 };

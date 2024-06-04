@@ -1,4 +1,5 @@
 import { CategoryAiEnum } from '@core/enums/ai.enum';
+import { api } from '@core/https/http';
 import { apiAi } from '@core/https/http-ai';
 import { ChatModel, RoomModel, RoomReq } from '@core/models/chat.model';
 import { FileReq } from '@core/models/file.model';
@@ -7,6 +8,16 @@ export const idAi = {
     [CategoryAiEnum.CHAT_GPT]: process.env.NEXT_PUBLIC_ID_CHAT_CHATGPT,
     [CategoryAiEnum.GEMINI]: process.env.NEXT_PUBLIC_ID_CHAT_GEMINI,
     [CategoryAiEnum.SYSTEM]: process.env.NEXT_PUBLIC_ID_CHAT_CHATBOT,
+};
+
+export const getChatRoomListKeys = initKeys('chatRoomList');
+export const getChatRoomListApi = async () => {
+    return api.get<{ listRoom: RoomModel[] }>(`/api/roomchat/listRoom`);
+};
+
+export const getChatMessageListKeys = initKeys('chatMessageList');
+export const getChatMessageListApi = async (roomId: string) => {
+    return api.get<{ listMessage: ChatModel[] }>(`/api/roomchat/MessageRoom/${roomId}`);
 };
 
 export const chatAIRoomListKeys = initKeys('chatAIRoomList');

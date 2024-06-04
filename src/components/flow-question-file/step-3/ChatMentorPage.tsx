@@ -67,7 +67,6 @@ export default function ChatMentorPage({ setIsChat, idRoom, senderId }: Props) {
                         title='Xem câu trả lời'
                         className='w-full'
                         onClick={() => {
-                            console.log('chay vo nha');
                             setIsChat(false);
                         }}
                     />
