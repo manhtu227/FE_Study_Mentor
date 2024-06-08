@@ -4,7 +4,7 @@ import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
 import CreateQuestionForm from '@components/flow-question-file/step-1/CreateQuestionForm';
-import { Button, message, Steps, theme } from 'antd';
+import { Button, message, Steps } from 'antd';
 import clsx from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
@@ -13,7 +13,6 @@ import CheckQAPage from '../../components/flow-question-file/step-3/CheckQAPage'
 import RatingAnswerPage from '../../components/flow-question-file/step-4/RatingAnswerPage';
 
 function QuestionByFilePage() {
-    const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
@@ -54,7 +53,7 @@ function QuestionByFilePage() {
                     index={0}
                 />
             ),
-            content: <CreateQuestionForm onNext={handleNextStep} />,
+            content: <CreateQuestionForm />,
 
             icon: <></>,
         },

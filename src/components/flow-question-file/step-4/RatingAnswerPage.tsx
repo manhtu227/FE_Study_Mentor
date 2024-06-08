@@ -39,7 +39,6 @@ const subject = {
 
 export default function RatingAnswerPage() {
     const [form] = Form.useForm<RatingInput>();
-    const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
     const questions = useSelector((state: RootState) => state.questions);
     const router = useRouter();
 

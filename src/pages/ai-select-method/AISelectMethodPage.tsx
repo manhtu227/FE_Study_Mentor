@@ -9,7 +9,7 @@ import { DescriptionEnum } from '@core/enums/common.enum';
 import { Modal } from 'antd';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 const FreeAIList = [
     {
@@ -30,7 +30,6 @@ const FreeAIList = [
 
 function AISelectMethodPage() {
     const router = useRouter();
-    const pathname = usePathname();
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     const handleClickFreeAI = () => {

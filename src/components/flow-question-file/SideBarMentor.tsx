@@ -23,6 +23,7 @@ export function SideBarMentor({ button, mentor, children, className }: Props) {
         queryFn: () => getDetailedQuestionApi(currentQuestionId),
         select: (data) => data?.data.data,
     });
+    console.log(mentor);
 
     return (
         <div className={clsx('flex items-start w-full gap-8')}>

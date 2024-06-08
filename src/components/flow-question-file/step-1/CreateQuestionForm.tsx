@@ -38,7 +38,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 
-function CreateQuestionForm({ onNext }: { onNext: () => void }) {
+function CreateQuestionForm() {
     const [form] = Form.useForm<QuestionInput>();
     const [selectedLevel, setSelectedLevel] = useState<string>('');
     const [selectedGrade, setSelectedGrade] = useState<string>('');

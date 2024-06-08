@@ -2,20 +2,19 @@
 import images from '@assets/images';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { Image, Spin } from 'antd';
+import { Image } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { FindMentorEnum } from './FindMentorBySystemPage';
 
 export default function SystemLoadingPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [searching, setSearching] = useState<boolean>(true);
+    // const [searching, setSearching] = useState<boolean>(true);
 
-    const handleFoundMentor = () => {
-        setSearching(false);
-    };
+    // const handleFoundMentor = () => {
+    //     setSearching(false);
+    // };
 
     return (
         <div>
@@ -25,7 +24,7 @@ export default function SystemLoadingPage() {
                     <div className='text-black-800 font-bold text-lg'>
                         Hệ thống đang tìm kiếm người hướng dẫn phù hợp cho bạn
                     </div>
-                    <Spin size='large' spinning={searching} />
+                    {/* <Spin size='large' spinning={searching} /> */}
 
                     <div className='text-black-800 font-normal text-base'>
                         Vui lòng chờ một lát nhé

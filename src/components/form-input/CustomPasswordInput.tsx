@@ -2,7 +2,6 @@
 import { Form, Input } from 'antd';
 import { FormItemProps, Rule } from 'antd/es/form';
 import clsx from 'clsx';
-const { TextArea } = Input;
 
 export type CustomPasswordInputProps<T extends object> = {
     placeholder?: string;

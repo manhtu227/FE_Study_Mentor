@@ -131,6 +131,3 @@ export default function ChatAiPage({ type }: { type: AIFreeOrPaidEnum }) {
         </div>
     );
 }
-function dayjs(): import('dayjs').Dayjs {
-    throw new Error('Function not implemented.');
-}

@@ -15,9 +15,9 @@ export default function ModalJoinGoogleMeet({
 }) {
     const [isModalOpen, setIsModalOpen] = useState(true);
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
+    // const showModal = () => {
+    //     setIsModalOpen(true);
+    // };
 
     const handleOk = () => {
         setIsModalOpen(false);

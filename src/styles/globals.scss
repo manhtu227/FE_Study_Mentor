@@ -110,7 +110,7 @@ body {
 }
 
 .sidebar-message.active {
-    width: 350px; /* Chiều rộng khi mở */
+    width: 400px; /* Chiều rộng khi mở */
 }
 
 @keyframes mymove {
@@ -135,4 +135,10 @@ body {
 
 .animation-message {
     animation: mymove 1s infinite;
+}
+
+.badge-dot:has(.ant-badge-dot) {
+    // width: 10px;
+    // height: 10px;
+    // @apply h-3 w-3 #{!important};
 }

@@ -14,6 +14,8 @@ export default function GlobeIcon(props: GlobeIconProps): ReactElement {
             viewBox='0 0 23 23'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'
+            className={className}
+            {...rest}
         >
             <path
                 d='M11.5002 2.3584C6.45225 2.3584 2.35962 6.45102 2.35962 11.499C2.35962 16.547 6.45225 20.6396 11.5002 20.6396C16.5482 20.6396 20.6409 16.547 20.6409 11.499C20.6409 6.45102 16.5482 2.3584 11.5002 2.3584Z'

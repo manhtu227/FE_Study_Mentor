@@ -193,7 +193,7 @@ const Header = () => {
                         setNewQuestion(data.data);
 
                         if (data.data.methodAnswer === QuestionType.MEETING) {
-                            socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
+                            socket.on(SocketEvent.RECEIVE_GGMEET, () => {
                                 setIsShowModalReceiveGoogleMeet(true);
                             });
                         }

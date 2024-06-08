@@ -1,14 +1,13 @@
 'use client';
-
 import { ChatList } from '@components/chat/ChatList';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel, RoomReq } from '@core/models/chat.model';
 import { FileReq } from '@core/models/file.model';
 import { parseDateTimeISO8601 } from '@core/parser/datetime.parser';
 import {
+    ChatWithAiReq,
     chatAIRoomListKeys,
     chatWithAiApi,
-    ChatWithAiReq,
     createRoomIdApi,
 } from '@core/services/chat.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -29,7 +28,7 @@ type ChatProps = {
 export default function Chat({
     chatList,
     setChatList,
-    isFetchingData,
+    // isFetchingData,
     avatar,
     categoryAi,
 }: ChatProps) {

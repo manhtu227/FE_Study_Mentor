@@ -1,13 +1,10 @@
 import CameraIcon from '@assets/icons/camera';
-import { process } from '@core/constants/commons.constant';
 import { FileReq } from '@core/models/file.model';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -44,6 +41,7 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
     const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
+            console.log(loading);
             return;
         }
 

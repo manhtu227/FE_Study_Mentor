@@ -11,9 +11,9 @@ import {
     getChatRoomListKeys,
 } from '@core/services/chat.service';
 import { RootState } from '@core/store';
-import { addRoom } from '@core/store/reducers/room-chat.reducer';
+import { addRoom, removeRoom } from '@core/store/reducers/room-chat.reducer';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Avatar, Tooltip } from 'antd';
+import { Avatar, Badge, Tooltip } from 'antd';
 import clsx from 'clsx';
 import { RefObject, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,8 +46,8 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
     });
 
     const handleSubmit = (room: RoomModel) => {
-        if (roomChatReducer.roomIds.includes(room.roomId)) {
-            dispatch(addRoom(room.roomId));
+        if (roomChatReducer.roomIds?.includes(room.roomId)) {
+            dispatch(removeRoom(room.roomId));
         }
         setRoom(room);
         getAvatar.mutate(room.recipientId);
@@ -74,7 +74,7 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
             if (
                 data.roomId &&
                 data.roomId !== room?.roomId &&
-                !roomChatReducer.roomIds.includes(data.roomId)
+                !roomChatReducer.roomIds?.includes(data.roomId)
             ) {
                 dispatch(addRoom(data.roomId));
                 return;
@@ -107,6 +107,7 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                         <div className='w-full bg-primary-700 p-2 flex justify-between absolute top-0 right-0 left-0'>
                             <div className='flex gap-2 items-center'>
                                 <Avatar size={40} src={room?.avatar || images.teacher.src} />
+
                                 <span className='font-bold text-white-900'>{room?.title}</span>
                             </div>
                         </div>
@@ -120,13 +121,20 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                                     >
                                         <div className='flex'>
                                             <div
-                                                className='px-3 hover:bg-gray-100 cursor-pointer'
+                                                className='px-3 py-1 hover:bg-gray-100 cursor-pointer'
                                                 onClick={() => handleSubmit(item)}
                                             >
-                                                <Avatar
-                                                    size={40}
-                                                    src={room?.avatar || images.teacher.src}
-                                                />
+                                                <Badge
+                                                    dot={roomChatReducer.roomIds?.includes(
+                                                        room?.roomId || '',
+                                                    )}
+                                                    className='badge-dot'
+                                                >
+                                                    <Avatar
+                                                        size={40}
+                                                        src={room?.avatar || images.teacher.src}
+                                                    />
+                                                </Badge>
                                             </div>
                                             {room?.roomId === item.roomId && (
                                                 <div className='h-5/6 self-center w-1 rounded-full bg-black-800'></div>
@@ -137,11 +145,12 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                             </div>
                         </div>
                         <ChatList
-                            avatar={`${process.env.NEXT_PUBLIC_PHOTO}${getAvatar.data?.data.fileKey}`}
+                            avatar={room?.avatar || images.teacher.src}
                             dataList={dataChat}
                             classNameMessage='absolute bottom-2 left-[72px] right-4'
                             onSubmit={handleSubmitChat}
-                            className='absolute top-14 left-[70px] right-0'
+                            isSideBar
+                            className='absolute top-14 left-[70px] right-0 bg-white-900 h-full'
                         />
                     </>
                 )}

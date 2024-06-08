@@ -14,6 +14,7 @@ type Props = {
     classNameMessage?: string;
     className?: string;
     isLoadingEnd?: boolean;
+    isSideBar?: boolean;
 };
 export function ChatList({
     dataList,
@@ -22,6 +23,7 @@ export function ChatList({
     classNameMessage,
     className,
     isLoadingEnd,
+    isSideBar,
 }: Props) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const { data } = useSession();
@@ -70,7 +72,13 @@ export function ChatList({
                                 key={index}
                                 className={clsx(
                                     `flex flex-col gap-4`,
-                                    index !== 0 ? (checked ? 'mt-8' : 'mt-[10px]') : '',
+                                    index !== 0
+                                        ? checked
+                                            ? 'mt-8'
+                                            : 'mt-[10px]'
+                                        : isSideBar
+                                        ? 'mt-[10px]'
+                                        : '',
                                 )}
                             >
                                 <ChatItem
@@ -81,7 +89,13 @@ export function ChatList({
                                         !checkedMine && index === dataList.length - 1 ? 'type' : ''
                                     }
                                     avatar={
-                                        checked ? (!checkedMine ? avatar : undefined) : undefined
+                                        isSideBar
+                                            ? undefined
+                                            : checked
+                                            ? !checkedMine
+                                                ? avatar
+                                                : undefined
+                                            : undefined
                                     }
                                     files={item.files}
                                 />
@@ -101,7 +115,7 @@ export function ChatList({
                     </div>
                 )}
             </div>
-            <MessageForm onSubmit={onSubmit} className={classNameMessage} />
+            <MessageForm onSubmit={onSubmit} className={classNameMessage} isSideBar />
         </div>
     );
 }

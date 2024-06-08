@@ -108,3 +108,8 @@ export const createQRCodeApi = async (data: QRCodeReq) => {
         vietQRAuth: true,
     } as any & { vietQRAuth?: boolean });
 };
+
+export const avatarTutorKeys = initKeys('avatar-tutor-keys');
+export const getAvatarByIdTutorApi = (id: string) => {
+    return api.get<FileReq>(`api/users/avatar/${id}`);
+};

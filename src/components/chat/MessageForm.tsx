@@ -25,9 +25,10 @@ export type MessageInput = {
 type MessageFormProps = {
     onSubmit: (value: string, files?: FileReq[] | null) => void;
     className?: string;
+    isSideBar?: boolean;
 };
 
-export default function MessageForm({ onSubmit, className }: MessageFormProps) {
+export default function MessageForm({ onSubmit, className, isSideBar }: MessageFormProps) {
     const [form] = useForm<MessageInput>();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -71,18 +72,20 @@ export default function MessageForm({ onSubmit, className }: MessageFormProps) {
             className={className}
         >
             {/* <Spin spinning={loading}> */}
-            <div className={clsx('flex gap-6 items-end')}>
-                <div className='cursor-pointer'>
-                    <Upload
-                        fileList={fileList}
-                        customRequest={dummyRequest}
-                        onChange={handleChangeFile}
-                        multiple
-                        showUploadList={false}
-                        beforeUpload={beforeUpload}
-                    >
-                        <UploadIcon />
-                    </Upload>
+            <div className={clsx('flex items-end', isSideBar ? 'gap-2' : 'gap-6')}>
+                <div className='cursor-pointer hover:bg-white-800 rounded-lg p-2'>
+                    <div className='!max-h-6 !w-6'>
+                        <Upload
+                            fileList={fileList}
+                            customRequest={dummyRequest}
+                            onChange={handleChangeFile}
+                            multiple
+                            showUploadList={false}
+                            beforeUpload={beforeUpload}
+                        >
+                            <UploadIcon />
+                        </Upload>
+                    </div>
                 </div>
                 <CustomTextAreaInput<MessageInput>
                     name='text'

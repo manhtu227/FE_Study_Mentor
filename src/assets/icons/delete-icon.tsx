@@ -1,6 +1,3 @@
-type DeleteIconProps = {
-    number: string;
-};
 export default function DeleteIcon() {
     return (
         <svg

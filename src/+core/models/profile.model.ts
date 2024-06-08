@@ -153,3 +153,9 @@ export type QRCodeResp = {
     qrCode: string;
     qrDataURL: string;
 };
+
+export type SignedUrlResp = {
+    fileKey: string;
+    fileName: string;
+    url: string;
+};
