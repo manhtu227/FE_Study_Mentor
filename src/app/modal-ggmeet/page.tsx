@@ -1,4 +1,4 @@
-import PopUpGGMeet from '../../pages/modal-ggmeet/PopUpGGMeet';
+import PopUpGGMeet from '../../page-ui/modal-ggmeet/PopUpGGMeet';
 
 export default function FindQuestion() {
     return (

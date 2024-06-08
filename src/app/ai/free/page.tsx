@@ -1,5 +1,5 @@
 'use client';
-import ChatAiPage, { AIFreeOrPaidEnum } from '../../../pages/chat-ai/ChatAiPage';
+import ChatAiPage, { AIFreeOrPaidEnum } from '../../../page-ui/chat-ai/ChatAiPage';
 
 export default function ChatAi() {
     return (

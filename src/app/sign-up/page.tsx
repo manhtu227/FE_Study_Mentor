@@ -1,4 +1,4 @@
-import SignUpPage from '../../pages/signUp/SignUpPage';
+import SignUpPage from '../../page-ui/signUp/SignUpPage';
 export default function FindMentor() {
     return (
         <main>

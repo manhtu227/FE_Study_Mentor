@@ -1,4 +1,4 @@
-import QuestionListPage from '../../pages/question-list/QuestionListPage';
+import QuestionListPage from '../../page-ui/question-list/QuestionListPage';
 
 export default function QuestionList() {
     return (

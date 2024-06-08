@@ -18,16 +18,13 @@ body {
     }
 }
 
-:where(.css-dev-only-do-not-override-3mqfnx).ant-steps.ant-steps-horizontal:not(
-        .ant-steps-label-vertical
-    )
-    .ant-steps-item {
-    padding-inline-start: 0px;
-    white-space: wrap;
+.ant-steps.ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item {
+    padding-inline-start: 0px !important;
+    white-space: wrap !important;
 }
 
-:where(.css-dev-only-do-not-override-3mqfnx).ant-steps .ant-steps-item:last-child {
-    flex: 1;
+.ant-steps .ant-steps-item:last-child {
+    flex: 1 !important;
 }
 
 .tag-p {

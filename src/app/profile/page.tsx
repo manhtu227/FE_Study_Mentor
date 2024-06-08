@@ -1,4 +1,4 @@
-import ProfilePage from '../../pages/profile/ProfilePage';
+import ProfilePage from '../../page-ui/profile/ProfilePage';
 
 export default function ChatAi() {
     return <ProfilePage />;

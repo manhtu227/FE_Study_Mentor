@@ -1,4 +1,4 @@
-import MentorProfileManagementPage from '../../../pages/mentor-profile-management/MentorProfileManagementPage';
+import MentorProfileManagementPage from '../../../page-ui/mentor-profile-management/MentorProfileManagementPage';
 
 export default function MentorProfileManagement() {
     return (

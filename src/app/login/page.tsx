@@ -1,4 +1,4 @@
-import LoginPage from '../../pages/login/user/LoginPage';
+import LoginPage from '../../page-ui/login/user/LoginPage';
 
 export default function FindMentor() {
     return (

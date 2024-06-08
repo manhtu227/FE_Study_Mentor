@@ -21,7 +21,7 @@
         "paths": {
             "@components/*": ["./src/components/*"],
             "@core/*": ["./src/+core/*"],
-            "@page/*": ["./src/page/*"],
+            "@page/*": ["./src/page-ui/*"],
             "@styles/*": ["./src/styles/*"],
             "@assets/*": ["./src/assets/*"]
         }

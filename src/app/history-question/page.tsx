@@ -1,4 +1,4 @@
-import HistoryQuestionPage from '../../pages/history-question/HistoryQuestionPage';
+import HistoryQuestionPage from '../../page-ui/history-question/HistoryQuestionPage';
 
 export default function FindMentor() {
     return (

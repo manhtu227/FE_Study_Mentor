@@ -1,4 +1,4 @@
-import FindMentorPage from '../../pages/find-mentor/FindMentorPage';
+import FindMentorPage from '../../page-ui/find-mentor/FindMentorPage';
 
 export default function FindMentor() {
     return (

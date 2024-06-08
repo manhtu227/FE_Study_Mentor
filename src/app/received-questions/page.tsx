@@ -1,4 +1,4 @@
-import FindQuestionsPage from '../../pages/received-questions/FindQuestionsPage';
+import FindQuestionsPage from '../../page-ui/received-questions/FindQuestionsPage';
 
 export default function ReceivedQuestion() {
     return (
