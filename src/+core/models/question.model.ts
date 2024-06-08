@@ -1,3 +1,4 @@
+import { QuestionType } from '@core/enums/question.enum';
 import { Rule } from 'antd/es/form';
 import { StaticImageData } from 'next/image';
 import { FileAntd, FileReq } from './file.model';
@@ -144,6 +145,7 @@ export type ReceiveNewQuestionModel = {
         description: string;
     };
     createdAt: Date;
+    methodAnswer: QuestionType;
 };
 
 export type ReceivedQuestion = {
@@ -209,6 +211,10 @@ export type AcceptQuestionResp = {
     updatedAt: string;
 };
 
+export type GetGoogleMeetLinkResp = {
+    meetingUrl: string;
+    createdAt: string;
+};
 export enum QuestionStep {
     ONE = 1,
     TWO = 2,

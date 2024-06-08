@@ -1,5 +1,10 @@
 // components/NotificationBell.tsx
-import { CloseOutlined, NotificationOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import {
+    CheckCircleOutlined,
+    CloseOutlined,
+    NotificationOutlined,
+    QuestionCircleOutlined,
+} from '@ant-design/icons';
 import BellIcon from '@assets/icons/bell';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationTitle, NotificationType } from '@core/enums/notification.enum';
@@ -57,6 +62,8 @@ const NotificationBell: React.FC = () => {
         switch (type) {
             case NotificationType.NEW_QUESTION:
                 return <QuestionCircleOutlined />;
+            case NotificationType.COMPLETED_QUESTION:
+                return <CheckCircleOutlined />;
             default:
                 return <NotificationOutlined />;
         }

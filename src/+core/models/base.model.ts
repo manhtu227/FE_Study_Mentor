@@ -3,3 +3,9 @@ export type BaseResp<T> = {
     message: string;
     data: T;
 };
+
+export type BaseRespExternal<T> = {
+    code: number;
+    desc: string;
+    data: T;
+};

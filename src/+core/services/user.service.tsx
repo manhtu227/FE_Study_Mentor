@@ -1,11 +1,15 @@
 import { api } from '@core/https/http';
-import { BaseResp } from '@core/models/base.model';
-import { FileAntd, FileReq } from '@core/models/file.model';
+import { BaseResp, BaseRespExternal } from '@core/models/base.model';
+import { FileReq } from '@core/models/file.model';
 import {
+    BankItemResp,
     CertificatesInformationRequest,
     CertificatesSubjectNotVerifyResp,
     EducationInfoResp,
-    IUserProfileResp,
+    LookUpBankNumberReq,
+    LookUpBankNumberResp,
+    QRCodeReq,
+    QRCodeResp,
     UpdatePersonalInformationInput,
     UserResp,
     UserVoucherViewModel,
@@ -41,8 +45,8 @@ export const getListSubjectsCertificatesNotVerifyApi = async () => {
     );
 };
 
-export const updateAvatarApi = async (data: FileAntd) => {
-    return api.patch<IUserProfileResp>(`api/users/profile/avatar`, data);
+export const updateAvatarApi = async (data: FileReq) => {
+    return api.patch<UserResp>(`api/users/profile/avatar`, data);
 };
 
 export const deleteSubjectsCertificatesNotVerifyApi = async () => {
@@ -81,7 +85,26 @@ export const pickTutor = (body: PickTutorReq) => {
     return api.post<void>('api/users/student/pick-tutor', body);
 };
 
-export const avatarTutorKeys = initKeys('avatar-tutor-keys');
-export const getAvatarByIdTutor = (id: string) => {
-    return api.get<FileReq>(`api/users/avatar/${id}`);
+export const getBankListKeys = initKeys('get-bank-list-keys');
+
+export const getBankListApi = async () => {
+    return api.get<BaseRespExternal<BankItemResp[]>>(`https://api.vietqr.io/v2/banks`, {
+        needsAuth: true,
+    } as any & { needsAuth?: boolean });
+};
+
+export const lookUpBankNumberApi = async (request: LookUpBankNumberReq) => {
+    return api.post<BaseRespExternal<LookUpBankNumberResp>>(
+        `https://api.vietqr.io/v2/lookup`,
+        request,
+        {
+            vietQRAuth: true,
+        } as any & { vietQRAuth?: boolean },
+    );
+};
+
+export const createQRCodeApi = async (data: QRCodeReq) => {
+    return api.post<BaseRespExternal<QRCodeResp>>(`https://api.vietqr.io/v2/generate`, data, {
+        vietQRAuth: true,
+    } as any & { vietQRAuth?: boolean });
 };

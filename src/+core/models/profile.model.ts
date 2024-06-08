@@ -60,6 +60,7 @@ export type UserResp = {
     gender: number;
     isActive: boolean;
     averageRate: number;
+    avatar: FileReq;
 };
 
 export type EducationInfoResp = {
@@ -79,12 +80,6 @@ export type IGrade = {
 export type ILevel = {
     id: string;
     name: string;
-};
-
-export type SignedUrlResp = {
-    fileKey: string;
-    fileName: string;
-    url: string;
 };
 
 export type FileObject = {
@@ -110,4 +105,51 @@ export type UserVoucherViewModel = {
     percentage: number;
     endDate: Date;
     quantity: number;
+};
+
+export type BankAccountInput = {
+    binBank: number;
+    accountNumber: number;
+    accountName: string;
+};
+
+export type BankItemResp = {
+    id: number;
+    name: string;
+    code: string;
+    bin: string;
+    shortName: string;
+    logo: string;
+    transferSupported: number;
+    lookupSupported: number;
+    short_name: string;
+    support: number;
+    isTransfer: number;
+    swift_code: string;
+};
+
+export type LookUpBankNumberReq = {
+    bin: number;
+    accountNumber: number;
+};
+
+export type LookUpBankNumberResp = {
+    accountName: string;
+};
+
+export type QRCodeReq = {
+    accountNo: number;
+    accountName: string;
+    acqId: number;
+    amount?: number;
+    addInfo?: string;
+    format?: string;
+    template?: string;
+};
+
+export type QRCodeResp = {
+    acpId: number;
+    accountName: string;
+    qrCode: string;
+    qrDataURL: string;
 };

@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
                         email: credentials.email,
                         password: credentials.password,
                     });
+
                     return data.data as any;
                 } catch (e: any) {
                     if (isAxiosError(e)) console.error('Login failed', e.message);

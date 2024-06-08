@@ -1,3 +1,7 @@
+export enum QuestionType {
+    MEETING = 0,
+    FILE = 1,
+}
 import { OptionItems } from '@core/types/option.type';
 
 export enum QuestionStatus {
