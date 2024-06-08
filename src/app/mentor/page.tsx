@@ -1,4 +1,4 @@
-import MentorSelectMethodPage from '../../pages/mentor-select-method/MentorSelectMethodPage';
+import MentorSelectMethodPage from '../../pages-ui/mentor-select-method/MentorSelectMethodPage';
 
 function Mentor() {
     return <MentorSelectMethodPage />;

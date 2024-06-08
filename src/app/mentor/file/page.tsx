@@ -1,4 +1,4 @@
-import QuestionByFilePage from '../../../pages/question-by-file/QuestionByFilePage';
+import QuestionByFilePage from '../../../pages-ui/question-by-file/QuestionByFilePage';
 
 function ByFile() {
     return (

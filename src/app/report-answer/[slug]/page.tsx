@@ -1,4 +1,4 @@
-import ReportAnswerPage from '../../../pages/report-answer/ReportAnswerPage';
+import ReportAnswerPage from '../../../pages-ui/report-answer/ReportAnswerPage';
 
 function ReportAnswer() {
     return <ReportAnswerPage />;

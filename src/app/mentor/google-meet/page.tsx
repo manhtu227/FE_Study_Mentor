@@ -1,4 +1,4 @@
-import CreateQuestionByGoogleMeetPage from '../../../pages/question/google-meet/ByGoogleMeetPage';
+import CreateQuestionByGoogleMeetPage from '../../../pages-ui/question/google-meet/ByGoogleMeetPage';
 
 function ByGoogleMeet() {
     return (

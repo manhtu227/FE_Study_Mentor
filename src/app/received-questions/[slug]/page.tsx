@@ -1,4 +1,4 @@
-import DetailedQuestionPage from '../../../pages/received-questions/detailed-question/DetailedQuestionPage';
+import DetailedQuestionPage from '../../../pages-ui/received-questions/detailed-question/DetailedQuestionPage';
 
 function DetailedQuestion() {
     return <DetailedQuestionPage />;

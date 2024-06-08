@@ -1,4 +1,4 @@
-import HistoryPaymentPage from '../../pages/history-payment/HistoryPaymentPage';
+import HistoryPaymentPage from '../../pages-ui/history-payment/HistoryPaymentPage';
 
 export default function FindMentor() {
     return (

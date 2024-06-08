@@ -1,4 +1,4 @@
-import AISelectMethodPage from '../../pages/ai-select-method/AISelectMethodPage';
+import AISelectMethodPage from '../../pages-ui/ai-select-method/AISelectMethodPage';
 
 function Mentor() {
     return <AISelectMethodPage />;
