@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd';
 import { FormItemProps, Rule } from 'antd/es/form';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const { TextArea } = Input;
 
 export type CustomTextAreaInputProps<T extends object> = {
@@ -22,6 +22,7 @@ export type CustomTextAreaInputProps<T extends object> = {
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     autoFocus?: boolean;
     fileUpload: React.ReactNode;
+    isActive?: boolean;
 } & FormItemProps<T>;
 
 export const CustomTextAreaInput = <T extends object>({
@@ -41,20 +42,35 @@ export const CustomTextAreaInput = <T extends object>({
     autoFocus,
     suffix,
     fileUpload: file,
+    isActive = true,
 }: CustomTextAreaInputProps<T>) => {
     const [row, setRow] = useState(rows);
     const onChangeEvent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if (
-            (row <= 5 && e.target.value.split('\n').length > row) ||
-            e.target.value.split('\n').length < row
-        ) {
-            setRow(e.target.value.split('\n').length);
+        if (isActive) {
+            if (
+                (row <= 5 && e.target.value.split('\n').length > row) ||
+                e.target.value.split('\n').length < row
+            ) {
+                setRow(e.target.value.split('\n').length);
+            }
         }
         onChange && onChange(e);
     };
 
+    useEffect(() => {
+        if (rows) {
+            setRow(rows);
+        }
+    }, [rows]);
+
     return (
-        <div className='text-area w-full border-solid rounded-md border-gray-200 bg-white-900'>
+        <div
+            className={
+                suffix
+                    ? 'text-area w-full border-solid rounded-md border-gray-200 bg-white-900'
+                    : ''
+            }
+        >
             {file && <div className='p-2'>{file}</div>}
             <div className='flex items-end'>
                 <Form.Item<T>
@@ -73,7 +89,7 @@ export const CustomTextAreaInput = <T extends object>({
                         disabled={disabled}
                         rows={row}
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
+                            if (e.key === 'Enter' && !e.shiftKey && isActive) {
                                 setRow(1);
                                 e.preventDefault();
                             }
@@ -82,7 +98,7 @@ export const CustomTextAreaInput = <T extends object>({
                         autoFocus={autoFocus}
                     />
                 </Form.Item>
-                <div className='p-2'>{suffix}</div>
+                {suffix && <div className='p-2'>{suffix}</div>}
             </div>
         </div>
     );

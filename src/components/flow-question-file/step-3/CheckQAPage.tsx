@@ -5,7 +5,11 @@ import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { MentorType } from '@core/models/profile.model';
-import { AnswerResponseModel, GetQuestionResponseModel } from '@core/models/question.model';
+import {
+    AnswerResponseModel,
+    GetQuestionResponseModel,
+    QuestionStep,
+} from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
@@ -16,6 +20,7 @@ import { FileIcon } from 'react-file-icon';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 import ChatMentorPage from './ChatMentorPage';
+import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 
 const mockDataInfo: MentorType = {
     id: '4',
@@ -40,6 +45,7 @@ export default function CheckQAPage({ onNext }: Props) {
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const [answer, setAnswer] = useState<AnswerResponseModel>();
+    const updateStepMutation = useUpdateStepApi();
 
     const query = useQuery({
         queryKey: detailedQuestionKeys.list({ currentQuestionId }),
@@ -65,13 +71,11 @@ export default function CheckQAPage({ onNext }: Props) {
                         question: GetQuestionResponseModel;
                     };
                 }) => {
-                    console.log('sao thee', data.data.answer);
                     setAnswer(data.data.answer);
                 },
             );
         }
     }, [socketReducer, currentQuestionId]);
-    console.log(answer, 'answer');
 
     return (
         <div>
@@ -194,7 +198,12 @@ export default function CheckQAPage({ onNext }: Props) {
                     <ButtonPrimary
                         title={'Kết thúc cuộc trò chuyện'}
                         className='ml-[432px] mt-6 !w-fit'
+                        disabled={!answer}
                         onClick={() => {
+                            updateStepMutation.mutate({
+                                step: QuestionStep.FOUR,
+                                questionId: currentQuestionId,
+                            });
                             onNext();
                         }}
                     />

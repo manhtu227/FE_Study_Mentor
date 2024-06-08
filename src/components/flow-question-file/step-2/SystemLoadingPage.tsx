@@ -2,15 +2,11 @@
 import images from '@assets/images';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { Button, Image, ProgressProps, Spin } from 'antd';
+import { Image, Spin } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { FindMentorEnum } from './FindMentorBySystemPage';
 
-const twoColors: ProgressProps['strokeColor'] = {
-    '0%': '#108ee9',
-    '100%': '#87d068',
-};
 export default function SystemLoadingPage() {
     const router = useRouter();
     const pathname = usePathname();

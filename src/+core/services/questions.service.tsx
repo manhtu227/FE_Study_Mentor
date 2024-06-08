@@ -1,3 +1,4 @@
+import { QuestionStatus } from '@core/enums/question.enum';
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
@@ -7,11 +8,13 @@ import {
     GetQuestionResponseModel,
     GradeResp,
     InfoExchangeInput,
+    QuestionStep,
     RatingReq,
     StructureEducationsResp,
     SubjectResp,
 } from '@core/models/question.model';
 import { OptionItem } from '@core/types/option.type';
+import { IPaginationInfo, PagingResp } from '@core/types/paging.type';
 import { initKeys } from '@core/utilities/query-key.utility';
 
 export const ConvertLevelToOption = (data: StructureEducationsResp): OptionItem => {
@@ -77,4 +80,26 @@ export const sendAnswerToStudentApi = async (body: AnswerRequestModel) => {
 
 export const findMentorBySystemApi = async (questionId: string) => {
     return api.post<void>(`/api/questions/${questionId}/find-tutor/system`);
+};
+
+export type StepUpdateReq = {
+    questionId: string;
+    step: QuestionStep;
+};
+export const updateStepQuestionApi = async (req: StepUpdateReq) => {
+    return api.patch<void>(`/api/questions/${req.questionId}/step`, {
+        step: req.step,
+    });
+};
+
+export type QuestionListFilter = {
+    status?: QuestionStatus;
+};
+export type QuestionListReq = QuestionListFilter & IPaginationInfo;
+
+export const questionListKeys = initKeys('question-list-keys');
+export const getQuestionListApi = async (params: QuestionListReq) => {
+    return api.get<PagingResp<GetQuestionResponseModel[]>>(`api/users/student/questions`, {
+        params,
+    });
 };

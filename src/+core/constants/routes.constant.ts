@@ -5,6 +5,7 @@ export const MY_ROUTE = {
         FREE: '/ai/free',
         PAID: '/ai/paid',
     },
+    LIST_QUESTION: '/list-question',
     MENTOR: {
         self: '/mentor',
         FILE: `/mentor/file`,

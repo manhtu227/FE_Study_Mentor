@@ -60,7 +60,11 @@ const Header = () => {
     const [newQuestion, setNewQuestion] = useState<ReceiveNewQuestionModel>();
     const toastId = useRef<any>(null);
     const [isOpenModalFoundTutor, setIsOpenModalFoundTutor] = useState(false);
-    const [user, setUser] = useState<UserModel>();
+    const [questionInfo, setQuestionInfo] = useState<{
+        questionId: string;
+        tutor: UserModel;
+        isAccepted: number;
+    }>();
     const dispatch = useDispatch();
     const receivedQuestions = useSelector(
         (state: RootState) => state.receivedQuestions.receivedQuestions,
@@ -202,9 +206,26 @@ const Header = () => {
                         SocketEvent.TUTOR_ACCEPTED_QUESTION,
                         (data: { data: { questionId: string; tutor: UserModel } }) => {
                             setIsOpenModalFoundTutor(true);
-                            setUser(data.data.tutor);
+                            setQuestionInfo({
+                                ...data.data,
+                                isAccepted: 1,
+                            });
                             dispatch(addTutor(data.data.tutor));
                             dispatch(setCurrentQuestionId(data.data.questionId));
+                        },
+                    );
+
+                    socket.on(
+                        SocketEvent.PICKED_TUTOR_ACCEPTED_QUESTION,
+                        (data: {
+                            data: { questionId: string; tutor: UserModel; isAccepted: number };
+                        }) => {
+                            setIsOpenModalFoundTutor(true);
+                            setQuestionInfo(data.data);
+                            if (data.data.isAccepted === 1) {
+                                dispatch(setCurrentQuestionId(data.data.questionId));
+                                dispatch(addTutor(data.data.tutor));
+                            }
                         },
                     );
                 }
@@ -305,10 +326,13 @@ const Header = () => {
                     </div>
                 )}
             </nav>
+
             <ModalFoundTutor
                 isModalOpen={isOpenModalFoundTutor}
                 setIsModalOpen={setIsOpenModalFoundTutor}
-                user={user}
+                user={questionInfo?.tutor}
+                isAccepted={questionInfo?.isAccepted}
+                questionId={questionInfo?.questionId}
             />
         </header>
     );
