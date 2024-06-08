@@ -1,4 +1,5 @@
 import { FileReq } from './file.model';
+import { QuestionResp } from './question.model';
 
 export type RoomModel = {
     roomId: string;
@@ -6,6 +7,8 @@ export type RoomModel = {
     senderId: string;
     recipientId: string;
     createdAt: string;
+    avatar?: string;
+    question?: QuestionResp;
 };
 
 export type RoomReq = { TitleRoom: string };

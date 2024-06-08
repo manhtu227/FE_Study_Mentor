@@ -3,16 +3,19 @@
 import { RightOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
+import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { MentorType } from '@core/models/profile.model';
 import { RatingInput, RatingReq } from '@core/models/question.model';
 import {
     createRatingApi,
-    getInfoDiscussApi,
-    infoDiscusKeys,
+    detailedQuestionKeys,
+    getDetailedQuestionApi,
 } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Avatar, Divider, Form, Image, Input, Rate, Spin, message } from 'antd';
+import { Avatar, Divider, Form, Image, Rate, Spin, message } from 'antd';
+import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 
@@ -37,32 +40,31 @@ const subject = {
 export default function RatingAnswerPage() {
     const [form] = Form.useForm<RatingInput>();
     const user = useSelector((state: RootState) => state.authentication)?.user ?? '';
+    const questions = useSelector((state: RootState) => state.questions);
+    const router = useRouter();
 
     const mutateCreate = useMutation({
         // mutationFn: (data: RatingReq) => updateRatingApi(data, user?.id),
-        mutationFn: (data: RatingReq) =>
-            createRatingApi(data, '65974321-27ff-47f1-8513-8696930c76f5'),
+        mutationFn: (data: RatingReq) => createRatingApi(data, questions.currentQuestionId),
         onSuccess: () => {
-            message.success('Cập nhật thông tin thành công');
+            message.success('Đánh giá thành công');
+            router.push(MY_ROUTE.HOME);
         },
         onError: (error: any) => {
             message.error(`Đã xảy ra lỗi: ${error.message || 'Vui lòng thử lại.'}`);
         },
     });
 
-    const infoDiscussQuery = useQuery({
-        queryKey: infoDiscusKeys.all,
-        queryFn: () =>
-            getInfoDiscussApi({
-                questionId: '65974321-27ff-47f1-8513-8696930c76f5',
-            }),
-        select: (resp) => resp.data.data[0],
+    const query = useQuery({
+        queryKey: detailedQuestionKeys.list({ currentQuestionId: questions.currentQuestionId }),
+        queryFn: () => getDetailedQuestionApi(questions.currentQuestionId),
+        select: (data) => data?.data.data,
     });
 
     const handleFinish = (values: RatingInput) => {
         mutateCreate.mutate({
             ...values,
-            tutorId: '8d116df8-29f3-40d2-b3c0-9b554c78f59e',
+            tutorId: query.data?.tutor?.id || '',
             // answerId: '4d6350fd-5f44-4b52-8ac7-3d03be8e63c4',
         });
     };
@@ -92,13 +94,17 @@ export default function RatingAnswerPage() {
                                 <Image
                                     alt={'image of question'}
                                     loading='lazy'
-                                    src={subject.teacher.image || ''}
+                                    src={
+                                        query.data?.tutor?.avatar?.fileKey
+                                            ? `${process.env.NEXT_PUBLIC_PHOTO}${query.data.tutor.avatar.fileKey}`
+                                            : images.teacher.src
+                                    }
                                 />
                             }
                         />
                     </div>
                     <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
-                        {subject.teacher.name}
+                        {query.data?.tutor?.fullName || 'Không tên'}
                     </h3>
 
                     <Form
@@ -116,7 +122,22 @@ export default function RatingAnswerPage() {
                             <Rate />
                         </Form.Item>
                         <div className='font-bold text-base mb-2'>Chi tiết</div>
-                        <Form.Item<RatingInput>
+                        <CustomTextAreaInput<RatingInput>
+                            fileUpload={false}
+                            name='comment'
+                            placeholder='Nhập đánh giá chi tiết'
+                            rows={8}
+                            isActive={false}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your comment about this question',
+                                },
+                            ]}
+                            classNameForm='w-full !mb-6'
+                            className='w-full text-left'
+                        />
+                        {/* <Form.Item<RatingInput>
                             name='comment'
                             rules={[
                                 {
@@ -130,11 +151,11 @@ export default function RatingAnswerPage() {
                                 className='h-[150px] font-medium text-base text-gray-700'
                                 placeholder='Nhập đánh giá chi tiết'
                             />
-                        </Form.Item>
+                        </Form.Item> */}
                         <ButtonPrimary
                             title='Gửi đánh giá'
                             htmlType='submit'
-                            className='w-full pt-0 rounded-lg'
+                            className='w-full  rounded-lg'
                             isRightIcon
                         />
                     </Form>

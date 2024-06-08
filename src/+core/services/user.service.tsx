@@ -83,5 +83,5 @@ export const pickTutor = (body: PickTutorReq) => {
 
 export const avatarTutorKeys = initKeys('avatar-tutor-keys');
 export const getAvatarByIdTutor = (id: string) => {
-    return api.post<FileReq>(`api/users/avatar/${id}`);
+    return api.get<FileReq>(`api/users/avatar/${id}`);
 };

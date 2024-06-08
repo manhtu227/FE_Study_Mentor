@@ -1,3 +1,5 @@
+import { FileReq } from './file.model';
+
 export type UserModel = {
     id: string;
     createdAt: Date;
@@ -13,4 +15,5 @@ export type UserModel = {
     dateOfBirth?: number;
     averageRate: number;
     isOnline: boolean;
+    avatar?: FileReq;
 };

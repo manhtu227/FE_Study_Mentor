@@ -1,3 +1,4 @@
+import images from '@assets/images';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { MentorType } from '@core/models/profile.model';
@@ -5,6 +6,7 @@ import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/que
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
 type Props = {
@@ -28,7 +30,19 @@ export function SideBarMentor({ button, mentor, children, className }: Props) {
                 <CardInfoExchange data={query.data} />
                 <div className='flex flex-col gap-4 my-4 items-start'>
                     <span className='font-bold text-lg text-black-800'>Người hướng dẫn</span>
-                    <CardMentorInfo mentor={mentor} />
+                    <CardMentorInfo
+                        mentor={{
+                            age: query.data?.tutor?.dateOfBirth
+                                ? dayjs().year() - query.data?.tutor?.dateOfBirth
+                                : 20,
+                            id: query.data?.tutor?.id || '',
+                            image: query.data?.tutor?.avatar?.fileKey
+                                ? `${process.env.NEXT_PUBLIC_PHOTO}${query.data.tutor.avatar.fileKey}`
+                                : images.teacher.src,
+                            name: query.data?.tutor?.fullName || 'Không tên',
+                            rating: query.data?.tutor?.averageRate || 5,
+                        }}
+                    />
                 </div>
                 {button}
             </div>

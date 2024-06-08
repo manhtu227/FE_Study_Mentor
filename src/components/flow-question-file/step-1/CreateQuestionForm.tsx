@@ -3,12 +3,14 @@ import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
+import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { CreatePaymentRequestModel } from '@core/models/payment.model';
 import {
     CreateFileQuestionReducer,
     CreateFileQuestionRequestModel,
     QuestionInput,
+    QuestionStep,
 } from '@core/models/question.model';
 import { createNewPaymentRequestApi } from '@core/services/payment.service';
 import {
@@ -22,6 +24,7 @@ import {
     getListVoucherApi,
     voucherKeys,
 } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -32,7 +35,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 
 function CreateQuestionForm({ onNext }: { onNext: () => void }) {
@@ -52,6 +55,8 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
     const gradeOptions = filteredGrades.map(ConvertGradeToOption);
     const subjectData = filteredGrades.find((grade) => grade.id === selectedGrade)?.subjects ?? [];
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
+    const updateStepMutation = useUpdateStepApi();
+    const questionId = useSelector((state: RootState) => state.questions.currentQuestionId);
 
     /* create question api */
     const mutateCreateQuestions = useMutation({
@@ -66,6 +71,15 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
                 type: 'success',
                 content: 'Create new payment request successfully',
             });
+            updateStepMutation.mutate({ step: QuestionStep.ONE, questionId: questionId });
+        },
+        onError: () => {
+            message.open({
+                type: 'error',
+                content: 'Create new payment request failed',
+            });
+            console.log('loi');
+            updateStepMutation.mutate({ step: QuestionStep.ONE, questionId: questionId });
         },
     });
 
@@ -138,7 +152,7 @@ function CreateQuestionForm({ onNext }: { onNext: () => void }) {
 
     const handleSubmitPayment = () => {
         const orderCode = Math.floor(Math.random() * 1000000);
-        const cancelUrl = process.env.NEXT_PUBLIC_HOME_PAGE_URL || 'http://localhost:3000/';
+        const cancelUrl = `${window.location.origin}/mentor/file?step=1`;
         const des = 'Thanh toán cho câu hỏi';
         const returnUrl = `${window.location.origin}/mentor/file?step=1`;
         const message = `amount=${2000}&cancelUrl=${cancelUrl}&description=${des}&orderCode=${orderCode}&returnUrl=${returnUrl}`;

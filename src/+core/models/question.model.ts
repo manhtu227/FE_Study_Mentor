@@ -37,6 +37,21 @@ export type CreateFileQuestionRequestModel = {
     voucherCode?: string;
 };
 
+export type QuestionResp = {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    answerTime: number;
+    content: string;
+    price: string;
+    status: number;
+    isPaid: boolean;
+    type: number;
+    googleMeetUrl: string;
+    jobRunCount: number;
+    step: number;
+};
+
 export type AnswerRequestModel = {
     questionId: string;
     tutorId: string;
@@ -166,9 +181,11 @@ export type GetQuestionResponseModel = {
     type: number;
     fileQuestions: FileReq[] | null;
     student: UserModel;
+    tutor?: UserModel;
     subject: SubjectModel;
     answers: AnswerResponseModel[];
     isAnswered: boolean;
+    step?: QuestionStep;
 };
 
 export type AcceptQuestionModel = {
@@ -191,3 +208,10 @@ export type AcceptQuestionResp = {
     createdAt: string;
     updatedAt: string;
 };
+
+export enum QuestionStep {
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+}
