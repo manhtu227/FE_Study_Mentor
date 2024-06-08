@@ -33,6 +33,11 @@ api.interceptors.request.use(
             config.headers['x-api-key'] = process.env.NEXT_PUBLIC_PAY_OS_API_KEY;
         }
 
+        if (config.vietQRAuth) {
+            config.headers['x-client-id'] = process.env.NEXT_PUBLIC_VIETQR_CLIENT_ID;
+            config.headers['x-api-key'] = process.env.NEXT_PUBLIC_VIETQR_API_KEY;
+        }
+
         // Thêm header Authorization cho tất cả các request
         config.headers['Authorization'] = `Bearer ${token}`;
 

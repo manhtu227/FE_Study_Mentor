@@ -1,13 +1,16 @@
 'use client';
 
-import EyeIcon from '@assets/icons/eye';
 import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
+import BankAccountForm from '@components/form/BankAccountForm';
+import Prestige from '@components/profile/prestige/Prestige';
 import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
-import { FileAntd } from '@core/models/file.model';
-import { SignedUrlResp } from '@core/models/profile.model';
+import { FileReq } from '@core/models/file.model';
+import { BankItemResp } from '@core/models/profile.model';
 import {
     educationInfoKeys,
+    getBankListApi,
+    getBankListKeys,
     getEducationInfoApi,
     getUserDetailApi,
     updateAvatarApi,
@@ -22,10 +25,10 @@ import { ProfileForm } from './components/ProfileForm';
 function ProfilePage() {
     const [form] = Form.useForm();
     const [isUpdatePersonalInfo, setIsUpdatePersonalInfo] = useState<boolean>(false);
-    const [avatar, setAvatar] = useState<any>();
-    const [avatarObject, setAvatarObject] = useState<SignedUrlResp>();
     const { data } = useSession();
     const file = useUploadFileApi();
+    const [avatar, setAvatar] = useState<FileReq>();
+    const [bankList, setBankList] = useState<BankItemResp[]>([]);
 
     const personalInfoQuery = useQuery({
         queryKey: userDetailKeys.list({ id: data?.user?.user?.id, isUpdatePersonalInfo }),
@@ -39,6 +42,12 @@ function ProfilePage() {
         select: (resp) => resp.data.data,
     });
 
+    const getBankListQuery = useQuery({
+        queryKey: getBankListKeys.all,
+        queryFn: () => getBankListApi(),
+        select: (resp) => resp.data.data,
+    });
+
     const [isActive, setIsActive] = useState<boolean>(personalInfoQuery.data?.isActive ?? false);
 
     const mutateUpdate = useMutation({
@@ -48,14 +57,27 @@ function ProfilePage() {
         },
     });
 
-    const handleSubmitAvatar = (values: FileAntd) => {
-        file.uploadFile(values?.file);
-        mutateUpdate.mutate(values);
+    const handleSubmitAvatar = async (values: any) => {
+        const attachFiles = file && (await file.uploadFile(values?.avatar?.file));
+
+        mutateUpdate.mutate(attachFiles);
     };
 
     useEffect(() => {
+        if (mutateUpdate?.data?.data) setAvatar(mutateUpdate?.data?.data?.avatar);
+    }, [mutateUpdate?.data?.data]);
+
+    useEffect(() => {
         if (personalInfoQuery.data?.isActive) setIsActive(personalInfoQuery.data.isActive);
-    }, [personalInfoQuery.data?.isActive]);
+
+        if (personalInfoQuery.data?.avatar?.fileKey) setAvatar(personalInfoQuery.data?.avatar);
+    }, [personalInfoQuery.data]);
+
+    useEffect(() => {
+        if (getBankListQuery?.data) {
+            setBankList(getBankListQuery?.data);
+        }
+    }, [getBankListQuery?.data]);
 
     return (
         <Spin spinning={personalInfoQuery.isFetching || educationInfoQuery.isFetching} size='large'>
@@ -67,9 +89,11 @@ function ProfilePage() {
                                 <div className=' flex items-start gap-4'>
                                     <Form name='avatar' onFinish={handleSubmitAvatar} form={form}>
                                         <CustomUploadAvatarInput
-                                            image={undefined}
+                                            image={avatar}
                                             name='avatar'
                                             onChange={() => {
+                                                console.log('checkk');
+
                                                 form.submit();
                                             }}
                                         />
@@ -124,34 +148,8 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             </div>
-
-                            <div className='p-8 flex flex-col items-start gap-4 bg-white-900 rounded-md'>
-                                <div className='font-semibold text-xl text-black-800'>
-                                    Độ uy tín của bạn
-                                </div>
-                                <div className='text-md'>
-                                    Mỗi lượt đánh giá 5 sao sẽ tăng độ uy tín của bạn. Bạn sẽ được
-                                    ứng viên tìm đến nhiều hơn.
-                                </div>
-                                <div className='flex items-center gap-4'>
-                                    <div className='rounded-full bg-primary-600 flex flex-col h-[120px] min-w-[120px] items-center justify-center'>
-                                        <span className='font-bold text-white-800 text-[48px]'>
-                                            {personalInfoQuery.data?.averageRate ?? 0}
-                                        </span>
-                                        <span className='text-white-800 font-bold text-xs'>
-                                            Sao
-                                        </span>
-                                    </div>
-                                    <div className='text-md'>
-                                        Hãy tích cực và nhiệt tình trao đổi, hướng dẫn cho học sinh
-                                        của bạn nhé. Nhận được đánh giá tốt là một cách tiếp cận và
-                                        nân cao độ uy tín của bản thân nhé!
-                                    </div>
-                                </div>
-                                <Button className='w-full h-12 border-[2px] border-primary-800 text-2xl font-semibold gap-2 flex items-center justify-center text-primary-800'>
-                                    Xem nhận xét <EyeIcon />
-                                </Button>
-                            </div>
+                            <BankAccountForm bankList={bankList} />
+                            <Prestige averageRate={personalInfoQuery.data?.averageRate ?? 0} />
                         </div>
                         <ProfileForm
                             personalData={personalInfoQuery.data}

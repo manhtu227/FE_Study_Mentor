@@ -4,11 +4,14 @@ import RightOutlined from '@ant-design/icons/RightOutlined';
 import Logo from '@components/logo/Logo';
 import MessageIcon from '@components/message/MessageIcon';
 import ModalFoundTutor from '@components/modal/ModalFoundTutor';
-import NewQuestionNotification from '@components/new-question-notification/NewQuestionNotification';
+import ModalJoinGoogleMeet from '@components/modal/ModalJoinGoogleMeet';
 import NotificationBell from '@components/notification-bell/NotificationBell';
+import CompletedQuestionNotification from '@components/notification/CompletedQuestionNotification';
+import NewQuestionNotification from '@components/notification/NewQuestionNotification';
 import { DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION } from '@core/constants/questions.constant';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationType } from '@core/enums/notification.enum';
+import { QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
 import { ReceiveNewQuestionModel } from '@core/models/question.model';
@@ -62,6 +65,8 @@ const Header = () => {
     const receivedQuestions = useSelector(
         (state: RootState) => state.receivedQuestions.receivedQuestions,
     );
+    const [completedQuestion, setCompletedQuestion] = useState<any>();
+    const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(true);
 
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
@@ -108,11 +113,59 @@ const Header = () => {
         router.push(MY_ROUTE.SIGN_UP);
     };
 
+    const handleCompleteQuestion = (data: any) => {
+        toastId.current = toast(
+            <CompletedQuestionNotification
+                questionName='Python là gì?'
+                subjectName={data.subject.name}
+                price={data.price}
+            />,
+            {
+                position: 'top-left',
+                autoClose: DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+                transition: Bounce,
+                type: 'success',
+            },
+        );
+
+        dispatch(
+            addNotification({
+                id: data.questionId,
+                message: `Câu hỏi chủ đề ${data.subject.name} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
+                type: NotificationType.COMPLETED_QUESTION,
+                createdAt: data.createdAt,
+                questionId: data.questionId,
+            }),
+        );
+    };
+
     useEffect(() => {
         if (newQuestion) {
             handleReceiveNewQuestion(newQuestion);
         }
     }, [newQuestion]);
+
+    useEffect(() => {
+        if (completedQuestion) {
+            handleCompleteQuestion(completedQuestion);
+        }
+    }, [completedQuestion]);
+
+    const mockData = {
+        questionId: '1',
+        subject: {
+            name: 'Python',
+        },
+        price: 100000,
+        createdAt: new Date(),
+        questionName: 'Python là gì?',
+    };
 
     useEffect(() => {
         if (data?.user.user.id) {
@@ -134,7 +187,15 @@ const Header = () => {
                     socket.on(SocketEvent.NEW_QUESTION, (data) => {
                         data.data.createdAt = new Date();
                         setNewQuestion(data.data);
+
+                        if (data.data.methodAnswer === QuestionType.MEETING) {
+                            socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
+                                setIsShowModalReceiveGoogleMeet(true);
+                            });
+                        }
                     });
+
+                    setTimeout(() => setCompletedQuestion(mockData), 5000);
                 }
                 if (data?.user?.user?.role === UserType.STUDENT) {
                     socket.on(
@@ -181,6 +242,14 @@ const Header = () => {
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
             <ToastContainer />
+            {isShowModalReceiveGoogleMeet && (
+                <ModalJoinGoogleMeet
+                    googleMeetUrl='https://meet.google.com/caf-yvtx-jfk'
+                    price={3000}
+                    questionName='Test câu hỏi'
+                    subjectName='Sinh học'
+                />
+            )}
             <nav className='flex h-full items-center px-[44px] bg-white-900'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' className='cursor-pointer' />

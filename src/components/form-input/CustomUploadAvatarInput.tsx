@@ -1,4 +1,6 @@
 import CameraIcon from '@assets/icons/camera';
+import { DEFAULT_PREFIX_IMAGE_URL } from '@core/constants/commons.constant';
+import { FileReq } from '@core/models/file.model';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
@@ -25,7 +27,7 @@ const beforeUpload = (file: RcFile) => {
     return isJpgOrPng && isLt2M;
 };
 type CustomUploadAvatarInputProps = {
-    image?: string;
+    image?: FileReq;
     name?: string;
     onChange?: () => void;
 };
@@ -35,7 +37,7 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
     const [imageUrl, setImageUrl] = useState<string>();
 
     useEffect(() => {
-        image && setImageUrl(image);
+        image && setImageUrl(image?.fileKey);
     }, [image]);
 
     /* Handler */
@@ -52,6 +54,13 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
                 setImageUrl(url);
             });
         }
+
+        // temp solution because post image of antd not working
+        getBase64(info.file.originFileObj as RcFile, (url) => {
+            onChange && onChange();
+            setLoading(false);
+            setImageUrl(url);
+        });
     };
 
     return (
@@ -66,7 +75,15 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
             )} */}
             </div>
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
-                {imageUrl ? <img src={imageUrl} alt='avatar' className='w-full h-full' /> : <></>}
+                {imageUrl ? (
+                    <img
+                        src={`${DEFAULT_PREFIX_IMAGE_URL}${imageUrl}`}
+                        alt='avatar'
+                        className='w-full h-full'
+                    />
+                ) : (
+                    <></>
+                )}
                 <Form.Item name={name} className='absolute z-50 right-0 bottom-0 m-0'>
                     <Upload
                         name='avatar'

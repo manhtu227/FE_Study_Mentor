@@ -1,3 +1,4 @@
+import { DEFAULT_PREFIX_IMAGE_URL } from '@core/constants/commons.constant';
 import { ChatModel } from '@core/models/chat.model';
 import { FileReq } from '@core/models/file.model';
 import { Avatar, Image } from 'antd';
@@ -163,7 +164,7 @@ function ChatItem({ value, avatar, files, checkedMine, isLoadingEnd, className }
                                 <div key={file.fileKey} className='flex items-center gap-2'>
                                     <Image
                                         className='max-w-[200px] max-h-[100px] rounded-lg'
-                                        src={`https://storage.googleapis.com/study-mentor/${file.fileKey}`}
+                                        src={`${DEFAULT_PREFIX_IMAGE_URL}${file.fileKey}`}
                                         alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
                                     />
                                 </div>

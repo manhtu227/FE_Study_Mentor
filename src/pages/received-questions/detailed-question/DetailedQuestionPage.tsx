@@ -151,7 +151,7 @@ function DetailedQuestionPage() {
                                                     className='max-w-[200px] max-h-[100px] rounded-lg'
                                                     width={200}
                                                     height={100}
-                                                    src={`https://storage.googleapis.com/study-mentor/${file.fileKey}`}
+                                                    src={`${DEFAULT_PREFIX_IMAGE_URL}${file.fileKey}`}
                                                     alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
                                                 />
                                             </div>

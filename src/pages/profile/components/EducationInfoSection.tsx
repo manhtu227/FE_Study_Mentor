@@ -1,4 +1,5 @@
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
+import { DEFAULT_PREFIX_IMAGE_URL } from '@core/constants/commons.constant';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import {
@@ -180,7 +181,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     useEffect(() => {
         if (
             subjectsCertificatesQuery.data?.data?.data &&
-            subjectsCertificatesQuery.data?.data?.success
+            subjectsCertificatesQuery.data?.data?.data?.subjects
         ) {
             setCertificatesSubjectNotVerify(subjectsCertificatesQuery.data?.data.data);
         } else {
@@ -198,6 +199,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
 
     const isDisabledAddNewSubject =
         certificatesSubjectNotVerify && certificatesSubjectNotVerify?.subjects?.length !== 0;
+
     return (
         <Spin spinning={mutateUpdate.isPending} size='large'>
             <div className='w-full mb-8'>
@@ -238,7 +240,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                                                 width={200}
                                                 height={100}
                                                 className='max-w-[200px] max-h-[100px] rounded-lg'
-                                                src={`https://storage.googleapis.com/study-mentor/${certificate.fileKey}`}
+                                                src={`${DEFAULT_PREFIX_IMAGE_URL}${certificate.fileKey}`}
                                                 alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
                                             />
                                         </div>
