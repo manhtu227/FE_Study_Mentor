@@ -1,5 +1,5 @@
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
-import { DEFAULT_PREFIX_IMAGE_URL } from '@core/constants/commons.constant';
+import { process } from '@core/constants/commons.constant';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import {
@@ -240,7 +240,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                                                 width={200}
                                                 height={100}
                                                 className='max-w-[200px] max-h-[100px] rounded-lg'
-                                                src={`${DEFAULT_PREFIX_IMAGE_URL}${certificate.fileKey}`}
+                                                src={`${process.env.NEXT_PUBLIC_PHOTO}${certificate.fileKey}`}
                                                 alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
                                             />
                                         </div>

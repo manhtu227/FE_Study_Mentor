@@ -8,4 +8,3 @@ export const FILL_OUT_THIS_FILED_MESSAGE = 'Please fill out this field';
 export const FIXED_PRICE = 2;
 export const DATE_FORMAT = 'dd/MM/yyyy';
 export const DEFAULT_USER_NAME = 'User';
-export const DEFAULT_PREFIX_IMAGE_URL = 'https://storage.googleapis.com/study-mentor/';

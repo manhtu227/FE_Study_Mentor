@@ -1,5 +1,5 @@
 import CameraIcon from '@assets/icons/camera';
-import { DEFAULT_PREFIX_IMAGE_URL } from '@core/constants/commons.constant';
+import { process } from '@core/constants/commons.constant';
 import { FileReq } from '@core/models/file.model';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
@@ -77,7 +77,7 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
                 {imageUrl ? (
                     <img
-                        src={`${DEFAULT_PREFIX_IMAGE_URL}${imageUrl}`}
+                        src={`${process.env.NEXT_PUBLIC_PHOTO}${imageUrl}`}
                         alt='avatar'
                         className='w-full h-full'
                     />
