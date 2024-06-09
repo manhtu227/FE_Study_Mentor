@@ -38,6 +38,13 @@ export type CreateFileQuestionRequestModel = {
     voucherCode?: string;
 };
 
+export interface ICalculatePriceRequestModel {
+    level: string;
+    numberOfStar: number;
+    timeFindTutor: number;
+    voucherCode?: string;
+}
+
 export type QuestionResp = {
     id: string;
     createdAt: Date;
@@ -72,7 +79,8 @@ export type CreateFileQuestionReducer = {
 
 export type CreateFileQuestionResp = {
     price: number;
-    questionId: string;
+    promoPrice: number;
+    questionId?: string;
 };
 
 export type RatingInput = {
@@ -187,6 +195,7 @@ export type GetQuestionResponseModel = {
     subject: SubjectModel;
     answers: AnswerResponseModel[];
     isAnswered: boolean;
+    roomId?: string;
     step?: QuestionStep;
 };
 

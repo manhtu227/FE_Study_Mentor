@@ -5,6 +5,7 @@ import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
 import { DATE_FORMAT } from '@core/constants/date.constant';
+import { ENV } from '@core/constants/env.constants';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
@@ -151,7 +152,7 @@ function DetailedQuestionPage() {
                                                     className='max-w-[200px] max-h-[100px] rounded-lg'
                                                     width={200}
                                                     height={100}
-                                                    src={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
+                                                    src={`${ENV.PHOTO}${file.fileKey}`}
                                                     alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
                                                 />
                                             </div>

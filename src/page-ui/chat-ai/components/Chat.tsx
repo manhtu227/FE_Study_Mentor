@@ -8,7 +8,7 @@ import {
     ChatWithAiReq,
     chatAIRoomListKeys,
     chatWithAiApi,
-    createRoomIdApi,
+    createRoomAiIdApi,
 } from '@core/services/chat.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -64,7 +64,7 @@ export default function Chat({
     });
 
     const mutateCreateRoom = useMutation({
-        mutationFn: (body: RoomReq) => createRoomIdApi(data!.user.user.id, categoryAi, body),
+        mutationFn: (body: RoomReq) => createRoomAiIdApi(data!.user.user.id, categoryAi, body),
         onSuccess: (resp) => {
             mutateChat.mutateAsync({
                 question: chatList[chatList.length - 1].content,

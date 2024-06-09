@@ -9,6 +9,7 @@ import { CreatePaymentRequestModel } from '@core/models/payment.model';
 import {
     CreateFileQuestionReducer,
     CreateFileQuestionRequestModel,
+    ICalculatePriceRequestModel,
     QuestionInput,
     QuestionStep,
 } from '@core/models/question.model';
@@ -17,50 +18,61 @@ import {
     ConvertGradeToOption,
     ConvertLevelToOption,
     ConvertSubjectToOption,
+    calculatePriceQuestions,
     createQuestions,
 } from '@core/services/questions.service';
-import {
-    convertVoucherToOption,
-    getListVoucherApi,
-    voucherKeys,
-} from '@core/services/user.service';
+import { getListVoucherApi, voucherKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Select, Spin, message } from 'antd';
+import { Button, Form, Modal, Popover, Select, Spin, message } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
+import PopoverVoucher from './PopoverVoucher';
+import { VoucherItem } from './VoucherItem';
 
 function CreateQuestionForm() {
     const [form] = Form.useForm<QuestionInput>();
     const [selectedLevel, setSelectedLevel] = useState<string>('');
     const [selectedGrade, setSelectedGrade] = useState<string>('');
     const [selectedSubject, setSelectedSubject] = useState<string>('');
-    const [price, setPrice] = useState<number>(0);
+    const [isOpenVoucher, setIsOpenVoucher] = useState<boolean>(false);
     const router = useRouter();
-    const dispatch = useDispatch();
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
     // Filter grades based on selected levels
     const filteredGrades = levelData?.find((level) => level.id === selectedLevel)?.grades ?? [];
-
     const gradeOptions = filteredGrades.map(ConvertGradeToOption);
     const subjectData = filteredGrades.find((grade) => grade.id === selectedGrade)?.subjects ?? [];
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
     const updateStepMutation = useUpdateStepApi();
     const questionId = useSelector((state: RootState) => state.questions.currentQuestionId);
+    const dispatch = useDispatch();
 
     /* create question api */
     const mutateCreateQuestions = useMutation({
         mutationFn: (data: CreateFileQuestionRequestModel) => createQuestions(data),
+    });
+
+    /* caculate price question api */
+    const mutateCaculatePrice = useMutation({
+        mutationFn: (data: ICalculatePriceRequestModel) => calculatePriceQuestions(data),
+        onSuccess: () => {
+            if (isOpenVoucher) {
+                setIsOpenVoucher(false);
+            }
+            message.open({
+                type: 'success',
+                content: 'Calculate price successfully',
+            });
+        },
     });
 
     // create new payment request api
@@ -78,7 +90,6 @@ function CreateQuestionForm() {
                 type: 'error',
                 content: 'Create new payment request failed',
             });
-            console.log('loi');
             updateStepMutation.mutate({ step: QuestionStep.ONE, questionId: questionId });
         },
     });
@@ -86,36 +97,22 @@ function CreateQuestionForm() {
     const voucherQuery = useQuery({
         queryKey: voucherKeys.all,
         queryFn: () => getListVoucherApi(),
-        select: (resp) => resp.data.data.map(convertVoucherToOption),
+        select: (resp) => resp.data.data,
     });
 
     /* Handler */
     const { data } = useSession();
     const file = useUploadFileApi();
     const handleSubmit = async (values: QuestionInput) => {
-        const attachFiles = file && (await file.uploadMultipleFiles(values?.attachFiles?.fileList));
-        const request: CreateFileQuestionRequestModel = {
-            userId: data?.user.user.id || '',
-            subjectId: selectedSubject,
-            timeFindTutor: values.timeAnswer,
+        const request: ICalculatePriceRequestModel = {
+            level:
+                (levelOptions.find((level) => level.value === selectedLevel)?.label as string) ||
+                '',
             numberOfStar: values.tutorRating,
-            content: values.content,
-            attachFiles: attachFiles,
+            timeFindTutor: values.timeAnswer,
             voucherCode: values.voucher,
         };
-        mutateCreateQuestions.mutate(request, {
-            onSuccess: (resp) => {
-                const requestReducer: CreateFileQuestionReducer = request;
-                requestReducer.questionId = resp.data.data.questionId;
-                dispatch(addQuestion(requestReducer));
-                dispatch(setCurrentQuestionId(requestReducer.questionId));
-                setPrice(resp.data.data.price);
-                message.open({
-                    type: 'success',
-                    content: 'Create new question successfully',
-                });
-            },
-        });
+        mutateCaculatePrice.mutate(request);
 
         // onNext();
     };
@@ -150,23 +147,48 @@ function CreateQuestionForm() {
         form.setFieldsValue({ subjectId: value });
     };
 
-    const handleSubmitPayment = () => {
-        const orderCode = Math.floor(Math.random() * 1000000);
-        const cancelUrl = `${window.location.origin}/mentor/file?step=1`;
-        const des = 'Thanh toán cho câu hỏi';
-        const returnUrl = `${window.location.origin}/mentor/file?step=1`;
-        const message = `amount=${2000}&cancelUrl=${cancelUrl}&description=${des}&orderCode=${orderCode}&returnUrl=${returnUrl}`;
-        const hash = HmacSHA256(message, process.env.NEXT_PUBLIC_PAY_OS_CHECK_SUM_KEY || '');
-        const request: CreatePaymentRequestModel = {
-            amount: 2000,
-            description: des,
-            orderCode: orderCode,
-            cancelUrl: cancelUrl,
-            returnUrl: returnUrl,
-            signature: hash.toString(),
+    const handleSubmitPayment = async () => {
+        const values = form.getFieldsValue();
+        const attachFiles = file && (await file.uploadMultipleFiles(values?.attachFiles?.fileList));
+        const requestCreate: CreateFileQuestionRequestModel = {
+            userId: data?.user.user.id || '',
+            subjectId: selectedSubject,
+            timeFindTutor: values.timeAnswer,
+            numberOfStar: values.tutorRating,
+            content: values.content,
+            attachFiles: attachFiles,
+            voucherCode: values.voucher,
         };
 
-        mutateCreatePaymentRequest.mutate(request);
+        mutateCreateQuestions.mutate(requestCreate, {
+            onSuccess: (resp) => {
+                const requestReducer: CreateFileQuestionReducer = requestCreate;
+                requestReducer.questionId = resp.data.data.questionId;
+                dispatch(addQuestion(requestReducer));
+                dispatch(setCurrentQuestionId(requestReducer.questionId!));
+
+                // handle create payment request
+                const orderCode = Math.floor(Math.random() * 1000000);
+                const cancelUrl = `${window.location.origin}/mentor/file?step=1`;
+                const des = 'Thanh toán cho câu hỏi';
+                const returnUrl = `${window.location.origin}/mentor/file?step=1`;
+                const message = `amount=${2000}&cancelUrl=${cancelUrl}&description=${des}&orderCode=${orderCode}&returnUrl=${returnUrl}`;
+                const hash = HmacSHA256(
+                    message,
+                    process.env.NEXT_PUBLIC_PAY_OS_CHECK_SUM_KEY || '',
+                );
+                const request: CreatePaymentRequestModel = {
+                    amount: 2000,
+                    description: des,
+                    orderCode: orderCode,
+                    cancelUrl: cancelUrl,
+                    returnUrl: returnUrl,
+                    signature: hash.toString(),
+                };
+
+                mutateCreatePaymentRequest.mutate(request);
+            },
+        });
     };
 
     useEffect(() => {
@@ -277,6 +299,8 @@ function CreateQuestionForm() {
                         rules={[{ required: true, message: 'Please input!' }]}
                     />
 
+                    <Form.Item<QuestionInput> name={'voucher'} noStyle />
+
                     {/* Question content */}
                     <Form.Item className='mb-0'>
                         <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
@@ -289,27 +313,55 @@ function CreateQuestionForm() {
                             // rules={[{ required: true, message: 'Please input!' }]}
                         />
                     </Form.Item>
-                    <Form.Item>
+                    {/* <Form.Item>
                         <div className='font-bold text-base mb-2'>Hãy chọn voucher phù hợp</div>
                         <CustomSelectInput<QuestionInput>
                             name='voucher'
                             allowClear
                             optionsSelect={voucherQuery.data || []}
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                     {/* <div className='flex justify-end'></div> */}
 
                     <div className='flex items-center justify-between '>
                         <Form.Item label=' ' colon={false}>
-                            <Button
-                                type='primary'
-                                size='large'
-                                className='!h-12 font-bold text-base'
-                                disabled={!price}
-                                onClick={handleSubmitPayment}
-                            >
-                                Giá: {formatPriceVND(price)} &nbsp; | &nbsp; Thanh toán
-                            </Button>
+                            {mutateCaculatePrice.data?.data.data ? (
+                                <Popover
+                                    title='Chi tiết khuyến mãi'
+                                    content={
+                                        <PopoverVoucher
+                                            priceDiscount={
+                                                mutateCaculatePrice.data?.data.data.promoPrice
+                                            }
+                                            priceTotal={mutateCaculatePrice.data?.data.data.price}
+                                        ></PopoverVoucher>
+                                    }
+                                >
+                                    <Button
+                                        type='primary'
+                                        size='large'
+                                        className='!h-12 font-bold text-base'
+                                        disabled={!mutateCaculatePrice.data?.data.data.price}
+                                        onClick={handleSubmitPayment}
+                                    >
+                                        Giá:{' '}
+                                        {formatPriceVND(
+                                            mutateCaculatePrice.data.data.data.promoPrice,
+                                        )}
+                                        &nbsp; | &nbsp; Thanh toán
+                                    </Button>
+                                </Popover>
+                            ) : (
+                                <Button
+                                    type='primary'
+                                    size='large'
+                                    className='!h-12 font-bold text-base'
+                                    disabled={!mutateCaculatePrice.data?.data.data.price}
+                                    onClick={handleSubmitPayment}
+                                >
+                                    Giá: {formatPriceVND(0)} &nbsp; | &nbsp; Thanh toán
+                                </Button>
+                            )}
                         </Form.Item>
                         <Button
                             type='primary'
@@ -323,11 +375,49 @@ function CreateQuestionForm() {
                 </Form>
                 <div className='font-medium text-sm text-left text-[#313636]'>
                     Bạn cảm thấy mức giá không phù hợp?
-                    <Link className='font-bold text-base text-primary-900 no-underline' href={'#'}>
-                        Tùy chọn khác
-                    </Link>
+                    <div
+                        className='font-bold text-base text-primary-900 no-underline cursor-pointer'
+                        onClick={() => setIsOpenVoucher(true)}
+                    >
+                        Lựa chọn mã giảm giá
+                    </div>
                 </div>
             </div>
+            <Modal
+                open={isOpenVoucher}
+                onCancel={() => setIsOpenVoucher(false)}
+                footer={null}
+                width={500}
+                centered
+                title='Chọn mã khuyến mãi'
+                className='px-4'
+            >
+                <div className='flex flex-col gap-3 w-full'>
+                    {voucherQuery.data?.map((voucher, index) => {
+                        return (
+                            <VoucherItem
+                                key={index}
+                                percent={voucher.percentage}
+                                quantity={voucher.quantity}
+                                time={voucher.endDate}
+                                onClick={() => {
+                                    form.validateFields().then(
+                                        (values) => {
+                                            form.setFieldValue('voucher', voucher.code);
+                                            values.voucher = voucher.code;
+                                            handleSubmit(values);
+                                        },
+                                        () => {
+                                            setIsOpenVoucher(false);
+                                            message.error('Vui lòng nhập đầy đủ thông tin');
+                                        },
+                                    );
+                                }}
+                            />
+                        );
+                    })}
+                </div>
+            </Modal>
         </Spin>
     );
 }

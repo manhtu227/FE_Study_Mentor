@@ -92,8 +92,6 @@ function ProfilePage() {
                                             image={avatar}
                                             name='avatar'
                                             onChange={() => {
-                                                console.log('checkk');
-
                                                 form.submit();
                                             }}
                                         />

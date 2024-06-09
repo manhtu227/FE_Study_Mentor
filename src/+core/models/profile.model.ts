@@ -103,7 +103,7 @@ export type IUserProfileResp = {
 export type UserVoucherViewModel = {
     code: string;
     percentage: number;
-    endDate: Date;
+    endDate: string;
     quantity: number;
 };
 

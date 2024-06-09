@@ -1,34 +1,25 @@
 'use client';
 import { DownloadOutlined } from '@ant-design/icons';
-import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
 import { SocketEvent } from '@core/enums/socket.enum';
-import { MentorType } from '@core/models/profile.model';
+import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import {
     AnswerResponseModel,
     GetQuestionResponseModel,
     QuestionStep,
 } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
+import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Divider } from 'antd';
 import { useEffect, useState } from 'react';
 import { FileIcon } from 'react-file-icon';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 import ChatMentorPage from './ChatMentorPage';
-import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
-
-const mockDataInfo: MentorType = {
-    id: '4',
-    image: images.feedback.src,
-    name: 'Nguyễn Hương',
-    age: 23,
-    rating: 5,
-};
 
 const questionFile = {
     extension: 'docx',
@@ -77,13 +68,21 @@ export default function CheckQAPage({ onNext }: Props) {
         }
     }, [socketReducer, currentQuestionId]);
 
+    const mutateCreateRoom = useMutation({
+        mutationFn: (body: CreateRoomUserReq) => createRoomUserIdApi(body),
+        onSuccess: () => {
+            setIsChat(true);
+        },
+    });
+
     return (
         <div>
             {isChat ? (
                 <ChatMentorPage
                     setIsChat={setIsChat}
-                    idRoom='b9a66b1d-fdc6-4a86-966f-4016f2e5e927'
-                    senderId='30110137-1685-4b28-b585-55f87886cb56'
+                    idRoom={mutateCreateRoom.data?.data.roomId || ''}
+                    senderId={query.data?.tutor?.id || ''}
+                    tutor={query.data?.tutor}
                 />
             ) : (
                 <>
@@ -92,13 +91,21 @@ export default function CheckQAPage({ onNext }: Props) {
                             className='p-8'
                             button={
                                 <ButtonPrimary
-                                    title='Tạo đoạn chat'
+                                    title={query.data?.roomId ? 'Trò chuyện' : 'Tạo đoạn chat'}
                                     className='w-full'
-                                    onClick={() => setIsChat(true)}
+                                    onClick={() => {
+                                        if (query.data?.roomId) {
+                                            setIsChat(true);
+                                            return;
+                                        }
+                                        mutateCreateRoom.mutate({
+                                            tutorId: query.data?.tutor?.id || '',
+                                            questionId: currentQuestionId,
+                                        });
+                                    }}
                                     isRightIcon
                                 />
                             }
-                            mentor={mockDataInfo}
                         >
                             <div className='flex flex-col text-left'>
                                 <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>

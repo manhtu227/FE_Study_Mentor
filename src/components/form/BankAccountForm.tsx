@@ -15,7 +15,6 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
     const [qrCodeImage, setQrCodeImage] = useState<string>('');
 
     const handleSubmitBankAccount = (values: BankAccountInput) => {
-        console.log(values);
         setIsUpdate(false);
 
         const requestCreateQRCode: QRCodeReq = {

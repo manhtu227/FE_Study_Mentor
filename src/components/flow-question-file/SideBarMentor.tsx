@@ -1,7 +1,6 @@
 import images from '@assets/images';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
-import { MentorType } from '@core/models/profile.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
@@ -11,19 +10,17 @@ import { useSelector } from 'react-redux';
 
 type Props = {
     button: React.ReactNode;
-    mentor: MentorType;
     children?: React.ReactNode;
     className?: string;
 };
 
-export function SideBarMentor({ button, mentor, children, className }: Props) {
+export function SideBarMentor({ button, children, className }: Props) {
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const query = useQuery({
         queryKey: detailedQuestionKeys.list({ currentQuestionId }),
         queryFn: () => getDetailedQuestionApi(currentQuestionId),
         select: (data) => data?.data.data,
     });
-    console.log(mentor);
 
     return (
         <div className={clsx('flex items-start w-full gap-8')}>

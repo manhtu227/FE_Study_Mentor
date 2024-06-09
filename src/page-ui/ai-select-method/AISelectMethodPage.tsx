@@ -61,7 +61,7 @@ function AISelectMethodPage() {
                         Đặt câu hỏi
                     </div>
                 </div>
-                <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
+                <div className='flex items-start gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
                         image={images.freeAI}
                         title='Trả lời với AI miễn phí'
