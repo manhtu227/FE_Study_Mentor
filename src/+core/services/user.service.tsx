@@ -113,3 +113,7 @@ export const avatarTutorKeys = initKeys('avatar-tutor-keys');
 export const getAvatarByIdTutorApi = (id: string) => {
     return api.get<FileReq>(`api/users/avatar/${id}`);
 };
+
+export const createGoogleMeetApi = (body: PickTutorReq) => {
+    return api.post<BaseResp<{ meetingURL: string }>>(`api/users/create/ggMeet`, body);
+};

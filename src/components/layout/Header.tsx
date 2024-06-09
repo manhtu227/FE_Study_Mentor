@@ -14,7 +14,7 @@ import { NotificationType } from '@core/enums/notification.enum';
 import { QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
-import { ReceiveNewQuestionModel } from '@core/models/question.model';
+import { QuestionEnum, ReceiveNewQuestionModel } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
@@ -64,6 +64,7 @@ const Header = () => {
         questionId: string;
         tutor: UserModel;
         isAccepted: number;
+        methodAnswer: QuestionEnum;
     }>();
     const dispatch = useDispatch();
     const receivedQuestions = useSelector(
@@ -204,7 +205,13 @@ const Header = () => {
                 if (data?.user?.user?.role === UserType.STUDENT) {
                     socket.on(
                         SocketEvent.TUTOR_ACCEPTED_QUESTION,
-                        (data: { data: { questionId: string; tutor: UserModel } }) => {
+                        (data: {
+                            data: {
+                                questionId: string;
+                                tutor: UserModel;
+                                methodAnswer: QuestionEnum;
+                            };
+                        }) => {
                             setIsOpenModalFoundTutor(true);
                             setQuestionInfo({
                                 ...data.data,
@@ -218,7 +225,12 @@ const Header = () => {
                     socket.on(
                         SocketEvent.PICKED_TUTOR_ACCEPTED_QUESTION,
                         (data: {
-                            data: { questionId: string; tutor: UserModel; isAccepted: number };
+                            data: {
+                                questionId: string;
+                                tutor: UserModel;
+                                isAccepted: number;
+                                methodAnswer: QuestionEnum;
+                            };
                         }) => {
                             setIsOpenModalFoundTutor(true);
                             setQuestionInfo(data.data);
@@ -331,6 +343,7 @@ const Header = () => {
                 isModalOpen={isOpenModalFoundTutor}
                 setIsModalOpen={setIsOpenModalFoundTutor}
                 user={questionInfo?.tutor}
+                methodAnswer={questionInfo?.methodAnswer}
                 isAccepted={questionInfo?.isAccepted}
                 questionId={questionInfo?.questionId}
             />

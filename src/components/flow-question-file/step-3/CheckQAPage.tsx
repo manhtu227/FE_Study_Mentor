@@ -7,12 +7,15 @@ import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import {
     AnswerResponseModel,
     GetQuestionResponseModel,
+    QuestionEnum,
     QuestionStep,
 } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
+import { downloadUrl } from '@core/utilities/download.util';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Divider } from 'antd';
 import { useEffect, useState } from 'react';
@@ -90,21 +93,25 @@ export default function CheckQAPage({ onNext }: Props) {
                         <SideBarMentor
                             className='p-8'
                             button={
-                                <ButtonPrimary
-                                    title={query.data?.roomId ? 'Trò chuyện' : 'Tạo đoạn chat'}
-                                    className='w-full'
-                                    onClick={() => {
-                                        if (query.data?.roomId) {
-                                            setIsChat(true);
-                                            return;
-                                        }
-                                        mutateCreateRoom.mutate({
-                                            tutorId: query.data?.tutor?.id || '',
-                                            questionId: currentQuestionId,
-                                        });
-                                    }}
-                                    isRightIcon
-                                />
+                                query.data?.questionType === QuestionEnum.GG_MEET ? (
+                                    <></>
+                                ) : (
+                                    <ButtonPrimary
+                                        title={query.data?.roomId ? 'Trò chuyện' : 'Tạo đoạn chat'}
+                                        className='w-full'
+                                        onClick={() => {
+                                            if (query.data?.roomId) {
+                                                setIsChat(true);
+                                                return;
+                                            }
+                                            mutateCreateRoom.mutate({
+                                                tutorId: query.data?.tutor?.id || '',
+                                                questionId: currentQuestionId,
+                                            });
+                                        }}
+                                        isRightIcon
+                                    />
+                                )
                             }
                         >
                             <div className='flex flex-col text-left'>
@@ -133,19 +140,25 @@ export default function CheckQAPage({ onNext }: Props) {
                                                             <div className='w-[30px]'>
                                                                 <FileIcon
                                                                     extension={
-                                                                        questionFile.extension
+                                                                        file.fileKey
+                                                                            .split('.')
+                                                                            .pop() || ''
                                                                     }
                                                                     // {...defaultStyles.docx}
                                                                 />
                                                             </div>
                                                             <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
-                                                                {questionFile.fileName}
-                                                            </div>
-                                                            <div className='text-sm text-black-800'>
-                                                                {questionFile.size} MB
+                                                                {file.fileName}
                                                             </div>
                                                         </div>
-                                                        <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                        <DownloadOutlined
+                                                            className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                            onClick={async () => {
+                                                                await downloadUrl(
+                                                                    imageUtility(file.fileKey),
+                                                                );
+                                                            }}
+                                                        />
                                                     </div>
                                                 );
                                             })}
@@ -154,10 +167,23 @@ export default function CheckQAPage({ onNext }: Props) {
                             </div>
                             <div className='flex flex-col text-left'>
                                 <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>
-                                    Thông tin câu trả lời
+                                    {query.data?.questionType === QuestionEnum.FILE
+                                        ? 'Thông tin câu trả lời'
+                                        : 'Thông tin google meet'}
                                 </h3>
                                 <Divider />
-                                {answer ? (
+                                {query.data?.questionType === QuestionEnum.GG_MEET ? (
+                                    query.data.meetingURL ? (
+                                        <div
+                                            className='text-base px-2 hover:text-primary-600'
+                                            onClick={() => window.open(query.data?.meetingURL)}
+                                        >
+                                            {query.data.meetingURL}
+                                        </div>
+                                    ) : (
+                                        <ButtonPrimary title={'Create google meet'} />
+                                    )
+                                ) : answer ? (
                                     <>
                                         <div
                                             dangerouslySetInnerHTML={{
@@ -203,9 +229,17 @@ export default function CheckQAPage({ onNext }: Props) {
                         </SideBarMentor>
                     </div>
                     <ButtonPrimary
-                        title={'Kết thúc cuộc trò chuyện'}
+                        title={
+                            query.data?.questionType === QuestionEnum.FILE
+                                ? 'Kết thúc cuộc trò chuyện'
+                                : 'Hoàn thành buổi meet room'
+                        }
                         className='ml-[432px] mt-6 !w-fit'
-                        disabled={!answer}
+                        disabled={
+                            query.data?.questionType === QuestionEnum.FILE
+                                ? !answer
+                                : !query.data?.meetingURL
+                        }
                         onClick={() => {
                             updateStepMutation.mutate({
                                 step: QuestionStep.FOUR,

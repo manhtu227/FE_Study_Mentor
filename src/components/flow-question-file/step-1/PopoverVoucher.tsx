@@ -29,7 +29,7 @@ export default function PopoverVoucher({ priceTotal, priceDiscount }: Props) {
             </div>
             <div className='flex justify-between py-2'>
                 <span className='text-base font-medium'>Tổng tiền</span>
-                <span className='text-base font-semibold'>{priceDiscount}</span>
+                <span className='text-base font-semibold'>{formatPriceVND(priceDiscount)}</span>
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import images from '@assets/images';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
+import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
@@ -26,10 +27,9 @@ import { RootState } from '@core/store';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Modal, Popover, Select, Spin, message } from 'antd';
+import { Button, Form, Image, Modal, Popover, Select, Spin, message } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,7 +37,11 @@ import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 import PopoverVoucher from './PopoverVoucher';
 import { VoucherItem } from './VoucherItem';
 
-function CreateQuestionForm() {
+type Props = {
+    isGoogleMeet?: boolean;
+};
+
+function CreateQuestionForm({ isGoogleMeet }: Props) {
     const [form] = Form.useForm<QuestionInput>();
     const [selectedLevel, setSelectedLevel] = useState<string>('');
     const [selectedGrade, setSelectedGrade] = useState<string>('');
@@ -157,7 +161,9 @@ function CreateQuestionForm() {
             numberOfStar: values.tutorRating,
             content: values.content,
             attachFiles: attachFiles,
+            title: values.title,
             voucherCode: values.voucher,
+            timeMeeting: values.timeForAnswerQuestion,
         };
 
         mutateCreateQuestions.mutate(requestCreate, {
@@ -202,126 +208,165 @@ function CreateQuestionForm() {
     return (
         <Spin spinning={mutateCreateQuestions.isPending || file.isFetching}>
             <div className='p-8 bg-white-900'>
-                <div className='w-full font-bold text-lg text-black mb-8'>Nội dung câu hỏi</div>
-                <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8'>
-                    <Image
-                        src={images.createQuestion}
-                        alt='Create a new question'
-                        className='w-full h-full object-cover'
-                    />
-                </div>
+                {isGoogleMeet ? (
+                    <h2 className='text-3xl leading-[27px] text-center'>
+                        Trả lời thông qua Google meet
+                    </h2>
+                ) : (
+                    <div className='w-full font-bold text-lg text-black mb-8'>Nội dung câu hỏi</div>
+                )}
+                {!isGoogleMeet && (
+                    <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8'>
+                        <Image
+                            src={images.createQuestion.src}
+                            alt='Create a new question'
+                            className='w-full h-full object-cover'
+                            preview={false}
+                        />
+                    </div>
+                )}
                 <Form name='questionForm' onFinish={handleSubmit} form={form} autoComplete='off'>
-                    {/* Question level */}
-                    <Form.Item className='mb-2'>
-                        <div className='font-bold text-base mb-2'>Cấp độ câu hỏi</div>
-                        <div className='flex items-center justify-between h-max'>
-                            <Form.Item<QuestionInput>
-                                name='levelId'
-                                style={{
-                                    display: 'inline-block',
-                                    width: '30%',
-                                    height: 'max-content',
-                                }}
-                                rules={[{ required: true, message: 'Please input!' }]}
-                            >
-                                <Select
-                                    className='h-12 font-medium text-base'
-                                    placeholder='Chọn cấp học'
-                                    options={levelOptions}
-                                    onChange={handleChangeLevels}
-                                />
+                    <div className='flex w-full gap-8'>
+                        <div className='w-full'>
+                            {/* Question level */}
+                            <Form.Item className='mb-2'>
+                                <div className='font-bold text-base mb-2'>Cấp độ câu hỏi</div>
+                                <div className='flex items-center justify-between h-max'>
+                                    <Form.Item<QuestionInput>
+                                        name='levelId'
+                                        style={{
+                                            display: 'inline-block',
+                                            width: '30%',
+                                            height: 'max-content',
+                                        }}
+                                        rules={[{ required: true, message: 'Please input!' }]}
+                                    >
+                                        <Select
+                                            className='h-12 font-medium text-base'
+                                            placeholder='Chọn cấp học'
+                                            options={levelOptions}
+                                            onChange={handleChangeLevels}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item<QuestionInput>
+                                        name='gradeId'
+                                        style={{
+                                            display: 'inline-block',
+                                            width: '30%',
+                                        }}
+                                        rules={[{ required: true, message: 'Please input!' }]}
+                                    >
+                                        <Select
+                                            className='h-12 font-medium text-base'
+                                            placeholder='Chọn khối/ lớp'
+                                            options={gradeOptions}
+                                            onChange={handleChangeGrades}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name='subjectId'
+                                        style={{
+                                            display: 'inline-block',
+                                            width: '30%',
+                                        }}
+                                        rules={[{ required: true, message: 'Please input!' }]}
+                                    >
+                                        <Select
+                                            className='h-12 font-medium text-base text-gray-700'
+                                            placeholder='Chọn môn học/ kỹ năng'
+                                            options={subjectOptions}
+                                            onChange={handleChangeSubjects}
+                                        />
+                                    </Form.Item>
+                                </div>
                             </Form.Item>
-                            <Form.Item<QuestionInput>
-                                name='gradeId'
-                                style={{
-                                    display: 'inline-block',
-                                    width: '30%',
-                                }}
+                            {/* Title question */}
+                            <div className='font-bold text-base mb-2'>Tóm tát câu hỏi</div>
+                            <CustomTextInput<QuestionInput>
+                                name='title'
                                 rules={[{ required: true, message: 'Please input!' }]}
-                            >
-                                <Select
-                                    className='h-12 font-medium text-base'
-                                    placeholder='Chọn khối/ lớp'
-                                    options={gradeOptions}
-                                    onChange={handleChangeGrades}
+                            />
+                            {/* Requirement for mentor */}
+                            <div className='mb-2'>
+                                <div className='font-bold text-base mb-2'>
+                                    Yêu cầu cho người hướng dẫn
+                                </div>
+                                <Form.Item<QuestionInput>
+                                    name='tutorRating'
+                                    style={{
+                                        display: 'inline-block',
+                                        width: '100%',
+                                    }}
+                                    rules={[{ required: true, message: 'Please input!' }]}
+                                >
+                                    <Select
+                                        className='h-12 font-medium text-base'
+                                        placeholder='Chọn số sao'
+                                        options={starOptions}
+                                    />
+                                </Form.Item>
+                            </div>
+                            {/* Time for handle the question */}
+                            <div className='font-bold text-base mb-2'>
+                                Thời gian bạn muốn tìm kiếm câu trả lời cho hỏi
+                            </div>
+                            <CustomSelectInput<QuestionInput>
+                                name='timeAnswer'
+                                showSearch
+                                optionsSelect={[
+                                    { value: 10, label: '10 phút' },
+                                    { value: 15, label: '15 phút' },
+                                    { value: 20, label: '20 phút' },
+                                    { value: 30, label: '30 phút' },
+                                    { value: 45, label: '45 phút' },
+                                    { value: 60, label: '60 phút' },
+                                ]}
+                                rules={[{ required: true, message: 'Please input!' }]}
+                            />
+
+                            {/* Time in Google meet*/}
+                            {isGoogleMeet && (
+                                <>
+                                    <div className='font-bold text-base mb-2'>
+                                        Thời gian giải đáp thắc mắc
+                                    </div>
+                                    <CustomSelectInput<QuestionInput>
+                                        name='timeForAnswerQuestion'
+                                        showSearch
+                                        optionsSelect={[
+                                            { value: 10, label: '10 phút' },
+                                            { value: 15, label: '15 phút' },
+                                            { value: 20, label: '20 phút' },
+                                            { value: 30, label: '30 phút' },
+                                            { value: 45, label: '45 phút' },
+                                            { value: 60, label: '60 phút' },
+                                        ]}
+                                        rules={[{ required: true, message: 'Please input!' }]}
+                                    />
+                                </>
+                            )}
+
+                            <Form.Item<QuestionInput> name={'voucher'} noStyle />
+
+                            {/* Question content */}
+                            <Form.Item className='mb-0'>
+                                <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
+                                <CustomEditorInput<QuestionInput>
+                                    name='content'
+                                    rules={[{ required: true, message: 'Please input!' }]}
                                 />
-                            </Form.Item>
-                            <Form.Item
-                                name='subjectId'
-                                style={{
-                                    display: 'inline-block',
-                                    width: '30%',
-                                }}
-                                rules={[{ required: true, message: 'Please input!' }]}
-                            >
-                                <Select
-                                    className='h-12 font-medium text-base text-gray-700'
-                                    placeholder='Chọn môn học/ kỹ năng'
-                                    options={subjectOptions}
-                                    onChange={handleChangeSubjects}
+                                <CustomDragDropFile<QuestionInput>
+                                    name='attachFiles'
+                                    // rules={[{ required: true, message: 'Please input!' }]}
                                 />
                             </Form.Item>
                         </div>
-                    </Form.Item>
-                    {/* Requirement for mentor */}
-                    <div className='mb-2'>
-                        <div className='font-bold text-base mb-2'>Yêu cầu cho người hướng dẫn</div>
-                        <Form.Item<QuestionInput>
-                            name='tutorRating'
-                            style={{
-                                display: 'inline-block',
-                                width: '100%',
-                            }}
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        >
-                            <Select
-                                className='h-12 font-medium text-base'
-                                placeholder='Chọn số sao'
-                                options={starOptions}
-                            />
-                        </Form.Item>
+                        {isGoogleMeet && (
+                            <div className='  '>
+                                <img src={images.gg.src} alt='' />
+                            </div>
+                        )}
                     </div>
-                    {/* Time for handle the question */}
-                    <div className='font-bold text-base mb-2'>
-                        Thời gian bạn muốn tìm kiếm câu trả lời cho hỏi
-                    </div>
-                    <CustomSelectInput<QuestionInput>
-                        name='timeAnswer'
-                        showSearch
-                        optionsSelect={[
-                            { value: 10, label: '10 phút' },
-                            { value: 15, label: '15 phút' },
-                            { value: 20, label: '20 phút' },
-                            { value: 30, label: '30 phút' },
-                            { value: 45, label: '45 phút' },
-                            { value: 60, label: '60 phút' },
-                        ]}
-                        rules={[{ required: true, message: 'Please input!' }]}
-                    />
-
-                    <Form.Item<QuestionInput> name={'voucher'} noStyle />
-
-                    {/* Question content */}
-                    <Form.Item className='mb-0'>
-                        <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
-                        <CustomEditorInput<QuestionInput>
-                            name='content'
-                            rules={[{ required: true, message: 'Please input!' }]}
-                        />
-                        <CustomDragDropFile<QuestionInput>
-                            name='attachFiles'
-                            // rules={[{ required: true, message: 'Please input!' }]}
-                        />
-                    </Form.Item>
-                    {/* <Form.Item>
-                        <div className='font-bold text-base mb-2'>Hãy chọn voucher phù hợp</div>
-                        <CustomSelectInput<QuestionInput>
-                            name='voucher'
-                            allowClear
-                            optionsSelect={voucherQuery.data || []}
-                        />
-                    </Form.Item> */}
-                    {/* <div className='flex justify-end'></div> */}
 
                     <div className='flex items-center justify-between '>
                         <Form.Item label=' ' colon={false}>
@@ -373,6 +418,7 @@ function CreateQuestionForm() {
                         </Button>
                     </div>
                 </Form>
+
                 <div className='font-medium text-sm text-left text-[#313636]'>
                     Bạn cảm thấy mức giá không phù hợp?
                     <div
