@@ -5,7 +5,6 @@ import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { MentorType } from '@core/models/profile.model';
 import { RatingInput, RatingReq } from '@core/models/question.model';
 import {
     createRatingApi,
@@ -19,22 +18,12 @@ import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 
-const mentor: MentorType = {
-    id: '1',
-    image: images.feedback.src,
-    name: 'Nguyễn Hưng',
-    age: 23,
-    rating: 5,
-    // tags: ['tag1'],
-};
-
 const subject = {
     id: 1,
     name: 'Lập trình Javascript',
     level: 'Đại học',
     time: '1 giờ 15 phút',
     price: '130 Xu',
-    teacher: mentor,
 };
 
 export default function RatingAnswerPage() {
@@ -73,7 +62,6 @@ export default function RatingAnswerPage() {
             <SideBarMentor
                 className='p-8'
                 button={<ButtonPrimary title='Quay lại đoạn chat' className='w-full' isRightIcon />}
-                mentor={mentor}
             >
                 <div className='flex flex-col text-left gap-x-4'>
                     <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>

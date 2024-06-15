@@ -31,7 +31,6 @@ function BankAccountForm() {
     });
 
     const handleSubmitBankAccount = (values: BankAccountInput) => {
-        console.log(values);
         setIsUpdate(false);
 
         const requestCreateQRCode: QRCodeReq = {

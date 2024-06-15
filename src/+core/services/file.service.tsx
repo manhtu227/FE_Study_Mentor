@@ -10,3 +10,10 @@ export const getSignedUrlApi = async (fileName: string) => {
 export const uploadFileToCloudApi = async (data: { url: string; file: File }) => {
     return axios.put<void>(data.url, data.file);
 };
+
+export const downloadFileApi = async (params: { fileKey: string }) => {
+    return api.get<Blob>(`/api/files/download`, {
+        params,
+        responseType: 'blob',
+    });
+};

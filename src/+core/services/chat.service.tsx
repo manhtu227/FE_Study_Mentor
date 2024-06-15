@@ -29,8 +29,16 @@ export const getDetailMessageChatAiApi = (roomId: string) => {
     return apiAi.get<ChatModel[]>(`/ai/listQuestion/${roomId}`);
 };
 
-export const createRoomIdApi = (userId: string, categoryAi: CategoryAiEnum, body: RoomReq) => {
+export const createRoomAiIdApi = (userId: string, categoryAi: CategoryAiEnum, body: RoomReq) => {
     return apiAi.post<{ RoomId: string }>(`/ai/CreateRoom/${userId}/${idAi[categoryAi]}`, body);
+};
+
+export type CreateRoomUserReq = {
+    tutorId: string;
+    questionId: string;
+};
+export const createRoomUserIdApi = (body: CreateRoomUserReq) => {
+    return api.post<{ roomId: string }>(`/api/users/create/roomChat`, body);
 };
 
 export type ChatWithAiReq = {

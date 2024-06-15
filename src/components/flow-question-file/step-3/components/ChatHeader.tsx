@@ -1,11 +1,13 @@
-import images from '@assets/images';
+import { UserModel } from '@core/models/user.model';
+import { imageUtility } from '@core/utilities/image.utility';
 import { Avatar } from 'antd';
 
 type Props = {
     className?: string;
+    tutor?: UserModel;
 };
 
-export default function ChatHeader({ className }: Props) {
+export default function ChatHeader({ className, tutor }: Props) {
     return (
         <div className={className}>
             {/* <div className='flex flex-col mb-4'>
@@ -13,9 +15,11 @@ export default function ChatHeader({ className }: Props) {
                 <span className='font-bold text-[15px] text-primary-800'>Xem chi tiết</span>
             </div> */}
             <div className='flex gap-4 pb-2 pack-border-b-primary-400'>
-                <Avatar size={40} src={images.mentorMethod.src} />
+                <Avatar size={40} src={imageUtility(tutor?.avatar?.fileKey)} />
                 <div>
-                    <h1 className='m-0 font-bold text-base text-black-800'>Jacky</h1>
+                    <h1 className='m-0 font-bold text-base text-black-800'>
+                        {tutor?.fullName || 'Không tên'}
+                    </h1>
                     <span className='text-primary-600 font-bold text-xs'>Hoạt động</span>
                 </div>
             </div>

@@ -20,6 +20,7 @@ export type QuestionInput = {
     fileContent: any;
     numberOfStars: number;
     voucher?: string;
+    title: string;
 };
 
 export type UploadQuestionProps = {
@@ -36,7 +37,16 @@ export type CreateFileQuestionRequestModel = {
     content: string;
     attachFiles: FileReq[] | null;
     voucherCode?: string;
+    timeMeeting?: number;
+    title?: string;
 };
+
+export interface ICalculatePriceRequestModel {
+    level: string;
+    numberOfStar: number;
+    timeFindTutor: number;
+    voucherCode?: string;
+}
 
 export type QuestionResp = {
     id: string;
@@ -51,6 +61,7 @@ export type QuestionResp = {
     googleMeetUrl: string;
     jobRunCount: number;
     step: number;
+    title?: string;
 };
 
 export type AnswerRequestModel = {
@@ -72,7 +83,8 @@ export type CreateFileQuestionReducer = {
 
 export type CreateFileQuestionResp = {
     price: number;
-    questionId: string;
+    promoPrice: number;
+    questionId?: string;
 };
 
 export type RatingInput = {
@@ -175,6 +187,12 @@ export interface AnswerResponseModel {
     content: string;
     fileAttachmentAnswers: FileReq[];
 }
+
+export enum QuestionEnum {
+    GG_MEET = 0,
+    FILE = 1,
+}
+
 export type GetQuestionResponseModel = {
     questionId: string;
     createdAt: Date;
@@ -191,8 +209,13 @@ export type GetQuestionResponseModel = {
     subject: SubjectModel;
     answers: AnswerResponseModel[] | null;
     isAnswered: boolean;
+    roomId?: string;
     step?: QuestionStep;
     isAccepted: boolean;
+    title?: string;
+    questionType: QuestionEnum;
+    timeMetting?: number;
+    meetingURL?: string;
 };
 
 export type AcceptQuestionModel = {

@@ -6,7 +6,9 @@ import { SEND_MESSAGE } from '@core/constants/socket.constants';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { ChatModel } from '@core/models/chat.model';
 import { MentorType } from '@core/models/profile.model';
+import { UserModel } from '@core/models/user.model';
 import { RootState } from '@core/store';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -26,10 +28,11 @@ const mockDataInfo: MentorType = {
 type Props = {
     setIsChat: (value: boolean) => void;
     idRoom: string;
+    tutor?: UserModel;
     senderId: string;
 };
 
-export default function ChatMentorPage({ setIsChat, idRoom, senderId }: Props) {
+export default function ChatMentorPage({ setIsChat, idRoom, senderId, tutor }: Props) {
     const [dataChat, setDataChat] = useState<ChatModel[]>([]);
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
@@ -71,14 +74,13 @@ export default function ChatMentorPage({ setIsChat, idRoom, senderId }: Props) {
                         }}
                     />
                 }
-                mentor={mockDataInfo}
             >
                 <div className='fixed left-0 right-0 z-0'>
                     <div className='pack-layout '>
                         <div className='bg-white-900 relative  h-[calc(100vh-200px)] ml-[432px]'>
-                            <ChatHeader className='absolute top-4 left-4 right-4' />
+                            <ChatHeader className='absolute top-4 left-4 right-4' tutor={tutor} />
                             <ChatList
-                                avatar=''
+                                avatar={imageUtility(tutor?.avatar?.fileKey)}
                                 dataList={dataChat}
                                 onSubmit={handleSubmit}
                                 classNameMessage='absolute left-4 right-4 bottom-4'

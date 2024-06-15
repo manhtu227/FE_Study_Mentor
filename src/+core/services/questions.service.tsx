@@ -7,6 +7,7 @@ import {
     CreateFileQuestionResp,
     GetQuestionResponseModel,
     GradeResp,
+    ICalculatePriceRequestModel,
     InfoExchangeInput,
     QuestionReportRes,
     RatingReq,
@@ -51,6 +52,10 @@ export const subjectsKeys = initKeys('subjects-keys');
 
 export const createQuestions = (data: CreateFileQuestionRequestModel) => {
     return api.post<BaseResp<CreateFileQuestionResp>>('/api/questions', data);
+};
+
+export const calculatePriceQuestions = (data: ICalculatePriceRequestModel) => {
+    return api.post<BaseResp<CreateFileQuestionResp>>('/api/questions/calculate-price', data);
 };
 
 // export const updateRatingApi = async (body: RatingReq, id: string) => {
@@ -100,7 +105,7 @@ export type QuestionListReq = QuestionListFilter & IPaginationInfo;
 
 export const questionListKeys = initKeys('question-list-keys');
 export const getQuestionListApi = async (params: QuestionListReq) => {
-    return api.get<PagingResp<GetQuestionResponseModel[]>>(`api/users/student/questions`, {
+    return api.get<PagingResp<GetQuestionResponseModel[]>>(`api/users/questions`, {
         params,
     });
 };

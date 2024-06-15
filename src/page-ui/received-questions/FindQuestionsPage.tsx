@@ -96,7 +96,7 @@ export default function FindQuestionsPage() {
                 <Row gutter={[32, 32]}>
                     {data.data?.data.data.map((question) => {
                         return (
-                            <Col xs={24} sm={12} md={8} key={question.id}>
+                            <Col xs={24} sm={12} md={8} key={question.questionId}>
                                 <CardQuestionUser
                                     question={question}
                                     onClick={() => {

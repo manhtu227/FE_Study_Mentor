@@ -2,8 +2,11 @@
 import { StarFilled } from '@ant-design/icons';
 import images from '@assets/images';
 import { MY_ROUTE } from '@core/constants/routes.constant';
+import { QuestionEnum } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
+import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
+import { useMutation } from '@tanstack/react-query';
 import { Avatar, Modal } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -16,6 +19,7 @@ type Props = {
     user?: UserModel;
     isAccepted?: number;
     questionId?: string;
+    methodAnswer?: QuestionEnum;
 };
 
 export default function ModalFoundTutor({
@@ -24,9 +28,15 @@ export default function ModalFoundTutor({
     user,
     isAccepted = 1,
     questionId,
+    methodAnswer,
 }: Props) {
     const dispatch = useDispatch();
     const [dots, setDots] = useState('');
+
+    const mutationCreate = useMutation({
+        mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
+    });
+
     useEffect(() => {
         const interval = setInterval(() => {
             setDots((prevDots) => {
@@ -44,10 +54,31 @@ export default function ModalFoundTutor({
 
     const handleOk = () => {
         setIsModalOpen(false);
-        if (isAccepted == 1) router.push(`${MY_ROUTE.MENTOR.FILE}?step=2&id=${user?.id}`);
-        else {
+        if (isAccepted == 1) {
+            if (methodAnswer === QuestionEnum.GG_MEET && questionId && user?.id) {
+                mutationCreate.mutate(
+                    {
+                        questionId: questionId,
+                        tutorId: user?.id,
+                    },
+                    {
+                        onSuccess: () => {
+                            router.push(`${MY_ROUTE.MENTOR.GOOGLE_MEET}?step=2&id=${user?.id}`);
+                        },
+                    },
+                );
+                return;
+            }
+            router.push(`${MY_ROUTE.MENTOR.FILE}?step=2&id=${user?.id}`);
+        } else {
             dispatch(setCurrentQuestionId(questionId || ''));
-            router.push(`${MY_ROUTE.MENTOR.FILE}?step=1`);
+            router.push(
+                `${
+                    methodAnswer === QuestionEnum.GG_MEET
+                        ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                        : MY_ROUTE.MENTOR.FILE
+                }?step=1`,
+            );
         }
     };
 
@@ -80,6 +111,11 @@ export default function ModalFoundTutor({
                         }
                         alt='ảnh người hướng dẫn'
                     />
+                    <div className='py-1'>
+                        {methodAnswer === QuestionEnum.FILE
+                            ? 'Hình thức trò chuyện'
+                            : 'Hình thức giải đáp qua google meet'}
+                    </div>
                     {isAccepted && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
                     <div className='flex items-start gap-6 mt-5'>
                         <div className='h-[60px] ml-10'>

@@ -146,3 +146,7 @@ export const getListAnsweredQuestionsKeys = initKeys('get-list-answered-question
 export const getListAnsweredQuestionsApi = async (params: IPaginationInfo) => {
     return api.get<PagingResp<QuestionAnsweredItem[]>>(`api/users/tutor/list-answered`, { params });
 };
+
+export const createGoogleMeetApi = (body: PickTutorReq) => {
+    return api.post<BaseResp<{ meetingURL: string }>>(`api/users/create/ggMeet`, body);
+};

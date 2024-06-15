@@ -150,7 +150,7 @@ function SidebarChatItem({ active, title, onClick }: SidebarChatItemProps) {
             onClick={onClick}
         >
             {active ? <SideBarChatActive /> : <SideBarChatDefault />}
-            <span className='text-base truncate'>{title} </span>
+            <span className='text-base truncate max-w-[272px]'>{title} </span>
         </div>
     );
 }

@@ -140,7 +140,7 @@ function DetailedQuestionPage() {
         if (!data?.user.user.id) return;
 
         const requestAccept: AcceptQuestionModel = {
-            questionId: currentQuestion?.id as string,
+            questionId: currentQuestion?.questionId as string,
             studentId: currentQuestion?.student.id as string,
             senderId: data?.user.user.id as string,
         };
@@ -228,7 +228,7 @@ function DetailedQuestionPage() {
                         {showForm ? (
                             <div className='mt-8 rounded-lg bg-white-900 transition-all'>
                                 <AnswerQuestionForm
-                                    questionId={currentQuestion.id}
+                                    questionId={currentQuestion.questionId}
                                     tutorId={data?.user?.user?.id ?? ''}
                                     onHideForm={() => setShowForm(false)}
                                 />

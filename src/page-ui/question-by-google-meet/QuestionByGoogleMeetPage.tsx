@@ -3,7 +3,7 @@ import CreateQuestionIcon from '@assets/icons/create-question';
 import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
-import CreateQuestionForm from '@components/flow-question-file/step-1/CreateQuestionForm';
+import CreateQuestionByGoogleMeetPage from '@page/question/google-meet/ByGoogleMeetPage';
 import { Button, message, Steps } from 'antd';
 import clsx from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -12,7 +12,7 @@ import FindMentorBySystemPage from '../../components/flow-question-file/step-2/F
 import CheckQAPage from '../../components/flow-question-file/step-3/CheckQAPage';
 import RatingAnswerPage from '../../components/flow-question-file/step-4/RatingAnswerPage';
 
-function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
+function QuestionByGoogleMeetPage() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
@@ -53,7 +53,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
                     index={0}
                 />
             ),
-            content: <CreateQuestionForm isGoogleMeet={isGoogleMeet} />,
+            content: <CreateQuestionByGoogleMeetPage />,
             icon: <></>,
         },
         {
@@ -154,7 +154,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
     );
 }
 
-export default QuestionByFilePage;
+export default QuestionByGoogleMeetPage;
 
 type Props = {
     current: number;
