@@ -3,6 +3,7 @@ import { BaseResp, BaseRespExternal } from '@core/models/base.model';
 import { FileReq } from '@core/models/file.model';
 import {
     BankItemResp,
+    BankModel,
     CertificatesInformationRequest,
     CertificatesSubjectNotVerifyResp,
     EducationInfoResp,
@@ -14,7 +15,9 @@ import {
     UserResp,
     UserVoucherViewModel,
 } from '@core/models/profile.model';
+import { ChartRevenueItem, OverviewTutorInfo, QuestionAnsweredItem } from '@core/models/user.model';
 import { OptionItem } from '@core/types/option.type';
+import { IPaginationInfo, PagingResp } from '@core/types/paging.type';
 import { initKeys } from '@core/utilities/query-key.utility';
 
 export const userDetailKeys = initKeys('user-detail-keys');
@@ -112,4 +115,34 @@ export const createQRCodeApi = async (data: QRCodeReq) => {
 export const avatarTutorKeys = initKeys('avatar-tutor-keys');
 export const getAvatarByIdTutorApi = (id: string) => {
     return api.get<FileReq>(`api/users/avatar/${id}`);
+};
+
+export const getTutorBankInfoKeys = initKeys('get-tutor-bank-info-keys');
+
+export const getTutorBankInfoApi = async () => {
+    return api.get<BaseResp<BankModel>>(`api/users/tutor/bank`);
+};
+
+export const updateTutorialBankInfoApi = async (data: BankModel) => {
+    return api.put<void>(`api/users/tutor/bank`, data);
+};
+
+export const getOverviewTutorInfoKeys = initKeys('get-overview-tutor-info-keys');
+
+export const getOverviewTutorInfoApi = async () => {
+    return api.get<BaseResp<OverviewTutorInfo>>(`api/users/tutor/manage`);
+};
+
+export const getChartRevenueKeys = initKeys('get-chart-revenue-keys');
+
+export const getChartRevenueApi = async (days: number) => {
+    return api.get<BaseResp<ChartRevenueItem[]>>(`api/users/tutor/chart-revenue`, {
+        params: { option: days },
+    });
+};
+
+export const getListAnsweredQuestionsKeys = initKeys('get-list-answered-questions-keys');
+
+export const getListAnsweredQuestionsApi = async (params: IPaginationInfo) => {
+    return api.get<PagingResp<QuestionAnsweredItem[]>>(`api/users/tutor/list-answered`, { params });
 };

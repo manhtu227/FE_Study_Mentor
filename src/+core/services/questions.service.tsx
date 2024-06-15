@@ -1,4 +1,4 @@
-import { QuestionStatus } from '@core/enums/question.enum';
+import { QuestionStatus, QuestionStep } from '@core/enums/question.enum';
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
@@ -8,8 +8,9 @@ import {
     GetQuestionResponseModel,
     GradeResp,
     InfoExchangeInput,
-    QuestionStep,
+    QuestionReportRes,
     RatingReq,
+    ReportQuestionReq,
     StructureEducationsResp,
     SubjectResp,
 } from '@core/models/question.model';
@@ -102,4 +103,21 @@ export const getQuestionListApi = async (params: QuestionListReq) => {
     return api.get<PagingResp<GetQuestionResponseModel[]>>(`api/users/student/questions`, {
         params,
     });
+};
+
+export const questionListTutorKeys = initKeys('question-list-tutor-keys');
+export const getQuestionListTutorApi = async (params: QuestionListReq) => {
+    return api.get<PagingResp<GetQuestionResponseModel[]>>(`api/users/questions`, {
+        params,
+    });
+};
+
+export const reportQuestionApi = async (request: ReportQuestionReq) => {
+    return api.post<void>(`api/users/tutor/report-tutor`, request);
+};
+
+export const getQuestionReportKeys = initKeys('get-question-report-keys');
+
+export const getQuestionReportApi = async () => {
+    return api.get<PagingResp<QuestionReportRes[]>>(`api/users/tutor/report-tutor`);
 };

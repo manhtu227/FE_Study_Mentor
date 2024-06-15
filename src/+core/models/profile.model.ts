@@ -108,8 +108,8 @@ export type UserVoucherViewModel = {
 };
 
 export type BankAccountInput = {
-    binBank: number;
-    accountNumber: number;
+    binBank: string;
+    accountNumber: string;
     accountName: string;
 };
 
@@ -129,8 +129,8 @@ export type BankItemResp = {
 };
 
 export type LookUpBankNumberReq = {
-    bin: number;
-    accountNumber: number;
+    bin: string;
+    accountNumber: string;
 };
 
 export type LookUpBankNumberResp = {
@@ -138,7 +138,7 @@ export type LookUpBankNumberResp = {
 };
 
 export type QRCodeReq = {
-    accountNo: number;
+    accountNo: string;
     accountName: string;
     acqId: number;
     amount?: number;
@@ -158,4 +158,11 @@ export type SignedUrlResp = {
     fileKey: string;
     fileName: string;
     url: string;
+};
+
+export type BankModel = {
+    nameOfBanking: string | null;
+    numberOfBanking: string | null;
+    idOfBanking: string | null;
+    nameUserOfBanking: string | undefined;
 };

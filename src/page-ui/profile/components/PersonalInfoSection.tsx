@@ -72,7 +72,6 @@ export function PersonalInfoSection({
                     <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
                     Thông tin cá nhân
                 </div>
-                <div className='bg-blue-400 w-full h-[100px] rounded-md mb-8' />
                 <Form
                     name='personalInformationForm'
                     form={form}

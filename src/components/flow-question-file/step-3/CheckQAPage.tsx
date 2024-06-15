@@ -3,13 +3,11 @@ import { DownloadOutlined } from '@ant-design/icons';
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
+import { QuestionStep } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
+import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import { MentorType } from '@core/models/profile.model';
-import {
-    AnswerResponseModel,
-    GetQuestionResponseModel,
-    QuestionStep,
-} from '@core/models/question.model';
+import { AnswerResponseModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
@@ -20,7 +18,6 @@ import { FileIcon } from 'react-file-icon';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 import ChatMentorPage from './ChatMentorPage';
-import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 
 const mockDataInfo: MentorType = {
     id: '4',

@@ -21,6 +21,7 @@ export default {
     },
     green: {
         900: '#48BB78',
+        500: '#4EA8B4',
     },
     red: {
         900: '#E5342F',

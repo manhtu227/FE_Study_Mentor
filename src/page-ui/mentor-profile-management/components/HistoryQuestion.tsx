@@ -1,17 +1,30 @@
+import { MoreOutlined } from '@ant-design/icons';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
-import { FilterQuestionType, filterQuestionOptions } from '@core/enums/filter-question-type.enum';
-import { Avatar, Image, Table } from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import clsx from 'clsx';
-import { useState } from 'react';
+import ModalDetailedQuestion from '@components/modal/ModalDetailedQuestion';
+import { DATE_FORMAT } from '@core/constants/commons.constant';
+import { FilterQuestionType } from '@core/enums/filter-question-type.enum';
+import { usePagingFilter } from '@core/hooks/usePagingFilter';
+import { FileReq } from '@core/models/file.model';
+import { QuestionAnsweredItem } from '@core/models/user.model';
+import {
+    getListAnsweredQuestionsApi,
+    getListAnsweredQuestionsKeys,
+} from '@core/services/user.service';
+import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { Avatar, Dropdown, Empty, Image, Skeleton, Table } from 'antd';
+import { TableProps } from 'antd/lib';
+import { format } from 'date-fns';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 export type HistoryQuestionTable = {
     key: string;
-    images: string;
+    avatar?: FileReq;
     name: string;
     email: string;
-    price: string;
-    status: FilterQuestionType;
+    expense: number;
+    status: number;
     date: string;
 };
 
@@ -38,84 +51,148 @@ export const statusActiveColors = {
     ),
 };
 
-const columns: ColumnsType<HistoryQuestionTable> = [
-    {
-        dataIndex: 'name',
-        render: (value, record) => {
-            return (
-                <div className='flex items-center gap-4'>
-                    <div className='w-[44px] h-[44px]'>
-                        <Avatar
-                            size={44}
-                            icon={
-                                <Image
-                                    alt={'image of question'}
-                                    loading='lazy'
-                                    src={record.images}
-                                />
-                            }
-                        />
-                    </div>
-                    <div className='flex flex-col'>
-                        <span className='font-bold text-sm text-black-800'>{value}</span>
-                        <span className='font-normal text-sm text-gray-400'>{record.email}</span>
-                    </div>
-                </div>
-            );
-        },
-    },
-    {
-        dataIndex: 'price',
-        render: (value) => (
-            <div className='font-normal text-sm flex flex-col'>
-                {value}
-                <span className='text-primary-800 font-bold text-sm'>120 Xu</span>
-            </div>
-        ),
-    },
-    {
-        dataIndex: 'status',
-        render: (text: FilterQuestionType) => {
-            return statusActiveColors[text];
-        },
-    },
-    { dataIndex: 'date' },
-];
-
-const data: HistoryQuestionTable[] = [
-    {
-        key: '1',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.COMPLETED,
-        date: '20/10/2021',
-    },
-    {
-        key: '2',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.NOT_COMPLETED,
-        date: '20/10/2021',
-    },
-    {
-        key: '3',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.CANCELED,
-        date: '20/10/2021',
-    },
-];
-
 export function HistoryQuestion() {
-    const [filter, setFilter] = useState(FilterQuestionType.ALL);
+    const [currentQuestionId, setCurrentQuestionId] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const router = useRouter();
+
+    const columns: TableProps<HistoryQuestionTable>['columns'] = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            render: (value, record) => {
+                return (
+                    <div className='flex items-center gap-4'>
+                        <div className='w-[44px] h-[44px]'>
+                            {record?.avatar && (
+                                <Avatar
+                                    size={44}
+                                    icon={
+                                        <Image
+                                            alt={'image of question'}
+                                            loading='lazy'
+                                            src={`${process.env.NEXT_PUBLIC_PHOTO}${record?.avatar.fileKey}`}
+                                        />
+                                    }
+                                />
+                            )}
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className='font-bold text-sm text-black-800'>{value}</span>
+                            <span className='font-normal text-sm text-gray-400'>
+                                {record.email}
+                            </span>
+                        </div>
+                    </div>
+                );
+            },
+        },
+        {
+            title: 'Expense',
+            dataIndex: 'expense',
+            render: (value, record) => (
+                <div className='font-normal text-sm flex flex-col'>
+                    <span className='text-primary-800 font-bold text-sm'>{record.expense}</span>
+                </div>
+            ),
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            render: (text: FilterQuestionType) => {
+                return statusActiveColors[text];
+            },
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <Dropdown
+                    overlay={
+                        <div className='flex flex-col bg-white-900 rounded-md'>
+                            <div
+                                className='flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-200'
+                                onClick={() => {
+                                    setCurrentQuestionId(record.key);
+                                    setShowModal(true);
+                                }}
+                            >
+                                <span className='text-black-800'>Xem chi tiết</span>
+                            </div>
+                            <div
+                                className='flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-200'
+                                onClick={() => {
+                                    router.push(`/reports/${record.key}`);
+                                }}
+                            >
+                                <span className='text-black-800'>Báo cáo câu hỏi này</span>
+                            </div>
+                        </div>
+                    }
+                >
+                    <MoreOutlined className='text-black-800 cursor-pointer' />
+                </Dropdown>
+            ),
+        },
+    ];
+    // const [filter, setFilter] = useState(FilterQuestionType.ALL);
+    const [data, setData] = useState<HistoryQuestionTable[]>([]);
+
+    const searchParams = useSearchParams();
+
+    const { initialPaging } = useMemo(() => {
+        const initialPaging: IPaginationInfo = {
+            pageSize: +(searchParams?.get('pageSize') || initialPagingState.pageSize),
+            page: +(searchParams?.get('page') || initialPagingState.page),
+        };
+        return {
+            initialPaging,
+        };
+    }, [searchParams]);
+
+    const { handlePageChange, filter } = usePagingFilter({
+        initialPaging,
+    });
+
+    const getListAnsweredQuestionsQuery = useQuery({
+        queryKey: getListAnsweredQuestionsKeys.list(filter),
+        queryFn: () => getListAnsweredQuestionsApi(filter),
+        placeholderData: keepPreviousData,
+    });
+
+    useEffect(() => {
+        if (getListAnsweredQuestionsQuery?.data?.data?.data) {
+            const data = getListAnsweredQuestionsQuery.data.data.data;
+
+            const newData: HistoryQuestionTable[] = data.map((e: QuestionAnsweredItem) => {
+                return {
+                    key: e.questionId,
+                    avatar: e?.avatar,
+                    name: e.name,
+                    email: e.email,
+                    expense: e.expense,
+                    status: e.status,
+                    date: format(new Date(e.createdAt), DATE_FORMAT).toString(),
+                };
+            });
+
+            setData(newData);
+        }
+    }, [getListAnsweredQuestionsQuery?.data?.data?.data]);
+
     return (
         <div className='bg-white-900 p-8 flex flex-col gap-8 rounded-md'>
+            {showModal && (
+                <ModalDetailedQuestion
+                    currentQuestionId={currentQuestionId}
+                    isModalOpen={showModal}
+                    setIsModalOpen={setShowModal}
+                />
+            )}
             <span className='font-bold text-lg'>Lịch sử câu hỏi đã trả lời</span>
             <div className='flex justify-between items-center'>
                 <CustomSelectInput
@@ -125,7 +202,7 @@ export function HistoryQuestion() {
                     classNameSelect='placeholder-color'
                 />
 
-                <div className='flex gap-4'>
+                {/* <div className='flex gap-4'>
                     {filterQuestionOptions.map((e, i) => (
                         <div
                             key={i}
@@ -140,7 +217,7 @@ export function HistoryQuestion() {
                             {e.label}
                         </div>
                     ))}
-                </div>
+                </div> */}
                 <CustomSelectInput
                     classNameForm='w-[131px] '
                     optionsSelect={[]}
@@ -151,15 +228,32 @@ export function HistoryQuestion() {
             <Table
                 columns={columns}
                 dataSource={data}
-                showHeader={false}
                 //centered pagination
                 pagination={{
                     position: ['bottomCenter'],
                     showSizeChanger: false,
-                    pageSize: 5,
+                    pageSize:
+                        getListAnsweredQuestionsQuery?.data?.data.paginationInfo.pageSize ??
+                        initialPaging.pageSize,
                     size: 'small',
-                    total: 50,
+                    total: getListAnsweredQuestionsQuery?.data?.data.paginationInfo.total ?? 0,
                     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                    onChange(page, pageSize) {
+                        handlePageChange({ page, pageSize });
+                    },
+                }}
+                locale={{
+                    emptyText: getListAnsweredQuestionsQuery.isFetching ? (
+                        [1, 2, 3, 4, 5].map((u) => (
+                            <Skeleton.Input
+                                className='!h-[50px] !w-full mt-2'
+                                active={true}
+                                key={u}
+                            />
+                        ))
+                    ) : (
+                        <Empty />
+                    ),
                 }}
             />
         </div>

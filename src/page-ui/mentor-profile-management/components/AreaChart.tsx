@@ -1,3 +1,8 @@
+import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
+import { DATE_FORMAT } from '@core/constants/date.constant';
+import { getChartRevenueApi, getChartRevenueKeys } from '@core/services/user.service';
+import { useQuery } from '@tanstack/react-query';
+import { Select } from 'antd';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -9,6 +14,8 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 // import faker from 'faker';
 import { Line } from 'react-chartjs-2';
 
@@ -40,41 +47,65 @@ export const options = {
     },
 };
 
-const labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+export function AreaChart({ optionsChart }: { optionsChart: { value: number; label: string }[] }) {
+    const [option, setOption] = useState(optionsChart[0].value);
+    const [labels, setLabels] = useState<string[]>([]);
+    const [revenues, setRevenues] = useState<number[]>([]);
 
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Dataset 1',
-            data: [300, 50, 100, 200, 300, 500, 400],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 0, 0)',
-            fill: {
-                target: 'origin', // Set the fill options
-                above: 'rgba(255, 0, 0, 0.3)',
+    const getChartRevenueQuery = useQuery({
+        queryKey: getChartRevenueKeys.list({ option }),
+        queryFn: () => getChartRevenueApi(option),
+    });
+
+    const handleChangeFilterChart = (value: any) => {
+        setOption(value);
+    };
+
+    useEffect(() => {
+        if (getChartRevenueQuery?.data?.data?.data) {
+            const data = getChartRevenueQuery.data.data.data.sort(
+                (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            );
+
+            setLabels(data.map((item) => format(new Date(item.date), DATE_FORMAT.DATE.SHORT_DATE)));
+            setRevenues(data.map((item) => item.totalCost));
+        }
+    }, [getChartRevenueQuery?.data?.data?.data]);
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Chart Revenue',
+                data: revenues,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 0, 0)',
+                fill: {
+                    target: 'origin', // Set the fill options
+                    above: 'rgba(255, 0, 0, 0.3)',
+                },
             },
-        },
-        {
-            label: 'Dataset 2',
-            data: [100, 200, 300, 400, 500, 600, 700],
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.3)',
-            fill: 'origin', // Set the fill options
-        },
-    ],
-};
+        ],
+    };
 
-export function AreaChart() {
     return (
-        <div className='px-[9.5px] bg-white-900 rounded-md'>
-            <div className='flex flex-col mt-[34px] mb-14'>
+        <div className='px-[9.5px] bg-white-900 rounded-md w-full py-4'>
+            <div className='flex flex-col px-4 pt-0 pb-6'>
                 <span className='text-lg font-bold text-black-500'>Doanh thu</span>
-                <span className='text-sm font-bold text-green-900'>
-                    (+500 xu) so với tuần trước
-                </span>
+                <div className='w-full flex justify-end'>
+                    <Select
+                        options={optionsChart}
+                        className='w-[200px]'
+                        value={option}
+                        onChange={handleChangeFilterChart}
+                    />
+                </div>
             </div>
-            <Line options={options} data={data} className='!h-[300px] w-full' />
+            {getChartRevenueQuery.isFetching ? (
+                <CustomSkeletonParagraph height={300} />
+            ) : (
+                <Line options={options} data={data} className='!h-[300px] !w-full' />
+            )}
         </div>
     );
 }

@@ -1,50 +1,76 @@
 /* eslint-disable unused-imports/no-unused-imports */
 'use client';
-import { RightOutlined } from '@ant-design/icons';
 import DocumentIcon from '@assets/icons/document-icon';
 import WalletIcon from '@assets/icons/wallet-icon';
 import { CardTitleIcon } from '@components/card/CardTitleIcon';
+import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
+import { OverviewTutorInfo } from '@core/models/user.model';
+import { getOverviewTutorInfoApi, getOverviewTutorInfoKeys } from '@core/services/user.service';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { AreaChart } from './components/AreaChart';
-import { BarChart } from './components/BarChart';
 import { HistoryQuestion } from './components/HistoryQuestion';
-import { SideBarMentorProfile } from './components/SideBarMentorPorfile';
 
 export default function MentorProfileManagementPage() {
+    const [overviewTutorInfo, setOverviewTutorInfo] = useState<OverviewTutorInfo>();
+    const overviewTutorInfoQuery = useQuery({
+        queryKey: getOverviewTutorInfoKeys.all,
+        queryFn: () => getOverviewTutorInfoApi(),
+    });
+
+    useEffect(() => {
+        if (overviewTutorInfoQuery.data?.data?.data) {
+            setOverviewTutorInfo(overviewTutorInfoQuery.data?.data?.data);
+        }
+    }, [overviewTutorInfoQuery.data?.data?.data]);
+
+    const optionsChart = [
+        { value: 7, label: '7 ngày gần nhất' },
+        { value: 30, label: '30 ngày gần nhất' },
+        { value: 90, label: '90 ngày gần nhất' },
+        { value: 365, label: '365 ngày gần nhất' },
+    ];
+
     return (
-        <div className='pack-layout pb-16 px-4'>
-            <div className='h-[69px] flex items-center gap-4 text-sm font-bold text-primary-800'>
-                <span>Người hướng dẫn</span>
-                <RightOutlined />
-                <span>Quản lý và thống kê doanh thu</span>
-            </div>
-            <div className='flex items-start w-full gap-8'>
-                <div className='w-[435px]'>
-                    <SideBarMentorProfile />
-                </div>
-                <div className='min-w-[500px] flex-grow'>
-                    <div>
-                        <div className='flex gap-4 justify-between'>
-                            <CardTitleIcon
-                                title='Doanh thu'
-                                value='4.500 Xu'
-                                percent='+55%'
-                                icon={<WalletIcon />}
-                            />
-                            <CardTitleIcon
-                                title='Số câu trả lời'
-                                value='120'
-                                percent='+55%'
-                                icon={<DocumentIcon />}
-                            />
-                        </div>
+        <div className='pack-layout pb-16 px-4 pt-4'>
+            <div className='min-w-[500px] flex-grow'>
+                <div>
+                    <div className='flex gap-4 justify-between'>
+                        {overviewTutorInfoQuery?.isFetching ? (
+                            [1, 2, 3, 4].map((item) => (
+                                <CustomSkeletonParagraph height={50} key={item} />
+                            ))
+                        ) : (
+                            <>
+                                <CardTitleIcon
+                                    title='Doanh thu'
+                                    value={`${overviewTutorInfo?.revenue} VND`}
+                                    icon={<WalletIcon />}
+                                />
+                                <CardTitleIcon
+                                    title='Số câu trả lời'
+                                    value={`${overviewTutorInfo?.numberOfQuestionsAnswered}`}
+                                    icon={<DocumentIcon />}
+                                />
+                                <CardTitleIcon
+                                    title='Số phản hồi từ học viên'
+                                    value={`${overviewTutorInfo?.numberOfComment}`}
+                                    icon={<DocumentIcon />}
+                                />
+                                <CardTitleIcon
+                                    title='Số học viên đã trả lời'
+                                    value={`${overviewTutorInfo?.numberOfStudent}`}
+                                    icon={<DocumentIcon />}
+                                />
+                            </>
+                        )}
                     </div>
-                    <div className='grid grid-cols-2 gap-8 my-8'>
-                        <BarChart />
-                        <AreaChart />
-                    </div>
-                    {/* <Chat chatList={dataChat} setChatList={handleDataChat} /> */}
-                    <HistoryQuestion />
                 </div>
+                <div className='w-full my-8'>
+                    <AreaChart optionsChart={optionsChart} />
+                </div>
+                {/* <Chat chatList={dataChat} setChatList={handleDataChat} /> */}
+                <HistoryQuestion />
             </div>
         </div>
     );

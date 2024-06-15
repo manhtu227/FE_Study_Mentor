@@ -139,3 +139,11 @@ body {
     // height: 10px;
     // @apply h-3 w-3 #{!important};
 }
+
+.ant-modal-content {
+    width: 100% !important;
+    .ant-modal-title {
+        font-size: large !important;
+        font-weight: bold !important;
+    }
+}
