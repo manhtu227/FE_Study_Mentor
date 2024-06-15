@@ -17,3 +17,27 @@ export type UserModel = {
     isOnline: boolean;
     avatar?: FileReq;
 };
+
+export type OverviewTutorInfo = {
+    revenue: number;
+    numberOfQuestionsAnswered: number;
+    numberOfComment: number;
+    numberOfStudent: number;
+};
+
+export type ChartRevenueItem = {
+    date: string;
+    totalCost: number;
+};
+
+export type QuestionAnsweredItem = {
+    questionId: string;
+    studentId: string;
+    name: string;
+    avatar?: FileReq;
+    expense: number;
+    status: number;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+};

@@ -2,7 +2,7 @@ type CardTitleIconProps = {
     title: string;
     icon: React.ReactNode;
     value: string;
-    percent: string;
+    percent?: string;
 };
 
 export function CardTitleIcon({ title, icon, value, percent }: CardTitleIconProps) {

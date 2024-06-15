@@ -1,5 +1,4 @@
-import WalletIcon from '@assets/icons/wallet-icon';
-import { Progress } from 'antd';
+import { Select } from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -14,7 +13,7 @@ import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const options = {
+export const optionsChart = {
     responsive: true,
     plugins: {
         legend: {
@@ -75,41 +74,20 @@ export const data = {
 };
 
 export function BarChart() {
+    const optionsFilter = [
+        { value: 7, label: '7 ngày' },
+        { value: 30, label: '30 ngày' },
+        { value: 7, label: '7 ngày' },
+        { value: 7, label: '7 ngày' },
+    ];
     return (
-        <div className=' bg-white-900 p-4 rounded-md'>
-            <div className='h-[210px] bar-chart px-4 pt-4'>
-                <Bar options={options} data={data} />
+        <div className=' bg-white-900 p-4 rounded-md flex flex-col justify-between'>
+            <div>
+                <Select />
             </div>
-            <div className='flex flex-col mt-[10px] mb-8'>
-                <span className='text-lg font-bold text-black-500'>Câu hỏi trả lời theo tuần</span>
-                <span className='text-sm font-bold text-green-900'>
-                    (+23) <span className='text-gray-500'>so với tuần trước</span>
-                </span>
+            <div className='h-3/5 bar-chart px-4 pt-4'>
+                <Bar options={optionsChart} data={data} />
             </div>
-            <div className='flex gap-[2px] justify-between'>
-                <ItemRate />
-                <ItemRate />
-                <ItemRate />
-                <ItemRate />
-            </div>
-        </div>
-    );
-}
-
-function ItemRate() {
-    return (
-        <div className='w-[100px]'>
-            <div className='flex gap-[5.5px]'>
-                <div className='w-[25px] h-[25px] bg-primary-600 flex items-center justify-center rounded-[6px]'>
-                    <WalletIcon className='w-3 h-3' />
-                </div>
-                <span className='font-bold text-xs text-gray-500'>
-                    Doanh
-                    <br /> thu
-                </span>
-            </div>
-            <span className='font-normal text-lg'>1.200k</span>
-            <Progress percent={50} size='small' showInfo={false} />
         </div>
     );
 }

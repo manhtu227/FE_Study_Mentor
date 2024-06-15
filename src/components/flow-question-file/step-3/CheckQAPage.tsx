@@ -2,14 +2,17 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
+import { QuestionStep } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
+import { MentorType } from '@core/models/profile.model';
 import {
     AnswerResponseModel,
     GetQuestionResponseModel,
     QuestionEnum,
-    QuestionStep,
 } from '@core/models/question.model';
+
+import images from '@assets/images';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
@@ -23,6 +26,14 @@ import { FileIcon } from 'react-file-icon';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
 import ChatMentorPage from './ChatMentorPage';
+
+const mockDataInfo: MentorType = {
+    id: '4',
+    image: images.feedback.src,
+    name: 'Nguyễn Hương',
+    age: 23,
+    rating: 5,
+};
 
 const questionFile = {
     extension: 'docx',

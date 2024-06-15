@@ -14,6 +14,11 @@ export enum QuestionStatus {
     DONE = 'DONE',
 }
 
+export enum QuestionStatusForTutor {
+    PENDING = 'PENDING',
+    NEW = 'NEW',
+}
+
 export const optionQuestionStatus: OptionItems = [
     {
         label: 'Tất cả',
@@ -48,3 +53,30 @@ export const optionQuestionStatus: OptionItems = [
         value: QuestionStatus.DONE,
     },
 ];
+
+export const optionQuestionStatusForTutor = [
+    {
+        label: 'Tất cả',
+        value: null,
+    },
+    {
+        label: 'Mới',
+        value: QuestionStatusForTutor.NEW,
+    },
+    {
+        label: 'Đang trả lời',
+        value: QuestionStatusForTutor.PENDING,
+    },
+];
+
+export enum QuestionStep {
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+}
+
+export enum QuestionAcceptStatus {
+    AGREE = 1,
+    DECLINE = 0,
+}

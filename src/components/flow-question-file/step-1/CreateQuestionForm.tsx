@@ -3,6 +3,7 @@ import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { starOptions } from '@core/constants/options.contanst';
+import { QuestionStep } from '@core/enums/question.enum';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -12,7 +13,6 @@ import {
     CreateFileQuestionRequestModel,
     ICalculatePriceRequestModel,
     QuestionInput,
-    QuestionStep,
 } from '@core/models/question.model';
 import { createNewPaymentRequestApi } from '@core/services/payment.service';
 import {

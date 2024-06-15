@@ -4,15 +4,31 @@ import {
     LookUpBankNumberReq,
     QRCodeReq,
 } from '@core/models/profile.model';
-import { createQRCodeApi, lookUpBankNumberApi } from '@core/services/user.service';
-import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Image, Input, Select } from 'antd';
+import {
+    createQRCodeApi,
+    getBankListApi,
+    getBankListKeys,
+    getTutorBankInfoApi,
+    getTutorBankInfoKeys,
+    lookUpBankNumberApi,
+    updateTutorialBankInfoApi,
+} from '@core/services/user.service';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Form, Image, Input, Select, message } from 'antd';
 import { useEffect, useState } from 'react';
 
-function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
+function BankAccountForm() {
     const [form] = Form.useForm<BankAccountInput>();
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [qrCodeImage, setQrCodeImage] = useState<string>('');
+    const [bankList, setBankList] = useState<BankItemResp[]>([]);
+
+    const mutateUpdateTutorBankInfo = useMutation({
+        mutationFn: (data: any) => updateTutorialBankInfoApi(data),
+        onSuccess: () => {
+            message.success('Cập nhật thông tin thành công');
+        },
+    });
 
     const handleSubmitBankAccount = (values: BankAccountInput) => {
         setIsUpdate(false);
@@ -20,10 +36,19 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
         const requestCreateQRCode: QRCodeReq = {
             accountNo: values.accountNumber,
             accountName: values.accountName,
-            acqId: values.binBank,
+            acqId: +values.binBank,
             template: 'qr_only',
         };
+
         createQRCode.mutate(requestCreateQRCode);
+
+        const requestUpdateTutorBankInfo = {
+            idOfBanking: values.binBank,
+            numberOfBanking: values.accountNumber,
+            nameUserOfBanking: values.accountName,
+        };
+
+        mutateUpdateTutorBankInfo.mutate(requestUpdateTutorBankInfo);
     };
 
     const handleCancelUpdate = () => {
@@ -50,6 +75,18 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
         });
     };
 
+    const getBankListQuery = useQuery({
+        queryKey: getBankListKeys.all,
+        queryFn: () => getBankListApi(),
+        select: (resp) => resp.data.data,
+    });
+
+    const getTutorBankInfoQuery = useQuery({
+        queryKey: getTutorBankInfoKeys.all,
+        queryFn: () => getTutorBankInfoApi(),
+        select: (resp) => resp.data.data,
+    });
+
     useEffect(() => {
         if (lookUpMutation.data?.data?.data?.accountName) {
             form.setFieldValue('accountName', lookUpMutation.data?.data?.data?.accountName);
@@ -61,6 +98,40 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
             setQrCodeImage(createQRCode.data?.data?.data?.qrDataURL);
         }
     }, [createQRCode.data?.data?.data?.qrDataURL]);
+
+    useEffect(() => {
+        if (getBankListQuery?.data) {
+            const listData = getBankListQuery?.data;
+
+            setBankList(listData);
+        }
+    }, [getBankListQuery?.data]);
+
+    useEffect(() => {
+        if (
+            getTutorBankInfoQuery?.data &&
+            getTutorBankInfoQuery?.data?.idOfBanking &&
+            getTutorBankInfoQuery?.data?.numberOfBanking &&
+            getTutorBankInfoQuery?.data?.nameOfBanking
+        ) {
+            form.setFieldsValue({
+                binBank: getTutorBankInfoQuery?.data?.idOfBanking,
+                accountNumber: getTutorBankInfoQuery?.data?.numberOfBanking,
+                accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking,
+            });
+
+            const requestCreateQRCode: QRCodeReq = {
+                accountNo: getTutorBankInfoQuery?.data?.numberOfBanking,
+                accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking ?? '',
+                acqId: +getTutorBankInfoQuery?.data?.idOfBanking,
+                template: 'qr_only',
+            };
+
+            createQRCode.mutate(requestCreateQRCode);
+        }
+    }, [getTutorBankInfoQuery?.data?.idOfBanking]);
+
+    console.log(form.getFieldsValue());
 
     return (
         <div className='p-8 flex flex-col items-start gap-4 bg-white-900 rounded-md mb-8'>
@@ -79,12 +150,12 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
                 disabled={!isUpdate}
             >
                 {/* bank name */}
-                <Form.Item
+                <div className='font-bold text-base mb-2'>Tên ngân hàng</div>
+                <Form.Item<BankAccountInput>
                     name='binBank'
                     rules={[{ required: true, message: 'Vui lòng chọn trường này!' }]}
                     className='!mb-2'
                 >
-                    <div className='font-bold text-base mb-2'>Tên ngân hàng</div>
                     <Select
                         options={bankList.map((bank) => ({
                             label: bank.shortName,
@@ -97,33 +168,31 @@ function BankAccountForm({ bankList }: { bankList: BankItemResp[] }) {
                 </Form.Item>
 
                 {/* account number */}
-                <Form.Item
+                <div className='font-bold text-base mb-2'>Số tài khoản</div>
+                <Form.Item<BankAccountInput>
                     name='accountNumber'
                     rules={[{ required: true, message: 'Vui lòng nhập trường này!' }]}
                     className='!mb-2'
                 >
-                    <div className='font-bold text-base mb-2'>Số tài khoản</div>
                     <Input
                         className='h-12 font-medium text-base text-gray-700'
                         placeholder='Nhập số tài khoản của bạn'
-                        type='number'
                         onChange={(e) => form.setFieldValue('accountNumber', e.target.value)}
                         onBlur={handleLookUpBankNumber}
                     />
                 </Form.Item>
 
                 {/* account name */}
-                <Form.Item
+                <div className='font-bold text-base mb-2'>Tên tài khoản</div>
+                <Form.Item<BankAccountInput>
                     name='accountName'
                     rules={[{ required: true, message: 'Vui lòng nhập trường này!' }]}
                     className='!mb-8'
                 >
-                    <div className='font-bold text-base mb-2'>Tên tài khoản</div>
                     <Input
                         className='h-12 font-medium text-base text-gray-700'
                         placeholder='Tên tài khoản của bạn'
                         disabled
-                        value={lookUpMutation.data?.data?.data?.accountName}
                     />
                 </Form.Item>
                 {isUpdate && (

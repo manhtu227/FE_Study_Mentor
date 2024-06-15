@@ -1,4 +1,4 @@
-import { QuestionType } from '@core/enums/question.enum';
+import { QuestionAcceptStatus, QuestionStep, QuestionType } from '@core/enums/question.enum';
 import { Rule } from 'antd/es/form';
 import { StaticImageData } from 'next/image';
 import { FileAntd, FileReq } from './file.model';
@@ -113,7 +113,7 @@ export type AnswerQuestion = {
 
 export type ReportAnswer = {
     reportContent: string;
-    fileContent: any;
+    attachFiles?: FileAntd;
 };
 
 export type StructureEducationsResp = {
@@ -158,6 +158,10 @@ export type ReceiveNewQuestionModel = {
     };
     createdAt: Date;
     methodAnswer: QuestionType;
+    title?: string;
+    fileQuestions: FileReq[];
+    student?: UserModel;
+    type: QuestionType;
 };
 
 export type ReceivedQuestion = {
@@ -190,7 +194,7 @@ export enum QuestionEnum {
 }
 
 export type GetQuestionResponseModel = {
-    id: string;
+    questionId: string;
     createdAt: Date;
     updatedAt: Date;
     answerTime: number;
@@ -203,10 +207,11 @@ export type GetQuestionResponseModel = {
     student: UserModel;
     tutor?: UserModel;
     subject: SubjectModel;
-    answers: AnswerResponseModel[];
+    answers: AnswerResponseModel[] | null;
     isAnswered: boolean;
     roomId?: string;
     step?: QuestionStep;
+    isAccepted: boolean;
     title?: string;
     questionType: QuestionEnum;
     timeMetting?: number;
@@ -217,6 +222,7 @@ export type AcceptQuestionModel = {
     studentId: string;
     senderId: string;
     questionId: string;
+    isAccepted?: QuestionAcceptStatus;
 };
 
 export type AcceptQuestionResp = {
@@ -238,9 +244,25 @@ export type GetGoogleMeetLinkResp = {
     meetingUrl: string;
     createdAt: string;
 };
-export enum QuestionStep {
-    ONE = 1,
-    TWO = 2,
-    THREE = 3,
-    FOUR = 4,
-}
+
+export type ReportQuestionReq = {
+    questionId: string;
+    studentId: string;
+    attachFiles?: FileReq[] | null;
+    content: string;
+};
+
+export type QuestionReportRes = {
+    questionName: string;
+    content: string;
+    studentName: string;
+    attachFiles: FileReq[];
+    createdAt: string;
+    questionId: string;
+    questionTitle: string;
+};
+
+export type GoogleMeetInfoResp = {
+    meetingUrl: string;
+    createdAt: string;
+};

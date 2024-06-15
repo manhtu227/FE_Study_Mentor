@@ -6,11 +6,8 @@ import Prestige from '@components/profile/prestige/Prestige';
 import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { FileReq } from '@core/models/file.model';
-import { BankItemResp } from '@core/models/profile.model';
 import {
     educationInfoKeys,
-    getBankListApi,
-    getBankListKeys,
     getEducationInfoApi,
     getUserDetailApi,
     updateAvatarApi,
@@ -28,7 +25,6 @@ function ProfilePage() {
     const { data } = useSession();
     const file = useUploadFileApi();
     const [avatar, setAvatar] = useState<FileReq>();
-    const [bankList, setBankList] = useState<BankItemResp[]>([]);
 
     const personalInfoQuery = useQuery({
         queryKey: userDetailKeys.list({ id: data?.user?.user?.id, isUpdatePersonalInfo }),
@@ -39,12 +35,6 @@ function ProfilePage() {
     const educationInfoQuery = useQuery({
         queryKey: educationInfoKeys.list({ id: data?.user?.user?.id }),
         queryFn: () => getEducationInfoApi(),
-        select: (resp) => resp.data.data,
-    });
-
-    const getBankListQuery = useQuery({
-        queryKey: getBankListKeys.all,
-        queryFn: () => getBankListApi(),
         select: (resp) => resp.data.data,
     });
 
@@ -73,15 +63,9 @@ function ProfilePage() {
         if (personalInfoQuery.data?.avatar?.fileKey) setAvatar(personalInfoQuery.data?.avatar);
     }, [personalInfoQuery.data]);
 
-    useEffect(() => {
-        if (getBankListQuery?.data) {
-            setBankList(getBankListQuery?.data);
-        }
-    }, [getBankListQuery?.data]);
-
     return (
         <Spin spinning={personalInfoQuery.isFetching || educationInfoQuery.isFetching} size='large'>
-            <div className='w-full bg-[#F3F9FA]'>
+            <div className='w-full bg-[#F3F9FA] pt-4'>
                 <div className='px-[180px] pb-[100px]'>
                     <div className='flex gap-8 w-full'>
                         <div className='w-1/3'>
@@ -146,7 +130,7 @@ function ProfilePage() {
                                     </div>
                                 </div>
                             </div>
-                            <BankAccountForm bankList={bankList} />
+                            <BankAccountForm />
                             <Prestige averageRate={personalInfoQuery.data?.averageRate ?? 0} />
                         </div>
                         <ProfileForm

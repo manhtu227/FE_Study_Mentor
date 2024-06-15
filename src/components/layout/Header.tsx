@@ -3,6 +3,7 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import Logo from '@components/logo/Logo';
 import MessageIcon from '@components/message/MessageIcon';
+import ModalAcceptQuestion from '@components/modal/ModalAcceptQuestion';
 import ModalFoundTutor from '@components/modal/ModalFoundTutor';
 import ModalJoinGoogleMeet from '@components/modal/ModalJoinGoogleMeet';
 import NotificationBell from '@components/notification-bell/NotificationBell';
@@ -11,10 +12,14 @@ import NewQuestionNotification from '@components/notification/NewQuestionNotific
 import { DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION } from '@core/constants/questions.constant';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationType } from '@core/enums/notification.enum';
-import { QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
-import { QuestionEnum, ReceiveNewQuestionModel } from '@core/models/question.model';
+import {
+    GoogleMeetInfoResp,
+    QuestionEnum,
+    ReceiveNewQuestionModel,
+} from '@core/models/question.model';
+
 import { UserModel } from '@core/models/user.model';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
@@ -58,6 +63,7 @@ const Header = () => {
     const router = useRouter();
     const { data } = useSession();
     const [newQuestion, setNewQuestion] = useState<ReceiveNewQuestionModel>();
+    const [newGoogleMeet, setNewGoogleMeet] = useState<GoogleMeetInfoResp>();
     const toastId = useRef<any>(null);
     const [isOpenModalFoundTutor, setIsOpenModalFoundTutor] = useState(false);
     const [questionInfo, setQuestionInfo] = useState<{
@@ -71,7 +77,8 @@ const Header = () => {
         (state: RootState) => state.receivedQuestions.receivedQuestions,
     );
     const [completedQuestion, setCompletedQuestion] = useState<any>();
-    const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(true);
+    const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
+    const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
 
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
@@ -82,6 +89,7 @@ const Header = () => {
                 onCloseNotification={handleWatchLaterNotification}
                 subjectName={data.subject.name}
                 price={data.price}
+                questionType={data.methodAnswer}
             />,
             {
                 position: 'top-left',
@@ -191,13 +199,26 @@ const Header = () => {
                 if (data?.user?.user?.role === UserType.TUTOR) {
                     socket.on(SocketEvent.NEW_QUESTION, (data) => {
                         data.data.createdAt = new Date();
-                        setNewQuestion(data.data);
 
-                        if (data.data.methodAnswer === QuestionType.MEETING) {
-                            socket.on(SocketEvent.RECEIVE_GGMEET, () => {
-                                setIsShowModalReceiveGoogleMeet(true);
-                            });
-                        }
+                        setNewQuestion({
+                            ...data.data,
+                            methodAnswer: data.methodAnswer,
+                        });
+                    });
+
+                    socket.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
+                        data.data.createdAt = new Date();
+                        setNewQuestion({
+                            ...data.data,
+                            methodAnswer: data.methodAnswer,
+                        });
+
+                        setIsShowModalPickedQuestion(true);
+                    });
+
+                    socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
+                        setIsShowModalReceiveGoogleMeet(true);
+                        setNewGoogleMeet(data.data);
                     });
 
                     setTimeout(() => setCompletedQuestion(mockData), 5000);
@@ -275,12 +296,19 @@ const Header = () => {
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
             <ToastContainer />
-            {isShowModalReceiveGoogleMeet && (
+            {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && (
                 <ModalJoinGoogleMeet
-                    googleMeetUrl='https://meet.google.com/caf-yvtx-jfk'
-                    price={3000}
-                    questionName='Test câu hỏi'
-                    subjectName='Sinh học'
+                    googleMeetUrl={newGoogleMeet?.meetingUrl}
+                    price={newQuestion?.price}
+                    questionName={newQuestion.content}
+                    subjectName={newQuestion.subject.name}
+                />
+            )}
+            {isShowModalPickedQuestion && newQuestion && (
+                <ModalAcceptQuestion
+                    question={newQuestion}
+                    isShow={isShowModalPickedQuestion}
+                    setShowModal={setIsShowModalPickedQuestion}
                 />
             )}
             <nav className='flex h-full items-center px-[44px] bg-white-900'>

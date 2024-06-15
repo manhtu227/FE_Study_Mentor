@@ -1,17 +1,17 @@
 'use client';
 
-import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { DownOutlined, DownloadOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import images from '@assets/images';
 import { CardQuestion } from '@components/card/CardQuestion';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
 import { DATE_FORMAT } from '@core/constants/date.constant';
-import { ENV } from '@core/constants/env.constants';
+import { QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
-import { Avatar, Button, Col, Image, Modal, Pagination, Row, Tag } from 'antd';
+import { Avatar, Button, Col, Image, Modal, Pagination, Row } from 'antd';
 import { format } from 'date-fns';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
@@ -85,12 +85,21 @@ function DetailedQuestionPage() {
     const { confirm } = Modal;
     const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
-    const showConfirmAnswerQuestion = () => {
+    const showConfirmAnswerQuestion = (questionType: QuestionType) => {
         confirm({
-            title: 'Bạn có chắc chắn muốn trả lời câu hỏi này không?',
+            title:
+                questionType === QuestionType.FILE
+                    ? 'Bạn có chắc chắn muốn trả lời câu hỏi này không?'
+                    : 'Bạn có chắc chắn muốn trả lời câu hỏi này không? Câu hỏi này sẽ được trả lời thông qua Google Meet',
             icon: <ExclamationCircleFilled />,
             content: 'Nếu đồng ý, bạn sẽ không thể hủy bỏ hành động này',
             onOk() {
+                if (questionType === QuestionType.MEETING) {
+                    setIsAnswered(true);
+
+                    return;
+                }
+
                 handleAnswerTheQuestion();
             },
             onCancel() {},
@@ -105,8 +114,23 @@ function DetailedQuestionPage() {
     useEffect(() => {
         if (!(params?.slug as string)) return;
 
-        setCurrentQuestion(detailedQuestionQuery?.data?.data?.data);
-    }, [detailedQuestionQuery?.data, params?.slug as string]);
+        const question = detailedQuestionQuery?.data?.data?.data;
+
+        setCurrentQuestion(question);
+
+        if (question?.isAccepted && question.type === QuestionType.MEETING) {
+            setShowForm(false);
+            setIsAnswered(true);
+            return;
+        }
+
+        if (question?.isAnswered) {
+            setShowForm(false);
+            return;
+        } else if (question?.tutor?.id === data?.user.user.id && question?.isAccepted) {
+            setShowForm(true);
+        } else setShowForm(false);
+    }, [detailedQuestionQuery?.data?.data?.data, params?.slug as string]);
 
     useEffect(() => {
         if (detailedQuestionQuery?.error) router.push('/404');
@@ -116,7 +140,7 @@ function DetailedQuestionPage() {
         if (!data?.user.user.id) return;
 
         const requestAccept: AcceptQuestionModel = {
-            questionId: currentQuestion?.id as string,
+            questionId: currentQuestion?.questionId as string,
             studentId: currentQuestion?.student.id as string,
             senderId: data?.user.user.id as string,
         };
@@ -126,10 +150,14 @@ function DetailedQuestionPage() {
         setIsAnswered(true);
     };
 
+    useEffect(() => {
+        setIsAnswered(false);
+    }, []);
+
     return (
-        <div className='px-[180px] pb-[64px] bg-[#F3F9FA]'>
+        <div className='px-[180px] pb-[64px] bg-[#F3F9FA] pt-4'>
             <div className='w-full flex gap-8'>
-                {currentQuestion && (
+                {currentQuestion?.questionId && (
                     <div className='w-2/3 '>
                         <div className='w-full transition-all'>
                             <div className='text-[14px] leading-[21px] font-normal text-black-800 mb-3'>
@@ -140,7 +168,11 @@ function DetailedQuestionPage() {
                                 Nội dung câu hỏi
                             </div>
                             <div className='my-4 text-2xl'>
-                                <div>{currentQuestion.content}</div>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: currentQuestion.content,
+                                    }}
+                                />
                                 <ul className='flex gap-2 flex-wrap pl-0'>
                                     {currentQuestion.fileQuestions?.map((file) => {
                                         return (
@@ -148,13 +180,13 @@ function DetailedQuestionPage() {
                                                 key={file.fileKey}
                                                 className='flex gap-2 items-center'
                                             >
-                                                <Image
-                                                    className='max-w-[200px] max-h-[100px] rounded-lg'
-                                                    width={200}
-                                                    height={100}
-                                                    src={`${ENV.PHOTO}${file.fileKey}`}
-                                                    alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                                                />
+                                                <div
+                                                    key={file.fileKey}
+                                                    className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
+                                                >
+                                                    <div className='flex items-center'></div>
+                                                    <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -185,7 +217,7 @@ function DetailedQuestionPage() {
                                     type='primary'
                                     size='large'
                                     className='!h-12 !w-[248px] font-bold text-base bg-primary-800 mt-4'
-                                    onClick={showConfirmAnswerQuestion}
+                                    onClick={() => showConfirmAnswerQuestion(currentQuestion.type)}
                                     disabled={currentQuestion.isAnswered || isAnswered}
                                 >
                                     Trả lời câu hỏi này
@@ -196,7 +228,7 @@ function DetailedQuestionPage() {
                         {showForm ? (
                             <div className='mt-8 rounded-lg bg-white-900 transition-all'>
                                 <AnswerQuestionForm
-                                    questionId={currentQuestion.id}
+                                    questionId={currentQuestion.questionId}
                                     tutorId={data?.user?.user?.id ?? ''}
                                     onHideForm={() => setShowForm(false)}
                                 />
@@ -229,7 +261,7 @@ function DetailedQuestionPage() {
                         </div>
                     </div>
                 )}
-                <div className='w-1/3'>
+                {/* <div className='w-1/3'>
                     <div>
                         <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
                             <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
@@ -254,7 +286,7 @@ function DetailedQuestionPage() {
                             Người hướng dẫn nổi bật
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

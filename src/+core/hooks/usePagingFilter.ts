@@ -1,3 +1,4 @@
+'use client';
 import { removeEmptyParams } from '@core/helpers/remove-params.helper';
 import { initialPagingState, IPaginationInfo } from '@core/types/paging.type';
 import { debounce } from 'lodash';
@@ -37,7 +38,7 @@ export function usePagingFilter<T extends object>({
     }, debounceTime);
 
     // when paging change, update url by new paging
-    const handlePageChange = (paging: { page?: number; limit?: number }) => {
+    const handlePageChange = (paging: { page: number; pageSize: number }) => {
         const newParams = { ...filter, ...paging };
         setFilter(newParams);
     };

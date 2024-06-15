@@ -6,6 +6,7 @@ export const DATE_FORMAT = {
         DOT_DATE: 'YYYY.MM.DD ddd',
         MONTH: 'YYYY.MM',
         STRING: 'MMMM DD, YYYY',
+        SHORT_DATE: 'dd/MM',
     },
     DATE_TIME: {
         HYPHEN: 'yyyy-MM-dd hh:mm',
