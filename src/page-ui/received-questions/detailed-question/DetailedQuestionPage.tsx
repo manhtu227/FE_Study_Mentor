@@ -155,51 +155,52 @@ function DetailedQuestionPage() {
     }, []);
 
     return (
-        <div className='px-[180px] pb-[64px] bg-[#F3F9FA] pt-4'>
+        <div className='px-[180px] pb-[64px] bg-[#F3F9FA] pt-4 flex'>
             <div className='w-full flex gap-8'>
                 {currentQuestion?.questionId && (
-                    <div className='w-2/3 '>
+                    <div className='w-full'>
                         <div className='w-full transition-all'>
                             <div className='text-[14px] leading-[21px] font-normal text-black-800 mb-3'>
                                 Đặt câu hỏi lúc{' '}
                                 {format(currentQuestion.createdAt, DATE_FORMAT.DATE_TIME.HYPHEN)}
                             </div>
-                            <div className='font-bold text-4xl text-black-800'>
-                                Nội dung câu hỏi
-                            </div>
+
                             <div className='my-4 text-2xl'>
+                                <div>
+                                    <span className='font-bold'>Tiêu đề: </span>
+                                    <div>{currentQuestion.title}</div>
+                                </div>
+                                <div className='font-bold'>Nội dung câu hỏi</div>
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html: currentQuestion.content,
                                     }}
+                                    className='border rounded-lg border-gray-600 border-solid p-2 mt-2'
                                 />
                                 <ul className='flex gap-2 flex-wrap pl-0'>
-                                    {currentQuestion.fileQuestions?.map((file) => {
+                                    {currentQuestion.fileQuestions?.map((file, index) => {
                                         return (
                                             <div
                                                 key={file.fileKey}
-                                                className='flex gap-2 items-center'
+                                                className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid w-[300px]'
                                             >
-                                                <div
-                                                    key={file.fileKey}
-                                                    className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                >
-                                                    <div className='flex items-center'></div>
-                                                    <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                <div className='flex items-center text-base truncate max-w-2/3'>
+                                                    {file.fileName}
                                                 </div>
+                                                <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
                                             </div>
                                         );
                                     })}
                                 </ul>
                             </div>
-                            <div className='flex items-center gap-2 '>
+                            <div className='flex items-center gap-2'>
                                 <Avatar
                                     size={44}
                                     icon={
                                         <Image
-                                            alt={'image of question'}
+                                            alt={'Avatar of student'}
                                             loading='lazy'
-                                            src={images.charac1.src} // Convert images.charac1 to a string by using the .src property
+                                            src={`${process.env.NEXT_PUBLIC_PHOTO}${currentQuestion.student.avatar?.fileKey}`} // Convert images.charac1 to a string by using the .src property
                                         />
                                     }
                                 />
@@ -247,7 +248,7 @@ function DetailedQuestionPage() {
                                     questions.length > 0 &&
                                     questions.map((question) => {
                                         return (
-                                            <Col xs={24} sm={12} md={12} key={question.id}>
+                                            <Col xs={12} sm={8} md={8} key={question.id}>
                                                 <CardQuestion question={question} />
                                             </Col>
                                         );

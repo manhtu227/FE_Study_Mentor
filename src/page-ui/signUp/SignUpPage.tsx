@@ -13,7 +13,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { AUTHENTICATED } from '@core/constants/authentication.constants';
+import {
+    AUTHENTICATED,
+    PASSWORD_PATTERN,
+    PASSWORD_VALIDATION_MESSAGE,
+} from '@core/constants/authentication.constants';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -121,9 +125,8 @@ const SignUpPage = () => {
                             rules={[
                                 { required: true, message: 'Vui lòng nhập mật khẩu' },
                                 {
-                                    pattern: new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
-                                    message:
-                                        'Mật khẩu tối thiểu 8 ký tự, ít nhất 1 chữ cái và 1 số',
+                                    pattern: new RegExp(PASSWORD_PATTERN),
+                                    message: PASSWORD_VALIDATION_MESSAGE,
                                 },
                             ]}
                         >

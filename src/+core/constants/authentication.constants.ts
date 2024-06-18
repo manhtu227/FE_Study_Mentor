@@ -16,3 +16,7 @@ export const PASSWORD_SECURITY_RULE_SIGN_IN_MESSAGE =
     'At least 12 characters, mix of uppercase and lowercase letters, numbers, and special characters (e.g., !, @, #, $, %)';
 export const IS_LOGIN = 'isLogin';
 export const AUTHENTICATED = 'authenticated';
+export const PASSWORD_PATTERN =
+    /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;'"<>.,?/])[A-Za-z\d!@#$%^&*()_+{}[\]:;'"<>.,?/]{8,}$/;
+export const PASSWORD_VALIDATION_MESSAGE =
+    'Mật khẩu tối thiểu 8 ký tự, ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt';

@@ -2,6 +2,7 @@
 
 import CustomUploadAvatarInput from '@components/form-input/CustomUploadAvatarInput';
 import BankAccountForm from '@components/form/BankAccountForm';
+import ModalChangePassword from '@components/modal/ModalChangePassword';
 import Prestige from '@components/profile/prestige/Prestige';
 import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -14,7 +15,7 @@ import {
     userDetailKeys,
 } from '@core/services/user.service';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Spin, Switch, message } from 'antd';
+import { Button, Form, Spin, message } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { ProfileForm } from './components/ProfileForm';
@@ -39,6 +40,7 @@ function ProfilePage() {
     });
 
     const [isActive, setIsActive] = useState<boolean>(personalInfoQuery.data?.isActive ?? false);
+    const [isShowChangePasswordModal, setIsShowChangePasswordModal] = useState<boolean>(false);
 
     const mutateUpdate = useMutation({
         mutationFn: (data: any) => updateAvatarApi(data),
@@ -62,6 +64,10 @@ function ProfilePage() {
 
         if (personalInfoQuery.data?.avatar?.fileKey) setAvatar(personalInfoQuery.data?.avatar);
     }, [personalInfoQuery.data]);
+
+    const handleShowChangePasswordModal = () => {
+        setIsShowChangePasswordModal(true);
+    };
 
     return (
         <Spin spinning={personalInfoQuery.isFetching || educationInfoQuery.isFetching} size='large'>
@@ -110,7 +116,7 @@ function ProfilePage() {
                                     </div>
                                 </div>
                                 <div className='w-full border-solid border-[1px] border-gray-200 border-r-0 border-l-0 border-b-0 mt-8 pt-8'>
-                                    <div className='flex items-center gap-4'>
+                                    {/* <div className='flex items-center gap-4'>
                                         <Switch
                                             defaultChecked
                                             onChange={() => setIsActive(!isActive)}
@@ -123,11 +129,24 @@ function ProfilePage() {
                                         >
                                             Đang {isActive ? 'bật' : 'tắt'} trạng thái hoạt động
                                         </div>
-                                    </div>
-                                    <div className='text-gray-700 font-light text-sm mt-4'>
+                                    </div> */}
+                                    {/* <div className='text-gray-700 font-light text-sm mt-4'>
                                         Bật trạng thái hoạt động cho phép các ứng viên tìm đến bạn
                                         trong thời gian bạn đang sử dụng website.
-                                    </div>
+                                    </div> */}
+                                    {isShowChangePasswordModal && (
+                                        <ModalChangePassword
+                                            isShow={isShowChangePasswordModal}
+                                            setShowModal={setIsShowChangePasswordModal}
+                                        />
+                                    )}
+                                    <Button
+                                        type='primary'
+                                        className='w-full'
+                                        onClick={handleShowChangePasswordModal}
+                                    >
+                                        Đổi mật khẩu
+                                    </Button>
                                 </div>
                             </div>
                             <BankAccountForm />
