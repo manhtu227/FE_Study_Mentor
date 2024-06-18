@@ -131,8 +131,6 @@ function BankAccountForm() {
         }
     }, [getTutorBankInfoQuery?.data?.idOfBanking]);
 
-    console.log(form.getFieldsValue());
-
     return (
         <div className='p-8 flex flex-col items-start gap-4 bg-white-900 rounded-md mb-8'>
             <div className='font-semibold text-xl text-black-800'>Tài khoản ngân hàng</div>

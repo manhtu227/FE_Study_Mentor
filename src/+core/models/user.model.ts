@@ -41,3 +41,8 @@ export type QuestionAnsweredItem = {
     updatedAt: Date;
     email: string;
 };
+
+export type ResetPasswordReq = {
+    passwordOld: string;
+    passwordNew: string;
+};
