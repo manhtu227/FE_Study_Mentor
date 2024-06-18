@@ -29,3 +29,7 @@ export type ChangePasswordInput = {
     oldPassword: string;
     newPassword: string;
 };
+
+export type ResetPasswordInput = {
+    email: string;
+};

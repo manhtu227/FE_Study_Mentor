@@ -51,7 +51,9 @@ const LoginPage = () => {
                 </div>
                 <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
                     <Form name='signUp' onFinish={handleSubmitLogin} form={form} autoComplete='off'>
-                        <div className='font-bold text-base mb-2 text-[White]'>Email</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            <span className='text-red-500 mr-1'>*</span>Email
+                        </div>
                         <Form.Item
                             name='email'
                             rules={[{ required: true, message: 'Vui lòng nhập email' }]}
@@ -63,7 +65,9 @@ const LoginPage = () => {
                             />
                         </Form.Item>
 
-                        <div className='font-bold text-base mb-2 text-[White]'>Mật khẩu</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            <span className='text-red-500 mr-1'>*</span>Mật khẩu
+                        </div>
                         <Form.Item
                             name='password'
                             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
@@ -75,7 +79,7 @@ const LoginPage = () => {
                         </Form.Item>
 
                         <div className='text-[White] text-right'>
-                            <Link href='#' className='text-[White]'>
+                            <Link href={MY_ROUTE.RESET_PASSWORD} className='text-[White]'>
                                 Quên mật khẩu?
                             </Link>
                         </div>

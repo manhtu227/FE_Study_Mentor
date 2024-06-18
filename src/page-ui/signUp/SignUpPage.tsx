@@ -66,7 +66,10 @@ const SignUpPage = () => {
                         form={form}
                         autoComplete='off'
                     >
-                        <div className='font-bold text-base mb-2 text-[White]'>Loại người dùng</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            {' '}
+                            <span className='text-red-500 mr-1'>*</span>Loại người dùng
+                        </div>
                         <Form.Item
                             name='type'
                             rules={[{ required: true, message: 'Vui lòng chọn loại người dùng' }]}
@@ -80,7 +83,10 @@ const SignUpPage = () => {
                             />
                         </Form.Item>
 
-                        <div className='font-bold text-base mb-2 text-[White]'>Họ và tên</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            {' '}
+                            <span className='text-red-500 mr-1'>*</span>Họ và tên
+                        </div>
                         <Form.Item
                             name='fullName'
                             rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}
@@ -91,7 +97,10 @@ const SignUpPage = () => {
                             />
                         </Form.Item>
 
-                        <div className='font-bold text-base mb-2 text-[White]'>Email</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            {' '}
+                            <span className='text-red-500 mr-1'>*</span>Email
+                        </div>
                         <Form.Item
                             name='email'
                             rules={[
@@ -105,7 +114,10 @@ const SignUpPage = () => {
                             <CustomTextInput placeholder='Nhập email...' />
                         </Form.Item>
 
-                        <div className='font-bold text-base mb-2 text-[White]'>Giới tính</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            {' '}
+                            <span className='text-red-500 mr-1'>*</span>Giới tính
+                        </div>
                         <Form.Item
                             name='gender'
                             rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
@@ -119,7 +131,10 @@ const SignUpPage = () => {
                             />
                         </Form.Item>
 
-                        <div className='font-bold text-base mb-2 text-[White]'>Mật khẩu</div>
+                        <div className='font-bold text-base mb-2 text-[White]'>
+                            {' '}
+                            <span className='text-red-500 mr-1'>*</span>Mật khẩu
+                        </div>
                         <Form.Item
                             name='password'
                             rules={[

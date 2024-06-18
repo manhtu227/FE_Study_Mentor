@@ -1,4 +1,5 @@
 import { api } from '@core/https/http';
+import { ResetPasswordInput } from '@core/models/authentication.model';
 import { BaseResp, BaseRespExternal } from '@core/models/base.model';
 import { FileReq } from '@core/models/file.model';
 import {
@@ -158,4 +159,8 @@ export const createGoogleMeetApi = (body: PickTutorReq) => {
 
 export const changePasswordApi = async (data: ResetPasswordReq) => {
     return api.put<void>(`api/users/password/change-password`, data);
+};
+
+export const resetPasswordApi = async (email: ResetPasswordInput) => {
+    return api.put<void>(`api/users/password/reset-password`, { email });
 };
