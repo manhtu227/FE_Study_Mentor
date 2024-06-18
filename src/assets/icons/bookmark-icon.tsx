@@ -16,7 +16,7 @@ export default function BookmarkIcon({ number }: BookMarkIconProps) {
             <text
                 x='49%'
                 y='30%'
-                className='font-bold text-base'
+                className='font-bold text-xs'
                 dominantBaseline='middle'
                 textAnchor='middle'
                 fill='#F3F9FA'
@@ -33,7 +33,7 @@ export default function BookmarkIcon({ number }: BookMarkIconProps) {
                 fill='#F3F9FA'
                 fontSize='10'
             >
-                Xu
+                đồng
             </text>
 
             <defs>

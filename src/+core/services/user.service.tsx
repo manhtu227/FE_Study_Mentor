@@ -15,7 +15,12 @@ import {
     UserResp,
     UserVoucherViewModel,
 } from '@core/models/profile.model';
-import { ChartRevenueItem, OverviewTutorInfo, QuestionAnsweredItem } from '@core/models/user.model';
+import {
+    ChartRevenueItem,
+    OverviewTutorInfo,
+    QuestionAnsweredItem,
+    ResetPasswordReq,
+} from '@core/models/user.model';
 import { OptionItem } from '@core/types/option.type';
 import { IPaginationInfo, PagingResp } from '@core/types/paging.type';
 import { initKeys } from '@core/utilities/query-key.utility';
@@ -149,4 +154,8 @@ export const getListAnsweredQuestionsApi = async (params: IPaginationInfo) => {
 
 export const createGoogleMeetApi = (body: PickTutorReq) => {
     return api.post<BaseResp<{ meetingURL: string }>>(`api/users/create/ggMeet`, body);
+};
+
+export const changePasswordApi = async (data: ResetPasswordReq) => {
+    return api.put<void>(`api/users/password/change-password`, data);
 };

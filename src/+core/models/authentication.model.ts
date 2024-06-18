@@ -24,3 +24,8 @@ export enum Status {
     ACTIVE = 0,
     IN_ACTIVE = 1,
 }
+
+export type ChangePasswordInput = {
+    oldPassword: string;
+    newPassword: string;
+};
