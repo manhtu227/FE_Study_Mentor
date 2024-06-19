@@ -15,4 +15,7 @@ export const MY_ROUTE = {
     LOGIN: '/login',
     SIGN_UP: '/sign-up',
     RESET_PASSWORD: '/reset-password',
+    DASHBOARD: '/dashboard',
+    PROFILE: '/profile',
+    REPORT: '/reports',
 };

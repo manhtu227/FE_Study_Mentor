@@ -126,10 +126,12 @@ function DetailedQuestionPage() {
 
         if (question?.isAnswered) {
             setShowForm(false);
-            return;
+            setIsAnswered(true);
         } else if (question?.tutor?.id === data?.user.user.id && question?.isAccepted) {
             setShowForm(true);
-        } else setShowForm(false);
+        } else {
+            setShowForm(false);
+        }
     }, [detailedQuestionQuery?.data?.data?.data, params?.slug as string]);
 
     useEffect(() => {
@@ -231,7 +233,10 @@ function DetailedQuestionPage() {
                                 <AnswerQuestionForm
                                     questionId={currentQuestion.questionId}
                                     tutorId={data?.user?.user?.id ?? ''}
-                                    onHideForm={() => setShowForm(false)}
+                                    onHideForm={() => {
+                                        setShowForm(false);
+                                        setIsAnswered(true);
+                                    }}
                                 />
                             </div>
                         ) : (

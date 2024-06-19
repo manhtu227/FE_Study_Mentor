@@ -49,8 +49,8 @@ export function CardQuestionUser({
                 {loading ? (
                     <CustomSkeletonTitle height='80px' className=' mt-5' />
                 ) : (
-                    <div className='h-32 mt-4 overflow-auto'>
-                        {<div dangerouslySetInnerHTML={{ __html: question?.content || '' }} />}
+                    <div className='h-32 mt-4 overflow-auto max-w-full truncate text-black-800 font-bold text-lg'>
+                        {question?.title}
                     </div>
                 )}
             </div>

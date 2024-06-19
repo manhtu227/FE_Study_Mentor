@@ -8,12 +8,14 @@ const NewQuestionNotification = ({
     subjectName,
     price,
     questionType,
+    title,
 }: {
     onClickNotification: () => void;
     onCloseNotification: () => void;
     subjectName: string;
     price: number;
     questionType: QuestionType;
+    title?: string;
 }) => {
     return (
         <div>
@@ -22,6 +24,7 @@ const NewQuestionNotification = ({
                 <span className='font-bold'>{subjectName}</span> với giá{' '}
                 <span className='text-red-400'>{price} đồng</span>
             </div>
+            <div>Tiêu đề: {title}</div>
             <div>Loại câu hỏi: {handleDetechQuestionType(questionType)}</div>
             <div className='flex items-center gap-2'>
                 <Button type='link' size='middle' onClick={onCloseNotification}>
