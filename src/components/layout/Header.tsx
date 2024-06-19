@@ -43,8 +43,16 @@ import { defaultSocket } from '../../socket';
 const Header = () => {
     const userItems: MenuProps['items'] = [
         {
-            label: <Link href='/profile'>Profile</Link>,
+            label: <Link href={MY_ROUTE.DASHBOARD}>Bảng điều khiển</Link>,
             key: '0',
+        },
+        {
+            label: <Link href={MY_ROUTE.REPORT}>Báo cáo của bạn</Link>,
+            key: '1',
+        },
+        {
+            label: <Link href={MY_ROUTE.PROFILE}>Trang cá nhân</Link>,
+            key: '2',
         },
         {
             label: (
@@ -53,10 +61,10 @@ const Header = () => {
                         signOut();
                     }}
                 >
-                    Logout
+                    Đăng xuất
                 </div>
             ),
-            key: '2',
+            key: '3',
         },
     ];
 
@@ -90,6 +98,7 @@ const Header = () => {
                 subjectName={data.subject.name}
                 price={data.price}
                 questionType={data.methodAnswer}
+                title={data.title}
             />,
             {
                 position: 'top-left',
