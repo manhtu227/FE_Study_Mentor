@@ -35,7 +35,7 @@ export const roleUser = [
     MY_ROUTE.MENTOR.self,
     MY_ROUTE.DASHBOARD_STUDENT,
 ];
-export const roleTutor = [MY_ROUTE.DASHBOARD_TUTOR];
+export const roleTutor = [MY_ROUTE.DASHBOARD_TUTOR, MY_ROUTE.MENTOR.RECEIVED_QUESTIONS];
 
 export const rolePublic = [
     MY_ROUTE.AUTH.LOGIN,
