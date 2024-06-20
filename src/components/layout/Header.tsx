@@ -36,7 +36,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { defaultSocket } from '../../socket';
 
@@ -315,7 +315,6 @@ const Header = () => {
 
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
-            <ToastContainer />
             {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && (
                 <ModalJoinGoogleMeet
                     googleMeetUrl={newGoogleMeet?.meetingUrl}

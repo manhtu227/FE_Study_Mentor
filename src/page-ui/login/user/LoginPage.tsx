@@ -6,13 +6,14 @@ import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { LoginInput } from '@core/models/authentication.model';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
 import { Form } from 'antd';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [form] = Form.useForm<LoginInput>();
@@ -27,14 +28,16 @@ const LoginPage = () => {
                 password: form.password,
                 redirect: false,
             } as LoginInput & SignInOptions),
+        onError: handleError,
     });
 
     const handleSubmitLogin = async (values: LoginInput) => {
         const resp = await loginMutation.mutateAsync(values);
         if (resp && resp?.ok) {
+            toastSuccess('Đăng nhập thành công');
             return;
         }
-        toast.error('Tên email hoặc mật khẩu không hợp lệ.');
+        toastError('Email hoặc mật khẩu không hợp lệ.');
     };
 
     /* Effect */
@@ -70,7 +73,10 @@ const LoginPage = () => {
                                         placeholder='Nhập email...'
                                         classNameForm='w-full mb-6'
                                         prefix={<UserOutlined />}
-                                        rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập email' },
+                                            { type: 'email', message: 'Email không hợp lệ' },
+                                        ]}
                                     />
                                 </div>
                             </div>
@@ -103,7 +109,11 @@ const LoginPage = () => {
                             </div>
 
                             <div className='!mt-8'>
-                                <ButtonPrimary title={'Đăng nhập'} htmlType='submit' />
+                                <ButtonPrimary
+                                    title={'Đăng nhập'}
+                                    htmlType='submit'
+                                    loading={loginMutation.isPending}
+                                />
                             </div>
 
                             <p className='text-sm !mt-8 text-center text-gray-800'>

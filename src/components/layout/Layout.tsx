@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react';
 import QuestionIcon from '@components/message/QuestionIcon';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { usePathname } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 
 export default function Layout({ children }: PropsWithChildren) {
@@ -26,6 +27,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     pathname !== MY_ROUTE.LOGIN && pathname !== MY_ROUTE.SIGN_UP ? 'pt-[64px]' : ''
                 }
             >
+                <ToastContainer />
                 {children}
             </div>
             {/* <Footer /> */}

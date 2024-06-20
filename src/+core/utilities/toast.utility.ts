@@ -25,10 +25,9 @@ export const toastSuccess = (message: string, closeTimeout = 2000) => {
 };
 
 export const toastError = (message: string, closeTimeout = 2000) => {
-    toast.success(message, {
+    toast.error(message, {
         hideProgressBar: true,
         autoClose: closeTimeout,
-        position: 'bottom-left',
         type: 'error',
     });
 };
