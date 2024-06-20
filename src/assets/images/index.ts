@@ -23,6 +23,7 @@ import hero1 from './home-hero-1.png';
 import process1 from './home-process-1.png';
 import process2 from './home-process-2.png';
 import layer from './layers-3.png';
+import loginPageImage from './login-page.png';
 import loginScreen from './loginScreen.png';
 import mentorMethod from './mentor-method.png';
 import momo from './momo.png';
@@ -78,6 +79,7 @@ const images = {
     copilot: copilot,
     loginScreen: loginScreen,
     teacher: teacher,
+    loginPageImage: loginPageImage,
 };
 
 export default images;

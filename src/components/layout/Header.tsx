@@ -378,7 +378,7 @@ const Header = () => {
                             type='default'
                             size='large'
                             shape='round'
-                            className='bg-lightBlue border text-base font-bold bg-primary-800 text-white-900 hover:!text-white-900 hover:opacity-85'
+                            className='bg-lightBlue border text-base font-bold bg-primary-800 hover:!bg-primary-800 text-white-900 hover:!text-white-900 hover:!opacity-85'
                             onClick={handleClickSignUp}
                         >
                             Đăng ký

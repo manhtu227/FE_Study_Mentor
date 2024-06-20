@@ -13,12 +13,12 @@ export default withAuth(
     {
         secret: ENV.AUTH_SECRET,
         callbacks: {
-            authorized: ({ token }) => {
-                return !!token;
+            authorized: ({ token, req }) => {
+                return true;
             },
         },
         pages: {
-            signIn: MY_ROUTE.LOGIN,
+            signIn: MY_ROUTE.SIGN_UP,
             error: '/auth/error',
         },
     },
@@ -36,4 +36,4 @@ function authorizeUser(pathname: string, authority?: UserRole) {
     }
 }
 
-// export const config = { matcher: [`${MY_ROUTE.AI.self}/:path*`] };
+export const config = { matcher: [`${MY_ROUTE.AI.self}/:path*`] };
