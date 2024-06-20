@@ -18,7 +18,7 @@ export default withAuth(
             },
         },
         pages: {
-            signIn: MY_ROUTE.SIGN_UP,
+            signIn: MY_ROUTE.LOGIN,
             error: '/auth/error',
         },
     },

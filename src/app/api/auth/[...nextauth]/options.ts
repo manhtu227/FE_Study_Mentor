@@ -72,9 +72,9 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
-    // session: {
-    //     strategy: 'jwt',
-    // },
+    session: {
+        strategy: 'jwt',
+    },
     callbacks: {
         session: async ({ session, token }) => {
             session.user = token as any;
