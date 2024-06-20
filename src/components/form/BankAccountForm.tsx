@@ -13,8 +13,10 @@ import {
     lookUpBankNumberApi,
     updateTutorialBankInfoApi,
 } from '@core/services/user.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Image, Input, Select, message } from 'antd';
+import { Button, Form, Image, Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
 
 function BankAccountForm() {
@@ -26,8 +28,9 @@ function BankAccountForm() {
     const mutateUpdateTutorBankInfo = useMutation({
         mutationFn: (data: any) => updateTutorialBankInfoApi(data),
         onSuccess: () => {
-            message.success('Cập nhật thông tin thành công');
+            toastSuccess('Cập nhật thông tin thành công');
         },
+        onError: handleError,
     });
 
     const handleSubmitBankAccount = (values: BankAccountInput) => {
@@ -58,10 +61,12 @@ function BankAccountForm() {
 
     const lookUpMutation = useMutation({
         mutationFn: (data: LookUpBankNumberReq) => lookUpBankNumberApi(data),
+        onError: handleError,
     });
 
     const createQRCode = useMutation({
         mutationFn: (data: QRCodeReq) => createQRCodeApi(data),
+        onError: handleError,
     });
 
     const handleLookUpBankNumber = async () => {

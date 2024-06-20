@@ -4,8 +4,10 @@ import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { ReportAnswer, ReportQuestionReq } from '@core/models/question.model';
 import { reportQuestionApi } from '@core/services/questions.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, message } from 'antd';
+import { Button, Form } from 'antd';
 import { useState } from 'react';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
@@ -32,12 +34,10 @@ function ReportQuestionForm({ questionId, studentId }: { questionId: string; stu
     const reportQuestionMutate = useMutation({
         mutationFn: (values: ReportQuestionReq) => reportQuestionApi(values),
         onSuccess: () => {
-            message.open({
-                type: 'success',
-                content: 'Báo cáo câu hỏi thành công',
-            });
+            toastSuccess('Báo cáo câu hỏi thành công');
             setIsReported(true);
         },
+        onError: handleError,
     });
 
     return (

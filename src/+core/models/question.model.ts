@@ -1,4 +1,9 @@
-import { QuestionAcceptStatus, QuestionStep, QuestionType } from '@core/enums/question.enum';
+import {
+    QuestionAcceptStatus,
+    QuestionStatus,
+    QuestionStep,
+    QuestionType,
+} from '@core/enums/question.enum';
 import { Rule } from 'antd/es/form';
 import { StaticImageData } from 'next/image';
 import { FileAntd, FileReq } from './file.model';
@@ -195,12 +200,12 @@ export enum QuestionEnum {
 
 export type GetQuestionResponseModel = {
     questionId: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     answerTime: number;
     content: string;
     price: string;
-    status: number;
+    status: QuestionStatus;
     isPaid: boolean;
     type: number;
     fileQuestions: FileReq[] | null;

@@ -13,6 +13,7 @@ import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { PickTutorReq, getTutorOnline, pickTutor, tutorsKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -67,6 +68,7 @@ export default function CardListPage() {
         onSuccess: () => {
             setIsOpen(true);
         },
+        onError: handleError,
     });
 
     useEffect(() => {

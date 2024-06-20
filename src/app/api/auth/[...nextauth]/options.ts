@@ -1,6 +1,7 @@
 import { isAxiosError } from 'axios';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+import { ENV } from '@core/constants/env.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, UserType } from '@core/enums/user.enum';
 import { LoginInput, SignUpInput } from '@core/models/authentication.model';
@@ -13,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: MY_ROUTE.LOGIN,
     },
-    secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+    secret: ENV.AUTH_SECRET,
     providers: [
         CredentialsProvider({
             id: 'custom-login',
@@ -71,9 +72,9 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
-    session: {
-        strategy: 'jwt',
-    },
+    // session: {
+    //     strategy: 'jwt',
+    // },
     callbacks: {
         session: async ({ session, token }) => {
             session.user = token as any;

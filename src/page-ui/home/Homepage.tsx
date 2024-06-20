@@ -1,12 +1,12 @@
 'use client';
-import { RightOutlined } from '@ant-design/icons';
 import images from '@assets/images';
+import ButtonPrimary from '@components/button/ButtonPrimary';
 import Characteristic from '@components/homepage/characteristic/Characteristic';
 import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import { Button, Image } from 'antd';
+import { Image } from 'antd';
 
 import Carousel, { ResponsiveType } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -55,6 +55,7 @@ function Homepage() {
             <section className='relative mb-[300px]'>
                 <Image
                     src={images.hero1.src}
+                    preview={false}
                     alt='Hero'
                     className='relative opacity-50 max-w-full'
                 />
@@ -73,7 +74,7 @@ function Homepage() {
                             title='Trả lời bằng AI'
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.AI}
-                            className='max-w-[658px]'
+                            className='max-w-[600px]'
                             href={MY_ROUTE.AI.self}
                         />
                         <MethodItem
@@ -81,7 +82,7 @@ function Homepage() {
                             title='Giải đáp bởi người hướng dẫn'
                             titleButton='Trải nghiệm ngay'
                             type={DescriptionEnum.Mentor}
-                            className='max-w-[658px]'
+                            className='max-w-[600px]'
                             href={MY_ROUTE.MENTOR.self}
                         />
                     </div>
@@ -114,12 +115,17 @@ function Homepage() {
                     </div>
                 </div>
                 <div className='flex items-center'>
-                    <Image src={images.process1.src} alt='Quy trình làm việc của Study Mentor' />
+                    <Image
+                        preview={false}
+                        src={images.process1.src}
+                        alt='Quy trình làm việc của Study Mentor'
+                    />
                     <div className='relative'>
                         <Image
                             src={images.process2.src}
                             alt='Quy trình làm việc của Study Mentor'
                             className='relative -right-40'
+                            preview={false}
                         />
                         <div className='absolute top-28 right-20 rotate-6'>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
@@ -164,13 +170,18 @@ function Homepage() {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua.
                     </div>
-                    <Button className='h-[75px] w-full uppercase text-lg text-white-900 bg-gradient-to-r from-[#3D64EE] to-[#5BB9E2] hover:!text-white-900 hover:opacity-80'>
-                        XEM THÊM THÔNG TIN VỀ STUDY MENTOR{' '}
-                        <RightOutlined className='text-white-900' />
-                    </Button>
+                    <ButtonPrimary
+                        title={' XEM THÊM THÔNG TIN VỀ STUDY MENTOR'}
+                        isRightIcon
+                        className='h-[75px] w-full uppercase text-lg  bg-gradient-to-r from-[#3D64EE] to-[#5BB9E2]'
+                    />
                 </div>
                 <div className='w-1/2 mt-[100px] mr-10'>
-                    <Image src={images.homeContact.src} alt='XEM THÊM THÔNG TIN VỀ STUDY MENTOR' />
+                    <Image
+                        src={images.homeContact.src}
+                        alt='XEM THÊM THÔNG TIN VỀ STUDY MENTOR'
+                        preview={false}
+                    />
                 </div>
             </section>
             {/* section 5 */}
@@ -186,7 +197,6 @@ function Homepage() {
                     responsive={BreakpointSlides}
                     additionalTransfrom={0}
                     arrows={false}
-                    autoPlay
                     centerMode={false}
                     customTransition='all 5s linear'
                     dotListClass=''
@@ -222,7 +232,6 @@ function Homepage() {
                     responsive={BreakpointSlides}
                     additionalTransfrom={0}
                     arrows={false}
-                    autoPlay
                     centerMode={false}
                     customTransition='all 5s linear'
                     dotListClass=''
@@ -258,7 +267,6 @@ function Homepage() {
                     responsive={BreakpointSlides}
                     additionalTransfrom={0}
                     arrows={false}
-                    autoPlay
                     centerMode={false}
                     customTransition='all 5s linear'
                     dotListClass=''

@@ -20,7 +20,7 @@ import {
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
-import { UserModel } from '@core/models/user.model';
+import { UserModel, UserRole } from '@core/models/user.model';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
@@ -41,9 +41,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import { defaultSocket } from '../../socket';
 
 const Header = () => {
+    const { data } = useSession();
+
     const userItems: MenuProps['items'] = [
         {
-            label: <Link href={MY_ROUTE.DASHBOARD}>Bảng điều khiển</Link>,
+            label: (
+                <Link
+                    href={
+                        data?.user.user.role === UserRole.STUDENT
+                            ? MY_ROUTE.DASHBOARD_STUDENT
+                            : MY_ROUTE.DASHBOARD_TUTOR
+                    }
+                >
+                    Bảng điều khiển
+                </Link>
+            ),
             key: '0',
         },
         {
@@ -69,7 +81,6 @@ const Header = () => {
     ];
 
     const router = useRouter();
-    const { data } = useSession();
     const [newQuestion, setNewQuestion] = useState<ReceiveNewQuestionModel>();
     const [newGoogleMeet, setNewGoogleMeet] = useState<GoogleMeetInfoResp>();
     const toastId = useRef<any>(null);

@@ -1,18 +1,46 @@
+import { OptionItems } from '@core/types/option.type';
+
 export enum QuestionType {
     MEETING = 0,
     FILE = 1,
 }
-import { OptionItems } from '@core/types/option.type';
+
+export enum QuestionStatusString {
+    PENDING = 'PENDING',
+    NEW = 'NEW', // tạo thành công bước 2
+    ACCEPTED = 'ACCEPTED', // tạo thành công bước 3
+    REJECTED = 'REJECTED', // tạo thành công bước 2
+    ANSWERED = 'ANSWERED', // tạo thành công bước 3
+    EXPIRED = 'EXPIRED', // tạo thành công không bước
+    DONE = 'DONE', // done
+}
 
 export enum QuestionStatus {
-    PENDING = 'PENDING',
-    NEW = 'NEW',
-    ACCEPTED = 'ACCEPTED',
-    REJECTED = 'REJECTED',
-    ANSWERED = 'ANSWERED',
-    EXPIRED = 'EXPIRED',
-    DONE = 'DONE',
+    PENDING = 0,
+    NEW = 1, // tạo thành công bước 2
+    ACCEPTED = 2, // tạo thành công bước 3
+    REJECTED = 3, // tạo thành công bước 2
+    ANSWERED = 4, // tạo thành công bước 3
+    EXPIRED = 5, // tạo thành công không bước
+    DONE = 6, // done
 }
+
+export const getStepByStatus = (status: QuestionStatus): QuestionStep | null => {
+    switch (status) {
+        case QuestionStatus.NEW:
+            return QuestionStep.TWO;
+        case QuestionStatus.ACCEPTED:
+            return QuestionStep.THREE;
+        case QuestionStatus.REJECTED:
+            return QuestionStep.TWO;
+        case QuestionStatus.ANSWERED:
+            return QuestionStep.FOUR;
+        case QuestionStatus.DONE:
+            return QuestionStep.THREE;
+        default:
+            return null;
+    }
+};
 
 export enum QuestionStatusForTutor {
     PENDING = 'PENDING',
@@ -26,31 +54,31 @@ export const optionQuestionStatus: OptionItems = [
     },
     {
         label: 'Chờ xác nhận',
-        value: QuestionStatus.PENDING,
+        value: QuestionStatusString.PENDING,
     },
     {
         label: 'Mới',
-        value: QuestionStatus.NEW,
+        value: QuestionStatusString.NEW,
     },
     {
         label: 'Đã chấp nhận',
-        value: QuestionStatus.ACCEPTED,
+        value: QuestionStatusString.ACCEPTED,
     },
     {
         label: 'Đã từ chối',
-        value: QuestionStatus.REJECTED,
+        value: QuestionStatusString.REJECTED,
     },
     {
         label: 'Đã trả lời',
-        value: QuestionStatus.ANSWERED,
+        value: QuestionStatusString.ANSWERED,
     },
     {
         label: 'Hết hạn',
-        value: QuestionStatus.EXPIRED,
+        value: QuestionStatusString.EXPIRED,
     },
     {
         label: 'Hoàn thành',
-        value: QuestionStatus.DONE,
+        value: QuestionStatusString.DONE,
     },
 ];
 

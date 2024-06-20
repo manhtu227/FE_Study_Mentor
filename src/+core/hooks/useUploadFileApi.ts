@@ -1,5 +1,6 @@
 import { FileReq } from '@core/models/file.model';
 import { getSignedUrlApi, uploadFileToCloudApi } from '@core/services/file.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { useMutation } from '@tanstack/react-query';
 import { UploadFile } from 'antd';
 import { useState } from 'react';
@@ -9,6 +10,7 @@ export const useUploadFileApi = () => {
 
     const uploadToBackend = useMutation({
         mutationFn: (data: string) => getSignedUrlApi(data),
+        onError: handleError,
     });
 
     const uploadFileToCloud = useMutation({

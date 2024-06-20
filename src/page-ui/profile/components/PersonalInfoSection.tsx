@@ -5,8 +5,10 @@ import {
     UserResp,
 } from '@core/models/profile.model';
 import { updateUserDetailApi } from '@core/services/user.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Button, DatePicker, Form, Input, Select, Spin, message } from 'antd';
+import { Button, DatePicker, Form, Input, Select, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
@@ -23,13 +25,11 @@ export function PersonalInfoSection({
     const mutateUpdate = useMutation({
         mutationFn: (dataUpdate: UpdatePersonalInformationInput) => updateUserDetailApi(dataUpdate),
         onSuccess: () => {
-            message.success('Cập nhật thông tin thành công');
+            toastSuccess('Cập nhật thông tin thành công');
             setIsEdit(false);
             onUpdatePersonalInfo();
         },
-        onError: () => {
-            message.error('Cập nhật thông tin thất bại');
-        },
+        onError: handleError,
     });
     const handleSubmitPersonalInformationForm = (values: PersonalInformationInput) => {
         const request: UpdatePersonalInformationInput = {

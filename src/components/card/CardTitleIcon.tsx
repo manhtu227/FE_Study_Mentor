@@ -1,7 +1,7 @@
 type CardTitleIconProps = {
     title: string;
     icon: React.ReactNode;
-    value: string;
+    value: string | number;
     percent?: string;
 };
 

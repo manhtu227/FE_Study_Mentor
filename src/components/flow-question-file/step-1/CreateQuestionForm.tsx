@@ -3,9 +3,7 @@ import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { starOptions } from '@core/constants/options.contanst';
-import { QuestionStep } from '@core/enums/question.enum';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
-import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { CreatePaymentRequestModel } from '@core/models/payment.model';
 import {
@@ -26,6 +24,8 @@ import { getListVoucherApi, voucherKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Image, Modal, Popover, Select, Spin, message } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
@@ -56,13 +56,13 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
     const gradeOptions = filteredGrades.map(ConvertGradeToOption);
     const subjectData = filteredGrades.find((grade) => grade.id === selectedGrade)?.subjects ?? [];
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
-    const updateStepMutation = useUpdateStepApi();
     const questionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const dispatch = useDispatch();
 
     /* create question api */
     const mutateCreateQuestions = useMutation({
         mutationFn: (data: CreateFileQuestionRequestModel) => createQuestions(data),
+        onError: handleError,
     });
 
     /* caculate price question api */
@@ -72,30 +72,19 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
             if (isOpenVoucher) {
                 setIsOpenVoucher(false);
             }
-            message.open({
-                type: 'success',
-                content: 'Calculate price successfully',
-            });
+
+            toastSuccess('Tính giá tiền thành công');
         },
+        onError: handleError,
     });
 
     // create new payment request api
     const mutateCreatePaymentRequest = useMutation({
         mutationFn: (data: CreatePaymentRequestModel) => createNewPaymentRequestApi(data),
         onSuccess: () => {
-            message.open({
-                type: 'success',
-                content: 'Create new payment request successfully',
-            });
-            updateStepMutation.mutate({ step: QuestionStep.ONE, questionId: questionId });
+            toastSuccess('Tạo yêu cầu thanh toán thành công');
         },
-        onError: () => {
-            message.open({
-                type: 'error',
-                content: 'Create new payment request failed',
-            });
-            updateStepMutation.mutate({ step: QuestionStep.ONE, questionId: questionId });
-        },
+        onError: handleError,
     });
 
     const voucherQuery = useQuery({
@@ -281,9 +270,10 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 </div>
                             </Form.Item>
                             {/* Title question */}
-                            <div className='font-bold text-base mb-2'>Tóm tát câu hỏi</div>
+                            <div className='font-bold text-base mb-2'>Tóm tắt câu hỏi</div>
                             <CustomTextInput<QuestionInput>
                                 name='title'
+                                classNameForm='mb-6'
                                 rules={[{ required: true, message: 'Please input!' }]}
                             />
                             {/* Requirement for mentor */}
@@ -455,7 +445,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                         },
                                         () => {
                                             setIsOpenVoucher(false);
-                                            message.error('Vui lòng nhập đầy đủ thông tin');
+                                            toastError('Vui lòng nhập đầy đủ thông tin');
                                         },
                                     );
                                 }}

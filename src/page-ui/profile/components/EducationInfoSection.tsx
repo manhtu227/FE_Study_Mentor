@@ -19,6 +19,8 @@ import {
     subjectsCertificatedNotVerifyKeys,
     updateCertificatesAndSubjectsApi,
 } from '@core/services/user.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import {
     InvalidateQueryFilters,
     useMutation,
@@ -63,22 +65,24 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
         mutationFn: (request: CertificatesInformationRequest) =>
             updateCertificatesAndSubjectsApi(request),
         onSuccess: () => {
-            message.success('Gửi thành công');
+            toastSuccess('Gửi thành công');
             setIsEdit(false);
             queryClient.invalidateQueries(
                 subjectsCertificatedNotVerifyKeys.all as InvalidateQueryFilters,
             );
         },
+        onError: handleError,
     });
 
     const deleteSubjectsCertificatesNotVerifyMutation = useMutation({
         mutationFn: () => deleteSubjectsCertificatesNotVerifyApi(),
         onSuccess: () => {
-            message.success('Hủy đăng ký môn học thành công');
+            toastSuccess('Hủy đăng ký môn học thành công');
             queryClient.invalidateQueries(
                 subjectsCertificatedNotVerifyKeys.all as InvalidateQueryFilters,
             );
         },
+        onError: handleError,
     });
 
     const subjectsCertificatesQuery = useQuery({

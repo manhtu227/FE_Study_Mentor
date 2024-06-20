@@ -1,4 +1,4 @@
-import { QuestionStatus, QuestionStep } from '@core/enums/question.enum';
+import { QuestionStatusString, QuestionStep } from '@core/enums/question.enum';
 import { api } from '@core/https/http';
 import { BaseResp } from '@core/models/base.model';
 import {
@@ -99,7 +99,7 @@ export const updateStepQuestionApi = async (req: StepUpdateReq) => {
 };
 
 export type QuestionListFilter = {
-    status?: QuestionStatus;
+    status?: QuestionStatusString;
 };
 export type QuestionListReq = QuestionListFilter & IPaginationInfo;
 

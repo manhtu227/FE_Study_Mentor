@@ -3,8 +3,10 @@ import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { AnswerQuestion, AnswerRequestModel } from '@core/models/question.model';
 import { sendAnswerToStudentApi } from '@core/services/questions.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, message } from 'antd';
+import { Button, Form } from 'antd';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
 
 function AnswerQuestionForm({
@@ -21,12 +23,10 @@ function AnswerQuestionForm({
     const mutateSendAnswer = useMutation({
         mutationFn: (values: AnswerRequestModel) => sendAnswerToStudentApi(values),
         onSuccess: () => {
-            message.open({
-                type: 'success',
-                content: 'send answer to student successfully',
-            });
+            toastSuccess('Gửi câu trả lời thành công');
             onHideForm();
         },
+        onError: handleError,
     });
 
     const file = useUploadFileApi();

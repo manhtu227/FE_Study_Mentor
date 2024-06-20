@@ -7,7 +7,11 @@ import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { PaginationCore } from '@components/pagination/pagination';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { QuestionStatus, optionQuestionStatus } from '@core/enums/question.enum';
+import {
+    QuestionStatusString,
+    getStepByStatus,
+    optionQuestionStatus,
+} from '@core/enums/question.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { getEnum } from '@core/parser/enum.parser';
 import {
@@ -30,9 +34,9 @@ export default function QuestionListPage() {
     const { initialPaging, initialFilter } = useMemo(() => {
         const initialFilter: QuestionListFilter = {
             status:
-                getEnum<QuestionStatus>(
+                getEnum<QuestionStatusString>(
                     searchParams ? searchParams.get('status') : '',
-                    QuestionStatus,
+                    QuestionStatusString,
                 ) || undefined,
         };
         const initialPaging: IPaginationInfo = {
@@ -100,15 +104,15 @@ export default function QuestionListPage() {
                 <Row gutter={[32, 32]}>
                     {data.data?.data.data.map((question) => {
                         return (
-                            <Col xs={24} sm={12} md={8} key={question.id}>
+                            <Col xs={24} sm={12} md={8} key={question.questionId}>
                                 <CardQuestionUser
                                     question={question}
                                     onClick={() => {
-                                        dispatch(setCurrentQuestionId(question.id));
+                                        dispatch(setCurrentQuestionId(question.questionId));
                                         router.push(
-                                            `${MY_ROUTE.MENTOR.FILE}?step=${
-                                                question?.step ? question?.step - 1 : 2
-                                            }`,
+                                            `${MY_ROUTE.MENTOR.FILE}?step=${getStepByStatus(
+                                                question.status,
+                                            )}`,
                                         );
                                     }}
                                 />

@@ -3,7 +3,7 @@ import images from '@assets/images';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
-import { Button, Form, message } from 'antd';
+import { Button, Form } from 'antd';
 
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, UserType } from '@core/enums/user.enum';
@@ -20,6 +20,7 @@ import {
 } from '@core/constants/authentication.constants';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { toastSuccess } from '@core/utilities/toast.utility';
 
 const SignUpPage = () => {
     const [form] = Form.useForm<SignUpInput>();
@@ -37,7 +38,7 @@ const SignUpPage = () => {
                 type: data.type,
             } as SignUpInput & SignInOptions),
         onSuccess: () => {
-            message.success('Đăng ký thành công');
+            toastSuccess('Đăng ký thành công');
         },
     });
 

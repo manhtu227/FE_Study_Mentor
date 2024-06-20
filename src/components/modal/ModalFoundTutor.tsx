@@ -6,6 +6,8 @@ import { QuestionEnum } from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
 import { Avatar, Modal } from 'antd';
 import Image from 'next/image';
@@ -35,6 +37,7 @@ export default function ModalFoundTutor({
 
     const mutationCreate = useMutation({
         mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
+        onError: handleError,
     });
 
     useEffect(() => {
@@ -63,6 +66,7 @@ export default function ModalFoundTutor({
                     },
                     {
                         onSuccess: () => {
+                            toastSuccess('Tạo cuộc họp thành công');
                             router.push(`${MY_ROUTE.MENTOR.GOOGLE_MEET}?step=2&id=${user?.id}`);
                         },
                     },

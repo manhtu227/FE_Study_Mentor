@@ -2,9 +2,7 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
-import { QuestionStep } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
-import { useUpdateStepApi } from '@core/hooks/useUpdateStepApi';
 import { MentorType } from '@core/models/profile.model';
 import {
     AnswerResponseModel,
@@ -18,7 +16,9 @@ import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.serv
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { downloadUrl } from '@core/utilities/download.util';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { imageUtility } from '@core/utilities/image.utility';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Divider } from 'antd';
 import { useEffect, useState } from 'react';
@@ -50,7 +50,6 @@ export default function CheckQAPage({ onNext }: Props) {
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const [answer, setAnswer] = useState<AnswerResponseModel>();
-    const updateStepMutation = useUpdateStepApi();
 
     const query = useQuery({
         queryKey: detailedQuestionKeys.list({ currentQuestionId }),
@@ -86,7 +85,9 @@ export default function CheckQAPage({ onNext }: Props) {
         mutationFn: (body: CreateRoomUserReq) => createRoomUserIdApi(body),
         onSuccess: () => {
             setIsChat(true);
+            toastSuccess('Tạo room chat thành công');
         },
+        onError: handleError,
     });
 
     return (
@@ -138,41 +139,43 @@ export default function CheckQAPage({ onNext }: Props) {
                                 {query.data?.fileQuestions &&
                                     query.data?.fileQuestions?.length > 0 && (
                                         <>
-                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>
+                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
                                                 Tệp đính kèm
                                             </h3>
-                                            {query.data?.fileQuestions?.map((file) => {
-                                                return (
-                                                    <div
-                                                        key={file.fileKey}
-                                                        className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                    >
-                                                        <div className='flex items-center'>
-                                                            <div className='w-[30px]'>
-                                                                <FileIcon
-                                                                    extension={
-                                                                        file.fileKey
-                                                                            .split('.')
-                                                                            .pop() || ''
-                                                                    }
-                                                                    // {...defaultStyles.docx}
-                                                                />
+                                            <div className='flex flex-col gap-2'>
+                                                {query.data?.fileQuestions?.map((file) => {
+                                                    return (
+                                                        <div
+                                                            key={file.fileKey}
+                                                            className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
+                                                        >
+                                                            <div className='flex items-center'>
+                                                                <div className='w-[30px]'>
+                                                                    <FileIcon
+                                                                        extension={
+                                                                            file.fileKey
+                                                                                .split('.')
+                                                                                .pop() || ''
+                                                                        }
+                                                                        // {...defaultStyles.docx}
+                                                                    />
+                                                                </div>
+                                                                <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
+                                                                    {file.fileName}
+                                                                </div>
                                                             </div>
-                                                            <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
-                                                                {file.fileName}
-                                                            </div>
+                                                            <DownloadOutlined
+                                                                className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                                onClick={async () => {
+                                                                    await downloadUrl(
+                                                                        imageUtility(file.fileKey),
+                                                                    );
+                                                                }}
+                                                            />
                                                         </div>
-                                                        <DownloadOutlined
-                                                            className='text-[#4EA8B4] text-2xl cursor-pointer'
-                                                            onClick={async () => {
-                                                                await downloadUrl(
-                                                                    imageUtility(file.fileKey),
-                                                                );
-                                                            }}
-                                                        />
-                                                    </div>
-                                                );
-                                            })}
+                                                    );
+                                                })}
+                                            </div>
                                         </>
                                     )}
                             </div>
@@ -252,10 +255,6 @@ export default function CheckQAPage({ onNext }: Props) {
                                 : !query.data?.meetingURL
                         }
                         onClick={() => {
-                            updateStepMutation.mutate({
-                                step: QuestionStep.FOUR,
-                                questionId: currentQuestionId,
-                            });
                             onNext();
                         }}
                     />

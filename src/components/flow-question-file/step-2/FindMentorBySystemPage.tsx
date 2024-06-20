@@ -5,8 +5,10 @@ import { MY_ROUTE } from '@core/constants/routes.constant';
 import { getEnum } from '@core/parser/enum.parser';
 import { findMentorBySystemApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Image, message } from 'antd';
+import { Image } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -33,8 +35,9 @@ export default function FindMentorBySystemPage() {
     const mutateFindMentor = useMutation({
         mutationFn: () => findMentorBySystemApi(currentQuestionId),
         onSuccess: () => {
-            message.success('Đang tìm kiếm vui lòng chờ');
+            toastSuccess('Đang tìm kiếm vui lòng chờ');
         },
+        onError: handleError,
     });
 
     return (

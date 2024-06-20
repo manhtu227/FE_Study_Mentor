@@ -1,5 +1,6 @@
 import CameraIcon from '@assets/icons/camera';
 import { FileReq } from '@core/models/file.model';
+import { imageUtility } from '@core/utilities/image.utility';
 import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload, message } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
@@ -34,14 +35,13 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
     const [imageUrl, setImageUrl] = useState<string>();
 
     useEffect(() => {
-        image && setImageUrl(image?.fileKey);
+        image && setImageUrl(imageUtility(image?.fileKey));
     }, [image]);
 
     /* Handler */
     const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         if (info.file.status === 'uploading') {
             setLoading(true);
-            console.log(loading);
             return;
         }
 
@@ -65,23 +65,15 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
         <div className='relative h-[100px]'>
             <div>
                 {/* {isVerified ? ( */}
-                <div className='bg-gray-800 text-white-800 text-[10px] px-2 leading-[18px] font-bold absolute top-0 right-0'>
+                {/* <div className='bg-gray-800 text-white-800 text-[10px] px-2 leading-[18px] font-bold absolute top-0 right-0'>
                     VERIFIED
-                </div>
+                </div> */}
                 {/* ) : (
                 <div className='bg-gray-800 uppercase text-white-800'>NO VERIFIED</div>
             )} */}
             </div>
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
-                {imageUrl ? (
-                    <img
-                        src={`${process.env.NEXT_PUBLIC_PHOTO}${imageUrl}`}
-                        alt='avatar'
-                        className='w-full h-full'
-                    />
-                ) : (
-                    <></>
-                )}
+                {imageUrl ? <img src={imageUrl} alt='avatar' className='w-full h-full' /> : <></>}
                 <Form.Item name={name} className='absolute z-50 right-0 bottom-0 m-0'>
                     <Upload
                         name='avatar'

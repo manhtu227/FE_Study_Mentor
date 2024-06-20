@@ -1,5 +1,13 @@
-import CustomSelectInput from '@components/form-input/CustomSelectInput';
-import { FilterQuestionType, filterQuestionOptions } from '@core/enums/filter-question-type.enum';
+import { PaginationCore } from '@components/pagination/pagination';
+import {
+    FilterQuestionType,
+    convertQuestionFilter,
+    filterQuestionOptions,
+} from '@core/enums/filter-question-type.enum';
+import { GetQuestionResponseModel } from '@core/models/question.model';
+import { IPaginationInfo } from '@core/types/paging.type';
+import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { imageUtility } from '@core/utilities/image.utility';
 import { Avatar, Image, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import clsx from 'clsx';
@@ -69,7 +77,7 @@ const columns: ColumnsType<HistoryQuestionTable> = [
         render: (value) => (
             <div className='font-normal text-sm flex flex-col'>
                 {value}
-                <span className='text-primary-800 font-bold text-sm'>120 Xu</span>
+                <span className='text-primary-800 font-bold text-sm'>{formatPriceVND(value)}</span>
             </div>
         ),
     },
@@ -82,48 +90,37 @@ const columns: ColumnsType<HistoryQuestionTable> = [
     { dataIndex: 'date' },
 ];
 
-const data: HistoryQuestionTable[] = [
-    {
-        key: '1',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.COMPLETED,
-        date: '20/10/2021',
-    },
-    {
-        key: '2',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.NOT_COMPLETED,
-        date: '20/10/2021',
-    },
-    {
-        key: '3',
-        images: 'https://via.placeholder.com/150',
-        name: 'Mark Wilson',
-        email: 'mark@simmmple.com',
-        price: '120',
-        status: FilterQuestionType.CANCELED,
-        date: '20/10/2021',
-    },
-];
+export function convertQuestionToTabel(r: GetQuestionResponseModel): HistoryQuestionTable {
+    return {
+        key: r.questionId,
+        images: imageUtility(r.tutor?.avatar?.fileKey),
+        name: r.subject.name,
+        email: r.title || '',
+        price: r.price,
+        status: convertQuestionFilter(r.status),
+        date: r.createdAt,
+    };
+}
 
-export function HistoryQuestion() {
+type Props = {
+    data: HistoryQuestionTable[];
+    pagination: IPaginationInfo;
+    loading?: boolean;
+    handlePageChange?: any;
+};
+
+export function HistoryQuestion({ data, pagination, loading, handlePageChange }: Props) {
     const [filter, setFilter] = useState(FilterQuestionType.ALL);
     return (
         <div className='bg-white-900 p-8 flex flex-col gap-8 rounded-md'>
             <span className='font-bold text-lg'>Lịch sử câu hỏi</span>
             <div className='flex justify-between items-center'>
-                <CustomSelectInput
-                    classNameForm='w-[167px]'
+                {/* <CustomSelectInput
+                    classNameForm='w-[167px] !m-0'
                     optionsSelect={[]}
                     placeholder='Sắp xếp theo'
                     classNameSelect='placeholder-color'
-                />
+                /> */}
 
                 <div className='flex gap-4'>
                     {filterQuestionOptions.map((e, i) => (
@@ -141,27 +138,37 @@ export function HistoryQuestion() {
                         </div>
                     ))}
                 </div>
-                <CustomSelectInput
-                    classNameForm='w-[131px] '
+                {/* <CustomSelectInput
+                    classNameForm='w-[131px] !m-0'
                     optionsSelect={[]}
                     placeholder='Bộ lọc'
                     classNameSelect='placeholder-color '
+                /> */}
+            </div>
+            <div>
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                    showHeader={false}
+                    loading={loading}
+                    pagination={false}
+                    //centered pagination
+                    // pagination={{
+                    //     position: ['bottomCenter'],
+                    //     showSizeChanger: false,
+                    //     pageSize: pagination.pageSize,
+                    //     size: 'small',
+                    //     total: pagination.total,
+                    //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                    // }}
+                />
+                <PaginationCore
+                    onPageNumberChange={handlePageChange}
+                    pageSize={pagination.pageSize}
+                    current={pagination.page}
+                    total={pagination.total}
                 />
             </div>
-            <Table
-                columns={columns}
-                dataSource={data}
-                showHeader={false}
-                //centered pagination
-                pagination={{
-                    position: ['bottomCenter'],
-                    showSizeChanger: false,
-                    pageSize: 5,
-                    size: 'small',
-                    total: 50,
-                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                }}
-            />
         </div>
     );
 }

@@ -19,6 +19,7 @@ import { Button, Form, Spin, message } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { ProfileForm } from './components/ProfileForm';
+import { toastSuccess } from '@core/utilities/toast.utility';
 
 function ProfilePage() {
     const [form] = Form.useForm();
@@ -45,7 +46,7 @@ function ProfilePage() {
     const mutateUpdate = useMutation({
         mutationFn: (data: any) => updateAvatarApi(data),
         onSuccess: () => {
-            message.success('Cập nhật thông tin thành công');
+            toastSuccess('Cập nhật thông tin thành công');
         },
     });
 

@@ -12,8 +12,10 @@ import {
     getDetailedQuestionApi,
 } from '@core/services/questions.service';
 import { RootState } from '@core/store';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Avatar, Divider, Form, Image, Rate, Spin, message } from 'antd';
+import { Avatar, Divider, Form, Image, Rate, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { SideBarMentor } from '../SideBarMentor';
@@ -35,12 +37,10 @@ export default function RatingAnswerPage() {
         // mutationFn: (data: RatingReq) => updateRatingApi(data, user?.id),
         mutationFn: (data: RatingReq) => createRatingApi(data, questions.currentQuestionId),
         onSuccess: () => {
-            message.success('Đánh giá thành công');
+            toastSuccess('Đánh giá thành công');
             router.push(MY_ROUTE.HOME);
         },
-        onError: (error: any) => {
-            message.error(`Đã xảy ra lỗi: ${error.message || 'Vui lòng thử lại.'}`);
-        },
+        onError: handleError,
     });
 
     const query = useQuery({
@@ -61,7 +61,12 @@ export default function RatingAnswerPage() {
         <Spin spinning={mutateCreate.isPending} size='large'>
             <SideBarMentor
                 className='p-8'
-                button={<ButtonPrimary title='Quay lại đoạn chat' className='w-full' isRightIcon />}
+                button={
+                    <ButtonPrimary
+                        title='Báo cáo'
+                        className='w-full bg-red-600 hover:!bg-red-500'
+                    />
+                }
             >
                 <div className='flex flex-col text-left gap-x-4'>
                     <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0'>
@@ -124,25 +129,11 @@ export default function RatingAnswerPage() {
                             classNameForm='w-full !mb-6'
                             className='w-full text-left'
                         />
-                        {/* <Form.Item<RatingInput>
-                            name='comment'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your comment about this question',
-                                },
-                            ]}
-                            className='w-full text-left'
-                        >
-                            <Input
-                                className='h-[150px] font-medium text-base text-gray-700'
-                                placeholder='Nhập đánh giá chi tiết'
-                            />
-                        </Form.Item> */}
+
                         <ButtonPrimary
                             title='Gửi đánh giá'
                             htmlType='submit'
-                            className='w-full  rounded-lg'
+                            className='!w-fit mx-auto rounded-lg'
                             isRightIcon
                         />
                     </Form>

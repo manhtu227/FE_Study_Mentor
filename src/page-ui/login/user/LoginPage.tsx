@@ -14,6 +14,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [form] = Form.useForm<LoginInput>();
@@ -30,8 +31,12 @@ const LoginPage = () => {
             } as LoginInput & SignInOptions),
     });
 
-    const handleSubmitLogin = (values: LoginInput) => {
-        loginMutation.mutate(values);
+    const handleSubmitLogin = async (values: LoginInput) => {
+        const resp = await loginMutation.mutateAsync(values);
+        if (resp && resp?.ok) {
+            return;
+        }
+        toast.error('Tên email hoặc mật khẩu không hợp lệ.');
     };
 
     /* Effect */
