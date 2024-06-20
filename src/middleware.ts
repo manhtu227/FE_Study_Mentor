@@ -1,5 +1,5 @@
 import { ENV } from '@core/constants/env.constants';
-import { MY_ROUTE, rolePublic, roleUser } from '@core/constants/routes.constant';
+import { MY_ROUTE, rolePublic, roleTutor, roleUser } from '@core/constants/routes.constant';
 import { UserRole } from '@core/models/user.model';
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
@@ -28,9 +28,15 @@ function authorizeUser(pathname: string, authority?: UserRole) {
     if (rolePublic.includes(pathname)) {
         return true;
     } else if (authority === UserRole.STUDENT) {
-        return roleUser.includes(pathname);
+        return (
+            roleUser.includes(pathname) ||
+            roleUser.includes(pathname.substring(0, pathname.lastIndexOf('/')))
+        );
     } else if (authority === UserRole.TUTOR) {
-        return roleUser.includes(pathname);
+        return (
+            roleTutor.includes(pathname) ||
+            roleTutor.includes(pathname.substring(0, pathname.lastIndexOf('/')))
+        );
     } else {
         return true;
     }
