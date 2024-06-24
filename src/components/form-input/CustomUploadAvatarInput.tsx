@@ -1,8 +1,9 @@
 import CameraIcon from '@assets/icons/camera';
 import { FileReq } from '@core/models/file.model';
 import { imageUtility } from '@core/utilities/image.utility';
+import { toastError } from '@core/utilities/toast.utility';
 import type { UploadFile, UploadProps } from 'antd';
-import { Button, Form, Upload, message } from 'antd';
+import { Button, Form, Upload } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
@@ -16,11 +17,11 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
+        toastError('You can only upload JPG/PNG file!');
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
+        toastError('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
 };

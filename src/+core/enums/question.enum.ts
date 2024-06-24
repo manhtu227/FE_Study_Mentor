@@ -43,7 +43,7 @@ export const getStepByStatus = (status: QuestionStatus): QuestionStep | null => 
 };
 
 export enum QuestionStatusForTutor {
-    PENDING = 'PENDING',
+    ACCEPTED = 'ACCEPTED',
     NEW = 'NEW',
 }
 
@@ -93,7 +93,7 @@ export const optionQuestionStatusForTutor = [
     },
     {
         label: 'Đang trả lời',
-        value: QuestionStatusForTutor.PENDING,
+        value: QuestionStatusForTutor.ACCEPTED,
     },
 ];
 

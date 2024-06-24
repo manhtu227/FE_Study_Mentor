@@ -1,3 +1,4 @@
+import { DownloadOutlined } from '@ant-design/icons';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -19,7 +20,9 @@ import {
     subjectsCertificatedNotVerifyKeys,
     updateCertificatesAndSubjectsApi,
 } from '@core/services/user.service';
+import { downloadUrl } from '@core/utilities/download.util';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import {
     InvalidateQueryFilters,
@@ -27,7 +30,7 @@ import {
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
-import { Button, Form, Image, Select, Spin, message } from 'antd';
+import { Button, Form, Select, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -237,14 +240,18 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                                     return (
                                         <div
                                             key={certificate.fileKey}
-                                            className='flex gap-2 items-center'
+                                            className='border rounded-lg border-black-600 flex items-center justify-between p-4 border-solid w-full'
                                         >
-                                            <Image
-                                                width={200}
-                                                height={100}
-                                                className='max-w-[200px] max-h-[100px] rounded-lg'
-                                                src={`${process.env.NEXT_PUBLIC_PHOTO}${certificate.fileKey}`}
-                                                alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                            <div className='flex items-center text-base truncate max-w-2/3'>
+                                                {certificate.fileName}
+                                            </div>
+                                            <DownloadOutlined
+                                                className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                onClick={async () => {
+                                                    await downloadUrl(
+                                                        imageUtility(certificate.fileKey),
+                                                    );
+                                                }}
                                             />
                                         </div>
                                     );

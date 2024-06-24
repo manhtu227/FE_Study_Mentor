@@ -7,17 +7,15 @@ export default function ModalJoinGoogleMeet({
     googleMeetUrl,
     subjectName,
     price,
+    title,
 }: {
     questionName: string;
     googleMeetUrl: string;
     subjectName: string;
     price: number;
+    title?: string;
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const showModal = () => {
-    //     setIsModalOpen(true);
-    // };
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -41,7 +39,7 @@ export default function ModalJoinGoogleMeet({
                         Câu hỏi chủ đề : <strong>{subjectName}</strong>
                     </div>
                     <div className='text-xl'>
-                        Nội dung : <strong>{questionName}</strong>
+                        Tiêu đề : <strong>{title}</strong>
                     </div>
                     <div className='text-xl'>
                         Giá: <strong>{price}</strong>

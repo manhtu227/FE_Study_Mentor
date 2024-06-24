@@ -21,7 +21,7 @@ function ModalChangePassword({
             open={isShow}
             className='!w-[700px] flex flex-col text-left'
             footer={null}
-            closable={true}
+            closable={false}
         >
             <ChangePasswordForm onSaveForm={handleOk} onCancelForm={handleCancel} />
         </Modal>

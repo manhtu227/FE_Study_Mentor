@@ -10,6 +10,8 @@ import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
+import { downloadUrl } from '@core/utilities/download.util';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Avatar, Button, Col, Image, Modal, Pagination, Row } from 'antd';
 import { format } from 'date-fns';
@@ -189,7 +191,14 @@ function DetailedQuestionPage() {
                                                 <div className='flex items-center text-base truncate max-w-2/3'>
                                                     {file.fileName}
                                                 </div>
-                                                <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                <DownloadOutlined
+                                                    className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                    onClick={async () => {
+                                                        await downloadUrl(
+                                                            imageUtility(file.fileKey),
+                                                        );
+                                                    }}
+                                                />
                                             </div>
                                         );
                                     })}
