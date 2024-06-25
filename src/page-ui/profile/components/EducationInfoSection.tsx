@@ -283,7 +283,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='font-bold text-base mb-2'>Cấp học</div>
                     <Form.Item<EducationInformationInput>
                         name='levelIds'
-                        rules={[{ required: true, message: 'Please input!' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                     >
                         <Select
                             mode='multiple'
@@ -299,7 +299,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='font-bold text-base mb-2'>Khối/ Lớp</div>
                     <Form.Item<EducationInformationInput>
                         name='gradeIds'
-                        rules={[{ required: true, message: 'Please input!' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                     >
                         <Select
                             mode='multiple'

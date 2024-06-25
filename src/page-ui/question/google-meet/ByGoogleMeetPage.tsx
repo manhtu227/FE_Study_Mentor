@@ -132,11 +132,11 @@ export default function CreateQuestionByGoogleMeetPage() {
                                 <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
                                 <CustomEditorInput<QuestionInput>
                                     name='content'
-                                    rules={[{ required: true, message: 'Please input!' }]}
+                                    rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 />
                                 <CustomDragDropFile<QuestionInput>
                                     name='attachFiles'
-                                    // rules={[{ required: true, message: 'Please input!' }]}
+                                    // rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 />
                             </Form.Item>
                         </div>

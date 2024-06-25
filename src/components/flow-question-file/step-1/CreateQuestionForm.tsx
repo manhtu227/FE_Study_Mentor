@@ -27,7 +27,7 @@ import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Image, Modal, Popover, Select, Spin, message } from 'antd';
+import { Button, Form, Image, Modal, Popover, Select, Spin } from 'antd';
 import { HmacSHA256 } from 'crypto-js';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -228,7 +228,9 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                             width: '30%',
                                             height: 'max-content',
                                         }}
-                                        rules={[{ required: true, message: 'Please input!' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập giá trị!' },
+                                        ]}
                                     >
                                         <Select
                                             className='h-12 font-medium text-base'
@@ -243,7 +245,9 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                             display: 'inline-block',
                                             width: '30%',
                                         }}
-                                        rules={[{ required: true, message: 'Please input!' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập giá trị!' },
+                                        ]}
                                     >
                                         <Select
                                             className='h-12 font-medium text-base'
@@ -258,7 +262,9 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                             display: 'inline-block',
                                             width: '30%',
                                         }}
-                                        rules={[{ required: true, message: 'Please input!' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập giá trị!' },
+                                        ]}
                                     >
                                         <Select
                                             className='h-12 font-medium text-base text-gray-700'
@@ -270,11 +276,14 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 </div>
                             </Form.Item>
                             {/* Title question */}
-                            <div className='font-bold text-base mb-2'>Tóm tắt câu hỏi</div>
+                            <div className='font-bold text-base mb-2'>
+                                Tiêu đề câu hỏi (mô tả ngắn)
+                            </div>
                             <CustomTextInput<QuestionInput>
                                 name='title'
                                 classNameForm='mb-6'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
+                                placeholder='Nhập tiêu đề câu hỏi'
                             />
                             {/* Requirement for mentor */}
                             <div className='mb-2'>
@@ -287,7 +296,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                         display: 'inline-block',
                                         width: '100%',
                                     }}
-                                    rules={[{ required: true, message: 'Please input!' }]}
+                                    rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 >
                                     <Select
                                         className='h-12 font-medium text-base'
@@ -298,7 +307,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                             </div>
                             {/* Time for handle the question */}
                             <div className='font-bold text-base mb-2'>
-                                Thời gian bạn muốn tìm kiếm câu trả lời cho hỏi
+                                Thời gian bạn muốn hệ thống tìm kiếm câu trả lời cho câu hỏi
                             </div>
                             <CustomSelectInput<QuestionInput>
                                 name='timeAnswer'
@@ -311,7 +320,8 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                     { value: 45, label: '45 phút' },
                                     { value: 60, label: '60 phút' },
                                 ]}
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
+                                placeholder='Chọn thời gian tìm kiếm câu trả lời cho câu hỏi'
                             />
 
                             {/* Time in Google meet*/}
@@ -331,7 +341,9 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                             { value: 45, label: '45 phút' },
                                             { value: 60, label: '60 phút' },
                                         ]}
-                                        rules={[{ required: true, message: 'Please input!' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập giá trị!' },
+                                        ]}
                                     />
                                 </>
                             )}
@@ -343,11 +355,11 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 <div className='font-bold text-base mb-2'>Nội dung câu hỏi</div>
                                 <CustomEditorInput<QuestionInput>
                                     name='content'
-                                    rules={[{ required: true, message: 'Please input!' }]}
+                                    rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 />
                                 <CustomDragDropFile<QuestionInput>
                                     name='attachFiles'
-                                    // rules={[{ required: true, message: 'Please input!' }]}
+                                    // rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 />
                             </Form.Item>
                         </div>
@@ -411,12 +423,12 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
 
                 <div className='font-medium text-sm text-left text-[#313636]'>
                     Bạn cảm thấy mức giá không phù hợp?
-                    <div
+                    <button
                         className='font-bold text-base text-primary-900 no-underline cursor-pointer'
                         onClick={() => setIsOpenVoucher(true)}
                     >
                         Lựa chọn mã giảm giá
-                    </div>
+                    </button>
                 </div>
             </div>
             <Modal

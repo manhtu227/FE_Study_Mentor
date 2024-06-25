@@ -37,14 +37,14 @@ const NotificationBell: React.FC = () => {
 
     const drawerTitle = (
         <div className='flex items-center justify-between'>
-            <span className='font-bold text-2xl'>Notifications</span>
+            <span className='font-bold text-2xl'>Thông báo</span>
             {notifications.length > 0 && (
-                <div
-                    className='underline text-blue-600 text-sm cursor-pointer hover:opacity-80'
+                <button
+                    className='underline text-blue-600 text-sm cursor-pointer hover:opacity-80 bg-transparent border-none'
                     onClick={handleDismissAllNotifications}
                 >
-                    dismiss all
-                </div>
+                    xóa tất cả
+                </button>
             )}
         </div>
     );
