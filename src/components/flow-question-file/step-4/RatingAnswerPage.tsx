@@ -123,7 +123,7 @@ export default function RatingAnswerPage() {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your comment about this question',
+                                    message: 'Vui lòng nhập giá trị',
                                 },
                             ]}
                             classNameForm='w-full !mb-6'

@@ -20,6 +20,7 @@ import {
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
+import { ENV } from '@core/constants/env.constants';
 import { UserModel, UserRole } from '@core/models/user.model';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
@@ -30,7 +31,7 @@ import {
 } from '@core/store/reducers/received-questions.reducer';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { addTutor } from '@core/store/reducers/tutor.reducer';
-import { Button, Dropdown, MenuProps } from 'antd';
+import { Button, Dropdown, Image, MenuProps } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -355,7 +356,13 @@ const Header = () => {
                         >
                             <Dropdown menu={{ items: userItems }}>
                                 <div className='flex items-center gap-2 '>
-                                    <div className='rounded-full w-8 h-8 bg-[#D9D9D9]' />
+                                    <Image
+                                        className='rounded-full w-8 h-8 bg-[#D9D9D9]'
+                                        src={`${ENV.PHOTO}${data.user.user.avatar.fileKey}`}
+                                        height={32}
+                                        width={32}
+                                        preview={false}
+                                    />
                                     <div className='text-primary-900 text-base'>
                                         {data.user.user.fullName}
                                     </div>

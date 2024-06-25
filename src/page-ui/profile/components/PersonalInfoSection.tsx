@@ -83,7 +83,7 @@ export function PersonalInfoSection({
                     <div className='font-bold text-base mb-2'>Họ và tên</div>
                     <Form.Item<PersonalInformationInput>
                         name='fullName'
-                        rules={[{ required: true, message: 'Please input!' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                     >
                         <Input
                             className='h-12 font-medium text-base'
@@ -97,7 +97,7 @@ export function PersonalInfoSection({
                             <div className='font-bold text-base mb-2'>Số điện thoại</div>
                             <Form.Item<PersonalInformationInput>
                                 name='phone'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                             >
                                 <Input
                                     className='h-12 font-medium text-base'
@@ -111,7 +111,7 @@ export function PersonalInfoSection({
                             <div className='font-bold text-base mb-2'>Email</div>
                             <Form.Item<PersonalInformationInput>
                                 name='email'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                             >
                                 <Input
                                     className='h-12 font-medium text-base'
@@ -127,7 +127,7 @@ export function PersonalInfoSection({
                             <div className='font-bold text-base mb-2'>Năm sinh</div>
                             <Form.Item<PersonalInformationInput>
                                 name='dateOfBirth'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                             >
                                 <DatePicker
                                     className='h-12 font-medium text-base w-full'
@@ -143,7 +143,7 @@ export function PersonalInfoSection({
                             <div className='font-bold text-base mb-2'>Giới tính</div>
                             <Form.Item<PersonalInformationInput>
                                 name='gender'
-                                rules={[{ required: true, message: 'Please input!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                             >
                                 <Select
                                     className='h-12 font-medium text-base'

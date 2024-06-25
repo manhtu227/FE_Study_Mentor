@@ -61,11 +61,11 @@ function AnswerQuestionForm({
                 <Form.Item>
                     <CustomEditorInput<AnswerQuestion>
                         name='contentEditor'
-                        rules={[{ required: true, message: 'Please input!' }]}
+                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                     />
                     <CustomDragDropFile<AnswerQuestion>
                         name='attachFiles'
-                        // rules={[{ required: true, message: 'Please input!' }]}
+                        // rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                     />
                 </Form.Item>
                 <Form.Item colon={false}>

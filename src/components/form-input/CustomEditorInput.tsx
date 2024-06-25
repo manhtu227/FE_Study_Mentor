@@ -28,6 +28,7 @@ export const CustomEditorInput = <T extends object>({
                         ['clean'],
                     ],
                 }}
+                placeholder='Vui lòng nhập nội dung'
             />
         </Form.Item>
     );
