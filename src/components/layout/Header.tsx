@@ -102,29 +102,31 @@ const Header = () => {
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
 
-        toastId.current = toast(
-            <NewQuestionNotification
-                onClickNotification={handleClickOkNotification}
-                onCloseNotification={handleWatchLaterNotification}
-                subjectName={data.subject.name}
-                price={data.price}
-                questionType={data.methodAnswer}
-                title={data.title}
-            />,
-            {
-                position: 'top-left',
-                autoClose: DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-                transition: Bounce,
-                type: 'info',
-                onClose: handleWatchLaterNotification,
-            },
-        );
+        if (!isShowModalPickedQuestion) {
+            toastId.current = toast(
+                <NewQuestionNotification
+                    onClickNotification={handleClickOkNotification}
+                    onCloseNotification={handleWatchLaterNotification}
+                    subjectName={data.subject.name}
+                    price={data.price}
+                    questionType={data.methodAnswer}
+                    title={data.title}
+                />,
+                {
+                    position: 'top-left',
+                    autoClose: DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                    transition: Bounce,
+                    type: 'info',
+                    onClose: handleWatchLaterNotification,
+                },
+            );
+        }
 
         dispatch(
             addNotification({
