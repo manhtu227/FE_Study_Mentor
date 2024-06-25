@@ -6,7 +6,7 @@ import { CardQuestionUser } from '@components/card/CardQuestionUser';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { PaginationCore } from '@components/pagination/pagination';
-import { QuestionStatus, optionQuestionStatusForTutor } from '@core/enums/question.enum';
+import { QuestionStatusString, optionQuestionStatusForTutor } from '@core/enums/question.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { getEnum } from '@core/parser/enum.parser';
 import {
@@ -27,10 +27,10 @@ export default function FindQuestionsPage() {
     const { initialPaging, initialFilter } = useMemo(() => {
         const initialFilter: QuestionListFilter = {
             status:
-                getEnum<QuestionStatus>(
+                getEnum<QuestionStatusString>(
                     searchParams ? searchParams.get('status') : '',
-                    QuestionStatus,
-                ) || undefined,
+                    QuestionStatusString,
+                ) || QuestionStatusString.NEW,
         };
         const initialPaging: IPaginationInfo = {
             pageSize: +(searchParams?.get('pageSize') || initialPagingState.pageSize),

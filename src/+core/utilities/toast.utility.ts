@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 
 // export const toastError = (closeTimeout = 2000): ToastOptions => ({
 //     hideProgressBar: true,
@@ -17,17 +17,28 @@ import { toast } from 'react-toastify';
 // truyền message
 export const toastSuccess = (message: string, closeTimeout = 2000) => {
     toast.success(message, {
-        hideProgressBar: true,
         autoClose: closeTimeout,
-        position: 'bottom-left',
         type: 'success',
+        position: 'top-left',
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
     });
 };
 
 export const toastError = (message: string, closeTimeout = 2000) => {
     toast.error(message, {
-        hideProgressBar: true,
         autoClose: closeTimeout,
         type: 'error',
+        position: 'top-left',
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
     });
 };

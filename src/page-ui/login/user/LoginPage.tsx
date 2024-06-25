@@ -3,7 +3,11 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
-import { AUTHENTICATED } from '@core/constants/authentication.constants';
+import {
+    AUTHENTICATED,
+    PASSWORD_PATTERN,
+    PASSWORD_VALIDATION_MESSAGE,
+} from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { LoginInput } from '@core/models/authentication.model';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
@@ -48,7 +52,7 @@ const LoginPage = () => {
 
     return (
         <div className='font-[sans-serif]'>
-            <div className='min-h-screen flex fle-col items-center justify-center py-6 px-4'>
+            <div className='min-h-screen flex fle-col items-center justify-center'>
                 <div className='grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full'>
                     <div className='border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto'>
                         <Form
@@ -66,7 +70,9 @@ const LoginPage = () => {
                             </div>
 
                             <div>
-                                <label className='text-gray-800 text-sm mb-2 block'>Email</label>
+                                <label htmlFor='email' className='text-gray-800 text-sm mb-2 block'>
+                                    Email
+                                </label>
                                 <div className='relative flex items-center'>
                                     <CustomTextInput<LoginInput>
                                         name={'email'}
@@ -81,7 +87,12 @@ const LoginPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className='text-gray-800 text-sm mb-2 block'>Password</label>
+                                <label
+                                    htmlFor='password'
+                                    className='text-gray-800 text-sm mb-2 block'
+                                >
+                                    Password
+                                </label>
                                 <div className='relative flex items-center'>
                                     <CustomPasswordInput<LoginInput>
                                         name={'password'}
@@ -90,6 +101,10 @@ const LoginPage = () => {
                                         prefix={<LockOutlined />}
                                         rules={[
                                             { required: true, message: 'Vui lòng nhập mật khẩu' },
+                                            {
+                                                pattern: PASSWORD_PATTERN,
+                                                message: PASSWORD_VALIDATION_MESSAGE,
+                                            },
                                         ]}
                                     />
                                 </div>
@@ -99,12 +114,12 @@ const LoginPage = () => {
                                 <div className='flex items-center'></div>
 
                                 <div className='text-sm'>
-                                    <a
-                                        href='jajvascript:void(0);'
+                                    <Link
+                                        href={MY_ROUTE.RESET_PASSWORD}
                                         className='text-blue-600 hover:underline font-semibold'
                                     >
-                                        Forgot your password?
-                                    </a>
+                                        Quên mật khẩu?
+                                    </Link>
                                 </div>
                             </div>
 

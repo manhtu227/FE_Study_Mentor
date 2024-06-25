@@ -5,8 +5,9 @@ import {
 import { ChangePasswordInput } from '@core/models/authentication.model';
 import { ResetPasswordReq } from '@core/models/user.model';
 import { changePasswordApi } from '@core/services/user.service';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { useState } from 'react';
 
 function ChangePasswordForm({
@@ -23,7 +24,7 @@ function ChangePasswordForm({
         mutationFn: (data: ResetPasswordReq) => changePasswordApi(data),
         onSuccess: () => {
             onSaveForm();
-            message.success('Đổi password thành công');
+            toastSuccess('Đổi password thành công');
         },
         onError: (error: any) => {
             setErrorMessage(error.response.data.message);

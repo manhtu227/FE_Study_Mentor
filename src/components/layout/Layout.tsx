@@ -15,16 +15,22 @@ export default function Layout({ children }: PropsWithChildren) {
 
     return (
         <>
-            {pathname !== MY_ROUTE.LOGIN && pathname !== MY_ROUTE.SIGN_UP && (
-                <>
-                    <Header />
-                    <QuestionIcon />
-                </>
-            )}
+            {pathname !== MY_ROUTE.LOGIN &&
+                pathname !== MY_ROUTE.SIGN_UP &&
+                pathname !== MY_ROUTE.RESET_PASSWORD && (
+                    <>
+                        <Header />
+                        <QuestionIcon />
+                    </>
+                )}
 
             <div
                 className={
-                    pathname !== MY_ROUTE.LOGIN && pathname !== MY_ROUTE.SIGN_UP ? 'pt-[64px]' : ''
+                    pathname !== MY_ROUTE.LOGIN &&
+                    pathname !== MY_ROUTE.SIGN_UP &&
+                    pathname !== MY_ROUTE.RESET_PASSWORD
+                        ? 'pt-[64px]'
+                        : ''
                 }
             >
                 <ToastContainer />
