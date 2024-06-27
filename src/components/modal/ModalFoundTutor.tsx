@@ -7,10 +7,10 @@ import { UserModel } from '@core/models/user.model';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Avatar, Modal } from 'antd';
-import Image from 'next/image';
+import { Avatar, Image, Modal } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -107,14 +107,7 @@ export default function ModalFoundTutor({
                             ? 'Đã tìm thấy người hướng dẫn'
                             : 'Rất tiếc người hướng dẫn này đã từ chối bạn'}
                     </h2>
-                    <img
-                        src={
-                            user?.avatar?.fileKey
-                                ? `${process.env.NEXT_PUBLIC_PHOTO}${user?.avatar?.fileKey}`
-                                : images.teacher.src
-                        }
-                        alt='ảnh người hướng dẫn'
-                    />
+                    <img src={imageUtility(user?.avatar?.fileKey)} alt='ảnh người hướng dẫn' />
                     <div className='py-1'>
                         {methodAnswer === QuestionEnum.FILE
                             ? 'Hình thức trò chuyện'
@@ -135,6 +128,7 @@ export default function ModalFoundTutor({
                                                 : images.teacher.src
                                         }
                                         width={50}
+                                        preview={false}
                                         height={50}
                                     />
                                 }

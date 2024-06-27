@@ -207,7 +207,7 @@ export type GetQuestionResponseModel = {
     price: string;
     status: QuestionStatus;
     isPaid: boolean;
-    type: number;
+    type: QuestionType;
     fileQuestions: FileReq[] | null;
     student: UserModel;
     tutor?: UserModel;
@@ -228,6 +228,7 @@ export type AcceptQuestionModel = {
     senderId: string;
     questionId: string;
     isAccepted?: QuestionAcceptStatus;
+    methodAnswer: QuestionType;
 };
 
 export type AcceptQuestionResp = {

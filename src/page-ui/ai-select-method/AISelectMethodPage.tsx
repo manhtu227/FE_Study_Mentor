@@ -6,9 +6,8 @@ import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import { Modal } from 'antd';
+import { Image, Modal } from 'antd';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 const FreeAIList = [
@@ -51,7 +50,8 @@ function AISelectMethodPage() {
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
             <Image
-                src={images.studyMethodBg}
+                src={images.studyMethodBg.src}
+                preview={false}
                 alt='Hero'
                 className='relative opacity-50 max-w-full'
             />

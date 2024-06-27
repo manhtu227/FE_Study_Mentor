@@ -14,6 +14,7 @@ import images from '@assets/images';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { downloadUrl } from '@core/utilities/download.util';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
@@ -89,6 +90,26 @@ export default function CheckQAPage({ onNext }: Props) {
         },
         onError: handleError,
     });
+
+    const mutationCreate = useMutation({
+        mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
+        onError: handleError,
+    });
+
+    const handleCreateGoogleMeet = async () => {
+        mutationCreate.mutate(
+            {
+                questionId: currentQuestionId,
+                tutorId: query.data?.tutor?.id || '',
+            },
+            {
+                onSuccess: () => {
+                    toastSuccess('Tạo cuộc họp thành công');
+                    query.refetch();
+                },
+            },
+        );
+    };
 
     return (
         <div>
@@ -195,7 +216,10 @@ export default function CheckQAPage({ onNext }: Props) {
                                             {query.data.meetingURL}
                                         </div>
                                     ) : (
-                                        <ButtonPrimary title={'Create google meet'} />
+                                        <ButtonPrimary
+                                            title={'Create google meet'}
+                                            onClick={handleCreateGoogleMeet}
+                                        />
                                     )
                                 ) : answer ? (
                                     <>

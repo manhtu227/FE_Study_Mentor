@@ -4,8 +4,8 @@ import MethodItem from '@components/study-method/StudyMethod';
 import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
+import { Image } from 'antd';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -22,7 +22,7 @@ function MentorSelectMethodPage() {
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
             <Image
-                src={images.studyMethodBg}
+                src={images.studyMethodBg.src}
                 alt='Hero'
                 className='relative opacity-50 max-w-full'
             />

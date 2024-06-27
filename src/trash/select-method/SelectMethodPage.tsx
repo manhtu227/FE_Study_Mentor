@@ -3,13 +3,14 @@
 import images from '@assets/images';
 import MethodItem from '@components/study-method/StudyMethod';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import Image from 'next/image';
+import { Image } from 'antd';
 
 function SelectMethodPage() {
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>
             <Image
-                src={images.studyMethodBg}
+                src={images.studyMethodBg.src}
+                preview={false}
                 alt='Hero'
                 className='relative opacity-50 max-w-full'
             />

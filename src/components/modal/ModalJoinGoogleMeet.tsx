@@ -1,6 +1,5 @@
 'use client';
 import { Modal } from 'antd';
-import { useState } from 'react';
 
 export default function ModalJoinGoogleMeet({
     questionName,
@@ -8,14 +7,20 @@ export default function ModalJoinGoogleMeet({
     subjectName,
     price,
     title,
+    isModalOpen,
+    setIsModalOpen,
 }: {
     questionName: string;
     googleMeetUrl: string;
     subjectName: string;
     price: number;
+    isModalOpen: boolean;
     title?: string;
+    setIsModalOpen: (value: boolean) => void;
 }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const showModal = () => {
+    //     setIsModalOpen(true);
+    // };
 
     const handleOk = () => {
         setIsModalOpen(false);

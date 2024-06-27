@@ -2,8 +2,7 @@
 
 import BookmarkIcon from '@assets/icons/bookmark-icon';
 import { Question } from '@core/models/question.model';
-import { Avatar, Button, Tag } from 'antd';
-import Image from 'next/image';
+import { Avatar, Button, Image, Tag } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function CardQuestion({ question }: { question: Question }) {
@@ -20,7 +19,12 @@ export function CardQuestion({ question }: { question: Question }) {
                     <Avatar
                         size={44}
                         icon={
-                            <Image alt={'image of question'} loading='lazy' src={question.image} />
+                            <Image
+                                alt={'image of question'}
+                                loading='lazy'
+                                src={question.image.src}
+                                preview={false}
+                            />
                         }
                     />
                     <div className='flex flex-col'>

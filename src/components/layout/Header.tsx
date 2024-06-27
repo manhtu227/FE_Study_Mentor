@@ -241,7 +241,7 @@ const Header = () => {
 
                     socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
                         setIsShowModalReceiveGoogleMeet(true);
-                        setNewGoogleMeet(data.data);
+                        setNewGoogleMeet(data);
                     });
 
                     setTimeout(() => setCompletedQuestion(mockData), 5000);
@@ -315,17 +315,20 @@ const Header = () => {
             dispatch(removeNotification(newQuestion.questionId));
         }
     };
+    console.log(newGoogleMeet);
 
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
-            {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && (
-                <ModalJoinGoogleMeet
-                    googleMeetUrl={newGoogleMeet?.meetingUrl}
-                    price={newQuestion?.price}
-                    questionName={newQuestion.content}
-                    subjectName={newQuestion.subject.name}
-                />
-            )}
+            {/* {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && ( */}
+            <ModalJoinGoogleMeet
+                googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
+                isModalOpen={isShowModalReceiveGoogleMeet}
+                setIsModalOpen={setIsShowModalReceiveGoogleMeet}
+                price={newQuestion?.price || 1}
+                questionName={newQuestion?.content || ''}
+                subjectName={newQuestion?.subject.name || ''}
+            />
+            {/* )} */}
             {isShowModalPickedQuestion && newQuestion && (
                 <ModalAcceptQuestion
                     question={newQuestion}

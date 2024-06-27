@@ -1,5 +1,4 @@
 'use client';
-import SendIcon from '@assets/icons/send-icon';
 import UploadIcon from '@assets/icons/upload-icon';
 import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -10,6 +9,7 @@ import { useForm } from 'antd/es/form/Form';
 import clsx from 'clsx';
 import { useState } from 'react';
 import UploadFileMessage from './UploadFileMessage';
+import SendIcon from '@assets/icons/send-icon';
 
 const dummyRequest = ({ onSuccess }: any) => {
     setTimeout(() => {

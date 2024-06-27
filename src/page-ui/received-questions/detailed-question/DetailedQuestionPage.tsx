@@ -147,6 +147,7 @@ function DetailedQuestionPage() {
             questionId: currentQuestion?.questionId as string,
             studentId: currentQuestion?.student.id as string,
             senderId: data?.user.user.id as string,
+            methodAnswer: currentQuestion?.type || QuestionType.FILE,
         };
 
         socketReducer?.emit(SocketEvent.ACCEPT, requestAccept);

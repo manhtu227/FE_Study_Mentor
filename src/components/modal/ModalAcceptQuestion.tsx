@@ -30,12 +30,14 @@ export default function ModalAcceptQuestion({
         senderId: string,
         studentId: string,
         status: QuestionAcceptStatus,
+        methodAnswer: QuestionType,
     ): AcceptQuestionModel => {
         return {
             questionId: question.questionId,
             senderId: senderId,
             studentId: studentId,
             isAccepted: status,
+            methodAnswer: methodAnswer,
         };
     };
 
@@ -50,6 +52,7 @@ export default function ModalAcceptQuestion({
             senderId,
             studentId,
             QuestionAcceptStatus.AGREE,
+            question.type,
         );
 
         socketReducer?.emit(SocketEvent.ACCEPT_PICKED, request);
@@ -76,6 +79,7 @@ export default function ModalAcceptQuestion({
             senderId,
             studentId,
             QuestionAcceptStatus.DECLINE,
+            question.type,
         );
 
         socketReducer?.emit(SocketEvent.ACCEPT_PICKED, request);
