@@ -21,6 +21,7 @@ import {
     OverviewTutorInfo,
     QuestionAnsweredItem,
     ResetPasswordReq,
+    UserModel,
 } from '@core/models/user.model';
 import { OptionItem } from '@core/types/option.type';
 import { IPaginationInfo, PagingResp } from '@core/types/paging.type';
@@ -32,6 +33,15 @@ export const educationInfoKeys = initKeys('education-info-keys');
 
 export const getUserDetailApi = async () => {
     return api.get<{ data: UserResp }>(`/api/users/profile`);
+};
+
+export const getUserByIdKey = initKeys('user-by-id');
+export const getUserById = async (id: string) => {
+    return await api.get<BaseResp<UserModel>>(`/api/users/${id}`);
+};
+
+export const getDetailApi = async () => {
+    return api.get<BaseResp<UserResp>>(`/api/users/profile`);
 };
 
 export const updateUserDetailApi = async (data: UpdatePersonalInformationInput) => {

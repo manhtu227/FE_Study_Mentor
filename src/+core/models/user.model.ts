@@ -1,4 +1,5 @@
 import { FileReq } from './file.model';
+import { Subject } from './profile.model';
 
 export enum UserRole {
     STUDENT = 0,
@@ -22,6 +23,10 @@ export type UserModel = {
     averageRate: number;
     isOnline: boolean;
     avatar?: FileReq;
+    subjects?: Subject[];
+    certificates: FileReq[];
+    isMembership: boolean;
+    expirationDate: Date;
 };
 
 export type OverviewTutorInfo = {

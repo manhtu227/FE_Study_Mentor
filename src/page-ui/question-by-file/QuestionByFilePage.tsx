@@ -4,10 +4,14 @@ import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
 import CreateQuestionForm from '@components/flow-question-file/step-1/CreateQuestionForm';
-import { Button, message, Steps } from 'antd';
+import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import { RootState } from '@core/store';
+import { useQuery } from '@tanstack/react-query';
+import { Button, Steps, message } from 'antd';
 import clsx from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import FindMentorBySystemPage from '../../components/flow-question-file/step-2/FindMentorBySystemPage';
 import CheckQAPage from '../../components/flow-question-file/step-3/CheckQAPage';
 import RatingAnswerPage from '../../components/flow-question-file/step-4/RatingAnswerPage';
@@ -16,12 +20,35 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
+    const currentQuestionId = useSelector((state: RootState) => {
+        return state.questions.currentQuestionId;
+    });
+
+    const question = useQuery({
+        queryKey: detailedQuestionKeys.list({ currentQuestionId }),
+        queryFn: () => getDetailedQuestionApi(currentQuestionId),
+        select: (data) => data?.data.data,
+    });
+
     const current = useMemo(() => {
-        if (!searchParams) return 0;
-        const step = searchParams.get('step') || 0;
-        if (isNaN(+step)) return 0;
-        return +step;
-    }, [searchParams]);
+        let step = 0;
+
+        if (!question.data) step = 0;
+        if (!searchParams) step = 0;
+
+        const x = searchParams.get('step') || 0;
+        if (!isNaN(+x)) step = +x;
+
+        if ((step === 2 || step === 3) && !question?.data?.tutor) {
+            step = 1;
+        }
+
+        if (step === 3 && !question.data?.answers) {
+            step = 2;
+        }
+
+        return step;
+    }, [searchParams, question.data]);
 
     const next = () => {
         const params = new URLSearchParams(searchParams || '');

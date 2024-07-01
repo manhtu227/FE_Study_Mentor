@@ -1,4 +1,5 @@
 import { api } from '@core/https/http';
+import { BaseResp } from '@core/models/base.model';
 import {
     CreatePaymentRequestModel,
     CreatePaymentResp,
@@ -32,4 +33,32 @@ export const cancelPaymentRequestApi = async (paymentId: string, reason: string)
             needsAuth: true,
         } as any & { needsAuth?: boolean },
     );
+};
+
+export enum PaymentType {
+    QUESTION = 0,
+    CHAT_AI = 1,
+}
+
+export enum ExpirationDateType {
+    DAY = 0,
+    WEEK = 1,
+    MONTH = 2,
+    YEAR = 3,
+}
+
+export type PaymentReq = {
+    questionId?: string;
+    type: PaymentType;
+    expirationDateType?: ExpirationDateType;
+    cancelUrl?: string;
+    returnUrl?: string;
+};
+
+export const paymemtSystemApi = async (body: PaymentReq) => {
+    return api.post<
+        BaseResp<{
+            checkoutUrl: string;
+        }>
+    >(`/api/payment/payment-link`, body);
 };

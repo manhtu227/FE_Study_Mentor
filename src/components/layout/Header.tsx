@@ -22,6 +22,7 @@ import {
 
 import { ENV } from '@core/constants/env.constants';
 import { UserModel, UserRole } from '@core/models/user.model';
+import { getDetailApi, userDetailKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
@@ -31,6 +32,7 @@ import {
 } from '@core/store/reducers/received-questions.reducer';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { addTutor } from '@core/store/reducers/tutor.reducer';
+import { useQuery } from '@tanstack/react-query';
 import { Button, Dropdown, Image, MenuProps } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -42,7 +44,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { defaultSocket } from '../../socket';
 
 const Header = () => {
-    const { data } = useSession();
+    const { data, update } = useSession();
 
     const userItems: MenuProps['items'] = [
         {
@@ -141,6 +143,26 @@ const Header = () => {
         dispatch(addReceivedQuestion({ questionId: data.questionId, isWatchLater: false }));
     };
 
+    const userQuery = useQuery({
+        queryKey: userDetailKeys.all,
+        queryFn: () => getDetailApi(),
+    });
+
+    useEffect(() => {
+        if (userQuery.data?.data) {
+            const userData = userQuery.data?.data.data;
+            if (data?.user) {
+                update({
+                    ...data,
+                    user: {
+                        ...data.user,
+                        user: userData,
+                    },
+                });
+            }
+        }
+    }, [userQuery.data?.data]);
+
     const handleClickLogin = () => {
         router.push(MY_ROUTE.LOGIN);
     };
@@ -212,7 +234,6 @@ const Header = () => {
             if (socket) {
                 const onConnectSocket = () => {
                     dispatch(onConnect(socket));
-                    console.log('connect with id:', data?.user?.user?.id);
                 };
 
                 const onDisconnectSocket = () => {
@@ -315,7 +336,6 @@ const Header = () => {
             dispatch(removeNotification(newQuestion.questionId));
         }
     };
-    console.log(newGoogleMeet);
 
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>

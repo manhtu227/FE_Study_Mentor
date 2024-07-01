@@ -61,6 +61,8 @@ export type UserResp = {
     isActive: boolean;
     averageRate: number;
     avatar: FileReq;
+    isMembership: boolean;
+    expirationDate: string;
 };
 
 export type EducationInfoResp = {

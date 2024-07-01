@@ -39,7 +39,6 @@ const SignUpPage = () => {
     });
 
     const handleSubmitSignUp = (values: SignUpInput) => {
-        console.log('values', values);
         signUpMutate.mutate(values);
     };
 

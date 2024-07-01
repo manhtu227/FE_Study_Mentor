@@ -14,6 +14,7 @@ import { PickTutorReq, getTutorOnline, pickTutor, tutorsKeys } from '@core/servi
 import { RootState } from '@core/store';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -115,7 +116,7 @@ export default function CardListPage() {
                                   <CardMentorInfo
                                       mentor={{
                                           id: mentor.id,
-                                          image: images.feedback.src,
+                                          image: imageUtility(mentor.avatar.fileKey),
                                           name: mentor.fullName,
                                           age: mentor.age,
                                           rating: mentor.averageRate,

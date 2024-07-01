@@ -1,9 +1,11 @@
+import { FileReq } from './file.model';
+
 export type MentorListResp = {
     id: string;
     Email: string;
     age: number;
     Gender: number;
-    Avatar: string | null;
+    avatar: FileReq;
     Skill: string;
     fullName: string;
     Password: string;

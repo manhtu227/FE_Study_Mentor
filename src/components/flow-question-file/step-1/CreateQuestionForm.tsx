@@ -5,14 +5,13 @@ import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import { starOptions } from '@core/constants/options.contanst';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
-import { CreatePaymentRequestModel } from '@core/models/payment.model';
 import {
     CreateFileQuestionReducer,
     CreateFileQuestionRequestModel,
     ICalculatePriceRequestModel,
     QuestionInput,
 } from '@core/models/question.model';
-import { createNewPaymentRequestApi } from '@core/services/payment.service';
+import { PaymentReq, PaymentType, paymemtSystemApi } from '@core/services/payment.service';
 import {
     ConvertGradeToOption,
     ConvertLevelToOption,
@@ -28,10 +27,9 @@ import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Image, Modal, Popover, Select, Spin } from 'antd';
-import { HmacSHA256 } from 'crypto-js';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 import PopoverVoucher from './PopoverVoucher';
@@ -80,9 +78,10 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
 
     // create new payment request api
     const mutateCreatePaymentRequest = useMutation({
-        mutationFn: (data: CreatePaymentRequestModel) => createNewPaymentRequestApi(data),
-        onSuccess: () => {
+        mutationFn: (body: PaymentReq) => paymemtSystemApi(body),
+        onSuccess: (resp) => {
             toastSuccess('Tạo yêu cầu thanh toán thành công');
+            router.push(resp.data.data.checkoutUrl);
         },
         onError: handleError,
     });
@@ -163,36 +162,18 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                 dispatch(setCurrentQuestionId(requestReducer.questionId!));
 
                 // handle create payment request
-                const orderCode = Math.floor(Math.random() * 1000000);
-                const cancelUrl = `${window.location.origin}/mentor/file?step=1`;
-                const des = 'Thanh toán cho câu hỏi';
-                const returnUrl = `${window.location.origin}/mentor/file?step=1`;
-                const message = `amount=${2000}&cancelUrl=${cancelUrl}&description=${des}&orderCode=${orderCode}&returnUrl=${returnUrl}`;
-                const hash = HmacSHA256(
-                    message,
-                    process.env.NEXT_PUBLIC_PAY_OS_CHECK_SUM_KEY || '',
-                );
-                const request: CreatePaymentRequestModel = {
-                    amount: 2000,
-                    description: des,
-                    orderCode: orderCode,
+                const cancelUrl = `${window.location.origin}${window.location.pathname}?step=0`;
+                const returnUrl = `${window.location.origin}${window.location.pathname}?step=1`;
+
+                mutateCreatePaymentRequest.mutate({
+                    questionId: resp.data.data.questionId!,
+                    type: PaymentType.QUESTION,
                     cancelUrl: cancelUrl,
                     returnUrl: returnUrl,
-                    signature: hash.toString(),
-                };
-
-                mutateCreatePaymentRequest.mutate(request);
+                });
             },
         });
     };
-
-    useEffect(() => {
-        const checkoutUrl = mutateCreatePaymentRequest.data?.data.data.checkoutUrl;
-
-        if (checkoutUrl) {
-            router.push(checkoutUrl);
-        }
-    }, [mutateCreatePaymentRequest.data]);
 
     return (
         <Spin spinning={mutateCreateQuestions.isPending || file.isFetching}>

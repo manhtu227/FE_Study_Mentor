@@ -4,6 +4,7 @@ export const MY_ROUTE = {
         self: '/ai',
         FREE: '/ai/free',
         PAID: '/ai/paid',
+        UPGRADE: '/ai/upgrade',
     },
     LIST_QUESTION: '/question-list',
     MENTOR: {

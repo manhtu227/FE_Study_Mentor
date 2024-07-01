@@ -7,7 +7,6 @@ import { UserModel } from '@core/models/user.model';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
-import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
 import { Avatar, Image, Modal } from 'antd';
@@ -107,7 +106,7 @@ export default function ModalFoundTutor({
                             ? 'Đã tìm thấy người hướng dẫn'
                             : 'Rất tiếc người hướng dẫn này đã từ chối bạn'}
                     </h2>
-                    <img src={imageUtility(user?.avatar?.fileKey)} alt='ảnh người hướng dẫn' />
+                    {/* <img src={imageUtility(user?.avatar?.fileKey)} alt='ảnh người hướng dẫn' /> */}
                     <div className='py-1'>
                         {methodAnswer === QuestionEnum.FILE
                             ? 'Hình thức trò chuyện'

@@ -1,8 +1,8 @@
-import images from '@assets/images';
 import { CardInfoExchange } from '@components/card/CardInfoExchange';
 import { CardMentorInfo } from '@components/card/CardMentorInfo';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
@@ -34,9 +34,7 @@ export function SideBarMentor({ button, children, className }: Props) {
                                 ? dayjs().year() - query.data?.tutor?.dateOfBirth
                                 : 20,
                             id: query.data?.tutor?.id || '',
-                            image: query.data?.tutor?.avatar?.fileKey
-                                ? `${process.env.NEXT_PUBLIC_PHOTO}${query.data.tutor.avatar.fileKey}`
-                                : images.teacher.src,
+                            image: imageUtility(query.data?.tutor?.avatar?.fileKey),
                             name: query.data?.tutor?.fullName || 'Không tên',
                             rating: query.data?.tutor?.averageRate || 5,
                         }}

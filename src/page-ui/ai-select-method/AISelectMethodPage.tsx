@@ -77,7 +77,11 @@ function AISelectMethodPage() {
                         titleButton='Bắt đầu ngay'
                         type={DescriptionEnum.PaidAI}
                         className='max-w-[542px]'
-                        href={MY_ROUTE.AI.PAID}
+                        href={
+                            authData?.user.user.isMembership
+                                ? MY_ROUTE.AI.PAID
+                                : MY_ROUTE.AI.UPGRADE
+                        }
                     />
                 </div>
             </div>

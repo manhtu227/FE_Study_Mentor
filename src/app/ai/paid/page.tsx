@@ -1,7 +1,19 @@
 'use client';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import ChatAiPage, { AIFreeOrPaidEnum } from '../../../page-ui/chat-ai/ChatAiPage';
 
 export default function ChatAi() {
+    const router = useRouter();
+    const session = useSession();
+    useEffect(() => {
+        if (!session.data) return;
+        if (!session.data.user.user.isMembership) {
+            router.back();
+        }
+    }, [session.data]);
+
     return (
         <div className='bg-white-800'>
             <ChatAiPage type={AIFreeOrPaidEnum.PAID} />
