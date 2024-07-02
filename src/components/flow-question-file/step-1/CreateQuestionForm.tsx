@@ -325,6 +325,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                         rules={[
                                             { required: true, message: 'Vui lòng nhập giá trị!' },
                                         ]}
+                                        placeholder='Chọn thời gian giải đáp thắc mắc'
                                     />
                                 </>
                             )}
@@ -402,14 +403,14 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                     </div>
                 </Form>
 
-                <div className='font-medium text-sm text-left text-[#313636]'>
-                    Bạn cảm thấy mức giá không phù hợp?
-                    <button
+                <div className='flex items-center gap-2 font-medium text-sm text-left text-[#313636]'>
+                    <div>Bạn cảm thấy mức giá không phù hợp?</div>
+                    <div
                         className='font-bold text-base text-primary-900 no-underline cursor-pointer'
                         onClick={() => setIsOpenVoucher(true)}
                     >
                         Lựa chọn mã giảm giá
-                    </button>
+                    </div>
                 </div>
             </div>
             <Modal

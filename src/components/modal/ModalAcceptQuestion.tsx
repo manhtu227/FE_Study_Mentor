@@ -84,6 +84,9 @@ export default function ModalAcceptQuestion({
 
         socketReducer?.emit(SocketEvent.ACCEPT_PICKED, request);
     };
+
+    const hasQuestion = question.fileQuestions && question.fileQuestions.length > 0;
+
     return (
         <div>
             <Modal
@@ -97,7 +100,7 @@ export default function ModalAcceptQuestion({
                 className='!w-[700px] flex flex-col text-left'
             >
                 <h3 className='text-[20px] leading-[27px] text-[NeutralDark1]'>
-                    Có 1 học viên muốn được bạn trả lời 1 câu hỏi
+                    Có 1 học viên muốn được bạn trả lời câu hỏi
                 </h3>
                 <div className='mt-2'>
                     <h3 className='mb-0 font-bold text-xl text-blue-700'>Học viên:</h3>
@@ -132,39 +135,41 @@ export default function ModalAcceptQuestion({
                             }}
                             className='p-2 mt-2 border rounded-lg border-gray-600 border-solid'
                         />
-                        <div className='text-lg mt-1'>
-                            <strong>
-                                File đính kèm:{' '}
-                                <span className='font-light italic text-sm'>
-                                    (tải về để xem chi tiết)
-                                </span>
-                            </strong>
-                        </div>
-                        <div className='mt-1 border rounded-lg border-gray-600 border-solid'>
-                            {question.fileQuestions &&
-                                question.fileQuestions.length > 0 &&
-                                question.fileQuestions.map((file) => {
-                                    return (
-                                        <div
-                                            key={file.fileKey}
-                                            className='flex items-center justify-between p-4 gap-1'
-                                        >
-                                            <div className='flex items-center'>
-                                                <div className='font-bold text-md mx-4 max-w-4/5 truncate text-green-500'>
-                                                    {file.fileName}
-                                                </div>
-                                            </div>
-                                            <Link
-                                                href={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
-                                                type='download'
-                                                className='hover:opacity-90'
+                        {hasQuestion && (
+                            <>
+                                <div className='text-lg mt-1'>
+                                    <strong>
+                                        File đính kèm:{' '}
+                                        <span className='font-light italic text-sm'>
+                                            (tải về để xem chi tiết)
+                                        </span>
+                                    </strong>
+                                </div>
+                                <div className='mt-1 border rounded-lg border-gray-600 border-solid'>
+                                    {question.fileQuestions.map((file) => {
+                                        return (
+                                            <div
+                                                key={file.fileKey}
+                                                className='flex items-center justify-between p-4 gap-1'
                                             >
-                                                <DownloadOutlined className='text-green-500 text-2xl cursor-pointer' />
-                                            </Link>
-                                        </div>
-                                    );
-                                })}
-                        </div>
+                                                <div className='flex items-center'>
+                                                    <div className='font-bold text-md mx-4 max-w-4/5 truncate text-green-500'>
+                                                        {file.fileName}
+                                                    </div>
+                                                </div>
+                                                <Link
+                                                    href={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
+                                                    type='download'
+                                                    className='hover:opacity-90'
+                                                >
+                                                    <DownloadOutlined className='text-green-500 text-2xl cursor-pointer' />
+                                                </Link>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

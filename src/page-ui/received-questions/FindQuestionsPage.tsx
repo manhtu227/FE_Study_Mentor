@@ -31,6 +31,7 @@ export default function FindQuestionsPage() {
                     searchParams ? searchParams.get('status') : '',
                     QuestionStatusString,
                 ) || QuestionStatusString.NEW,
+            search: searchParams.get('search') || '',
         };
         const initialPaging: IPaginationInfo = {
             pageSize: +(searchParams?.get('pageSize') || initialPagingState.pageSize),
@@ -67,6 +68,9 @@ export default function FindQuestionsPage() {
                     prefix={<SearchOutlined />}
                     placeholder='Nhập nội dung tìm kiếm...'
                     classNameForm='w-[400px]'
+                    onChange={(e: any) => {
+                        handleFilterChange({ search: e.target.value });
+                    }}
                 />
                 <CustomSelectInput
                     classNameForm='w-[131px] '

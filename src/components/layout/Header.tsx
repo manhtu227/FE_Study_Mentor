@@ -20,18 +20,18 @@ import {
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
-import { ENV } from '@core/constants/env.constants';
 import { UserModel, UserRole } from '@core/models/user.model';
 import { getDetailApi, userDetailKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
-import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
+import { setCurrentQuestionId, setPickedQuestion } from '@core/store/reducers/question.reducer';
 import {
     addReceivedQuestion,
     setIsWatchedLater,
 } from '@core/store/reducers/received-questions.reducer';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { addTutor } from '@core/store/reducers/tutor.reducer';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Dropdown, Image, MenuProps } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
@@ -101,6 +101,7 @@ const Header = () => {
     const [completedQuestion, setCompletedQuestion] = useState<any>();
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
+    const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
 
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
@@ -252,10 +253,12 @@ const Header = () => {
 
                     socket.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
                         data.data.createdAt = new Date();
-                        setNewQuestion({
-                            ...data.data,
-                            methodAnswer: data.methodAnswer,
-                        });
+                        dispatch(
+                            setPickedQuestion({
+                                ...data.data,
+                                methodAnswer: data.methodAnswer,
+                            }),
+                        );
 
                         setIsShowModalPickedQuestion(true);
                     });
@@ -339,19 +342,17 @@ const Header = () => {
 
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
-            {/* {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && ( */}
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}
                 setIsModalOpen={setIsShowModalReceiveGoogleMeet}
-                price={newQuestion?.price || 1}
-                questionName={newQuestion?.content || ''}
-                subjectName={newQuestion?.subject.name || ''}
+                price={pickedQuestion?.price || 1}
+                questionName={pickedQuestion?.content || ''}
+                subjectName={pickedQuestion?.subject.name || ''}
             />
-            {/* )} */}
-            {isShowModalPickedQuestion && newQuestion && (
+            {isShowModalPickedQuestion && pickedQuestion && (
                 <ModalAcceptQuestion
-                    question={newQuestion}
+                    question={pickedQuestion}
                     isShow={isShowModalPickedQuestion}
                     setShowModal={setIsShowModalPickedQuestion}
                 />
@@ -381,7 +382,7 @@ const Header = () => {
                                 <div className='flex items-center gap-2 '>
                                     <Image
                                         className='rounded-full w-8 h-8 bg-[#D9D9D9]'
-                                        src={`${ENV.PHOTO}${data.user.user.avatar.fileKey}`}
+                                        src={imageUtility(data.user.user.avatar?.fileKey)}
                                         height={32}
                                         width={32}
                                         preview={false}

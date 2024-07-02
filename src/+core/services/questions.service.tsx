@@ -100,6 +100,7 @@ export const updateStepQuestionApi = async (req: StepUpdateReq) => {
 
 export type QuestionListFilter = {
     status?: QuestionStatusString;
+    search?: string;
 };
 export type QuestionListReq = QuestionListFilter & IPaginationInfo;
 

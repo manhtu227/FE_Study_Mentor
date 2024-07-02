@@ -172,5 +172,5 @@ export const changePasswordApi = async (data: ResetPasswordReq) => {
 };
 
 export const resetPasswordApi = async (email: ResetPasswordInput) => {
-    return api.put<void>(`api/users/password/reset-password`, { email });
+    return api.put<void>(`api/users/password/reset-password`, email);
 };

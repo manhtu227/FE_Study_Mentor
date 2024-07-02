@@ -14,12 +14,12 @@ import {
     updateAvatarApi,
     userDetailKeys,
 } from '@core/services/user.service';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Spin, message } from 'antd';
+import { Button, Form, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { ProfileForm } from './components/ProfileForm';
-import { toastSuccess } from '@core/utilities/toast.utility';
 
 function ProfilePage() {
     const [form] = Form.useForm();
@@ -143,7 +143,7 @@ function ProfilePage() {
                                     )}
                                     <Button
                                         type='primary'
-                                        className='w-full'
+                                        className='w-full !h-12'
                                         onClick={handleShowChangePasswordModal}
                                     >
                                         Đổi mật khẩu
