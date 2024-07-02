@@ -7,6 +7,7 @@ export type SignUpInput = {
     gender: Gender;
     password: string;
     type: UserType;
+    dateOfBirth: number;
 };
 
 export type LoginInput = {

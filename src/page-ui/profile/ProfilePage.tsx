@@ -7,6 +7,7 @@ import Prestige from '@components/profile/prestige/Prestige';
 import { DEFAULT_USER_NAME } from '@core/constants/commons.constant';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { FileReq } from '@core/models/file.model';
+import { UserRole } from '@core/models/user.model';
 import {
     educationInfoKeys,
     getEducationInfoApi,
@@ -27,6 +28,8 @@ function ProfilePage() {
     const { data } = useSession();
     const file = useUploadFileApi();
     const [avatar, setAvatar] = useState<FileReq>();
+    const [isVerified, setIsVerified] = useState<boolean>(false);
+    const [isShowChangePasswordModal, setIsShowChangePasswordModal] = useState<boolean>(false);
 
     const personalInfoQuery = useQuery({
         queryKey: userDetailKeys.list({ id: data?.user?.user?.id, isUpdatePersonalInfo }),
@@ -39,9 +42,6 @@ function ProfilePage() {
         queryFn: () => getEducationInfoApi(),
         select: (resp) => resp.data.data,
     });
-
-    const [isActive, setIsActive] = useState<boolean>(personalInfoQuery.data?.isActive ?? false);
-    const [isShowChangePasswordModal, setIsShowChangePasswordModal] = useState<boolean>(false);
 
     const mutateUpdate = useMutation({
         mutationFn: (data: any) => updateAvatarApi(data),
@@ -56,24 +56,29 @@ function ProfilePage() {
         mutateUpdate.mutate(attachFiles);
     };
 
+    const handleShowChangePasswordModal = () => {
+        setIsShowChangePasswordModal(true);
+    };
+
     useEffect(() => {
         if (mutateUpdate?.data?.data) setAvatar(mutateUpdate?.data?.data?.avatar);
     }, [mutateUpdate?.data?.data]);
 
     useEffect(() => {
-        if (personalInfoQuery.data?.isActive) setIsActive(personalInfoQuery.data.isActive);
-
         if (personalInfoQuery.data?.avatar?.fileKey) setAvatar(personalInfoQuery.data?.avatar);
     }, [personalInfoQuery.data]);
 
-    const handleShowChangePasswordModal = () => {
-        setIsShowChangePasswordModal(true);
-    };
+    useEffect(() => {
+        if (educationInfoQuery?.data?.subjects && educationInfoQuery?.data?.subjects?.length > 0)
+            setIsVerified(true);
+    }, [educationInfoQuery.data]);
+
+    const userType = data?.user?.user?.role;
 
     return (
         <Spin spinning={personalInfoQuery.isFetching || educationInfoQuery.isFetching} size='large'>
-            <div className='w-full bg-[#F3F9FA] pt-4'>
-                <div className='px-[180px] pb-[100px]'>
+            <div className='w-full bg-[#F3F9FA] h-full'>
+                <div className='px-[180px] pt-10 pb-16 '>
                     <div className='flex gap-8 w-full'>
                         <div className='w-1/3'>
                             <div className='flex p-8 flex-col bg-white-900 mb-8 rounded-md'>
@@ -95,25 +100,15 @@ function ProfilePage() {
                                         <div className='text-black-800 font-bold text-[27px] mb-2'>
                                             {personalInfoQuery.data?.fullName ?? DEFAULT_USER_NAME}
                                         </div>
-                                        <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
-                                            Tài khoản đã xác thực
-                                        </Button>
-                                        {/* {isVerified ? (
-                                    <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
-                                        Tài khoản đã xác thực
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className='hover:!bg-gray-700 bg-gray-700 rounded-md text-black-800 text-md'
-                                        disabled
-                                    >
-                                        Tài khoản chưa xác thực
-                                    </Button>
-                                )} */}
-                                        {/* <Button className='w-full bg-primary-800 hover:!bg-primary-800 rounded-full text-lg hover:opacity-90 hover:!text-white-900 font-semibold h-12 text-white-900 mt-2'>
-                                            <UpgradeIcon className='mr-2' />
-                                            Nâng cấp tài khoản
-                                        </Button> */}
+                                        {isVerified ? (
+                                            <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
+                                                Tài khoản đã xác thực
+                                            </Button>
+                                        ) : (
+                                            <Button className='text-md' disabled>
+                                                Tài khoản chưa xác thực
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                                 <div className='w-full border-solid border-[1px] border-gray-200 border-r-0 border-l-0 border-b-0 mt-8 pt-8'>
@@ -150,8 +145,16 @@ function ProfilePage() {
                                     </Button>
                                 </div>
                             </div>
-                            <BankAccountForm />
-                            <Prestige averageRate={personalInfoQuery.data?.averageRate ?? 0} />
+                            {userType === UserRole.TUTOR && (
+                                <>
+                                    <BankAccountForm />
+                                    <Prestige
+                                        averageRate={
+                                            +(personalInfoQuery.data?.averageRate.toFixed(1) ?? 0)
+                                        }
+                                    />
+                                </>
+                            )}
                         </div>
                         <ProfileForm
                             personalData={personalInfoQuery.data}

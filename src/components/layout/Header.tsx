@@ -15,6 +15,7 @@ import { NotificationType } from '@core/enums/notification.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
 import {
+    CompletedQuestion,
     GoogleMeetInfoResp,
     QuestionEnum,
     ReceiveNewQuestionModel,
@@ -98,7 +99,7 @@ const Header = () => {
     const receivedQuestions = useSelector(
         (state: RootState) => state.receivedQuestions.receivedQuestions,
     );
-    const [completedQuestion, setCompletedQuestion] = useState<any>();
+    const [completedQuestion, setCompletedQuestion] = useState<CompletedQuestion>();
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
     const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
@@ -172,12 +173,14 @@ const Header = () => {
         router.push(MY_ROUTE.SIGN_UP);
     };
 
-    const handleCompleteQuestion = (data: any) => {
+    const handleCompleteQuestion = (data: CompletedQuestion, isCompleted: boolean) => {
         toastId.current = toast(
             <CompletedQuestionNotification
-                questionName='Python là gì?'
-                subjectName={data.subject.name}
-                price={data.price}
+                title={data?.title ?? ''}
+                subjectName={data?.subjectName ?? ''}
+                price={data?.price ?? 0}
+                studentName={data?.studentName ?? ''}
+                isCompleted={isCompleted}
             />,
             {
                 position: 'top-left',
@@ -193,15 +196,16 @@ const Header = () => {
             },
         );
 
-        dispatch(
-            addNotification({
-                id: data.questionId,
-                message: `Câu hỏi chủ đề ${data.subject.name} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
-                type: NotificationType.COMPLETED_QUESTION,
-                createdAt: data.createdAt,
-                questionId: data.questionId,
-            }),
-        );
+        isCompleted &&
+            dispatch(
+                addNotification({
+                    id: data.questionId,
+                    message: `Câu hỏi chủ đề ${data.subjectName} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
+                    type: NotificationType.COMPLETED_QUESTION,
+                    createdAt: data.createdAt,
+                    questionId: data.questionId,
+                }),
+            );
     };
 
     useEffect(() => {
@@ -212,19 +216,9 @@ const Header = () => {
 
     useEffect(() => {
         if (completedQuestion) {
-            handleCompleteQuestion(completedQuestion);
+            handleCompleteQuestion(completedQuestion, true);
         }
     }, [completedQuestion]);
-
-    const mockData = {
-        questionId: '1',
-        subject: {
-            name: 'Python',
-        },
-        price: 100000,
-        createdAt: new Date(),
-        questionName: 'Python là gì?',
-    };
 
     useEffect(() => {
         if (data?.user.user.id) {
@@ -242,6 +236,7 @@ const Header = () => {
                 };
 
                 if (data?.user?.user?.role === UserType.TUTOR) {
+                    // New question
                     socket.on(SocketEvent.NEW_QUESTION, (data) => {
                         data.data.createdAt = new Date();
 
@@ -251,6 +246,7 @@ const Header = () => {
                         });
                     });
 
+                    // Student pick tutor
                     socket.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
                         data.data.createdAt = new Date();
                         dispatch(
@@ -263,12 +259,21 @@ const Header = () => {
                         setIsShowModalPickedQuestion(true);
                     });
 
+                    // Receive Google Meet
                     socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
                         setIsShowModalReceiveGoogleMeet(true);
                         setNewGoogleMeet(data);
                     });
 
-                    setTimeout(() => setCompletedQuestion(mockData), 5000);
+                    // Completed question
+                    socket.on(SocketEvent.COMPLETED_QUESTION, (data) => {
+                        setCompletedQuestion(data.data);
+                    });
+
+                    // Paid success for tutor
+                    socket.on(SocketEvent.PAID_SUCCESS_FOR_TUTOR, (data) => {
+                        handleCompleteQuestion(data, false);
+                    });
                 }
                 if (data?.user?.user?.role === UserType.STUDENT) {
                     socket.on(
@@ -341,7 +346,7 @@ const Header = () => {
     };
 
     return (
-        <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
+        <header className='h-[64px] min-h-[64px] w-full items-center z-50 shadow-md sticky top-0 right-0 z-[9999]'>
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}

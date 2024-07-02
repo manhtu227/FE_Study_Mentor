@@ -23,6 +23,8 @@ export enum SocketEvent {
     ERROR = 'error',
     CREATE_GGMEET = 'create-ggmeet',
     RECEIVE_GGMEET = 'receive-ggmeet',
+    COMPLETED_QUESTION = 'completed-question',
+    PAID_SUCCESS_FOR_TUTOR = 'paid-success-for-tutor',
 }
 
 export const SOCKET_QUESTION_EMIT = (topic: string) => `question-${topic}`;

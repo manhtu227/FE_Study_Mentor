@@ -33,9 +33,16 @@ export function PersonalInfoSection({
     });
     const handleSubmitPersonalInformationForm = (values: PersonalInformationInput) => {
         const request: UpdatePersonalInformationInput = {
-            ...values,
-            dateOfBirth: dayjs(values.dateOfBirth).get('year'), // '25/01/2019',
+            email: values.email,
+            fullName: values.fullName,
+            gender: values.gender,
         };
+
+        if (values?.dateOfBirth) {
+            request.dateOfBirth = dayjs(values.dateOfBirth).get('year');
+        }
+
+        if (values?.phone) request.phone = values.phone;
 
         mutateUpdate.mutate(request);
     };
@@ -46,7 +53,7 @@ export function PersonalInfoSection({
                 fullName: data.fullName,
                 phone: data.phone,
                 email: data.email,
-                dateOfBirth: dayjs(data.dateOfBirth),
+                dateOfBirth: dayjs(data.dateOfBirth).set('year', +data?.dateOfBirth),
                 gender: data.gender,
             };
 
@@ -95,10 +102,7 @@ export function PersonalInfoSection({
                         {/* Phone number */}
                         <div className='w-1/2'>
                             <div className='font-bold text-base mb-2'>Số điện thoại</div>
-                            <Form.Item<PersonalInformationInput>
-                                name='phone'
-                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
-                            >
+                            <Form.Item<PersonalInformationInput> name='phone'>
                                 <Input
                                     className='h-12 font-medium text-base'
                                     placeholder='Nhập số điện thoại'
@@ -125,10 +129,7 @@ export function PersonalInfoSection({
                         {/* Year of Birth */}
                         <div className='w-1/2'>
                             <div className='font-bold text-base mb-2'>Năm sinh</div>
-                            <Form.Item<PersonalInformationInput>
-                                name='dateOfBirth'
-                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
-                            >
+                            <Form.Item<PersonalInformationInput> name='dateOfBirth'>
                                 <DatePicker
                                     className='h-12 font-medium text-base w-full'
                                     placeholder='Nhập năm sinh'
@@ -143,15 +144,15 @@ export function PersonalInfoSection({
                             <div className='font-bold text-base mb-2'>Giới tính</div>
                             <Form.Item<PersonalInformationInput>
                                 name='gender'
-                                rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
+                                rules={[{ required: true, message: 'Vui lòng chọn giá trị!' }]}
                             >
                                 <Select
                                     className='h-12 font-medium text-base'
                                     placeholder='Chọn giới tính'
                                     onChange={(e) => form.setFieldsValue({ gender: e })}
                                     options={[
-                                        { value: Gender.Male, label: 'Male' },
-                                        { value: Gender.Female, label: 'Female' },
+                                        { value: Gender.Male, label: 'Nam' },
+                                        { value: Gender.Female, label: 'Nữ' },
                                     ]}
                                 />
                             </Form.Item>

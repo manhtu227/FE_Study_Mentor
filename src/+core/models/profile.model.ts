@@ -4,17 +4,17 @@ import { FileAntd, FileReq } from './file.model';
 
 export type PersonalInformationInput = {
     fullName: string;
-    phone: string;
+    phone?: string;
     email: string;
-    dateOfBirth: Dayjs;
+    dateOfBirth?: Dayjs;
     gender: Gender;
 };
 
 export type UpdatePersonalInformationInput = {
     fullName: string;
-    phone: string;
+    phone?: string;
     email: string;
-    dateOfBirth: number;
+    dateOfBirth?: number;
     gender: Gender;
 };
 
@@ -58,7 +58,6 @@ export type UserResp = {
     phone: string;
     dateOfBirth: Date;
     gender: number;
-    isActive: boolean;
     averageRate: number;
     avatar: FileReq;
     isMembership: boolean;
