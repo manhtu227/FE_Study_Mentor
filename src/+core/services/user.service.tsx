@@ -20,6 +20,7 @@ import {
     ChartRevenueItem,
     OverviewTutorInfo,
     QuestionAnsweredItem,
+    ReportModel,
     ResetPasswordReq,
     UserModel,
 } from '@core/models/user.model';
@@ -172,5 +173,10 @@ export const changePasswordApi = async (data: ResetPasswordReq) => {
 };
 
 export const resetPasswordApi = async (email: ResetPasswordInput) => {
-    return api.put<void>(`api/users/password/reset-password`, { email });
+    return api.put<void>(`api/users/password/reset-password`, email);
+};
+
+export const getTutorReportKeys = initKeys('tutor-report-keys');
+export const getTutorReportApi = async (reportId: string) => {
+    return api.get<PagingResp<ReportModel>>(`/api/users/tutor/report-tutor/${reportId}`);
 };

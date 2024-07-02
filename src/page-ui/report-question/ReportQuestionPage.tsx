@@ -6,28 +6,31 @@ import { GetQuestionResponseModel } from '@core/models/question.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 function ReportQuestionPage() {
-    const params = useParams();
+    const searchParams = useSearchParams();
+
+    // queries for detailed question
     const detailedQuestionQuery = useQuery({
         queryKey: detailedQuestionKeys.all,
-        queryFn: () => getDetailedQuestionApi(params?.slug as string),
+        queryFn: () => getDetailedQuestionApi(searchParams?.get('questionId') as string),
         select: (data) => data?.data.data,
     });
+
     const [currentQuestion, setCurrentQuestion] = useState<GetQuestionResponseModel | undefined>();
 
     useEffect(() => {
-        if (!(params?.slug as string)) return;
+        if (!(searchParams?.get('questionId') as string)) return;
 
         const question = detailedQuestionQuery?.data;
 
         setCurrentQuestion(question);
-    }, [detailedQuestionQuery?.data, params?.slug as string]);
+    }, [detailedQuestionQuery?.data, searchParams?.get('questionId') as string]);
 
     return (
-        <div className='px-[180px] pb-[64px] bg-[#F3F9FA] pt-4'>
+        <div className='px-[180px] pb-16 bg-[#F3F9FA] pt-4'>
             <div className='w-full flex gap-8'>
                 <div className='w-2/5 rounded-lg bg-white-900 p-8'>
                     {detailedQuestionQuery?.isFetching ? (
@@ -110,7 +113,7 @@ function ReportQuestionPage() {
                                     className='text-lg text-black'
                                 />
                                 {currentQuestion?.answers &&
-                                    currentQuestion?.answers[0].fileAttachmentAnswers.length >
+                                    currentQuestion?.answers[0]?.fileAttachmentAnswers?.length >
                                         0 && (
                                         <>
                                             <div className='w-full font-bold text-lg text-black mb-4 items-center flex'>

@@ -24,7 +24,7 @@ function ChangePasswordForm({
         mutationFn: (data: ResetPasswordReq) => changePasswordApi(data),
         onSuccess: () => {
             onSaveForm();
-            toastSuccess('Đổi password thành công');
+            toastSuccess('Đổi mật khẩu thành công');
         },
         onError: (error: any) => {
             setErrorMessage(error.response.data.message);

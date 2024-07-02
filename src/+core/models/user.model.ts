@@ -1,3 +1,4 @@
+import { UserType } from '@core/enums/user.enum';
 import { FileReq } from './file.model';
 import { Subject } from './profile.model';
 
@@ -56,4 +57,18 @@ export type QuestionAnsweredItem = {
 export type ResetPasswordReq = {
     passwordOld: string;
     passwordNew: string;
+};
+
+export type ReportModel = {
+    id: string;
+    questionName: string;
+    FullName: string;
+    content: string;
+    userId: string;
+    attachFiles?: FileReq[];
+    createdAt: Date;
+    questionId: string;
+    questionTitle: string;
+    hasFeedback: boolean;
+    userType: UserType;
 };

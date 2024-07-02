@@ -160,7 +160,7 @@ function DetailedQuestionPage() {
     }, []);
 
     return (
-        <div className='px-[180px] pb-[64px] bg-[#F3F9FA] pt-4 flex'>
+        <div className='px-[180px] pb-16 bg-[#F3F9FA] pt-4 flex'>
             <div className='w-full flex gap-8'>
                 {currentQuestion?.questionId && (
                     <div className='w-full'>
@@ -173,15 +173,27 @@ function DetailedQuestionPage() {
                             <div className='my-4 text-2xl'>
                                 <div>
                                     <span className='font-bold'>Tiêu đề: </span>
-                                    <div>{currentQuestion.title}</div>
+                                    {currentQuestion.title ? (
+                                        <div>{currentQuestion.title}</div>
+                                    ) : (
+                                        <div className='text-gray-300 text-base italic'>
+                                            Không có tiêu đề
+                                        </div>
+                                    )}
                                 </div>
                                 <div className='font-bold'>Nội dung câu hỏi</div>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: currentQuestion.content,
-                                    }}
-                                    className='border rounded-lg border-gray-600 border-solid p-2 mt-2'
-                                />
+                                {currentQuestion.content ? (
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: currentQuestion.content,
+                                        }}
+                                        className='border rounded-lg border-gray-600 border-solid p-2 mt-2'
+                                    />
+                                ) : (
+                                    <div className='text-gray-300 text-base italic'>
+                                        Không có nội dung
+                                    </div>
+                                )}
                                 <ul className='flex gap-2 flex-wrap pl-0'>
                                     {currentQuestion.fileQuestions?.map((file, index) => {
                                         return (

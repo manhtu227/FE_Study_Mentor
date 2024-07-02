@@ -14,7 +14,7 @@ export default function Layout({ children }: PropsWithChildren) {
     const pathname = usePathname();
 
     return (
-        <>
+        <div className='h-screen overflow-auto flex flex-col'>
             {pathname !== MY_ROUTE.LOGIN &&
                 pathname !== MY_ROUTE.SIGN_UP &&
                 pathname !== MY_ROUTE.RESET_PASSWORD && (
@@ -29,7 +29,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     pathname !== MY_ROUTE.LOGIN &&
                     pathname !== MY_ROUTE.SIGN_UP &&
                     pathname !== MY_ROUTE.RESET_PASSWORD
-                        ? 'pt-[64px]'
+                        ? 'flex-1'
                         : ''
                 }
             >
@@ -37,6 +37,6 @@ export default function Layout({ children }: PropsWithChildren) {
                 {children}
             </div>
             {/* <Footer /> */}
-        </>
+        </div>
     );
 }

@@ -6,7 +6,7 @@
 @import './form.scss';
 @import './pack.scss';
 @import 'nprogress/nprogress.css';
-// @import 'animate.css/animate.css';
+@import 'animate.css/animate.css';
 
 body {
     margin: 0;
@@ -29,7 +29,7 @@ body {
 
 .tag-p {
     p {
-        @apply m-0 p-0 #{!important};
+        @apply m-0 p-0;
     }
 }
 
@@ -146,4 +146,16 @@ body {
         font-size: large !important;
         font-weight: bold !important;
     }
+}
+
+.ant-spin-nested-loading {
+    height: 100%;
+}
+
+.ant-spin-container {
+    height: 100%;
+}
+
+.ant-dropdown {
+    z-index: 999999;
 }

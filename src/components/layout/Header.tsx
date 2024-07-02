@@ -15,23 +15,24 @@ import { NotificationType } from '@core/enums/notification.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
 import {
+    CompletedQuestion,
     GoogleMeetInfoResp,
     QuestionEnum,
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
-import { ENV } from '@core/constants/env.constants';
 import { UserModel, UserRole } from '@core/models/user.model';
 import { getDetailApi, userDetailKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
-import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
+import { setCurrentQuestionId, setPickedQuestion } from '@core/store/reducers/question.reducer';
 import {
     addReceivedQuestion,
     setIsWatchedLater,
 } from '@core/store/reducers/received-questions.reducer';
 import { onConnect, onDisconnect } from '@core/store/reducers/socket.reducer';
 import { addTutor } from '@core/store/reducers/tutor.reducer';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Dropdown, Image, MenuProps } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
@@ -98,9 +99,10 @@ const Header = () => {
     const receivedQuestions = useSelector(
         (state: RootState) => state.receivedQuestions.receivedQuestions,
     );
-    const [completedQuestion, setCompletedQuestion] = useState<any>();
+    const [completedQuestion, setCompletedQuestion] = useState<CompletedQuestion>();
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
+    const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
 
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
@@ -171,12 +173,14 @@ const Header = () => {
         router.push(MY_ROUTE.SIGN_UP);
     };
 
-    const handleCompleteQuestion = (data: any) => {
+    const handleCompleteQuestion = (data: CompletedQuestion, isCompleted: boolean) => {
         toastId.current = toast(
             <CompletedQuestionNotification
-                questionName='Python là gì?'
-                subjectName={data.subject.name}
-                price={data.price}
+                title={data?.title ?? ''}
+                subjectName={data?.subjectName ?? ''}
+                price={data?.price ?? 0}
+                studentName={data?.studentName ?? ''}
+                isCompleted={isCompleted}
             />,
             {
                 position: 'top-left',
@@ -192,15 +196,16 @@ const Header = () => {
             },
         );
 
-        dispatch(
-            addNotification({
-                id: data.questionId,
-                message: `Câu hỏi chủ đề ${data.subject.name} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
-                type: NotificationType.COMPLETED_QUESTION,
-                createdAt: data.createdAt,
-                questionId: data.questionId,
-            }),
-        );
+        isCompleted &&
+            dispatch(
+                addNotification({
+                    id: data.questionId,
+                    message: `Câu hỏi chủ đề ${data.subjectName} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
+                    type: NotificationType.COMPLETED_QUESTION,
+                    createdAt: data.createdAt,
+                    questionId: data.questionId,
+                }),
+            );
     };
 
     useEffect(() => {
@@ -211,19 +216,9 @@ const Header = () => {
 
     useEffect(() => {
         if (completedQuestion) {
-            handleCompleteQuestion(completedQuestion);
+            handleCompleteQuestion(completedQuestion, true);
         }
     }, [completedQuestion]);
-
-    const mockData = {
-        questionId: '1',
-        subject: {
-            name: 'Python',
-        },
-        price: 100000,
-        createdAt: new Date(),
-        questionName: 'Python là gì?',
-    };
 
     useEffect(() => {
         if (data?.user.user.id) {
@@ -241,6 +236,7 @@ const Header = () => {
                 };
 
                 if (data?.user?.user?.role === UserType.TUTOR) {
+                    // New question
                     socket.on(SocketEvent.NEW_QUESTION, (data) => {
                         data.data.createdAt = new Date();
 
@@ -250,22 +246,34 @@ const Header = () => {
                         });
                     });
 
+                    // Student pick tutor
                     socket.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
                         data.data.createdAt = new Date();
-                        setNewQuestion({
-                            ...data.data,
-                            methodAnswer: data.methodAnswer,
-                        });
+                        dispatch(
+                            setPickedQuestion({
+                                ...data.data,
+                                methodAnswer: data.methodAnswer,
+                            }),
+                        );
 
                         setIsShowModalPickedQuestion(true);
                     });
 
+                    // Receive Google Meet
                     socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
                         setIsShowModalReceiveGoogleMeet(true);
                         setNewGoogleMeet(data);
                     });
 
-                    setTimeout(() => setCompletedQuestion(mockData), 5000);
+                    // Completed question
+                    socket.on(SocketEvent.COMPLETED_QUESTION, (data) => {
+                        setCompletedQuestion(data.data);
+                    });
+
+                    // Paid success for tutor
+                    socket.on(SocketEvent.PAID_SUCCESS_FOR_TUTOR, (data) => {
+                        handleCompleteQuestion(data, false);
+                    });
                 }
                 if (data?.user?.user?.role === UserType.STUDENT) {
                     socket.on(
@@ -338,20 +346,18 @@ const Header = () => {
     };
 
     return (
-        <header className='h-[64px] min-h-[64px] w-full items-center fixed z-50 shadow-md'>
-            {/* {isShowModalReceiveGoogleMeet && newGoogleMeet && newQuestion && ( */}
+        <header className='h-[64px] min-h-[64px] w-full items-center z-50 shadow-md sticky top-0 right-0 z-[9999]'>
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}
                 setIsModalOpen={setIsShowModalReceiveGoogleMeet}
-                price={newQuestion?.price || 1}
-                questionName={newQuestion?.content || ''}
-                subjectName={newQuestion?.subject.name || ''}
+                price={pickedQuestion?.price || 1}
+                questionName={pickedQuestion?.content || ''}
+                subjectName={pickedQuestion?.subject.name || ''}
             />
-            {/* )} */}
-            {isShowModalPickedQuestion && newQuestion && (
+            {isShowModalPickedQuestion && pickedQuestion && (
                 <ModalAcceptQuestion
-                    question={newQuestion}
+                    question={pickedQuestion}
                     isShow={isShowModalPickedQuestion}
                     setShowModal={setIsShowModalPickedQuestion}
                 />
@@ -381,7 +387,7 @@ const Header = () => {
                                 <div className='flex items-center gap-2 '>
                                     <Image
                                         className='rounded-full w-8 h-8 bg-[#D9D9D9]'
-                                        src={`${ENV.PHOTO}${data.user.user.avatar.fileKey}`}
+                                        src={imageUtility(data.user.user.avatar?.fileKey)}
                                         height={32}
                                         width={32}
                                         preview={false}

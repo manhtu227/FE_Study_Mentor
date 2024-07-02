@@ -272,3 +272,15 @@ export type GoogleMeetInfoResp = {
     meetingUrl: string;
     createdAt: string;
 };
+
+export type CompletedQuestion = {
+    questionId: string;
+    tutorId: string;
+    studentId: string;
+    studentName: string;
+    subjectId: string;
+    subjectName: string;
+    price: number;
+    createdAt: Date;
+    title: string;
+};

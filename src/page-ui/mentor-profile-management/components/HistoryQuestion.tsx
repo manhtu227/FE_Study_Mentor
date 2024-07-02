@@ -126,7 +126,7 @@ export function HistoryQuestion() {
                             <div
                                 className='flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-200'
                                 onClick={() => {
-                                    router.push(`/reports/${record.key}`);
+                                    router.push(`/reports/questions?questionId=${record.key}`);
                                 }}
                             >
                                 <span className='text-black-800'>Báo cáo câu hỏi này</span>

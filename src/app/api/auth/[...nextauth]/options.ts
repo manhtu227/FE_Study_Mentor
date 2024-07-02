@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
                         fullName: credentials.fullName,
                         gender: credentials.gender as unknown as Gender, // Fix: Cast credentials.gender to Gender type
                         type: credentials.type as unknown as UserType, // Fix: Cast credentials.type to UserType type
+                        dateOfBirth: credentials.dateOfBirth as unknown as number, // Fix: Cast credentials.dateOfBirth to number type
                     });
                     return data.data as any;
                 } catch (e: any) {
@@ -77,7 +78,6 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         session: async ({ session, token }) => {
-            console.log('session', token);
             session.user = token as any;
             return session;
         },

@@ -1,14 +1,16 @@
-import { CreateFileQuestionReducer } from '@core/models/question.model';
+import { CreateFileQuestionReducer, ReceiveNewQuestionModel } from '@core/models/question.model';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface QuestionsState {
     questions: CreateFileQuestionReducer[];
     currentQuestionId: string;
+    pickedQuestion: ReceiveNewQuestionModel | null;
 }
 
 const initialState: QuestionsState = {
     questions: [],
     currentQuestionId: '',
+    pickedQuestion: null,
 };
 
 export const questionSlice = createSlice({
@@ -32,6 +34,12 @@ export const questionSlice = createSlice({
         removeAllQuestion: (state) => {
             state.questions = [];
         },
+        setPickedQuestion: (state, action: { payload: ReceiveNewQuestionModel }) => {
+            state.pickedQuestion = action.payload;
+        },
+        removePickedQuestion: (state) => {
+            state.pickedQuestion = null;
+        },
     },
 });
 
@@ -41,6 +49,8 @@ export const {
     removeAllQuestion,
     setCurrentQuestionId,
     removeCurrentQuestionId,
+    setPickedQuestion,
+    removePickedQuestion,
 } = questionSlice.actions;
 
 export default questionSlice.reducer;

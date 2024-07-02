@@ -208,7 +208,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
 
     return (
         <Spin spinning={mutateUpdate.isPending} size='large'>
-            <div className='w-full mb-8'>
+            <div className='w-full mb-4'>
                 <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
                     <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
                     Thông tin giáo dục quan tâm
