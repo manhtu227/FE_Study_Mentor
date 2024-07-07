@@ -221,6 +221,8 @@ export type GetQuestionResponseModel = {
     questionType: QuestionEnum;
     timeMetting?: number;
     meetingURL?: string;
+    id?: string;
+    reportId?: string;
 };
 
 export type AcceptQuestionModel = {
@@ -259,6 +261,7 @@ export type ReportQuestionReq = {
 };
 
 export type QuestionReportRes = {
+    id: string;
     questionName: string;
     content: string;
     studentName: string;

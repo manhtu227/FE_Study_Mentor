@@ -1,9 +1,14 @@
 import { NotificationType } from '@core/enums/notification.enum';
+import { GetQuestionResponseModel } from './question.model';
+import { UserModel, UserRole } from './user.model';
 
 export type Notification = {
-    id: string;
-    message: string;
+    id?: string;
     type: NotificationType;
-    createdAt: Date;
-    questionId?: string;
+    tutor?: UserModel;
+    student?: UserModel;
+    question: GetQuestionResponseModel;
+    role: UserRole;
+    createdAt?: Date;
+    message?: string;
 };

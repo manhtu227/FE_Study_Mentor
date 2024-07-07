@@ -6,12 +6,10 @@ import MessageIcon from '@components/message/MessageIcon';
 import ModalAcceptQuestion from '@components/modal/ModalAcceptQuestion';
 import ModalFoundTutor from '@components/modal/ModalFoundTutor';
 import ModalJoinGoogleMeet from '@components/modal/ModalJoinGoogleMeet';
-import NotificationBell from '@components/notification-bell/NotificationBell';
 import CompletedQuestionNotification from '@components/notification/CompletedQuestionNotification';
 import NewQuestionNotification from '@components/notification/NewQuestionNotification';
 import { DEFAULT_DEPLAY_AUTO_CLOSE_NOTIFICATION } from '@core/constants/questions.constant';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { NotificationType } from '@core/enums/notification.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { UserType } from '@core/enums/user.enum';
 import {
@@ -21,10 +19,18 @@ import {
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
+import NotificationBell from '@components/notification-bell/NotificationBell';
+import { NotificationType } from '@core/enums/notification.enum';
+import { Notification } from '@core/models/notification.model';
 import { UserModel, UserRole } from '@core/models/user.model';
-import { getDetailApi, userDetailKeys } from '@core/services/user.service';
+import {
+    getDetailApi,
+    getNotificationApi,
+    getNotificationKeys,
+    userDetailKeys,
+} from '@core/services/user.service';
 import { RootState } from '@core/store';
-import { addNotification, removeNotification } from '@core/store/reducers/notification.reducer';
+import { removeNotification, setNotifications } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId, setPickedQuestion } from '@core/store/reducers/question.reducer';
 import {
     addReceivedQuestion,
@@ -103,6 +109,7 @@ const Header = () => {
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
     const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
+    const notifications = useSelector((state: RootState) => state.notifications.notifications);
 
     const handleReceiveNewQuestion = (data: ReceiveNewQuestionModel) => {
         if (receivedQuestions.find((rq) => rq.questionId === data.questionId)) return;
@@ -133,15 +140,7 @@ const Header = () => {
             );
         }
 
-        dispatch(
-            addNotification({
-                id: data.questionId,
-                message: `Bạn vừa mới nhận được câu hỏi mới từ chủ đề ${data.subject.name} với giá ${data.price} đồng`,
-                type: NotificationType.NEW_QUESTION,
-                createdAt: data.createdAt,
-                questionId: data.questionId,
-            }),
-        );
+        getNotificationsQuery.refetch();
         dispatch(addReceivedQuestion({ questionId: data.questionId, isWatchLater: false }));
     };
 
@@ -196,16 +195,7 @@ const Header = () => {
             },
         );
 
-        isCompleted &&
-            dispatch(
-                addNotification({
-                    id: data.questionId,
-                    message: `Câu hỏi chủ đề ${data.subjectName} với giá ${data.price} đồng đã được học viên xác nhận hoàn thành`,
-                    type: NotificationType.COMPLETED_QUESTION,
-                    createdAt: data.createdAt,
-                    questionId: data.questionId,
-                }),
-            );
+        isCompleted && getNotificationsQuery.refetch();
     };
 
     useEffect(() => {
@@ -313,6 +303,10 @@ const Header = () => {
                             }
                         },
                     );
+
+                    socket.on(SocketEvent.GET_VOUCHER, (data) => {
+                        console.log('GET_VOUCHER', data);
+                    });
                 }
 
                 socket.on('connect', onConnectSocket);
@@ -345,8 +339,46 @@ const Header = () => {
         }
     };
 
+    const getNotificationsQuery = useQuery({
+        queryKey: getNotificationKeys.all,
+        queryFn: () => getNotificationApi(),
+        select: (data) => data?.data.data,
+    });
+
+    const getMessageNotification = (notification: Notification) => {
+        switch (notification.type) {
+            case NotificationType.NEW_QUESTION:
+                return `Bạn vừa mới nhận được câu hỏi mới với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            case NotificationType.COMPLETED_QUESTION:
+                return `Câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng đã được học viên xác nhận hoàn thành`;
+            case NotificationType.STUDENT_PICK_TUTOR:
+                return `Học viên ${notification.student?.fullName} đã chọn bạn để trả lời câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            case NotificationType.PAID_SUCCESS_FOR_TUTOR:
+                return `Quản trị viên đã thanh toán cho câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            case NotificationType.TUTOR_ACCEPTED_QUESTION:
+                return `Đã có người hướng dẫn ${notification.tutor?.fullName} chấp nhận câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
+                return `Người hướng dẫn ${notification.tutor?.fullName} bạn chọn đã chấp nhận câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            default:
+                return '';
+        }
+    };
+
+    useEffect(() => {
+        if (getNotificationsQuery?.data) {
+            const notifications = getNotificationsQuery?.data.map((notification) => {
+                return {
+                    ...notification,
+                    message: getMessageNotification(notification),
+                };
+            });
+
+            dispatch(setNotifications(notifications));
+        }
+    }, [getNotificationsQuery?.data]);
+
     return (
-        <header className='h-[64px] min-h-[64px] w-full items-center z-50 shadow-md sticky top-0 right-0 z-[9999]'>
+        <header className='h-[64px] min-h-[64px] w-full items-center z-50 shadow-md sticky top-0 right-0'>
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}
@@ -377,7 +409,7 @@ const Header = () => {
                 </div>
                 {data?.user.user ? (
                     <div className='flex w-1/3 items-center justify-end gap-4'>
-                        <NotificationBell />
+                        <NotificationBell notifications={notifications} />
                         <MessageIcon />
                         <Button
                             type='link'

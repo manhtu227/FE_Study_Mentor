@@ -26,6 +26,7 @@ export type HistoryQuestionTable = {
     expense: number;
     status: number;
     date: string;
+    isPaid: boolean;
 };
 
 export const statusActiveColors = {
@@ -98,9 +99,9 @@ export function HistoryQuestion() {
         },
         {
             title: 'Status',
-            dataIndex: 'status',
-            render: (text: FilterQuestionType) => {
-                return statusActiveColors[text];
+            dataIndex: 'isPaid',
+            render: (value, record) => {
+                return <div>{record.isPaid ? 'Đã được thanh toán' : 'Chưa được thanh toán'}</div>;
             },
         },
         {
@@ -126,7 +127,7 @@ export function HistoryQuestion() {
                             <div
                                 className='flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-200'
                                 onClick={() => {
-                                    router.push(`/reports/questions?questionId=${record.key}`);
+                                    router.push(`/reports/questions/${record.key}`);
                                 }}
                             >
                                 <span className='text-black-800'>Báo cáo câu hỏi này</span>
@@ -177,6 +178,7 @@ export function HistoryQuestion() {
                     expense: e.expense,
                     status: e.status,
                     date: format(new Date(e.createdAt), DATE_FORMAT).toString(),
+                    isPaid: e.isPaid,
                 };
             });
 

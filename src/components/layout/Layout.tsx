@@ -29,7 +29,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     pathname !== MY_ROUTE.LOGIN &&
                     pathname !== MY_ROUTE.SIGN_UP &&
                     pathname !== MY_ROUTE.RESET_PASSWORD
-                        ? 'flex-1'
+                        ? 'flex-1 bg-[#F3F9FA]'
                         : ''
                 }
             >

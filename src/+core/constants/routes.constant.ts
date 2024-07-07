@@ -25,6 +25,7 @@ export const MY_ROUTE = {
     PROFILE: '/profile',
     REPORT: '/reports',
     DASHBOARD_STUDENT: '/dashboard-student',
+    REPORT_QUESTION: '/reports/questions',
 };
 
 export const roleUser = [
@@ -40,6 +41,7 @@ export const roleTutor = [
     MY_ROUTE.DASHBOARD_TUTOR,
     MY_ROUTE.MENTOR.RECEIVED_QUESTIONS,
     MY_ROUTE.REPORT,
+    MY_ROUTE.REPORT_QUESTION,
 ];
 
 export const rolePublic = [
