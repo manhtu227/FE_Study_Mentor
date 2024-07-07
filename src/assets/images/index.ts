@@ -33,6 +33,7 @@ import qrImage from './qr-image.png';
 import self from './self.png';
 import sidebarChatActive from './sidebar-chat-active.png';
 import sidebarChatDefault from './sidebar-chat-default.png';
+import student from './student.png';
 import studyMethodBg from './study-method-bg.png';
 import system from './system.png';
 import teacher from './teacher.png';
@@ -80,6 +81,7 @@ const images = {
     loginScreen: loginScreen,
     teacher: teacher,
     loginPageImage: loginPageImage,
+    student: student,
 };
 
 export default images;

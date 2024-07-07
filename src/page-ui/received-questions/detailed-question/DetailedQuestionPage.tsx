@@ -135,6 +135,7 @@ function DetailedQuestionPage() {
             setIsAnswered(false);
         } else {
             setShowForm(false);
+            setIsAnswered(true);
         }
     }, [detailedQuestionQuery?.data?.data, data?.user.user.id, params?.slug as string]);
 

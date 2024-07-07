@@ -1,6 +1,6 @@
 'use client';
 import { SearchOutlined } from '@ant-design/icons';
-import { Col, Empty, Row } from 'antd';
+import { Col, DatePicker, Empty, Row } from 'antd';
 
 import { CardQuestionUser } from '@components/card/CardQuestionUser';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
@@ -19,6 +19,8 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
+const { RangePicker } = DatePicker;
+
 export default function FindQuestionsPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -30,8 +32,10 @@ export default function FindQuestionsPage() {
                 getEnum<QuestionStatusString>(
                     searchParams ? searchParams.get('status') : '',
                     QuestionStatusString,
-                ) || QuestionStatusString.NEW,
-            search: searchParams.get('search') || '',
+                ) || undefined,
+            search: searchParams.get('search') || undefined,
+            fromDate: searchParams.get('fromDate') || undefined,
+            toDate: searchParams.get('toDate') || undefined,
         };
         const initialPaging: IPaginationInfo = {
             pageSize: +(searchParams?.get('pageSize') || initialPagingState.pageSize),
@@ -55,14 +59,25 @@ export default function FindQuestionsPage() {
     });
 
     return (
-        <div>
-            <div className='flex mb-8 justify-between flex-wrap gap-2'>
+        <div className='mt-10'>
+            <div className='flex mb-8 justify-between flex-wrap gap-2 h-12'>
                 {/* <DropDownField className='px-6 py-3 flex items-center' title='Sắp xếp theo' /> */}
-                <CustomSelectInput
+                {/* <CustomSelectInput
                     classNameForm='w-[167px]'
                     optionsSelect={[]}
                     placeholder='Sắp xếp theo'
                     classNameSelect='placeholder-color'
+                /> */}
+                <RangePicker
+                    size='small'
+                    className='h-full'
+                    onChange={(e) => {
+                        handleFilterChange({
+                            fromDate: e?.[0]?.format('YYYY-MM-DD') ?? undefined,
+                            toDate: e?.[1]?.format('YYYY-MM-DD') ?? undefined,
+                        });
+                    }}
+                    placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
                 />
                 <CustomTextInput
                     prefix={<SearchOutlined />}
@@ -73,15 +88,16 @@ export default function FindQuestionsPage() {
                     }}
                 />
                 <CustomSelectInput
-                    classNameForm='w-[131px] '
+                    classNameForm='w-[284px]'
                     optionsSelect={optionQuestionStatusForTutor}
                     onChange={(e) => {
                         handleFilterChange({
                             status: e,
                         });
                     }}
-                    placeholder='Bộ lọc'
+                    placeholder='Trạng thái'
                     classNameSelect='placeholder-color '
+                    value={filter.status}
                 />
             </div>
             {data.isFetching ? (
