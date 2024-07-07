@@ -152,15 +152,6 @@ export function HistoryQuestion({ data, pagination, loading, handlePageChange }:
                     showHeader={false}
                     loading={loading}
                     pagination={false}
-                    //centered pagination
-                    // pagination={{
-                    //     position: ['bottomCenter'],
-                    //     showSizeChanger: false,
-                    //     pageSize: pagination.pageSize,
-                    //     size: 'small',
-                    //     total: pagination.total,
-                    //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                    // }}
                 />
                 <PaginationCore
                     onPageNumberChange={handlePageChange}

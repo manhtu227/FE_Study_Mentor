@@ -1,27 +1,51 @@
 // components/NotificationBell.tsx
 import {
     CheckCircleOutlined,
+    CheckSquareOutlined,
     CloseOutlined,
+    DollarOutlined,
     NotificationOutlined,
+    PushpinOutlined,
     QuestionCircleOutlined,
+    UsergroupDeleteOutlined,
 } from '@ant-design/icons';
 import BellIcon from '@assets/icons/bell';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationTitle, NotificationType } from '@core/enums/notification.enum';
 import { Notification } from '@core/models/notification.model';
-import { RootState } from '@core/store';
+import { UserRole } from '@core/models/user.model';
+import { deleteAllNotificationApi, deleteNotificationApi } from '@core/services/user.service';
 import { clearNotifications, removeNotification } from '@core/store/reducers/notification.reducer';
 import { calculateTimeAgo } from '@core/utilities/calculate-time-ago';
+import { useMutation } from '@tanstack/react-query';
 import { Badge, Button, Drawer, List } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { MouseEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-const NotificationBell: React.FC = () => {
-    const notifications = useSelector((state: RootState) => state.notification.notifications);
+type IProps = {
+    notifications?: Notification[];
+};
+
+const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
     const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
+    const { data } = useSession();
+
+    // Query
+    const deleteNotification = useMutation({
+        onMutate: async (id: string) => {
+            deleteNotificationApi(id);
+        },
+    });
+
+    const deleteAllNotifications = useMutation({
+        onMutate: async () => {
+            deleteAllNotificationApi();
+        },
+    });
 
     const showDrawer = () => {
         setVisible(true);
@@ -33,12 +57,13 @@ const NotificationBell: React.FC = () => {
 
     const handleDismissAllNotifications = () => {
         dispatch(clearNotifications());
+        deleteAllNotifications.mutate();
     };
 
     const drawerTitle = (
         <div className='flex items-center justify-between'>
             <span className='font-bold text-2xl'>Thông báo</span>
-            {notifications.length > 0 && (
+            {notifications && notifications?.length > 0 && (
                 <button
                     className='underline text-blue-600 text-sm cursor-pointer hover:opacity-80 bg-transparent border-none'
                     onClick={handleDismissAllNotifications}
@@ -53,6 +78,16 @@ const NotificationBell: React.FC = () => {
         switch (type) {
             case NotificationType.NEW_QUESTION:
                 return NotificationTitle.NEW_QUESTION;
+            case NotificationType.COMPLETED_QUESTION:
+                return NotificationTitle.COMPLETED_QUESTION;
+            case NotificationType.STUDENT_PICK_TUTOR:
+                return NotificationTitle.STUDENT_PICK_TUTOR;
+            case NotificationType.PAID_SUCCESS_FOR_TUTOR:
+                return NotificationTitle.PAID_SUCCESS_FOR_TUTOR;
+            case NotificationType.TUTOR_ACCEPTED_QUESTION:
+                return NotificationTitle.TUTOR_ACCEPTED_QUESTION;
+            case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
+                return NotificationTitle.PICKED_TUTOR_ACCEPTED_QUESTION;
             default:
                 return '';
         }
@@ -64,27 +99,59 @@ const NotificationBell: React.FC = () => {
                 return <QuestionCircleOutlined />;
             case NotificationType.COMPLETED_QUESTION:
                 return <CheckCircleOutlined />;
+            case NotificationType.STUDENT_PICK_TUTOR:
+                return <PushpinOutlined />;
+            case NotificationType.PAID_SUCCESS_FOR_TUTOR:
+                return <DollarOutlined />;
+            case NotificationType.TUTOR_ACCEPTED_QUESTION:
+                return <UsergroupDeleteOutlined />;
+            case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
+                return <CheckSquareOutlined />;
             default:
                 return <NotificationOutlined />;
         }
     };
 
-    const handleRemoveNotification = (id: string) => {
+    const handleRemoveNotification = (e: MouseEvent<HTMLDivElement>, id: string) => {
+        e.stopPropagation();
         dispatch(removeNotification(id));
+        deleteNotification.mutate(id);
+    };
+
+    const handleRedirectWhenClickedNoti = (notification: Notification) => {
+        switch (notification.type) {
+            case NotificationType.NEW_QUESTION:
+            case NotificationType.STUDENT_PICK_TUTOR:
+                router.push(`${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${notification.question.id}`);
+                break;
+            case NotificationType.COMPLETED_QUESTION:
+            case NotificationType.PAID_SUCCESS_FOR_TUTOR:
+                if (data?.user?.user?.role === UserRole.TUTOR) {
+                    router.push(`${MY_ROUTE.DASHBOARD_TUTOR}`);
+                } else {
+                    router.push(`${MY_ROUTE.DASHBOARD_STUDENT}`);
+                }
+                break;
+            case NotificationType.TUTOR_ACCEPTED_QUESTION:
+                break;
+            case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
+                break;
+            default:
+                break;
+        }
     };
 
     const handleClickNotification = (item: Notification) => {
         closeDrawer();
 
-        if (item.type === NotificationType.NEW_QUESTION) {
-            router.push(`${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${item.questionId}`);
-            dispatch(removeNotification(item.id));
-        }
+        handleRedirectWhenClickedNoti(item);
+        dispatch(removeNotification(item.question.id || ''));
+        deleteNotification.mutate(item.question.id || '');
     };
 
     return (
         <div className='notification-bell-custom'>
-            <Badge count={notifications.length}>
+            <Badge count={notifications && notifications?.length}>
                 <Button
                     className='h-10 w-10 flex items-center justify-center'
                     type='primary'
@@ -119,12 +186,12 @@ const NotificationBell: React.FC = () => {
                                     </div>
                                     <div>{item.message}</div>
                                     <div className='text-gray-400 font-light'>
-                                        {calculateTimeAgo(item?.createdAt)}
+                                        {item?.createdAt && calculateTimeAgo(item?.createdAt)}
                                     </div>
                                 </div>
                                 <div
                                     className='flex self-baseline cursor-pointer'
-                                    onClick={() => handleRemoveNotification(item.id)}
+                                    onClick={(e) => handleRemoveNotification(e, item.id ?? '')}
                                 >
                                     <CloseOutlined />
                                 </div>

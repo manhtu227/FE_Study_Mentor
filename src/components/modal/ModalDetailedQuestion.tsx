@@ -2,6 +2,8 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import CustomSkeletonTitle from '@components/skeleton/CustomSkeletonTitle';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import { downloadUrl } from '@core/utilities/download.util';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from 'antd';
 import Link from 'next/link';
@@ -44,37 +46,47 @@ export default function ModalDetailedQuestion({
                         <h3 className='m-0 border mb-2 flex items-center'>
                             <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
                             <div className='text-black-800 font-bold text-lg leading-[27px]'>
-                                Thông tin câu hỏi
+                                Nội dung
                             </div>
                         </h3>
                         {query.isFetching ? (
                             <CustomSkeletonTitle height='50px' />
                         ) : (
                             <>
-                                <div
-                                    dangerouslySetInnerHTML={{ __html: query.data?.content || '' }}
-                                />
-                                {query.data?.fileQuestions &&
-                                    query.data?.fileQuestions?.length > 0 && (
-                                        <>
-                                            <h3 className='m-0 border mb-2'>
-                                                <div className='text-black-800 font-bold text-sm leading-[27px]'>
-                                                    Tệp đính kèm
+                                {query?.data?.content ? (
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: query.data.content,
+                                        }}
+                                        className='border rounded-lg border-gray-600 border-solid p-2 mt-2'
+                                    />
+                                ) : (
+                                    <div className='text-gray-300 text-base italic'>
+                                        Không có nội dung
+                                    </div>
+                                )}
+                                <ul className='flex gap-2 flex-wrap pl-0'>
+                                    {query.data?.fileQuestions?.map((file, index) => {
+                                        return (
+                                            <div
+                                                key={file.fileKey}
+                                                className='border w-full rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid hover:bg-gray-100'
+                                            >
+                                                <div className='flex items-center text-base truncate max-w-2/3'>
+                                                    {file.fileName}
                                                 </div>
-                                            </h3>
-                                            {query.data?.fileQuestions?.map((file) => {
-                                                return (
-                                                    <div
-                                                        key={file.fileKey}
-                                                        className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                    >
-                                                        <div className='flex items-center'></div>
-                                                        <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
-                                                    </div>
-                                                );
-                                            })}
-                                        </>
-                                    )}
+                                                <DownloadOutlined
+                                                    className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                    onClick={async () => {
+                                                        await downloadUrl(
+                                                            imageUtility(file.fileKey),
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </ul>
                             </>
                         )}
                     </div>

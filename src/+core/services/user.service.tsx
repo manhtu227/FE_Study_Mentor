@@ -2,6 +2,7 @@ import { api } from '@core/https/http';
 import { ResetPasswordInput } from '@core/models/authentication.model';
 import { BaseResp, BaseRespExternal } from '@core/models/base.model';
 import { FileReq } from '@core/models/file.model';
+import { Notification } from '@core/models/notification.model';
 import {
     BankItemResp,
     BankModel,
@@ -179,4 +180,17 @@ export const resetPasswordApi = async (email: ResetPasswordInput) => {
 export const getTutorReportKeys = initKeys('tutor-report-keys');
 export const getTutorReportApi = async (reportId: string) => {
     return api.get<PagingResp<ReportModel>>(`/api/users/tutor/report-tutor/${reportId}`);
+};
+
+export const getNotificationKeys = initKeys('get-notification-keys');
+export const getNotificationApi = async () => {
+    return api.get<BaseResp<Notification[]>>(`/api/notifications`);
+};
+
+export const deleteNotificationApi = async (id: string) => {
+    return api.delete<void>(`/api/notifications/${id}`);
+};
+
+export const deleteAllNotificationApi = async () => {
+    return api.delete<void>(`/api/notifications`);
 };

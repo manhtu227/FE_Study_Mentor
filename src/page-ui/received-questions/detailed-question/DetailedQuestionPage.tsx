@@ -111,6 +111,7 @@ function DetailedQuestionPage() {
     const detailedQuestionQuery = useQuery({
         queryKey: detailedQuestionKeys.all,
         queryFn: () => getDetailedQuestionApi(params?.slug as string),
+        enabled: !!params?.slug,
     });
 
     useEffect(() => {
@@ -131,14 +132,11 @@ function DetailedQuestionPage() {
             setIsAnswered(true);
         } else if (question?.tutor?.id === data?.user.user.id && question?.isAccepted) {
             setShowForm(true);
+            setIsAnswered(false);
         } else {
             setShowForm(false);
         }
-    }, [detailedQuestionQuery?.data?.data?.data, params?.slug as string]);
-
-    useEffect(() => {
-        if (detailedQuestionQuery?.error) router.push('/404');
-    }, [detailedQuestionQuery?.error]);
+    }, [detailedQuestionQuery?.data?.data, data?.user.user.id, params?.slug as string]);
 
     const handleAnswerTheQuestion = () => {
         if (!data?.user.user.id) return;
@@ -160,7 +158,7 @@ function DetailedQuestionPage() {
     }, []);
 
     return (
-        <div className='px-[180px] pb-16 bg-[#F3F9FA] pt-4 flex'>
+        <div className='px-[180px] pb-16 pt-4 flex'>
             <div className='w-full flex gap-8'>
                 {currentQuestion?.questionId && (
                     <div className='w-full'>
@@ -174,14 +172,23 @@ function DetailedQuestionPage() {
                                 <div>
                                     <span className='font-bold'>Tiêu đề: </span>
                                     {currentQuestion.title ? (
-                                        <div>{currentQuestion.title}</div>
+                                        <div className='text-xl'>{currentQuestion.title}</div>
                                     ) : (
                                         <div className='text-gray-300 text-base italic'>
                                             Không có tiêu đề
                                         </div>
                                     )}
                                 </div>
-                                <div className='font-bold'>Nội dung câu hỏi</div>
+                                <div>
+                                    <div className='font-bold'>Loại câu hỏi:</div>
+                                    <div className='text-xl'>
+                                        {currentQuestion?.type === QuestionType.MEETING
+                                            ? 'Thông qua Google Meet'
+                                            : 'Thông qua file'}
+                                    </div>
+                                </div>
+
+                                <div className='font-bold'>Nội dung câu hỏi:</div>
                                 {currentQuestion.content ? (
                                     <div
                                         dangerouslySetInnerHTML={{

@@ -16,6 +16,7 @@ export type ReportTable = {
     questionTitle: string;
     studentName: string;
     date: string;
+    questionId: string;
 };
 
 function Report() {
@@ -37,13 +38,15 @@ function Report() {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Button onClick={() => handleClickReport(record.key)}>Xem chi tiết</Button>
+                <Button onClick={() => handleClickReport(record.key, record.questionId)}>
+                    Xem chi tiết
+                </Button>
             ),
         },
     ];
 
-    const handleClickReport = (id: string) => {
-        router.push(`/reports/${id}`);
+    const handleClickReport = (reportId: string, questionId: string) => {
+        router.push(`/reports/${reportId}?questionId=${questionId}`);
     };
 
     const reportQuery = useQuery({
@@ -77,10 +80,11 @@ function Report() {
 
             const newData: ReportTable[] = data.map((e: QuestionReportRes) => {
                 return {
-                    key: e.questionId,
+                    key: e.id,
                     questionTitle: e.questionTitle,
                     studentName: e.studentName,
                     date: format(new Date(e.createdAt), DATE_FORMAT).toString(),
+                    questionId: e.questionId,
                 };
             });
 

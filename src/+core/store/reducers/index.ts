@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
     questions: questionReducer,
     tutors: tutorsReducer,
     socket: socketReducer,
-    notification: notificationReducer,
+    notifications: notificationReducer,
     receivedQuestions: receivedQuestionsReducer,
     roomChat: roomChatReducer,
 });

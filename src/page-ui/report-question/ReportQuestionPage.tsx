@@ -4,33 +4,41 @@ import ReportQuestionForm from '@components/form/ReportQuestionForm';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
 import { GetQuestionResponseModel } from '@core/models/question.model';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import { downloadUrl } from '@core/utilities/download.util';
+import { imageUtility } from '@core/utilities/image.utility';
 import { useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 function ReportQuestionPage() {
+    const params = useParams();
     const searchParams = useSearchParams();
 
     // queries for detailed question
     const detailedQuestionQuery = useQuery({
         queryKey: detailedQuestionKeys.all,
-        queryFn: () => getDetailedQuestionApi(searchParams?.get('questionId') as string),
+        queryFn: () =>
+            getDetailedQuestionApi(
+                (params?.questionId as string) || (searchParams.get('questionId') as string),
+            ),
         select: (data) => data?.data.data,
     });
 
     const [currentQuestion, setCurrentQuestion] = useState<GetQuestionResponseModel | undefined>();
 
     useEffect(() => {
-        if (!(searchParams?.get('questionId') as string)) return;
+        if (!((params?.questionId as string) || (searchParams.get('questionId') as string))) return;
 
         const question = detailedQuestionQuery?.data;
 
         setCurrentQuestion(question);
-    }, [detailedQuestionQuery?.data, searchParams?.get('questionId') as string]);
+    }, [
+        detailedQuestionQuery?.data,
+        (params?.questionId as string) || (searchParams.get('questionId') as string),
+    ]);
 
     return (
-        <div className='px-[180px] pb-16 bg-[#F3F9FA] pt-4'>
+        <div className='px-[180px] pb-16 pt-4'>
             <div className='w-full flex gap-8'>
                 <div className='w-2/5 rounded-lg bg-white-900 p-8'>
                     {detailedQuestionQuery?.isFetching ? (
@@ -85,7 +93,16 @@ function ReportQuestionPage() {
                                                                 className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
                                                             >
                                                                 <div className='flex items-center'></div>
-                                                                <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                                <DownloadOutlined
+                                                                    className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                                    onClick={async () => {
+                                                                        await downloadUrl(
+                                                                            imageUtility(
+                                                                                file.fileKey,
+                                                                            ),
+                                                                        );
+                                                                    }}
+                                                                />
                                                             </div>
                                                         </div>
                                                     );
@@ -132,13 +149,16 @@ function ReportQuestionPage() {
                                                                         {file.fileName}
                                                                     </div>
                                                                 </div>
-                                                                <Link
-                                                                    href={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
-                                                                    type='download'
-                                                                    className='hover:opacity-90'
-                                                                >
-                                                                    <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
-                                                                </Link>
+                                                                <DownloadOutlined
+                                                                    className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                                    onClick={async () => {
+                                                                        await downloadUrl(
+                                                                            imageUtility(
+                                                                                file.fileKey,
+                                                                            ),
+                                                                        );
+                                                                    }}
+                                                                />
                                                             </div>
                                                         );
                                                     },
@@ -150,14 +170,13 @@ function ReportQuestionPage() {
                         )}
                     </div>
                 </div>
-                {currentQuestion?.questionId && currentQuestion?.student?.id && (
-                    <div className='w-3/5 rounded-lg bg-white-900'>
-                        <ReportQuestionForm
-                            questionId={currentQuestion?.questionId}
-                            studentId={currentQuestion?.student?.id}
-                        />
-                    </div>
-                )}
+                <div className='w-3/5 rounded-lg bg-white-900'>
+                    <ReportQuestionForm
+                        questionId={currentQuestion?.questionId}
+                        studentId={currentQuestion?.student?.id}
+                        reportId={currentQuestion?.reportId}
+                    />
+                </div>
             </div>
         </div>
     );

@@ -5,10 +5,11 @@ import { QuestionAcceptStatus, QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, ReceiveNewQuestionModel } from '@core/models/question.model';
 import { RootState } from '@core/store';
+import { downloadUrl } from '@core/utilities/download.util';
+import { imageUtility } from '@core/utilities/image.utility';
 import { handleDetechQuestionType } from '@core/utilities/question.utility';
 import { Modal } from 'antd';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 
@@ -157,13 +158,14 @@ export default function ModalAcceptQuestion({
                                                         {file.fileName}
                                                     </div>
                                                 </div>
-                                                <Link
-                                                    href={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
-                                                    type='download'
-                                                    className='hover:opacity-90'
-                                                >
-                                                    <DownloadOutlined className='text-green-500 text-2xl cursor-pointer' />
-                                                </Link>
+                                                <DownloadOutlined
+                                                    className='text-green-500 text-2xl cursor-pointer'
+                                                    onClick={async () => {
+                                                        await downloadUrl(
+                                                            imageUtility(file.fileKey),
+                                                        );
+                                                    }}
+                                                />
                                             </div>
                                         );
                                     })}
