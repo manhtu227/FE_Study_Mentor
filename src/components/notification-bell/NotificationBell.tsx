@@ -13,9 +13,11 @@ import BellIcon from '@assets/icons/bell';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationTitle, NotificationType } from '@core/enums/notification.enum';
 import { Notification } from '@core/models/notification.model';
+import { QuestionEnum } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
 import { deleteAllNotificationApi, deleteNotificationApi } from '@core/services/user.service';
 import { clearNotifications, removeNotification } from '@core/store/reducers/notification.reducer';
+import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { calculateTimeAgo } from '@core/utilities/calculate-time-ago';
 import { useMutation } from '@tanstack/react-query';
 import { Badge, Button, Drawer, List } from 'antd';
@@ -121,10 +123,30 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
     const handleRedirectWhenClickedNoti = (notification: Notification) => {
         switch (notification.type) {
             case NotificationType.NEW_QUESTION:
+                if (data?.user?.user?.role === UserRole.STUDENT) {
+                    dispatch(setCurrentQuestionId(notification.question.id || ''));
+                    router.push(
+                        `${
+                            notification.question.questionType === QuestionEnum.GG_MEET
+                                ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                : MY_ROUTE.MENTOR.FILE
+                        }?step=1`,
+                    );
+                }
             case NotificationType.STUDENT_PICK_TUTOR:
                 router.push(`${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${notification.question.id}`);
                 break;
             case NotificationType.COMPLETED_QUESTION:
+                if (data?.user?.user?.role === UserRole.STUDENT) {
+                    dispatch(setCurrentQuestionId(notification.question.id || ''));
+                    router.push(
+                        `${
+                            notification.question.questionType === QuestionEnum.GG_MEET
+                                ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                : MY_ROUTE.MENTOR.FILE
+                        }?step=3`,
+                    );
+                }
             case NotificationType.PAID_SUCCESS_FOR_TUTOR:
                 if (data?.user?.user?.role === UserRole.TUTOR) {
                     router.push(`${MY_ROUTE.DASHBOARD_TUTOR}`);
@@ -133,8 +155,28 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 }
                 break;
             case NotificationType.TUTOR_ACCEPTED_QUESTION:
+                if (data?.user?.user?.role === UserRole.STUDENT) {
+                    dispatch(setCurrentQuestionId(notification.question.id || ''));
+                    router.push(
+                        `${
+                            notification.question.questionType === QuestionEnum.GG_MEET
+                                ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                : MY_ROUTE.MENTOR.FILE
+                        }?step=2`,
+                    );
+                }
                 break;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
+                if (data?.user?.user?.role === UserRole.STUDENT) {
+                    dispatch(setCurrentQuestionId(notification.question.id || ''));
+                    router.push(
+                        `${
+                            notification.question.questionType === QuestionEnum.GG_MEET
+                                ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                : MY_ROUTE.MENTOR.FILE
+                        }?step=2`,
+                    );
+                }
                 break;
             default:
                 break;

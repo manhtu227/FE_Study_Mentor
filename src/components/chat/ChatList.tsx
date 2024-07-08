@@ -15,6 +15,7 @@ type Props = {
     className?: string;
     isLoadingEnd?: boolean;
     isSideBar?: boolean;
+    isChat?: boolean;
 };
 export function ChatList({
     dataList,
@@ -24,6 +25,7 @@ export function ChatList({
     className,
     isLoadingEnd,
     isSideBar,
+    isChat = true,
 }: Props) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const { data } = useSession();
@@ -115,7 +117,12 @@ export function ChatList({
                     </div>
                 )}
             </div>
-            <MessageForm onSubmit={onSubmit} className={classNameMessage} isSideBar />
+            <MessageForm
+                onSubmit={onSubmit}
+                className={classNameMessage}
+                isSideBar={isSideBar}
+                isChat={isChat}
+            />
         </div>
     );
 }

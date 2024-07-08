@@ -19,6 +19,7 @@ import { Avatar, Image, Modal, Rate } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ModalConfirm from './ModalConfirm';
 
 type Props = {
     isModalOpen: boolean;
@@ -40,6 +41,7 @@ export default function ModalFoundTutor({
     const dispatch = useDispatch();
     const [dots, setDots] = useState('');
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
+    const [modalConfirm, setModalConfirm] = useState(false);
 
     const mutationCreate = useMutation({
         mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
@@ -98,7 +100,7 @@ export default function ModalFoundTutor({
     };
 
     useEffect(() => {
-        if (socketReducer) {
+        if (socketReducer && isModalOpen) {
             socketReducer.on(
                 SocketEvent.ANSWER,
                 (data: {
@@ -110,19 +112,13 @@ export default function ModalFoundTutor({
                     };
                 }) => {
                     if (isModalOpen) {
-                        router.push(
-                            `${
-                                methodAnswer === QuestionEnum.GG_MEET
-                                    ? MY_ROUTE.MENTOR.GOOGLE_MEET
-                                    : MY_ROUTE.MENTOR.FILE
-                            }?step=2`,
-                        );
+                        setModalConfirm(true);
                         setIsModalOpen(false);
                     }
                 },
             );
         }
-    }, [socketReducer]);
+    }, [socketReducer, isModalOpen]);
 
     return (
         <div>
@@ -139,7 +135,7 @@ export default function ModalFoundTutor({
                     <h2 className='text-[20px] leading-[27px] text-[NeutralDark1]'>
                         {isAccepted
                             ? 'Đã tìm thấy người hướng dẫn'
-                            : 'Rất tiếc người hướng dẫn này đã từ chối bạn'}
+                            : 'Rất tiếc người này đã từ chối bạn'}
                     </h2>
                     <img
                         src={imageUtility(user?.avatar?.fileKey)}
@@ -153,7 +149,7 @@ export default function ModalFoundTutor({
                     </div>
                     {isAccepted && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
                     <div className='flex items-start gap-6 mt-5'>
-                        <div className='h-[60px] ml-10'>
+                        <div className='h-[60px]'>
                             <Avatar
                                 size={50}
                                 icon={
@@ -187,6 +183,28 @@ export default function ModalFoundTutor({
                     </div>
                 </div>
             </Modal>
+
+            <ModalConfirm
+                isOpen={modalConfirm}
+                setIsOpen={setModalConfirm}
+                message='Bạn có 1 câu trả lời từ người hướng dẫn'
+                titleYes='Xem chi tiết'
+                titleCancel='Quay lại trang chủ'
+                onConfirm={() => {
+                    router.push(
+                        `${
+                            methodAnswer === QuestionEnum.GG_MEET
+                                ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                : MY_ROUTE.MENTOR.FILE
+                        }?step=2`,
+                    );
+                    setModalConfirm(false);
+                }}
+                onCancel={() => {
+                    setModalConfirm(false);
+                    // router.push('/');
+                }}
+            />
         </div>
     );
 }

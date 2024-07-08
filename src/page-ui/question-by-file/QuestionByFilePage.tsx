@@ -25,7 +25,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
     });
 
     const question = useQuery({
-        queryKey: detailedQuestionKeys.list({ currentQuestionId }),
+        queryKey: detailedQuestionKeys.list({ currentQuestionId, step: searchParams.get('step') }),
         queryFn: () => getDetailedQuestionApi(currentQuestionId),
         select: (data) => data?.data.data,
     });
@@ -111,7 +111,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
                             color={`${current >= 2 ? 'white' : 'black'}`}
                         />
                     }
-                    title='Trò chuyện'
+                    title='Giải đáp'
                     index={2}
                 />
             ),

@@ -30,7 +30,7 @@ export function VoucherItem({ percent, quantity, time, onClick }: Props) {
                 </div>
             </div>
             <div className='h-28 gap-1 px-2 flex flex-col justify-center'>
-                <div>mã giảm giá {percent}%</div>
+                <div>Mã giảm giá {percent}%</div>
                 <div>Số lượng mã giảm giá bạn đang có: {quantity}</div>
                 <div>Sắp hết hạn: Còn {hours} giờ</div>
             </div>

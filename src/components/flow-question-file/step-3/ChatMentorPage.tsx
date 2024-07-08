@@ -30,9 +30,16 @@ type Props = {
     idRoom: string;
     tutor?: UserModel;
     senderId: string;
+    isChat?: boolean;
 };
 
-export default function ChatMentorPage({ setIsChat, idRoom, senderId, tutor }: Props) {
+export default function ChatMentorPage({
+    setIsChat,
+    idRoom,
+    senderId,
+    tutor,
+    isChat = true,
+}: Props) {
     const [dataChat, setDataChat] = useState<ChatModel[]>([]);
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
@@ -83,6 +90,7 @@ export default function ChatMentorPage({ setIsChat, idRoom, senderId, tutor }: P
                                 avatar={imageUtility(tutor?.avatar?.fileKey)}
                                 dataList={dataChat}
                                 onSubmit={handleSubmit}
+                                isChat={isChat}
                                 classNameMessage='absolute left-4 right-4 bottom-4'
                                 className='absolute left-4 right-4 top-20 max-h-[calc(100vh-356px)] overflow-auto'
                             />

@@ -84,7 +84,7 @@ function QuestionByGoogleMeetPage() {
                             color={`${current >= 2 ? 'white' : 'black'}`}
                         />
                     }
-                    title='Trò chuyện'
+                    title='Giải đáp'
                     index={2}
                 />
             ),

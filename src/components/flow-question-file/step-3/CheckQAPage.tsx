@@ -125,6 +125,7 @@ export default function CheckQAPage({ onNext }: Props) {
             },
         );
     };
+    console.log('query.data?.status', query.data?.status !== QuestionStatus.DONE);
 
     return (
         <div>
@@ -134,6 +135,7 @@ export default function CheckQAPage({ onNext }: Props) {
                     idRoom={mutateCreateRoom.data?.data.roomId || ''}
                     senderId={query.data?.tutor?.id || ''}
                     tutor={query.data?.tutor}
+                    isChat={query.data?.status !== QuestionStatus.DONE}
                 />
             ) : (
                 <>
@@ -145,10 +147,19 @@ export default function CheckQAPage({ onNext }: Props) {
                                     <></>
                                 ) : (
                                     <ButtonPrimary
-                                        title={query.data?.roomId ? 'Trò chuyện' : 'Tạo đoạn chat'}
+                                        title={
+                                            query.data?.status === QuestionStatus.DONE
+                                                ? 'Xem đoạn chát'
+                                                : query.data?.roomId
+                                                ? 'Giải đáp'
+                                                : 'Tạo đoạn chat'
+                                        }
                                         className='w-full'
                                         onClick={() => {
-                                            if (query.data?.roomId) {
+                                            if (
+                                                query.data?.roomId ||
+                                                query.data?.status === QuestionStatus.DONE
+                                            ) {
                                                 setIsChat(true);
                                                 return;
                                             }
@@ -281,24 +292,28 @@ export default function CheckQAPage({ onNext }: Props) {
                             </div>
                         </SideBarMentor>
                     </div>
-                    <ButtonPrimary
-                        title={
-                            query.data?.questionType === QuestionEnum.FILE
-                                ? 'Kết thúc cuộc trò chuyện'
-                                : 'Hoàn thành buổi meet room'
-                        }
-                        className='ml-[432px] mt-6 !w-fit'
-                        disabled={
-                            query.data?.questionType === QuestionEnum.FILE
-                                ? !answer
-                                : !query.data?.meetingURL
-                        }
-                        onClick={() => {
-                            mutateUpdateStatusQuestion.mutate({
-                                status: QuestionStatus.DONE,
-                            });
-                        }}
-                    />
+                    {query.data?.status !== QuestionStatus.DONE &&
+                        query.data?.status !== QuestionStatus.EXPIRED &&
+                        query.data?.status !== QuestionStatus.REJECTED && (
+                            <ButtonPrimary
+                                title={
+                                    query.data?.questionType === QuestionEnum.FILE
+                                        ? 'Kết thúc cuộc trò chuyện'
+                                        : 'Hoàn thành buổi meet room'
+                                }
+                                className='ml-[432px] mt-6 !w-fit'
+                                disabled={
+                                    query.data?.questionType === QuestionEnum.FILE
+                                        ? !answer
+                                        : !query.data?.meetingURL
+                                }
+                                onClick={() => {
+                                    mutateUpdateStatusQuestion.mutate({
+                                        status: QuestionStatus.DONE,
+                                    });
+                                }}
+                            />
+                        )}
                 </>
             )}
         </div>

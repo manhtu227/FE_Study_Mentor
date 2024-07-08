@@ -1,4 +1,5 @@
 'use client';
+import SendIcon from '@assets/icons/send-icon';
 import UploadIcon from '@assets/icons/upload-icon';
 import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -9,7 +10,6 @@ import { useForm } from 'antd/es/form/Form';
 import clsx from 'clsx';
 import { useState } from 'react';
 import UploadFileMessage from './UploadFileMessage';
-import SendIcon from '@assets/icons/send-icon';
 
 const dummyRequest = ({ onSuccess }: any) => {
     setTimeout(() => {
@@ -26,9 +26,15 @@ type MessageFormProps = {
     onSubmit: (value: string, files?: FileReq[] | null) => void;
     className?: string;
     isSideBar?: boolean;
+    isChat?: boolean;
 };
 
-export default function MessageForm({ onSubmit, className, isSideBar }: MessageFormProps) {
+export default function MessageForm({
+    onSubmit,
+    className,
+    isSideBar,
+    isChat = true,
+}: MessageFormProps) {
     const [form] = useForm<MessageInput>();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -92,6 +98,7 @@ export default function MessageForm({ onSubmit, className, isSideBar }: MessageF
                     placeholder='Nhập nội dung tin nhắn'
                     classNameInput={clsx('rce-input', 'rce-input-textarea')}
                     autoFocus
+                    disabled={!isChat}
                     fileUpload={
                         fileList.length > 0 ? (
                             <UploadFileMessage fileList={fileList} onChange={handleChangeFile} />
@@ -100,7 +107,7 @@ export default function MessageForm({ onSubmit, className, isSideBar }: MessageF
                     suffix={
                         <div
                             className='cursor-pointer flex items-center'
-                            onClick={() => form.submit()}
+                            onClick={() => isChat && form.submit()}
                         >
                             <SendIcon />
                         </div>
