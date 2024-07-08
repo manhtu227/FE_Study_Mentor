@@ -12,6 +12,7 @@ import {
     QuestionReportRes,
     RatingReq,
     ReportQuestionReq,
+    StatusQuestionReq,
     StructureEducationsResp,
     SubjectResp,
 } from '@core/models/question.model';
@@ -98,6 +99,10 @@ export const updateStepQuestionApi = async (req: StepUpdateReq) => {
     });
 };
 
+export const updateStatusQuestionApi = async (body: StatusQuestionReq, id: string) => {
+    return api.patch<void>(`/api/questions/${id}`, body);
+};
+
 export type QuestionListFilter = {
     status?: QuestionStatusString;
     search?: string;
@@ -124,8 +129,17 @@ export const reportQuestionApi = async (request: ReportQuestionReq) => {
     return api.post<void>(`api/users/tutor/report-tutor`, request);
 };
 
+export const reportQuestionStudentApi = async (request: ReportQuestionReq) => {
+    return api.post<void>(`api/users/student/report-student`, request);
+};
+
 export const getQuestionReportKeys = initKeys('get-question-report-keys');
 
 export const getQuestionReportApi = async () => {
     return api.get<PagingResp<QuestionReportRes[]>>(`api/users/tutor/report-tutor`);
+};
+
+export const getQuestionStudentReportKeys = initKeys('get-question-student-report-keys');
+export const getQuestionStudentReportApi = async () => {
+    return api.get<PagingResp<QuestionReportRes[]>>(`api/users/student/report-student`);
 };

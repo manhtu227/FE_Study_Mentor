@@ -54,7 +54,6 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
     const gradeOptions = filteredGrades.map(ConvertGradeToOption);
     const subjectData = filteredGrades.find((grade) => grade.id === selectedGrade)?.subjects ?? [];
     const subjectOptions = subjectData?.map(ConvertSubjectToOption) ?? [];
-    const questionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const dispatch = useDispatch();
 
     /* create question api */

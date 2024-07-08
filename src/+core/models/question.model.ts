@@ -287,3 +287,7 @@ export type CompletedQuestion = {
     createdAt: Date;
     title: string;
 };
+
+export type StatusQuestionReq = {
+    status: QuestionStatus;
+};

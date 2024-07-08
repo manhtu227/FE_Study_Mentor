@@ -53,7 +53,9 @@ export function PersonalInfoSection({
                 fullName: data.fullName,
                 phone: data.phone,
                 email: data.email,
-                dateOfBirth: dayjs(data.dateOfBirth).set('year', +data?.dateOfBirth),
+                dateOfBirth: data?.dateOfBirth
+                    ? dayjs(data.dateOfBirth).set('year', +data?.dateOfBirth)
+                    : null,
                 gender: data.gender,
             };
 

@@ -1,6 +1,7 @@
-import ReportAnswerPage from '../../../../page-ui/report-question/ReportQuestionPage';
+import ReportQuestionPage from '@page/report-question/ReportQuestionPage';
+
 function ReportAnswer() {
-    return <ReportAnswerPage />;
+    return <ReportQuestionPage />;
 }
 
 export default ReportAnswer;

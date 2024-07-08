@@ -1,18 +1,24 @@
 'use client';
-import { StarFilled } from '@ant-design/icons';
 import images from '@assets/images';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { QuestionEnum } from '@core/models/question.model';
+import { SocketEvent } from '@core/enums/socket.enum';
+import {
+    AnswerResponseModel,
+    GetQuestionResponseModel,
+    QuestionEnum,
+} from '@core/models/question.model';
 import { UserModel } from '@core/models/user.model';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
+import { RootState } from '@core/store';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
-import { Avatar, Image, Modal } from 'antd';
+import { Avatar, Image, Modal, Rate } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {
     isModalOpen: boolean;
@@ -33,6 +39,7 @@ export default function ModalFoundTutor({
 }: Props) {
     const dispatch = useDispatch();
     const [dots, setDots] = useState('');
+    const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
     const mutationCreate = useMutation({
         mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
@@ -89,6 +96,34 @@ export default function ModalFoundTutor({
         setIsModalOpen(false);
         // router.push('/');
     };
+
+    useEffect(() => {
+        if (socketReducer) {
+            socketReducer.on(
+                SocketEvent.ANSWER,
+                (data: {
+                    data: {
+                        answer: AnswerResponseModel;
+                        tutor: UserModel;
+                        student: UserModel;
+                        question: GetQuestionResponseModel;
+                    };
+                }) => {
+                    if (isModalOpen) {
+                        router.push(
+                            `${
+                                methodAnswer === QuestionEnum.GG_MEET
+                                    ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                    : MY_ROUTE.MENTOR.FILE
+                            }?step=2`,
+                        );
+                        setIsModalOpen(false);
+                    }
+                },
+            );
+        }
+    }, [socketReducer]);
+
     return (
         <div>
             <Modal
@@ -106,7 +141,11 @@ export default function ModalFoundTutor({
                             ? 'Đã tìm thấy người hướng dẫn'
                             : 'Rất tiếc người hướng dẫn này đã từ chối bạn'}
                     </h2>
-                    {/* <img src={imageUtility(user?.avatar?.fileKey)} alt='ảnh người hướng dẫn' /> */}
+                    <img
+                        src={imageUtility(user?.avatar?.fileKey)}
+                        alt='ảnh người hướng dẫn'
+                        className='h-32 w-32'
+                    />
                     <div className='py-1'>
                         {methodAnswer === QuestionEnum.FILE
                             ? 'Hình thức trò chuyện'
@@ -142,11 +181,7 @@ export default function ModalFoundTutor({
                             </div>
 
                             <div className='flex items-center gap-1'>
-                                <StarFilled className='text-[#f2c94c]' />
-                                <StarFilled className='text-[#f2c94c]' />
-                                <StarFilled className='text-[#f2c94c]' />
-                                <StarFilled className='text-[#f2c94c]' />
-                                <StarFilled className='text-[#f2c94c]' />
+                                <Rate value={user?.averageRate} disabled />
                             </div>
                         </div>
                     </div>

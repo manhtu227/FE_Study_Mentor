@@ -1,11 +1,6 @@
 'use client';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import {
-    ExpirationDateType,
-    PaymentReq,
-    PaymentType,
-    paymemtSystemApi,
-} from '@core/services/payment.service';
+import { PaymentReq, PaymentType, paymemtSystemApi } from '@core/services/payment.service';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
@@ -33,12 +28,12 @@ export default function UpgradeAiPage() {
                     <CardPayment />
                     <CardPayment
                         checkUpgrade
-                        onClick={() => {
+                        onClick={(type) => {
                             mutateCreatePaymentRequest.mutate({
                                 type: PaymentType.CHAT_AI,
                                 cancelUrl: window.location.href,
                                 returnUrl: MY_ROUTE.AI.PAID,
-                                expirationDateType: ExpirationDateType.MONTH,
+                                expirationDateType: type,
                             });
                         }}
                     />

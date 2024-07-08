@@ -2,12 +2,19 @@
 import { DATE_FORMAT } from '@core/constants/commons.constant';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { QuestionReportRes } from '@core/models/question.model';
-import { getQuestionReportApi, getQuestionReportKeys } from '@core/services/questions.service';
+import { UserRole } from '@core/models/user.model';
+import {
+    getQuestionReportApi,
+    getQuestionReportKeys,
+    getQuestionStudentReportApi,
+    getQuestionStudentReportKeys,
+} from '@core/services/questions.service';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Button, Empty, Skeleton, Table } from 'antd';
 import { TableProps } from 'antd/lib';
 import { format } from 'date-fns';
+import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -21,6 +28,7 @@ export type ReportTable = {
 
 function Report() {
     const router = useRouter();
+    const session = useSession();
     const columns: TableProps<ReportTable>['columns'] = [
         {
             title: 'Question Title',
@@ -50,10 +58,17 @@ function Report() {
     };
 
     const reportQuery = useQuery({
-        queryKey: getQuestionReportKeys.all,
-        queryFn: () => getQuestionReportApi(),
+        queryKey:
+            session.data?.user.user.role === UserRole.STUDENT
+                ? getQuestionStudentReportKeys.all
+                : getQuestionReportKeys.all,
+        queryFn: () =>
+            session.data?.user.user.role === UserRole.STUDENT
+                ? getQuestionStudentReportApi()
+                : getQuestionReportApi(),
         select: (data) => data?.data,
         placeholderData: keepPreviousData,
+        enabled: !!session.data?.user.user.role,
     });
 
     const [data, setData] = useState<ReportTable[]>([]);

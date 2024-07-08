@@ -6,7 +6,7 @@ export type PersonalInformationInput = {
     fullName: string;
     phone?: string;
     email: string;
-    dateOfBirth?: Dayjs;
+    dateOfBirth?: Dayjs | null;
     gender: Gender;
 };
 

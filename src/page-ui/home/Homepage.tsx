@@ -89,7 +89,7 @@ function Homepage() {
                 </div>
             </section>
             {/* section 2 */}
-            <section className='flex items-center gap-[10px] px-[180px]'>
+            <section className='flex items-center md:flex-wrap lg:flex-nowrap px-[180px] justify-around'>
                 {characteistics &&
                     characteistics.length > 0 &&
                     characteistics.map((item) => {

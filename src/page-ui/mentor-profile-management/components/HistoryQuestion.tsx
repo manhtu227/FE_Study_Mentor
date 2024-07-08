@@ -2,6 +2,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import ModalDetailedQuestion from '@components/modal/ModalDetailedQuestion';
 import { DATE_FORMAT } from '@core/constants/commons.constant';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { FilterQuestionType } from '@core/enums/filter-question-type.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { FileReq } from '@core/models/file.model';
@@ -127,7 +128,7 @@ export function HistoryQuestion() {
                             <div
                                 className='flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-200'
                                 onClick={() => {
-                                    router.push(`/reports/questions/${record.key}`);
+                                    router.push(`${MY_ROUTE.REPORT_QUESTION}/${record.key}`);
                                 }}
                             >
                                 <span className='text-black-800'>Báo cáo câu hỏi này</span>

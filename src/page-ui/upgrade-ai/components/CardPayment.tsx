@@ -1,8 +1,11 @@
 import { CheckOutlined } from '@ant-design/icons';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
+import { ExpirationDateType } from '@core/services/payment.service';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { Radio, RadioChangeEvent } from 'antd';
 import clsx from 'clsx';
+import { useState } from 'react';
 
 const AiFree = [
     'Không giới hạn số lượng câu hỏi',
@@ -20,18 +23,55 @@ const AiUpgrade = [
 
 type Props = {
     checkUpgrade?: boolean;
-    onClick?: () => void;
+    onClick?: (type: ExpirationDateType) => void;
 };
 
 const CardPayment = ({ checkUpgrade, onClick }: Props) => {
+    const [value, setValue] = useState(ExpirationDateType.DAY);
+
+    const onChange = (e: RadioChangeEvent) => {
+        setValue(e.target.value);
+    };
+
     return (
         <div className='flex flex-col p-6 gap-1 border-solid border-gray-500 border-[1px] max-w-96 rounded-md'>
             <span>{checkUpgrade ? 'Trả phí' : 'Miễn phí'}</span>
-            <span className='text-gray-900'>VNĐ {formatPriceVND(450000)}/tháng</span>
+            {checkUpgrade && (
+                <>
+                    <span className='text-gray-900'>
+                        VNĐ{' '}
+                        {formatPriceVND(
+                            ExpirationDateType.DAY === value
+                                ? 15000
+                                : ExpirationDateType.WEEK === value
+                                ? 105000
+                                : ExpirationDateType.MONTH === value
+                                ? 225000
+                                : 2500000,
+                        )}
+                        /
+                        {ExpirationDateType.DAY === value
+                            ? 'ngày'
+                            : ExpirationDateType.WEEK === value
+                            ? 'tuần'
+                            : ExpirationDateType.MONTH === value
+                            ? 'tháng'
+                            : 'năm'}
+                    </span>
+                    <Radio.Group onChange={onChange} value={value} className='flex flex-col'>
+                        <Radio value={ExpirationDateType.DAY}>1 ngày</Radio>
+                        <Radio value={ExpirationDateType.WEEK}>1 tuần</Radio>
+                        <Radio value={ExpirationDateType.MONTH}>1 tháng (Giảm 50%)</Radio>
+                        <Radio value={ExpirationDateType.YEAR}>1 năm (Giảm 50%)</Radio>
+                    </Radio.Group>
+                </>
+            )}
             {checkUpgrade ? (
                 <ButtonPrimary
                     title={'Nâng cấp ngay'}
-                    onClick={onClick}
+                    onClick={() => {
+                        onClick && onClick(value);
+                    }}
                     className='my-2 !h-[45px] !rounded-full'
                 />
             ) : (

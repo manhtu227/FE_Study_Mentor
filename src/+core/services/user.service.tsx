@@ -194,3 +194,8 @@ export const deleteNotificationApi = async (id: string) => {
 export const deleteAllNotificationApi = async () => {
     return api.delete<void>(`/api/notifications`);
 };
+
+export const getStudentReportKeys = initKeys('student-report-keys');
+export const getStudentReportApi = async (reportId: string) => {
+    return api.get<PagingResp<ReportModel>>(`/api/users/student/report-student/${reportId}`);
+};

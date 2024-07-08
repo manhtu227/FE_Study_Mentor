@@ -114,7 +114,7 @@ function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: Sideba
                         </div>
                     )}
                 </div>
-                <div className='pack-border-t-primary-400'>
+                {/* <div className='pack-border-t-primary-400'>
                     {more.map((item, index) => (
                         <div
                             key={index}
@@ -124,7 +124,7 @@ function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: Sideba
                             {item.title}
                         </div>
                     ))}
-                </div>
+                </div> */}
             </div>
         </div>
     );

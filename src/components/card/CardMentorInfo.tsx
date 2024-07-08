@@ -92,7 +92,7 @@ export function CardMentorInfo({
                                 <StarFilled className='text-[#f2c94c]' />
                                 <StarFilled className='text-[#f2c94c]' />
                                 <StarFilled className='text-[#f2c94c]' /> */}
-                                <Rate disabled defaultValue={mentor?.rating} />
+                                <Rate disabled value={mentor?.rating} />
                             </div>
                             <div className='flex mt-[10px] gap-2 flex-wrap'>
                                 <Button type='primary' onClick={handleShowModalMentor}>

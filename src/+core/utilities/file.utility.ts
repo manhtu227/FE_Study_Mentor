@@ -1,7 +1,6 @@
-import { RcFile } from 'antd/es/upload';
 import { toastError } from './toast.utility';
 
-export const beforeUpload = (file: RcFile) => {
+export const beforeUpload = (file: any) => {
     const isJpgOrPng =
         file.type === 'image/jpeg' ||
         file.type === 'image/png' ||

@@ -11,11 +11,11 @@ export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemPr
         name: 'file',
         multiple: true,
         listType: 'picture',
-        beforeUpload: beforeUpload,
+        beforeUpload,
         onChange(info) {
             const { status } = info.file;
             if (status === 'uploading') {
-                setFileList(info.fileList);
+                setFileList(info.fileList.map((file: any) => ({ ...file, status: 'done' })));
             } else if (status === 'done') {
                 setFileList(info.fileList);
             } else if (status === 'error') {

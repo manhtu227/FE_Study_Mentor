@@ -8,12 +8,18 @@ import {
     AnswerResponseModel,
     GetQuestionResponseModel,
     QuestionEnum,
+    StatusQuestionReq,
 } from '@core/models/question.model';
 
 import images from '@assets/images';
+import { QuestionStatus } from '@core/enums/question.enum';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
-import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import {
+    detailedQuestionKeys,
+    getDetailedQuestionApi,
+    updateStatusQuestionApi,
+} from '@core/services/questions.service';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { downloadUrl } from '@core/utilities/download.util';
@@ -87,6 +93,15 @@ export default function CheckQAPage({ onNext }: Props) {
         onSuccess: () => {
             setIsChat(true);
             toastSuccess('Tạo room chat thành công');
+        },
+        onError: handleError,
+    });
+
+    const mutateUpdateStatusQuestion = useMutation({
+        mutationFn: (body: StatusQuestionReq) => updateStatusQuestionApi(body, currentQuestionId),
+        onSuccess: () => {
+            onNext();
+            toastSuccess('Chúc mừng bạn đã hoàn thành câu hỏi');
         },
         onError: handleError,
     });
@@ -279,7 +294,9 @@ export default function CheckQAPage({ onNext }: Props) {
                                 : !query.data?.meetingURL
                         }
                         onClick={() => {
-                            onNext();
+                            mutateUpdateStatusQuestion.mutate({
+                                status: QuestionStatus.DONE,
+                            });
                         }}
                     />
                 </>

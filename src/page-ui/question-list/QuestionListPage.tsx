@@ -110,9 +110,9 @@ export default function QuestionListPage() {
                                     onClick={() => {
                                         dispatch(setCurrentQuestionId(question.questionId));
                                         router.push(
-                                            `${MY_ROUTE.MENTOR.FILE}?step=${getStepByStatus(
-                                                question.status,
-                                            )}`,
+                                            `${MY_ROUTE.MENTOR.FILE}?step=${
+                                                getStepByStatus(question.status) - 1
+                                            }`,
                                         );
                                     }}
                                 />

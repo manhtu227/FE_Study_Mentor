@@ -5,7 +5,7 @@ import { CardRate } from '@components/card/CardRate';
 export function SideBarMentorProfile() {
     return (
         <div className='flex flex-col gap-8 '>
-            <CardAccount />
+            <CardAccount name='đ' />
             <CardBankAccount />
             <CardRate />
         </div>

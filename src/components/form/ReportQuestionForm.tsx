@@ -6,7 +6,8 @@ import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagrap
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { ReportAnswer, ReportQuestionReq } from '@core/models/question.model';
-import { reportQuestionApi } from '@core/services/questions.service';
+import { UserRole } from '@core/models/user.model';
+import { reportQuestionApi, reportQuestionStudentApi } from '@core/services/questions.service';
 import { getTutorReportApi, getTutorReportKeys } from '@core/services/user.service';
 import { downloadUrl } from '@core/utilities/download.util';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
@@ -14,6 +15,7 @@ import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CustomEditorInput } from '../form-input/CustomEditorInput';
@@ -30,6 +32,7 @@ function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
     const file = useUploadFileApi();
     const [isReported, setIsReported] = useState<boolean>(false);
     const router = useRouter();
+    const session = useSession();
 
     const detailedTutorReportQuery = useQuery({
         queryKey: getTutorReportKeys.all,
@@ -57,11 +60,16 @@ function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
     };
 
     const reportQuestionMutate = useMutation({
-        mutationFn: (values: ReportQuestionReq) => reportQuestionApi(values),
+        mutationFn: (values: ReportQuestionReq) =>
+            session.data?.user.user.role === UserRole.STUDENT
+                ? reportQuestionStudentApi(values)
+                : reportQuestionApi(values),
         onSuccess: () => {
             toastSuccess('Báo cáo câu hỏi thành công');
             setIsReported(true);
-            router.push(MY_ROUTE.REPORT);
+            if (session.data?.user.user.role === UserRole.STUDENT) {
+                router.back();
+            } else router.push(MY_ROUTE.REPORT);
         },
         onError: handleError,
     });

@@ -25,7 +25,7 @@ export enum QuestionStatus {
     DONE = 6, // done
 }
 
-export const getStepByStatus = (status: QuestionStatus): QuestionStep | null => {
+export const getStepByStatus = (status: QuestionStatus): QuestionStep => {
     switch (status) {
         case QuestionStatus.NEW:
             return QuestionStep.TWO;
@@ -38,7 +38,7 @@ export const getStepByStatus = (status: QuestionStatus): QuestionStep | null => 
         case QuestionStatus.DONE:
             return QuestionStep.THREE;
         default:
-            return null;
+            return QuestionStep.ONE;
     }
 };
 

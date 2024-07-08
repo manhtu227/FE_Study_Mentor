@@ -65,6 +65,11 @@ export default function RatingAnswerPage() {
                     <ButtonPrimary
                         title='Báo cáo'
                         className='w-full bg-red-600 hover:!bg-red-500'
+                        onClick={() =>
+                            router.push(
+                                `${MY_ROUTE.REPORT_QUESTION}/${questions.currentQuestionId}`,
+                            )
+                        }
                     />
                 }
             >
