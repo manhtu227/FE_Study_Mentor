@@ -11,7 +11,7 @@ export const MY_ROUTE = {
         self: '/mentor',
         FILE: `/mentor/file`,
         GOOGLE_MEET: `/mentor/google-meet`,
-        RECEIVED_QUESTIONS: `/received-questions`,
+        RECEIVED_QUESTIONS: `/questions`,
     },
     AUTH: {
         self: '/auth',
@@ -23,9 +23,9 @@ export const MY_ROUTE = {
     RESET_PASSWORD: '/reset-password',
     DASHBOARD_TUTOR: '/dashboard-tutor',
     PROFILE: '/profile',
+    REPORT_QUESTION: '/reports/questions',
     REPORT: '/reports',
     DASHBOARD_STUDENT: '/dashboard-student',
-    REPORT_QUESTION: '/reports/questions',
 };
 
 export const roleUser = [
@@ -41,8 +41,8 @@ export const roleUser = [
 export const roleTutor = [
     MY_ROUTE.DASHBOARD_TUTOR,
     MY_ROUTE.MENTOR.RECEIVED_QUESTIONS,
-    MY_ROUTE.REPORT,
     MY_ROUTE.REPORT_QUESTION,
+    MY_ROUTE.REPORT,
 ];
 
 export const rolePublic = [
@@ -51,6 +51,5 @@ export const rolePublic = [
     MY_ROUTE.HOME,
     MY_ROUTE.LIST_QUESTION,
     MY_ROUTE.RESET_PASSWORD,
-    MY_ROUTE.DASHBOARD_TUTOR,
     MY_ROUTE.PROFILE,
 ];
