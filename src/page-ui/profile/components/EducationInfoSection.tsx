@@ -330,7 +330,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     >
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn cấp học'
                             onChange={handleChangeLevels}
                             options={levelOptions}
@@ -346,7 +346,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     >
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn khối/ lớp'
                             onChange={handleChangeGrades}
                             options={gradeOptions}
@@ -359,11 +359,12 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <Form.Item<EducationInformationInput> name='subjectIds'>
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn môn/ kỹ năng'
                             onChange={handleChangeSubjects}
                             options={subjectOptions}
                             value={subjects}
+                            style={{ width: '100%' }}
                         />
                     </Form.Item>
                     <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
@@ -407,7 +408,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                         size='large'
                         type='primary'
                         disabled={isDisabledAddNewSubject}
-                        className='!h-12 !w-[200px] font-bold text-base mt-4'
+                        className='!h-12 !w-[210px] font-bold text-base mt-4'
                         onClick={handleAddNewSubject}
                     >
                         Đăng ký thêm môn học

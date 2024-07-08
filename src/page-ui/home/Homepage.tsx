@@ -101,7 +101,11 @@ function Homepage() {
                                     size='large'
                                     className='!w-56 !h-14 text-2xl uppercase font-semibold flex items-center
                             justify-center no-underline'
-                                    href={!data ? MY_ROUTE.AUTH.LOGIN : ''}
+                                    href={
+                                        !data
+                                            ? MY_ROUTE.AUTH.LOGIN
+                                            : MY_ROUTE.MENTOR.RECEIVED_QUESTIONS
+                                    }
                                 >
                                     Bắt đầu ngay
                                 </Button>
