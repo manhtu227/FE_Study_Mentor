@@ -60,7 +60,7 @@ export function HistoryQuestion() {
 
     const columns: TableProps<HistoryQuestionTable>['columns'] = [
         {
-            title: 'Name',
+            title: 'Tên học viên',
             dataIndex: 'name',
             render: (value, record) => {
                 return (
@@ -90,7 +90,7 @@ export function HistoryQuestion() {
             },
         },
         {
-            title: 'Expense',
+            title: 'Chi phí',
             dataIndex: 'expense',
             render: (value, record) => (
                 <div className='font-normal text-sm flex flex-col'>
@@ -99,18 +99,18 @@ export function HistoryQuestion() {
             ),
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             dataIndex: 'isPaid',
             render: (value, record) => {
                 return <div>{record.isPaid ? 'Đã được thanh toán' : 'Chưa được thanh toán'}</div>;
             },
         },
         {
-            title: 'Date',
+            title: 'Thời gian tạo',
             dataIndex: 'date',
         },
         {
-            title: 'Action',
+            title: 'Hành động',
             key: 'action',
             render: (_, record) => (
                 <Dropdown

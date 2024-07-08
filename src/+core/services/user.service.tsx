@@ -199,3 +199,7 @@ export const getStudentReportKeys = initKeys('student-report-keys');
 export const getStudentReportApi = async (reportId: string) => {
     return api.get<PagingResp<ReportModel>>(`/api/users/student/report-student/${reportId}`);
 };
+
+export const deleteSubjectApi = async (subjectId: string) => {
+    return api.delete<void>(`/api/users/subjects/${subjectId}`);
+};

@@ -378,7 +378,7 @@ const Header = () => {
     }, [getNotificationsQuery?.data]);
 
     return (
-        <header className='h-[64px] min-h-[64px] w-full items-center z-50 shadow-md sticky top-0 right-0'>
+        <header className='h-[64px] min-h-[64px] w-full items-center z-[999] shadow-md sticky top-0 right-0'>
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}
@@ -403,7 +403,7 @@ const Header = () => {
                             className='text-primary-900 text-base font-bold no-underline hover:opacity-80'
                             href={MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}
                         >
-                            Câu hỏi hiện có
+                            Danh sách câu hỏi
                         </Link>
                     )}
                 </div>

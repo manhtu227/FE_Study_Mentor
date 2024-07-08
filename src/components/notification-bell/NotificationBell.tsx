@@ -133,6 +133,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                         }?step=1`,
                     );
                 }
+                break;
             case NotificationType.STUDENT_PICK_TUTOR:
                 router.push(`${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${notification.question.id}`);
                 break;
@@ -147,6 +148,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                         }?step=3`,
                     );
                 }
+                break;
             case NotificationType.PAID_SUCCESS_FOR_TUTOR:
                 if (data?.user?.user?.role === UserRole.TUTOR) {
                     router.push(`${MY_ROUTE.DASHBOARD_TUTOR}`);
