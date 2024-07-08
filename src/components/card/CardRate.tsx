@@ -15,7 +15,7 @@ export const CardRate = () => {
                 </div>
                 <div className='text-sm font-normal text-black-800'>
                     Hãy tích cực và nhiệt tình trao đổi, hướng dẫn cho học sinh của bạn nhé. Nhận
-                    được đánh giá tốt là một cách tiếp cận và nân cao độ uy tín của bản thân nhé!
+                    được đánh giá tốt là một cách tiếp cận và nâng cao độ uy tín của bản thân nhé!
                 </div>
             </div>
             <ButtonOutlined title={'Xem nhận xét'} />
