@@ -77,6 +77,7 @@ export default function Chat({
     const queryClient = useQueryClient();
 
     const handleSubmit = async (value: string, files?: FileReq[] | null) => {
+        console.log('value', value);
         const newChat: ChatModel = {
             questionId: uuidv4(),
             senderId: data!.user.user.id,
