@@ -18,22 +18,22 @@ function Homepage() {
         {
             id: 1,
             image: images.charac1,
-            title: 'Mentor 1:1 dự án portfolio cá nhân',
+            title: 'Tutor 1:1 cho từng học viên',
             description:
                 'Áp dụng phương pháp giảng dạy Porfolio Mentoring. Học & tương tác trực tiếp với giảng viên, được mentor dự án portfolio cá nhân xuyên suốt lộ trình học.',
         },
         {
             id: 2,
             image: images.charac2,
-            title: 'Học tại HCM/ Hà Nội/ Trực tuyến Zoom',
+            title: 'Học tại HCM/ Hà Nội/ Trực tuyến qua Google Meet',
             description:
                 'Có thể học cùng lúc nhiều môn hoặc học tuần tự từng môn theo thời gian bạn có.',
         },
         {
             id: 3,
             image: images.charac3,
-            title: 'Hỗ trợ thư viện video bài giảng đa dạng nhiều thể loại',
-            description: 'Giúp bạn sở hữu trọn vẹn kiến thức dù có vắng học đột xuất.',
+            title: 'Hỗ trợ giải đáp câu hỏi 24/7 bởi các người hướng dẫn chất lượng',
+            description: 'Giúp bạn sở hữu trọn vẹn kiến thức dù có mất gốc hay có câu hỏi hóc búa.',
         },
     ];
 
@@ -141,7 +141,7 @@ function Homepage() {
                     </h4>
                     <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-gray-700'>
                         Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
-                        website của bạn độc đáo, duy nhất, có giá trị thực
+                        giá trị và chất lượng dịch vụ tốt nhất cho người học.
                     </div>
                 </div>
                 <div className='flex items-center'>
@@ -153,34 +153,35 @@ function Homepage() {
                     <div className='relative'>
                         <Image
                             src={images.process2.src}
-                            alt='Quy trình làm việc của Study Mentor'
+                            alt='Quy trình trả lời câu hỏi của Study Mentor'
                             className='relative -right-40'
                             preview={false}
                         />
                         <div className='absolute top-28 right-20 rotate-6'>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin câu
+                                hỏi từ người học qua diễn đàn hoặc cuộc họp trực tuyến
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B2</span> &nbsp; Người hướng dẫn
+                                phân tích câu hỏi để hiểu rõ vấn đề, cũng như xác định các yếu tố
+                                quan trọng
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B3</span> &nbsp; Người hướng dẫn
+                                soạn thảo câu trả lời chi tiết, rõ ràng, dễ hiểu
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B4</span> &nbsp; Gửi câu trả lời và
+                                đảm bảo người học hiểu rõ vấn đề
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B5</span> &nbsp; Sẵn sàng hỗ trợ
+                                người học trong suốt quá trình giải đáp thắc mắc
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
-                                <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin và
-                                tư vấn giải pháp web phù hợp
+                                <span className='text-blue-600'>B6</span> &nbsp; Học viên có thể
+                                đánh giá câu trả lời và đánh giá người hướng dẫn
                             </div>
                         </div>
                     </div>
@@ -190,15 +191,15 @@ function Homepage() {
             <section className='mx-[180px] bg-[#DAECEF] flex items-center max-h-[500px] mb-[100px]'>
                 <div className='w-1/2 ml-[62px]'>
                     <div className='mb-6'>
-                        <div className='font-bold text-[32px] mb-2'>Lorem ipsum dolor sit amet</div>
+                        <div className='font-bold text-[32px] mb-2'>Chúng tôi đã đạt được</div>
                         <div className='font-bold text-[38px] text-[#4EA8B4] mb-2'>
-                            <span className='text-[#FFA51F]'>8000+</span> Student / Mentor
+                            <span className='text-[#FFA51F]'>8000+</span> Học viên / Người hướng dẫn
                         </div>
-                        <div className='font-bold text-[32px]'>consectetur adipiscing elit</div>
+                        <div className='font-bold text-[32px]'>đã tin tưởng sử dụng</div>
                     </div>
                     <div className='font-medium text-lg text-gray-700 mb-8'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua.
+                        Ứng dụng giải đáp online cung cấp nền tảng giúp người dùng nhận được câu trả
+                        lời nhanh chóng và chính xác từ các chuyên gia và cơ sở dữ liệu thông minh.
                     </div>
                     <ButtonPrimary
                         title={' XEM THÊM THÔNG TIN VỀ STUDY MENTOR'}
