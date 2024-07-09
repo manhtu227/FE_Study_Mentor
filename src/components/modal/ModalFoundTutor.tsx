@@ -101,6 +101,7 @@ export default function ModalFoundTutor({
 
     useEffect(() => {
         if (socketReducer && isModalOpen) {
+            socketReducer.off(SocketEvent.ANSWER);
             socketReducer.on(
                 SocketEvent.ANSWER,
                 (data: {
@@ -117,6 +118,9 @@ export default function ModalFoundTutor({
                     }
                 },
             );
+            return () => {
+                socketReducer.off(SocketEvent.ANSWER);
+            };
         }
     }, [socketReducer, isModalOpen]);
 

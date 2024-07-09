@@ -15,6 +15,7 @@ import { addRoom, removeRoom } from '@core/store/reducers/room-chat.reducer';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Avatar, Badge, Tooltip } from 'antd';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 import { RefObject, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,6 +31,7 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
     const getAvatar = useGetAvatarApi();
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const roomChatReducer = useSelector((state: RootState) => state.roomChat);
+    const user = useSession();
     const dispatch = useDispatch();
 
     const roomQuery = useQuery({
@@ -58,8 +60,11 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
         if (socketReducer) {
             const chatContent: ChatModel = {
                 questionId: uuidv4(),
-                senderId: room?.senderId || '',
-                recipientId: room?.recipientId || '',
+                senderId: user.data?.user.user.id || '',
+                recipientId:
+                    (user.data?.user.user.id === room?.recipientId
+                        ? room?.senderId
+                        : room?.recipientId) || '',
                 roomId: room?.roomId,
                 content: value,
                 files: files,
@@ -70,21 +75,24 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
     };
 
     useEffect(() => {
-        socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
-            if (
-                data.roomId &&
-                data.roomId !== room?.roomId &&
-                !roomChatReducer.roomIds?.includes(data.roomId)
-            ) {
-                dispatch(addRoom(data.roomId));
-                return;
-            }
-            setDataChat((prev) => [...prev, data]);
-        });
-        return () => {
+        if (socketReducer && room) {
             socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
-        };
-    }, []);
+            socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
+                if (
+                    data.roomId &&
+                    data.roomId !== room?.roomId &&
+                    !roomChatReducer.roomIds?.includes(data.roomId)
+                ) {
+                    dispatch(addRoom(data.roomId));
+                    return;
+                }
+                setDataChat((prev) => [...prev, data]);
+            });
+            return () => {
+                socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
+            };
+        }
+    }, [socketReducer, room]);
 
     useEffect(() => {
         if (roomQuery.data && roomQuery.data.length > 0) {
@@ -113,45 +121,48 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                         </div>
                         <div className='absolute left-0 top-14 h-[calc(100vh-110px)] bg-white-900'>
                             <div className='hover-scrollbar h-full flex flex-col gap-2 mt-4'>
-                                {(roomQuery.data || []).map((item) => (
-                                    <Tooltip
-                                        title={item.title}
-                                        key={item.roomId}
-                                        placement='leftTop'
-                                    >
-                                        <div className='flex'>
-                                            <div
-                                                className='px-3 py-1 hover:bg-gray-100 cursor-pointer'
-                                                onClick={() => handleSubmit(item)}
-                                            >
-                                                <Badge
-                                                    dot={roomChatReducer.roomIds?.includes(
-                                                        room?.roomId || '',
-                                                    )}
-                                                    className='badge-dot'
+                                {(roomQuery.data || []).map((item, index) => {
+                                    return (
+                                        <Tooltip
+                                            title={item.title}
+                                            key={item.roomId}
+                                            placement='leftTop'
+                                        >
+                                            <div className='flex'>
+                                                <div
+                                                    className='px-3 py-1 hover:bg-gray-100 cursor-pointer'
+                                                    onClick={() => handleSubmit(item)}
                                                 >
-                                                    <Avatar
-                                                        size={40}
-                                                        src={room?.avatar || images.teacher.src}
-                                                    />
-                                                </Badge>
+                                                    <Badge
+                                                        dot={roomChatReducer.roomIds?.includes(
+                                                            item.roomId,
+                                                        )}
+                                                        className='badge-dot'
+                                                    >
+                                                        <Avatar
+                                                            size={40}
+                                                            src={item?.avatar || images.teacher.src}
+                                                        />
+                                                    </Badge>
+                                                </div>
+                                                {room?.roomId === item.roomId && (
+                                                    <div className='h-5/6 self-center w-1 rounded-full bg-black-800'></div>
+                                                )}
                                             </div>
-                                            {room?.roomId === item.roomId && (
-                                                <div className='h-5/6 self-center w-1 rounded-full bg-black-800'></div>
-                                            )}
-                                        </div>
-                                    </Tooltip>
-                                ))}
+                                        </Tooltip>
+                                    );
+                                })}
                             </div>
                         </div>
                         <ChatList
                             avatar={room?.avatar || images.teacher.src}
                             dataList={dataChat}
-                            classNameMessage='absolute bottom-2 left-[72px] right-4'
+                            classNameMessage='absolute bottom-2 left-[72px] right-4 z-50'
                             onSubmit={handleSubmitChat}
                             isSideBar
-                            className='absolute top-14 left-[70px] right-0 bg-white-900 h-full'
+                            className='absolute top-14 left-[70px] right-0 bg-white-900 h-[calc(100%-120px)] hover-scrollbar'
                         />
+                        <div className='absolute left-[70px]  right-0 bottom-0 h-[65px] bg-white-900 z-10'></div>
                     </>
                 )}
             </div>

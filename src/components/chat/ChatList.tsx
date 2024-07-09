@@ -87,6 +87,7 @@ export function ChatList({
                                     value={item.content}
                                     createdAt={item.createdAt}
                                     checkedMine={checkedMine}
+                                    isSideBar={isSideBar}
                                     className={
                                         !checkedMine && index === dataList.length - 1 ? 'type' : ''
                                     }
@@ -135,64 +136,81 @@ type ChatItemProps = {
     checkedMine: boolean;
     isLoadingEnd?: boolean;
     className?: string;
+    isSideBar?: boolean;
 };
 
-function ChatItem({ value, avatar, files, checkedMine, isLoadingEnd, className }: ChatItemProps) {
+function ChatItem({
+    value,
+    avatar,
+    files,
+    checkedMine,
+    isLoadingEnd,
+    className,
+    isSideBar,
+}: ChatItemProps) {
     return (
-        <div className={clsx('flex gap-4 w-full', !checkedMine ? 'justify-start' : 'justify-end')}>
-            {avatar ? (
-                <div style={{ flex: `0 0 40px` }}>
-                    <Avatar size={40} src={avatar} />
-                </div>
-            ) : (
-                <div style={{ flex: `0 0 40px` }}></div>
-            )}
+        <div className={clsx(isSideBar && 'px-4')}>
+            <div
+                className={clsx(
+                    'flex gap-4 w-full',
+                    !checkedMine ? 'justify-start' : 'justify-end',
+                )}
+            >
+                {!isSideBar &&
+                    (avatar ? (
+                        <div style={{ flex: `0 0 40px` }}>
+                            <Avatar size={40} src={avatar} />
+                        </div>
+                    ) : (
+                        <div style={{ flex: `0 0 40px` }}></div>
+                    ))}
 
-            {isLoadingEnd ? (
-                <div className='flex items-end self-center h-4 gap-1 px-3 py-2 bg-gray-100 rounded-2xl'>
-                    <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message'></div>
-                    <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message animation-delay-100'></div>
-                    <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message animation-delay-200'></div>
-                </div>
-            ) : (
-                // <CustomSkeletonParagraph height={40} className='!rounded-lg' />
-                <div
-                    className={clsx(
-                        'flex flex-col gap-[10px] ',
-                        avatar ? 'items-start' : 'items-end',
-                    )}
-                >
-                    {value && (
-                        <div className='flex items-center w-fit'>
-                            <div
-                                className='px-4 py-2 text-base bg-white-800 rounded-2xl w-fit tag-p'
-                                style={{ whiteSpace: checkedMine ? 'pre-line' : '' }}
-                            >
-                                {/* <div></div> */}
-                                <ReactMarkdown className={className}>{value}</ReactMarkdown>
-                            </div>
-                        </div>
-                    )}
-                    {files && (
-                        <div
-                            className={clsx(
-                                'flex flex-wrap gap-2 max-w-[416px]',
-                                avatar ? 'justify-start' : 'justify-end',
-                            )}
-                        >
-                            {files.map((file) => (
-                                <div key={file.fileKey} className='flex items-center gap-2'>
-                                    <Image
-                                        className='max-w-[200px] max-h-[100px] rounded-lg'
-                                        src={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
-                                        alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                                    />
+                {isLoadingEnd ? (
+                    <div className='flex items-end self-center h-4 gap-1 px-3 py-2 bg-gray-100 rounded-2xl'>
+                        <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message'></div>
+                        <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message animation-delay-100'></div>
+                        <div className='w-1.5 h-1.5 rounded-full bg-gray-800 animation-message animation-delay-200'></div>
+                    </div>
+                ) : (
+                    // <CustomSkeletonParagraph height={40} className='!rounded-lg' />
+                    <div
+                        className={clsx(
+                            'flex flex-col gap-[10px] ',
+                            avatar ? 'items-start' : 'items-end',
+                        )}
+                    >
+                        {value && (
+                            <div className='flex items-center w-fit'>
+                                <div
+                                    className='px-4 py-2 text-base bg-white-800 rounded-2xl w-fit tag-p'
+                                    style={{ whiteSpace: checkedMine ? 'pre-line' : '' }}
+                                >
+                                    {/* <div></div> */}
+                                    <ReactMarkdown className={className}>{value}</ReactMarkdown>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
+                            </div>
+                        )}
+                        {files && (
+                            <div
+                                className={clsx(
+                                    'flex flex-wrap gap-2 max-w-[416px]',
+                                    avatar ? 'justify-start' : 'justify-end',
+                                )}
+                            >
+                                {files.map((file) => (
+                                    <div key={file.fileKey} className='flex items-center gap-2'>
+                                        <Image
+                                            className='max-w-[200px] max-h-[100px] rounded-lg'
+                                            src={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
+                                            alt='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

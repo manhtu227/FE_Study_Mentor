@@ -44,13 +44,17 @@ export default function ChatMentorPage({
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
     useEffect(() => {
-        socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
-            setDataChat((prev) => [...prev, data]);
-        });
-        return () => {
+        if (socketReducer) {
             socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
-        };
-    }, []);
+
+            socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
+                setDataChat((prev) => [...prev, data]);
+            });
+            return () => {
+                socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
+            };
+        }
+    }, [socketReducer]);
 
     const { data } = useSession();
 
