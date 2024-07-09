@@ -9,11 +9,14 @@ export const beforeUpload = (file: any) => {
         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
     if (!isJpgOrPng) {
-        toastError('file must be JPG/PNG/PDF/DOCX/DOC!');
+        toastError('file phải có định dạng là JPG/PNG/PDF/DOCX/DOC!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 10;
-    if (!isLt2M) {
-        toastError('file must smaller than 10MB!');
+    const isLt10M = file.size / 1024 / 1024 < 10;
+    if (!isLt10M) {
+        toastError('file có kích thước nhỏ hơn 10MB!');
     }
-    return isJpgOrPng && isLt2M;
+
+    console.log(isJpgOrPng && isLt10M);
+
+    return isJpgOrPng && isLt10M;
 };

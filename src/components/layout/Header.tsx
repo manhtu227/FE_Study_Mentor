@@ -30,7 +30,7 @@ import {
     userDetailKeys,
 } from '@core/services/user.service';
 import { RootState } from '@core/store';
-import { removeNotification, setNotifications } from '@core/store/reducers/notification.reducer';
+import { setNotifications } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId, setPickedQuestion } from '@core/store/reducers/question.reducer';
 import {
     addReceivedQuestion,
@@ -117,8 +117,6 @@ const Header = () => {
         if (!isShowModalPickedQuestion) {
             toastId.current = toast(
                 <NewQuestionNotification
-                    onClickNotification={handleClickOkNotification}
-                    onCloseNotification={handleWatchLaterNotification}
                     subjectName={data.subject.name}
                     price={data.price}
                     questionType={data.methodAnswer}
@@ -247,6 +245,7 @@ const Header = () => {
                         );
 
                         setIsShowModalPickedQuestion(true);
+                        getNotificationsQuery.refetch();
                     });
 
                     // Receive Google Meet
@@ -258,11 +257,13 @@ const Header = () => {
                     // Completed question
                     socket.on(SocketEvent.COMPLETED_QUESTION, (data) => {
                         setCompletedQuestion(data.data);
+                        getNotificationsQuery.refetch();
                     });
 
                     // Paid success for tutor
                     socket.on(SocketEvent.PAID_SUCCESS_FOR_TUTOR, (data) => {
                         handleCompleteQuestion(data, false);
+                        getNotificationsQuery.refetch();
                     });
                 }
                 if (data?.user?.user?.role === UserType.STUDENT) {
@@ -328,15 +329,6 @@ const Header = () => {
         if (!newQuestion) return;
 
         dispatch(setIsWatchedLater({ questionId: newQuestion?.questionId, isWatchedLater: true }));
-    };
-
-    const handleClickOkNotification = () => {
-        toast.dismiss(toastId.current);
-
-        if (newQuestion) {
-            router.push(`${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${newQuestion.questionId}`);
-            dispatch(removeNotification(newQuestion.questionId));
-        }
     };
 
     const getNotificationsQuery = useQuery({

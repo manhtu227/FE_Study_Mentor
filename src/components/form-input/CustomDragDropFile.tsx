@@ -24,9 +24,9 @@ export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemPr
         },
         onRemove(file) {
             setFileList((fileList: any) => {
-                const index = fileList.indexOf(file);
-                const newFileList = fileList.slice();
-                newFileList.splice(index, 1);
+                const index = fileList?.indexOf(file);
+                const newFileList = fileList?.slice();
+                newFileList?.splice(index, 1);
                 return newFileList;
             });
         },

@@ -1,7 +1,7 @@
 import CameraIcon from '@assets/icons/camera';
 import { FileReq } from '@core/models/file.model';
+import { beforeUpload } from '@core/utilities/file.utility';
 import { imageUtility } from '@core/utilities/image.utility';
-import { toastError } from '@core/utilities/toast.utility';
 import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
@@ -14,17 +14,6 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: RcFile) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        toastError('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        toastError('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 type CustomUploadAvatarInputProps = {
     image?: FileReq;
     name?: string;

@@ -44,13 +44,7 @@ function DetailedQuestionPage() {
             icon: <ExclamationCircleFilled />,
             content: 'Nếu đồng ý, bạn sẽ không thể hủy bỏ hành động này',
             onOk() {
-                if (questionType === QuestionType.MEETING) {
-                    setIsAnswered(true);
-
-                    return;
-                }
-
-                handleAnswerTheQuestion();
+                handleAnswerTheQuestion(questionType);
             },
             onCancel() {},
             okText: 'Trả lời',
@@ -98,7 +92,7 @@ function DetailedQuestionPage() {
         }
     }, [detailedQuestionQuery?.data?.data, data?.user.user.id, params?.slug as string]);
 
-    const handleAnswerTheQuestion = () => {
+    const handleAnswerTheQuestion = (questionType: QuestionType) => {
         if (!data?.user.user.id) return;
 
         const requestAccept: AcceptQuestionModel = {
@@ -109,7 +103,10 @@ function DetailedQuestionPage() {
         };
 
         socketReducer?.emit(SocketEvent.ACCEPT, requestAccept);
-        setShowForm(true);
+
+        if (questionType !== QuestionType.MEETING) {
+            setShowForm(true);
+        }
         setIsAnswered(true);
     };
 
@@ -130,25 +127,25 @@ function DetailedQuestionPage() {
 
                             <div className='my-4 text-2xl'>
                                 <div>
-                                    <span className='font-bold'>Tiêu đề: </span>
                                     {currentQuestion.title ? (
-                                        <div className='text-xl'>{currentQuestion.title}</div>
+                                        <div className='text-4xl font-semibold'>
+                                            {currentQuestion.title}
+                                        </div>
                                     ) : (
-                                        <div className='text-gray-300 text-base italic'>
+                                        <div className='text-gray-300 text-3xl font-semibold italic'>
                                             Không có tiêu đề
                                         </div>
                                     )}
                                 </div>
                                 <div>
-                                    <div className='font-bold'>Loại câu hỏi:</div>
-                                    <div className='text-xl'>
+                                    <span className='text-lg'>
                                         {currentQuestion?.type === QuestionType.MEETING
-                                            ? 'Thông qua Google Meet'
-                                            : 'Thông qua file'}
-                                    </div>
+                                            ? '(Thông qua Google Meet)'
+                                            : '(Thông qua file)'}
+                                    </span>
                                 </div>
 
-                                <div className='font-bold'>Nội dung câu hỏi:</div>
+                                <div className='font-bold text-xl'>Nội dung:</div>
                                 {currentQuestion.content ? (
                                     <div
                                         dangerouslySetInnerHTML={{
@@ -161,14 +158,15 @@ function DetailedQuestionPage() {
                                         Không có nội dung
                                     </div>
                                 )}
-                                <ul className='flex gap-2 flex-wrap pl-0'>
+                                <ul className='flex gap-2 flex-wrap pl-0 w-full'>
                                     {currentQuestion.fileQuestions?.map((file, index) => {
                                         return (
                                             <div
                                                 key={file.fileKey}
-                                                className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid w-[300px]'
+                                                className='border rounded-lg border-gray-600 flex items-center
+                                                justify-between p-4 border-solid w-full overflow-hidden hover:bg-gray-200'
                                             >
-                                                <div className='flex items-center text-base truncate max-w-2/3'>
+                                                <div className='text-base truncate w-2/3'>
                                                     {file.fileName}
                                                 </div>
                                                 <DownloadOutlined
@@ -189,7 +187,7 @@ function DetailedQuestionPage() {
                                     size={44}
                                     icon={
                                         <Image
-                                            alt={'Avatar of student'}
+                                            alt={'Ảnh đại diện của học sinh'}
                                             loading='lazy'
                                             src={imageUtility(
                                                 currentQuestion.student.avatar?.fileKey,
@@ -202,7 +200,7 @@ function DetailedQuestionPage() {
                                         {currentQuestion.student.fullName}
                                     </span>
                                     <span className='text-[14px] leading-[21px] font-normal text-[#838B8F]'>
-                                        Student
+                                        Học viên
                                     </span>
                                 </div>
                             </div>
