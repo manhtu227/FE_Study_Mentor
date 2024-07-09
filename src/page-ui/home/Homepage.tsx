@@ -58,7 +58,7 @@ function Homepage() {
                 />
                 <div className='absolute top-0 left-0 right-0 h-[650px] bg-[#0A2277] opacity-90'>
                     <div className='mb-[52px]'>
-                        <h3 className='text-center font-bold text-[3.2rem] max-w-[650px] mx-auto text-white-900'>
+                        <h3 className='text-center font-bold text-[3.2rem] max-w-[650px] mx-auto text-white-900 mt-20'>
                             Kiến thức là sức mạnh, chia sẻ là niềm vui!
                         </h3>
                         <div className='mx-auto text-white-900 text-center font-medium text-3xl max-w-[640px]'>

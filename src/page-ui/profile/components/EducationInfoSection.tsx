@@ -319,6 +319,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     name='educationInformationForm'
                     form={form}
                     onFinish={handleSubmitEducationInformationForm}
+                    onError={() => form.resetFields()}
                     autoComplete='off'
                     disabled={!isEdit}
                 >
@@ -326,7 +327,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='font-bold text-base mb-2'>Cấp học</div>
                     <Form.Item<EducationInformationInput>
                         name='levelIds'
-                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
+                        rules={[{ required: true, message: 'Vui lòng chọn cấp học!' }]}
                     >
                         <Select
                             mode='multiple'
@@ -342,7 +343,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='font-bold text-base mb-2'>Khối/ Lớp</div>
                     <Form.Item<EducationInformationInput>
                         name='gradeIds'
-                        rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
+                        rules={[{ required: true, message: 'Vui lòng chọn khối/ lớp!' }]}
                     >
                         <Select
                             mode='multiple'
@@ -356,7 +357,10 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
 
                     {/* Subjects */}
                     <div className='font-bold text-base mb-2'>Môn/ Kỹ năng</div>
-                    <Form.Item<EducationInformationInput> name='subjectIds'>
+                    <Form.Item<EducationInformationInput>
+                        name='subjectIds'
+                        rules={[{ required: true, message: 'Vui lòng chọn môn học!' }]}
+                    >
                         <Select
                             mode='multiple'
                             className='min-h-12 font-medium text-base'
@@ -373,7 +377,10 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     </div>
                     <div className='font-bold text-base mb-2'>Tên chứng chỉ</div>
                     <Form.Item<EducationInformationInput> name='certificateFiles'>
-                        <CustomDragDropFile<EducationInformationInput> name='certificateFiles' />
+                        <CustomDragDropFile<EducationInformationInput>
+                            name='certificateFiles'
+                            rules={[{ required: true, message: 'Vui lòng tải chứng chỉ lên!' }]}
+                        />
                     </Form.Item>
                     {isEdit && (
                         <div className='flex items-center justify-center mt-10 gap-4'>

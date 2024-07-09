@@ -4,7 +4,6 @@ import {
     CheckSquareOutlined,
     CloseOutlined,
     DollarOutlined,
-    NotificationOutlined,
     PushpinOutlined,
     QuestionCircleOutlined,
     UsergroupDeleteOutlined,
@@ -70,7 +69,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     className='underline text-blue-600 text-sm cursor-pointer hover:opacity-80 bg-transparent border-none'
                     onClick={handleDismissAllNotifications}
                 >
-                    xóa tất cả
+                    Xóa tất cả
                 </button>
             )}
         </div>
@@ -110,7 +109,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return <CheckSquareOutlined />;
             default:
-                return <NotificationOutlined />;
+                return null;
         }
     };
 
@@ -189,8 +188,6 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
         closeDrawer();
 
         handleRedirectWhenClickedNoti(item);
-        dispatch(removeNotification(item.question.id || ''));
-        deleteNotification.mutate(item.question.id || '');
     };
 
     return (
@@ -216,30 +213,33 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     dataSource={notifications}
                     renderItem={(item) => (
                         <List.Item key={item.id}>
-                            <div
-                                className='flex gap-3 justify-between items-center bg-white-900 rounded-lg shadow-md p-4 cursor-pointer
-                                hover:bg-gray-100 transition-colors duration-300 ease-in-out'
-                                onClick={() => handleClickNotification(item)}
-                            >
-                                <div className='text-3xl'>
-                                    {handleShowIconNotification(item.type)}
-                                </div>
-                                <div>
-                                    <div className='font-medium text-lg'>
-                                        {handleShowTitleNotification(item.type)}
-                                    </div>
-                                    <div>{item.message}</div>
-                                    <div className='text-gray-400 font-light'>
-                                        {item?.createdAt && calculateTimeAgo(item?.createdAt)}
-                                    </div>
-                                </div>
+                            {item.type !== NotificationType.RECEIVE_GGMEET && (
                                 <div
-                                    className='flex self-baseline cursor-pointer'
-                                    onClick={(e) => handleRemoveNotification(e, item.id ?? '')}
+                                    className='flex gap-3 justify-between items-center bg-white-900 rounded-lg shadow-md p-4 cursor-pointer
+                                hover:bg-gray-100 transition-colors duration-300 ease-in-out'
+                                    onClick={() => handleClickNotification(item)}
                                 >
-                                    <CloseOutlined />
+                                    <div className='text-3xl'>
+                                        {handleShowIconNotification(item.type)}
+                                    </div>
+                                    <div>
+                                        <div className='font-medium text-lg'>
+                                            {handleShowTitleNotification(item.type)}
+                                        </div>
+                                        <div>{item.message}</div>
+                                        <div className='text-gray-400 font-light'>
+                                            {item?.createdAt &&
+                                                calculateTimeAgo(new Date(item?.createdAt))}
+                                        </div>
+                                    </div>
+                                    <div
+                                        className='flex self-baseline cursor-pointer'
+                                        onClick={(e) => handleRemoveNotification(e, item.id ?? '')}
+                                    >
+                                        <CloseOutlined />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </List.Item>
                     )}
                 />
