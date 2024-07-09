@@ -31,19 +31,19 @@ function Report() {
     const session = useSession();
     const columns: TableProps<ReportTable>['columns'] = [
         {
-            title: 'Question Title',
+            title: 'Tiêu đề câu hỏi',
             dataIndex: 'questionTitle',
         },
         {
-            title: 'Student Name',
+            title: 'Tên học viên',
             dataIndex: 'studentName',
         },
         {
-            title: 'Created At',
+            title: 'Thời gian tạo',
             dataIndex: 'date',
         },
         {
-            title: 'Action',
+            title: 'Hành động',
             key: 'action',
             render: (_, record) => (
                 <Button onClick={() => handleClickReport(record.key, record.questionId)}>

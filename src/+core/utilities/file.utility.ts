@@ -11,9 +11,9 @@ export const beforeUpload = (file: any) => {
     if (!isJpgOrPng) {
         toastError('file must be JPG/PNG/PDF/DOCX/DOC!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isLt2M = file.size / 1024 / 1024 < 10;
     if (!isLt2M) {
-        toastError('file must smaller than 2MB!');
+        toastError('file must smaller than 10MB!');
     }
     return isJpgOrPng && isLt2M;
 };

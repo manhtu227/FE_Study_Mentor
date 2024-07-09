@@ -3,7 +3,7 @@
 import BookmarkIcon from '@assets/icons/bookmark-icon';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import CustomSkeletonTitle from '@components/skeleton/CustomSkeletonTitle';
-import { QuestionType } from '@core/enums/question.enum';
+import { QuestionStatus, QuestionType } from '@core/enums/question.enum';
 import { GetQuestionResponseModel } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
 import { imageUtility } from '@core/utilities/image.utility';
@@ -21,7 +21,9 @@ export function CardQuestionUser({
 }) {
     const { data } = useSession();
     const isAnswering =
-        data?.user?.user?.id === question?.tutor?.id && data?.user?.user?.role === UserRole.TUTOR;
+        data?.user?.user?.id === question?.tutor?.id &&
+        data?.user?.user?.role === UserRole.TUTOR &&
+        question?.status === QuestionStatus.ACCEPTED;
 
     return (
         <div className='max-w-[435px] border-solid border-[1px] border-[#DEE0E2] rounded-lg relative'>
@@ -81,7 +83,7 @@ export function CardQuestionUser({
                     onClick={onClick}
                     className={`w-full rounded-none !h-[40px] text-white-900 font-bold border-0 rounded-b-lg ${
                         isAnswering
-                            ? 'bg-green-600 hover:!bg-green-600 hover:!opacity-80'
+                            ? '!bg-green-600 hover:!bg-green-600 hover:!opacity-80'
                             : 'bg-[#3D64EE]'
                     }`}
                 />

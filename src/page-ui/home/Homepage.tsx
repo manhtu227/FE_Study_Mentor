@@ -2,30 +2,18 @@
 import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import Characteristic from '@components/homepage/characteristic/Characteristic';
-import Feedback from '@components/homepage/feedback/Feedback';
 import MethodItem from '@components/study-method/StudyMethod';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import { Image } from 'antd';
+import { UserRole } from '@core/models/user.model';
+import { Button, Image } from 'antd';
+import { useSession } from 'next-auth/react';
 
-import Carousel, { ResponsiveType } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
 function Homepage() {
-    const BreakpointSlides: ResponsiveType = {
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
-            items: 3,
-        },
-        tablet: {
-            breakpoint: { max: 1024, min: 530 },
-            items: 2,
-        },
-        mobile: {
-            breakpoint: { max: 530, min: 0 },
-            items: 1,
-        },
-    };
+    const { data } = useSession();
+
     const characteistics = [
         {
             id: 1,
@@ -49,10 +37,19 @@ function Homepage() {
         },
     ];
 
+    const anonymousDescription =
+        'trang web hàng đầu hỗ trợ giải đáp cho mọi thắc mắc học tập của bạn. Dù bạn đang học tiểu học, trung học, đại học hay tự học, chúng tôi luôn sẵn sàng hỗ trợ thông qua trí tuệ nhân tạo AI và người hướng dẫn.';
+    const tutorDescription =
+        'nền tảng nơi bạn có thể chia sẻ kiến thức và kiếm thêm thu nhập bằng cách trở thành người hướng dẫn. Hãy kết nối với hàng nghìn học viên đang tìm kiếm sự hỗ trợ và giải đáp thắc mắc học tập của họ, đồng thời phát triển sự nghiệp giáo dục của bạn.';
+
     return (
         <div className='w-full h-full bg-[#F3F9FA]'>
             {/* section 1 */}
-            <section className='relative mb-[300px]'>
+            <section
+                className={`relative ${
+                    data?.user?.user?.role === UserRole.STUDENT ? 'mb-[300px]' : ''
+                }`}
+            >
                 <Image
                     src={images.hero1.src}
                     preview={false}
@@ -64,32 +61,65 @@ function Homepage() {
                         <h3 className='text-center font-bold text-[3.2rem] max-w-[650px] mx-auto text-white-900'>
                             Kiến thức là sức mạnh, chia sẻ là niềm vui!
                         </h3>
-                        <div className='mx-auto text-white-900 text-center font-medium text-2xl max-w-[640px]'>
+                        <div className='mx-auto text-white-900 text-center font-medium text-3xl max-w-[640px]'>
                             Cùng nhau học hỏi - Cùng nhau tiến bộ
                         </div>
                     </div>
-                    <div className='flex items-center gap-[52px] w-full justify-center'>
-                        <MethodItem
-                            image={images.aiMethod}
-                            title='Trả lời bằng AI'
-                            titleButton='Trải nghiệm ngay'
-                            type={DescriptionEnum.AI}
-                            className='max-w-[600px]'
-                            href={MY_ROUTE.AI.self}
-                        />
-                        <MethodItem
-                            image={images.mentorMethod}
-                            title='Giải đáp bởi người hướng dẫn'
-                            titleButton='Trải nghiệm ngay'
-                            type={DescriptionEnum.Mentor}
-                            className='max-w-[600px]'
-                            href={MY_ROUTE.MENTOR.self}
-                        />
-                    </div>
+                    {data?.user?.user?.role === UserRole.STUDENT ? (
+                        <div className='flex items-center gap-[52px] w-full justify-center'>
+                            <MethodItem
+                                image={images.aiMethod}
+                                title='Trả lời bằng AI'
+                                titleButton='Trải nghiệm ngay'
+                                type={DescriptionEnum.AI}
+                                className='max-w-[600px]'
+                                href={MY_ROUTE.AI.self}
+                            />
+                            <MethodItem
+                                image={images.mentorMethod}
+                                title='Giải đáp bởi người hướng dẫn'
+                                titleButton='Trải nghiệm ngay'
+                                type={DescriptionEnum.Mentor}
+                                className='max-w-[600px]'
+                                href={MY_ROUTE.MENTOR.self}
+                            />
+                        </div>
+                    ) : (
+                        <div className='mx-auto w-3/5 flex items-center justify-center flex-col gap-10 mt-20'>
+                            <div className='text-gray-200 text-xl'>
+                                Chào mừng bạn đến với{' '}
+                                <span className='text-blue-600 shadow-lg font-bold uppercase'>
+                                    Study Mentor
+                                </span>
+                                ,{' '}
+                                {data?.user?.user?.role === UserRole.TUTOR
+                                    ? tutorDescription
+                                    : anonymousDescription}
+                            </div>
+                            <div className='flex items-start w-full'>
+                                <Button
+                                    size='large'
+                                    className='!w-56 !h-14 text-2xl uppercase font-semibold flex items-center
+                            justify-center no-underline'
+                                    href={
+                                        !data
+                                            ? MY_ROUTE.AUTH.LOGIN
+                                            : MY_ROUTE.MENTOR.RECEIVED_QUESTIONS
+                                    }
+                                >
+                                    Bắt đầu ngay
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
             {/* section 2 */}
-            <section className='flex items-center md:flex-wrap lg:flex-nowrap px-[180px] justify-around'>
+            <section
+                className={`flex items-center md:flex-wrap lg:flex-nowrap px-[180px] justify-around ${
+                    data?.user?.user?.role !== UserRole.STUDENT ? 'mt-24' : ''
+                }`}
+            >
                 {characteistics &&
                     characteistics.length > 0 &&
                     characteistics.map((item) => {
@@ -183,121 +213,6 @@ function Homepage() {
                         preview={false}
                     />
                 </div>
-            </section>
-            {/* section 5 */}
-            <section className='mb-[70px]'>
-                <div className='font-bold text-[32px] text-[#3D64EE] text-center leading-[50px]'>
-                    Người dùng
-                    <div className='font-bold text-[32px] text-center text-black'>
-                        Study Mentor đã tin tưởng sử dụng
-                    </div>
-                </div>
-                {/* <Feedbacks /> */}
-                <Carousel
-                    responsive={BreakpointSlides}
-                    additionalTransfrom={0}
-                    arrows={false}
-                    centerMode={false}
-                    customTransition='all 5s linear'
-                    dotListClass=''
-                    draggable
-                    focusOnSelect={false}
-                    infinite
-                    keyBoardControl
-                    minimumTouchDrag={80}
-                    pauseOnHover
-                    renderArrowsWhenDisabled={false}
-                    renderButtonGroupOutside={false}
-                    renderDotsOutside={false}
-                    ssr
-                    rewind={false}
-                    rewindWithAnimation={false}
-                    rtl={false}
-                    shouldResetAutoplay
-                    showDots={false}
-                    sliderClass=''
-                    slidesToSlide={2}
-                    swipeable
-                    transitionDuration={1000}
-                >
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                </Carousel>
-                <Carousel
-                    responsive={BreakpointSlides}
-                    additionalTransfrom={0}
-                    arrows={false}
-                    centerMode={false}
-                    customTransition='all 5s linear'
-                    dotListClass=''
-                    draggable
-                    focusOnSelect={false}
-                    infinite
-                    keyBoardControl
-                    minimumTouchDrag={80}
-                    pauseOnHover
-                    renderArrowsWhenDisabled={false}
-                    renderButtonGroupOutside={false}
-                    renderDotsOutside={false}
-                    ssr
-                    rewind={false}
-                    rewindWithAnimation={false}
-                    rtl={false}
-                    shouldResetAutoplay
-                    showDots={false}
-                    sliderClass=''
-                    slidesToSlide={2}
-                    swipeable
-                    transitionDuration={1000}
-                >
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                </Carousel>
-                <Carousel
-                    responsive={BreakpointSlides}
-                    additionalTransfrom={0}
-                    arrows={false}
-                    centerMode={false}
-                    customTransition='all 5s linear'
-                    dotListClass=''
-                    draggable
-                    focusOnSelect={false}
-                    infinite
-                    keyBoardControl
-                    minimumTouchDrag={80}
-                    pauseOnHover
-                    renderArrowsWhenDisabled={false}
-                    renderButtonGroupOutside={false}
-                    renderDotsOutside={false}
-                    ssr
-                    rewind={false}
-                    rewindWithAnimation={false}
-                    rtl={false}
-                    shouldResetAutoplay
-                    showDots={false}
-                    sliderClass=''
-                    slidesToSlide={2}
-                    swipeable
-                    transitionDuration={1000}
-                >
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                    <Feedback />
-                </Carousel>
             </section>
         </div>
     );

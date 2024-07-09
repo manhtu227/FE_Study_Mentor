@@ -1,14 +1,19 @@
 'use client';
 
 import { DownOutlined, DownloadOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-import images from '@assets/images';
-import { CardQuestion } from '@components/card/CardQuestion';
+import { CardQuestionUser } from '@components/card/CardQuestionUser';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
 import { DATE_FORMAT } from '@core/constants/date.constant';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
-import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
+import {
+    detailedQuestionKeys,
+    getDetailedQuestionApi,
+    getQuestionSameSubjectApi,
+    getQuestionSameSubjectKeys,
+} from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { downloadUrl } from '@core/utilities/download.util';
 import { imageUtility } from '@core/utilities/image.utility';
@@ -21,71 +26,14 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 function DetailedQuestionPage() {
-    const questions = [
-        {
-            id: 1,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            id: 2,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            id: 3,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            id: 4,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            id: 5,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            id: 6,
-            image: images.charac1,
-            type: 1,
-            title: 'Procedural Python - Lập trình hàm trong Python',
-            shortDescription:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-    ];
-
     const { data } = useSession();
     const [showForm, setShowForm] = useState<boolean>(false);
     const [currentQuestion, setCurrentQuestion] = useState<GetQuestionResponseModel | undefined>();
-    const router = useRouter();
     const params = useParams();
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const { confirm } = Modal;
     const [isAnswered, setIsAnswered] = useState<boolean>(false);
+    const router = useRouter();
 
     const showConfirmAnswerQuestion = (questionType: QuestionType) => {
         confirm({
@@ -105,6 +53,8 @@ function DetailedQuestionPage() {
                 handleAnswerTheQuestion();
             },
             onCancel() {},
+            okText: 'Trả lời',
+            cancelText: 'Hủy',
         });
     };
 
@@ -112,6 +62,13 @@ function DetailedQuestionPage() {
         queryKey: detailedQuestionKeys.all,
         queryFn: () => getDetailedQuestionApi(params?.slug as string),
         enabled: !!params?.slug,
+    });
+
+    const questionsSameSubjectQuery = useQuery({
+        queryKey: getQuestionSameSubjectKeys.all,
+        queryFn: () => getQuestionSameSubjectApi(currentQuestion?.questionId || ''),
+        select: (resp) => resp.data.data,
+        enabled: !!currentQuestion?.questionId,
     });
 
     useEffect(() => {
@@ -133,9 +90,11 @@ function DetailedQuestionPage() {
         } else if (question?.tutor?.id === data?.user.user.id && question?.isAccepted) {
             setShowForm(true);
             setIsAnswered(false);
-        } else {
+        } else if (question?.tutor?.id !== data?.user.user.id && question?.isAccepted) {
             setShowForm(false);
             setIsAnswered(true);
+        } else {
+            setShowForm(false);
         }
     }, [detailedQuestionQuery?.data?.data, data?.user.user.id, params?.slug as string]);
 
@@ -232,7 +191,9 @@ function DetailedQuestionPage() {
                                         <Image
                                             alt={'Avatar of student'}
                                             loading='lazy'
-                                            src={`${process.env.NEXT_PUBLIC_PHOTO}${currentQuestion.student.avatar?.fileKey}`} // Convert images.charac1 to a string by using the .src property
+                                            src={imageUtility(
+                                                currentQuestion.student.avatar?.fileKey,
+                                            )} // Convert images.charac1 to a string by using the .src property
                                         />
                                     }
                                 />
@@ -279,12 +240,19 @@ function DetailedQuestionPage() {
                                 Câu hỏi cùng chủ đề
                             </div>
                             <Row gutter={[32, 32]}>
-                                {questions &&
-                                    questions.length > 0 &&
-                                    questions.map((question) => {
+                                {questionsSameSubjectQuery?.data &&
+                                    questionsSameSubjectQuery?.data.length > 0 &&
+                                    questionsSameSubjectQuery?.data.map((question) => {
                                         return (
                                             <Col xs={12} sm={8} md={8} key={question.id}>
-                                                <CardQuestion question={question} />
+                                                <CardQuestionUser
+                                                    question={question}
+                                                    onClick={() => {
+                                                        router.push(
+                                                            `${window.location?.origin}${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${question.questionId}`,
+                                                        );
+                                                    }}
+                                                />
                                             </Col>
                                         );
                                     })}

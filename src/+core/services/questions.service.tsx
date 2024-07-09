@@ -143,3 +143,10 @@ export const getQuestionStudentReportKeys = initKeys('get-question-student-repor
 export const getQuestionStudentReportApi = async () => {
     return api.get<PagingResp<QuestionReportRes[]>>(`api/users/student/report-student`);
 };
+
+export const getQuestionSameSubjectKeys = initKeys('get-question-same-subject-keys');
+export const getQuestionSameSubjectApi = async (questionId: string) => {
+    return api.get<PagingResp<GetQuestionResponseModel[]>>(
+        `api/users/tutor/question-same-topic/${questionId}`,
+    );
+};

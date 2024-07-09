@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons';
+import { CloseOutlined, DownloadOutlined } from '@ant-design/icons';
 import { CustomDragDropFile } from '@components/form-input/CustomDragDropFile';
 import { useGetLevels } from '@core/hooks/options/useGetLevels';
 import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
@@ -15,7 +15,9 @@ import {
     ConvertSubjectToOption,
 } from '@core/services/questions.service';
 import {
+    deleteSubjectApi,
     deleteSubjectsCertificatesNotVerifyApi,
+    educationInfoKeys,
     getListSubjectsCertificatesNotVerifyApi,
     subjectsCertificatedNotVerifyKeys,
     updateCertificatesAndSubjectsApi,
@@ -30,7 +32,7 @@ import {
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
-import { Button, Form, Select, Spin } from 'antd';
+import { Button, Form, Modal, Select, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -42,6 +44,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const [grades, setGrades] = useState<string[]>([]);
     const [subjects, setSubjects] = useState<string[]>([]);
     const file = useUploadFileApi();
+    const { confirm } = Modal;
     const [certificatesSubjectNotVerify, setCertificatesSubjectNotVerify] =
         useState<CertificatesSubjectNotVerifyResp>();
 
@@ -91,6 +94,15 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
     const subjectsCertificatesQuery = useQuery({
         queryKey: subjectsCertificatedNotVerifyKeys.all,
         queryFn: () => getListSubjectsCertificatesNotVerifyApi(),
+    });
+
+    const deleteVerifiedSubject = useMutation({
+        mutationFn: (subjectId: string) => deleteSubjectApi(subjectId),
+        onSuccess: () => {
+            toastSuccess('Xóa môn học thành công');
+            queryClient.invalidateQueries(educationInfoKeys.all as InvalidateQueryFilters);
+        },
+        onError: handleError,
     });
 
     const handleSubmitEducationInformationForm = async (values: EducationInformationInput) => {
@@ -203,6 +215,19 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
         deleteSubjectsCertificatesNotVerifyMutation.mutate();
     };
 
+    const handleDeleteSubject = (subjectId: string) => {
+        confirm({
+            title: 'Bạn có chắc chắn muốn xóa môn học này?',
+            content: 'Sau khi xóa, bạn phải đăng ký lại môn học này sau khi xóa.',
+            onOk() {
+                deleteVerifiedSubject.mutate(subjectId);
+            },
+            onCancel() {},
+            okText: 'Xóa',
+            cancelText: 'Hủy',
+        });
+    };
+
     const isDisabledAddNewSubject =
         certificatesSubjectNotVerify && certificatesSubjectNotVerify?.subjects?.length !== 0;
 
@@ -213,34 +238,52 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <div className='h-[27px] w-[3px] bg-primary-600 mr-2 inline-block' />
                     Thông tin giáo dục quan tâm
                 </div>
-                <div className='bg-gray-200 w-full min-h-[100px] rounded-md mb-8 p-4'>
-                    <div className='font-bold '>Danh sách môn học đã được duyệt</div>
-                    <ul className='mt-6'>
+                <div className='font-bold'>Danh sách môn học đã được duyệt</div>
+                <div className='border border-solid border-gray-200 w-full rounded-md mb-8 mt-4'>
+                    <div className='p-4 flex items-start justify-start gap-4'>
                         {initialDataForm?.subjects && initialDataForm?.subjects.length > 0
                             ? initialDataForm?.subjects.map((subject) => {
-                                  return <li key={subject.id}>{subject.name}</li>;
+                                  return (
+                                      <div
+                                          key={subject.id}
+                                          className='p-2 flex items-center flex-wrap gap-2 px-3 border rounded-2xl bg-gray-200'
+                                      >
+                                          <span>{subject.name}</span>
+                                          <CloseOutlined
+                                              className='cursor-pointer'
+                                              onClick={() => handleDeleteSubject(subject.id)}
+                                          />
+                                      </div>
+                                  );
                               })
                             : 'Không có môn học nào được duyệt'}
-                    </ul>
-                </div>
-                <div className='bg-gray-200 w-full min-h-[100px] rounded-md mb-8 p-4'>
-                    <div className='font-bold '>
-                        Danh sách môn học chưa được duyệt và chứng chỉ đi kèm
                     </div>
+                </div>
+                <div className='font-bold'>
+                    Danh sách môn học chưa được duyệt và chứng chỉ đi kèm
+                </div>
+                <div className='border border-solid border-gray-200 w-full rounded-md mb-8 mt-4'>
                     {certificatesSubjectNotVerify?.subjects &&
                     certificatesSubjectNotVerify?.subjects.length > 0 ? (
                         <>
-                            <ul className='mt-6 '>
+                            <div className='p-4 flex gap-2 flex-wrap'>
                                 {certificatesSubjectNotVerify?.subjects.map((subject) => {
-                                    return <li key={subject.id}>{subject.name}</li>;
+                                    return (
+                                        <div
+                                            key={subject.id}
+                                            className='border rounded-2xl bg-gray-200 p-2 px-3'
+                                        >
+                                            {subject.name}
+                                        </div>
+                                    );
                                 })}
-                            </ul>
-                            <ul className='flex gap-2 flex-wrap pl-0'>
+                            </div>
+                            <div className='flex gap-2 flex-wrap p-4'>
                                 {certificatesSubjectNotVerify?.certificates?.map((certificate) => {
                                     return (
                                         <div
                                             key={certificate.fileKey}
-                                            className='border rounded-lg border-black-600 flex items-center justify-between p-4 border-solid w-full'
+                                            className='border border-gray-300 rounded-lg border-black-600 flex items-center justify-between p-4 border-solid w-full'
                                         >
                                             <div className='flex items-center text-base truncate max-w-2/3'>
                                                 {certificate.fileName}
@@ -256,18 +299,18 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                                         </div>
                                     );
                                 })}
-                            </ul>
+                            </div>
                             <Button
                                 size='large'
                                 type='dashed'
-                                className='!h-12 !w-[200px] font-bold text-base mt-10 bg-red-400 text-white-900 !hover:text-white-900 hover:bg-red-500'
+                                className='!h-12 ml-4 mb-4 !w-[200px] font-bold text-base mt-2 bg-red-400 text-white-900 !hover:text-white-900 hover:bg-red-500'
                                 onClick={handleCancelUpdateCertificationsSubjects}
                             >
                                 Hủy đăng ký môn học
                             </Button>
                         </>
                     ) : (
-                        <div className='flex items-center justify-center mt-6'>
+                        <div className='flex items-center justify-center p-6'>
                             Không có môn học nào chưa được duyệt
                         </div>
                     )}
@@ -287,7 +330,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     >
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn cấp học'
                             onChange={handleChangeLevels}
                             options={levelOptions}
@@ -303,7 +346,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     >
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn khối/ lớp'
                             onChange={handleChangeGrades}
                             options={gradeOptions}
@@ -316,11 +359,12 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                     <Form.Item<EducationInformationInput> name='subjectIds'>
                         <Select
                             mode='multiple'
-                            className='h-12 font-medium text-base'
+                            className='min-h-12 font-medium text-base'
                             placeholder='Chọn môn/ kỹ năng'
                             onChange={handleChangeSubjects}
                             options={subjectOptions}
                             value={subjects}
+                            style={{ width: '100%' }}
                         />
                     </Form.Item>
                     <div className='w-full font-bold text-lg text-black mb-8 items-center flex'>
@@ -364,7 +408,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                         size='large'
                         type='primary'
                         disabled={isDisabledAddNewSubject}
-                        className='!h-12 !w-[200px] font-bold text-base mt-4'
+                        className='!h-12 !w-[210px] font-bold text-base mt-4'
                         onClick={handleAddNewSubject}
                     >
                         Đăng ký thêm môn học
