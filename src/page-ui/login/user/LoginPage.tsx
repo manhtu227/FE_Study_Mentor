@@ -18,6 +18,7 @@ import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import SocialLogin from './components/SocialLogin';
 
 const LoginPage = () => {
     const [form] = Form.useForm<LoginInput>();
@@ -130,7 +131,10 @@ const LoginPage = () => {
                                     loading={loginMutation.isPending}
                                 />
                             </div>
-
+                            <p className='text-sm !mt-8 text-center text-gray-800'>
+                                Hoặc
+                                <SocialLogin />
+                            </p>
                             <p className='text-sm !mt-8 text-center text-gray-800'>
                                 Bạn chưa có tài khoản?
                                 <Link

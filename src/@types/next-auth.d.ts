@@ -1,4 +1,4 @@
-import { IAuthenResponseModel } from '@core/models/authentication.model';
+import { IAuthenResponseModel, SessionAccount } from '@core/models/authentication.model';
 
 declare module 'next-auth' {
     /**
@@ -9,6 +9,7 @@ declare module 'next-auth' {
         //   // address: string;
         // } & DefaultSession['user'];
         user: IAuthenResponseModel;
+        account?: any;
     }
 
     /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
@@ -19,7 +20,7 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-    interface JWT extends IAuthenResponseModel {}
+    interface JWT extends SessionAccount {}
 }
 
 /*

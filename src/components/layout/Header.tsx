@@ -195,7 +195,7 @@ const Header = () => {
     }, [completedQuestion]);
 
     useEffect(() => {
-        if (data?.user.user.id) {
+        if (data?.user?.user?.id) {
             dispatch(onDisconnect());
 
             const socket = defaultSocket(data?.user?.user?.id);
@@ -309,7 +309,7 @@ const Header = () => {
                 };
             }
         }
-    }, [data?.user.user.id]);
+    }, [data?.user?.user?.id]);
 
     const handleWatchLaterNotification = () => {
         if (!newQuestion) return;

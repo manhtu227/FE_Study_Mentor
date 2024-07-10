@@ -21,6 +21,11 @@ export type IAuthenResponseModel = {
     user: UserResp;
 };
 
+export type SessionAccount = {
+    user: IAuthenResponseModel;
+    account?: any;
+};
+
 export enum Status {
     ACTIVE = 0,
     IN_ACTIVE = 1,

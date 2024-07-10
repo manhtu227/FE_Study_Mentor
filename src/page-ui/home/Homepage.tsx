@@ -66,7 +66,7 @@ function Homepage() {
                             Cùng nhau học hỏi - Cùng nhau tiến bộ
                         </div>
                     </div>
-                    {data?.user?.user?.role === UserRole.STUDENT ? (
+                    {data?.user?.user?.role !== UserRole.TUTOR ? (
                         <div className='flex items-center gap-[52px] w-full justify-center'>
                             <MethodItem
                                 image={images.aiMethod}

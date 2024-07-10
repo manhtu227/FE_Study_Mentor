@@ -5,12 +5,12 @@ import { useState } from 'react';
 const { Dragger } = Upload;
 
 export const CustomDragDropFile = <T extends object>({ name, rules }: FormItemProps<T>) => {
-    const [fileList, setFileList] = useState<any>(undefined);
+    const [fileList, setFileList] = useState<any>([]);
 
     const props: UploadProps = {
         name: 'file',
         multiple: true,
-        listType: 'picture',
+        // listType: 'picture',
         beforeUpload,
         onChange(info) {
             const { status } = info.file;

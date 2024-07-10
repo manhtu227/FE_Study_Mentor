@@ -1,12 +1,12 @@
-import { isAxiosError } from 'axios';
-import CredentialsProvider from 'next-auth/providers/credentials';
-
 import { ENV } from '@core/constants/env.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, UserType } from '@core/enums/user.enum';
 import { LoginInput, SignUpInput } from '@core/models/authentication.model';
 import { loginApi, signUpApi } from '@core/services/authentication.service';
+import { isAxiosError } from 'axios';
 import type { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 type CredentialProviderInput = { [key in keyof LoginInput]: any };
 type CredentialSignUpProviderInput = { [key in keyof SignUpInput]: any };
 
@@ -72,23 +72,59 @@ export const authOptions: NextAuthOptions = {
                 }
             },
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
     ],
     session: {
         strategy: 'jwt',
     },
     callbacks: {
         session: async ({ session, token }) => {
-            session.user = token as any;
+            console.log('log session', session, token);
+            const { user, account } = token;
+            session.user = user as any;
+            session.account = account;
+
             return session;
         },
-        jwt: async ({ user, token, trigger, session }) => {
-            if (trigger === 'update') {
-                return { ...token, ...session.user };
+        jwt: async ({ token, user, account, trigger, session }) => {
+            console.log('log token', token);
+            console.log('log user', user);
+            console.log('log account', account);
+            console.log('log trigger', trigger);
+            console.log('log session', session);
+            if (user) {
+                token.user = {
+                    ...token.user,
+                    ...user,
+                };
             }
-            return {
-                ...token,
-                ...user,
-            };
+            if (trigger === 'signIn' && user) {
+                if (account?.provider !== 'credentials') {
+                    token.user = {
+                        ...token.user,
+                        ...user,
+                    };
+                    token.account = { ...account, ...token };
+                    // return { account };
+                }
+            }
+            if (trigger === 'update') {
+                token = session;
+            }
+            return token;
         },
+        // jwt: async ({ user, token, account, trigger, session }) => {
+        //     console.log('account  dd', account);
+        //     if (trigger === 'update') {
+        //         return { ...user, ...session.user };
+        //     }
+        //     return {
+        //         ...token,
+        //         ...user,
+        //     };
+        // },
     },
 };
