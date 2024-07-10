@@ -7,15 +7,18 @@ import {
     GetQuestionResponseModel,
     QuestionEnum,
 } from '@core/models/question.model';
-import { UserModel } from '@core/models/user.model';
+import { UserModel, UserRole } from '@core/models/user.model';
+import { getChatRoomListKeys } from '@core/services/chat.service';
 import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
+import { addRoom } from '@core/store/reducers/room-chat.reducer';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Avatar, Image, Modal, Rate } from 'antd';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,6 +45,7 @@ export default function ModalFoundTutor({
     const [dots, setDots] = useState('');
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const [modalConfirm, setModalConfirm] = useState(false);
+    const session = useSession();
 
     const mutationCreate = useMutation({
         mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
@@ -98,6 +102,7 @@ export default function ModalFoundTutor({
         setIsModalOpen(false);
         // router.push('/');
     };
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (socketReducer && isModalOpen) {
@@ -118,11 +123,35 @@ export default function ModalFoundTutor({
                     }
                 },
             );
+
             return () => {
                 socketReducer.off(SocketEvent.ANSWER);
             };
         }
     }, [socketReducer, isModalOpen]);
+
+    useEffect(() => {
+        if (socketReducer && session.data?.user.user.role === UserRole.TUTOR) {
+            socketReducer.off(SocketEvent.NOTIFICATION);
+            socketReducer.on(
+                SocketEvent.NOTIFICATION,
+                (data: {
+                    userId: string;
+                    turtorId: string;
+                    roomId: string;
+                    questionId: string;
+                }) => {
+                    dispatch(addRoom(data.roomId));
+                    queryClient.invalidateQueries({
+                        queryKey: getChatRoomListKeys.all,
+                    });
+                },
+            );
+            return () => {
+                socketReducer.off(SocketEvent.NOTIFICATION);
+            };
+        }
+    }, [socketReducer, session.data?.user]);
 
     return (
         <div>
@@ -137,7 +166,7 @@ export default function ModalFoundTutor({
             >
                 <div className='flex flex-col text-center items-center justify-center'>
                     <h2 className='text-[20px] leading-[27px] text-[NeutralDark1]'>
-                        {isAccepted
+                        {isAccepted === 1
                             ? 'Đã tìm thấy người hướng dẫn'
                             : 'Rất tiếc người này đã từ chối bạn'}
                     </h2>
@@ -151,7 +180,7 @@ export default function ModalFoundTutor({
                             ? 'Hình thức trò chuyện'
                             : 'Hình thức giải đáp qua google meet'}
                     </div>
-                    {isAccepted && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
+                    {isAccepted === 1 && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
                     <div className='flex items-start gap-6 mt-5'>
                         <div className='h-[60px]'>
                             <Avatar

@@ -20,7 +20,6 @@ import {
     createQuestions,
 } from '@core/services/questions.service';
 import { getListVoucherApi, voucherKeys } from '@core/services/user.service';
-import { RootState } from '@core/store';
 import { addQuestion, setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
@@ -30,7 +29,7 @@ import { Button, Form, Image, Modal, Popover, Select, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { CustomEditorInput } from '../../form-input/CustomEditorInput';
 import PopoverVoucher from './PopoverVoucher';
 import { VoucherItem } from './VoucherItem';
@@ -299,6 +298,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                     { value: 30, label: '30 phút' },
                                     { value: 45, label: '45 phút' },
                                     { value: 60, label: '60 phút' },
+                                    { value: 24 * 60, label: '24 giờ' },
                                 ]}
                                 rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
                                 placeholder='Chọn thời gian tìm kiếm câu trả lời cho câu hỏi'

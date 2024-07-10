@@ -389,14 +389,20 @@ const Header = () => {
             <nav className='flex h-full items-center px-[44px] bg-white-900'>
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' className='cursor-pointer' />
-                    {data?.user.user?.role === UserType.TUTOR && (
+                    {data?.user.user?.role !== undefined ? (
                         <Link
                             type='link'
                             className='text-primary-900 text-base font-bold no-underline hover:opacity-80'
-                            href={MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}
+                            href={
+                                data?.user.user?.role === UserType.TUTOR
+                                    ? MY_ROUTE.MENTOR.RECEIVED_QUESTIONS
+                                    : MY_ROUTE.LIST_QUESTION
+                            }
                         >
                             Danh sách câu hỏi
                         </Link>
+                    ) : (
+                        <></>
                     )}
                 </div>
                 {data?.user.user ? (

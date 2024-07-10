@@ -58,7 +58,6 @@ export default function MessageForm({
     const uploadFile = useUploadFileApi();
 
     const handleSubmit = async (values: MessageInput) => {
-        console.log('ddmmm', values);
         const files = await uploadFile.uploadMultipleFiles(values.fileList);
         onSubmit(values.text, files);
         setFileList([]);

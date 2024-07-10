@@ -16,7 +16,5 @@ export const beforeUpload = (file: any) => {
         toastError('file có kích thước nhỏ hơn 10MB!');
     }
 
-    console.log(isJpgOrPng && isLt10M);
-
     return isJpgOrPng && isLt10M;
 };

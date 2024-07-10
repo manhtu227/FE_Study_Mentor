@@ -125,14 +125,13 @@ export default function CheckQAPage({ onNext }: Props) {
             },
         );
     };
-    console.log('query.data?.status', query.data?.status !== QuestionStatus.DONE);
 
     return (
         <div>
             {isChat ? (
                 <ChatMentorPage
                     setIsChat={setIsChat}
-                    idRoom={mutateCreateRoom.data?.data.roomId || ''}
+                    idRoom={mutateCreateRoom.data?.data.roomId || query.data?.roomId || ''}
                     senderId={query.data?.tutor?.id || ''}
                     tutor={query.data?.tutor}
                     isChat={query.data?.status !== QuestionStatus.DONE}

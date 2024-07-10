@@ -7,8 +7,10 @@ import { SocketEvent } from '@core/enums/socket.enum';
 import { ChatModel } from '@core/models/chat.model';
 import { MentorType } from '@core/models/profile.model';
 import { UserModel } from '@core/models/user.model';
+import { getChatMessageListApi } from '@core/services/chat.service';
 import { RootState } from '@core/store';
 import { imageUtility } from '@core/utilities/image.utility';
+import { useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -57,6 +59,19 @@ export default function ChatMentorPage({
     }, [socketReducer]);
 
     const { data } = useSession();
+
+    const mutateGetMessage = useMutation({
+        mutationFn: (id: string) => getChatMessageListApi(id),
+        onSuccess: (resp) => {
+            setDataChat(resp.data.listMessage);
+        },
+    });
+
+    useEffect(() => {
+        if (idRoom) {
+            mutateGetMessage.mutate(idRoom);
+        }
+    }, [idRoom]);
 
     const handleSubmit = async (value: string, files?: FileReq[] | null) => {
         if (socketReducer) {

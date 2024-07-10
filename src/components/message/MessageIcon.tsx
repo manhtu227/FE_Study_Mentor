@@ -33,6 +33,11 @@ export default function MessageIcon(props: NotificationPanelToggleButtonProps) {
         };
     }, []);
 
+    // useEffect(() => {
+    //     if (active) {
+    //     }
+    // }, [roomChatReducer.roomIds.length]);
+
     return (
         <>
             <Badge count={roomChatReducer.roomIds?.length}>
