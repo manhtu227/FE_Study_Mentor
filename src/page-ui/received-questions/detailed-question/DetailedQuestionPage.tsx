@@ -240,7 +240,7 @@ function DetailedQuestionPage() {
                             <Row gutter={[32, 32]}>
                                 {questionsSameSubjectQuery?.data &&
                                     questionsSameSubjectQuery?.data.length > 0 &&
-                                    questionsSameSubjectQuery?.data.map((question) => {
+                                    questionsSameSubjectQuery?.data.map((question, index) => {
                                         return (
                                             <Col xs={12} sm={8} md={8} key={question.id}>
                                                 <CardQuestionUser

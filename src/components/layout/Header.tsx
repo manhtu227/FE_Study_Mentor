@@ -52,13 +52,13 @@ import { defaultSocket } from '../../socket';
 
 const Header = () => {
     const { data, update } = useSession();
-
+    console.log('  data?.user.user', data?.user.user);
     const userItems: MenuProps['items'] = [
         {
             label: (
                 <Link
                     href={
-                        data?.user.user.role === UserRole.STUDENT
+                        data?.user?.user?.role === UserRole.STUDENT
                             ? MY_ROUTE.DASHBOARD_STUDENT
                             : MY_ROUTE.DASHBOARD_TUTOR
                     }
