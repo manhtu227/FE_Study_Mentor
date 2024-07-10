@@ -28,6 +28,11 @@ export type UserModel = {
     certificates: FileReq[];
     isMembership: boolean;
     expirationDate: Date;
+
+    nameUserOfBanking?: string;
+    idOfBanking?: string;
+    numberOfBanking?: string;
+    nameOfBanking?: string;
 };
 
 export type OverviewTutorInfo = {

@@ -70,6 +70,13 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                 files: files,
             };
             setDataChat((prev) => [...prev, chatContent]);
+            if (
+                roomQuery?.data &&
+                roomQuery.data.length > 0 &&
+                room?.roomId !== roomQuery.data?.[0]?.roomId
+            ) {
+                roomQuery.refetch();
+            }
             socketReducer.emit(SocketEvent.SEND_MESSAGE, chatContent);
         }
     };
@@ -85,6 +92,13 @@ export function SideBarMessage({ className, sideBarRef }: Props) {
                 ) {
                     dispatch(addRoom(data.roomId));
                     return;
+                }
+                if (
+                    roomQuery?.data &&
+                    roomQuery.data.length > 0 &&
+                    data.roomId !== roomQuery.data?.[0]?.roomId
+                ) {
+                    roomQuery.refetch();
                 }
                 setDataChat((prev) => [...prev, data]);
             });

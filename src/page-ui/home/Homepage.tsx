@@ -48,7 +48,7 @@ function Homepage() {
             {/* section 1 */}
             <section
                 className={`relative ${
-                    data?.user?.user?.role === UserRole.STUDENT ? 'mb-[300px]' : ''
+                    data?.user?.user?.role === UserRole.TUTOR ? '' : 'mb-[300px]'
                 }`}
             >
                 <Image
