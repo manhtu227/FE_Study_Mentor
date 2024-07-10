@@ -23,7 +23,8 @@ export function CardQuestionUser({
     const isAnswering =
         data?.user?.user?.id === question?.tutor?.id &&
         data?.user?.user?.role === UserRole.TUTOR &&
-        question?.status === QuestionStatus.ACCEPTED;
+        question?.status === QuestionStatus.ACCEPTED &&
+        question?.type !== QuestionType.MEETING;
 
     return (
         <div className='max-w-[435px] border-solid border-[1px] border-[#DEE0E2] rounded-lg relative'>

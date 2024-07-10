@@ -5,7 +5,7 @@ import { CardQuestionUser } from '@components/card/CardQuestionUser';
 import AnswerQuestionForm from '@components/form/AnswerQuestionForm';
 import { DATE_FORMAT } from '@core/constants/date.constant';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { QuestionType } from '@core/enums/question.enum';
+import { QuestionStatus, QuestionType } from '@core/enums/question.enum';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { AcceptQuestionModel, GetQuestionResponseModel } from '@core/models/question.model';
 import {
@@ -71,6 +71,11 @@ function DetailedQuestionPage() {
         const question = detailedQuestionQuery?.data?.data?.data;
 
         setCurrentQuestion(question);
+
+        if (question?.status === QuestionStatus.EXPIRED) {
+            setIsAnswered(true);
+            return;
+        }
 
         if (question?.isAccepted && question.type === QuestionType.MEETING) {
             setShowForm(false);
@@ -212,7 +217,9 @@ function DetailedQuestionPage() {
                                     onClick={() => showConfirmAnswerQuestion(currentQuestion.type)}
                                     disabled={currentQuestion.isAnswered || isAnswered}
                                 >
-                                    Trả lời câu hỏi này
+                                    {currentQuestion.status === QuestionStatus.EXPIRED
+                                        ? 'Hết hạn'
+                                        : 'Trả lời câu hỏi'}
                                     <DownOutlined />
                                 </Button>
                             )}

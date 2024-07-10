@@ -1,7 +1,6 @@
 import GoogleIcon from '@assets/icons/google';
 import { Spin } from 'antd';
 import { signIn, useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -26,10 +25,10 @@ export default function SocialLogin({ size = 55 }: { size?: number }) {
                 setVerify(true);
                 const { account } = session;
                 let token;
-                if (account.provider === 'google') {
-                    token = account.id_token;
+                if (account?.provider === 'google') {
+                    token = account?.id_token;
                 } else {
-                    token = account.access_token;
+                    token = account?.access_token;
                 }
                 console.log('token', token);
                 // signinSocial({ provider: account.provider, idToken: token })
