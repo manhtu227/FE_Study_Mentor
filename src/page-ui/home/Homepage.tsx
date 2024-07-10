@@ -135,11 +135,11 @@ function Homepage() {
                     })}
             </section>
             {/* section 3 */}
-            <section className='mx-[180px] mb-[200px]'>
+            <section className='mx-[180px] mb-[100px] mt-24'>
                 <div className='mb-8'>
                     <h4 className='font-bold text-[32px] text-center mb-6'>
-                        <span className='text-blue-600'>Quy trình</span> đặt 1 câu hỏi với người
-                        hướng dẫn của Study Mentor
+                        <span className='text-blue-600'>Quy trình</span> đặt câu hỏi với người hướng
+                        dẫn của Study Mentor
                     </h4>
                     <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-gray-700'>
                         Mỗi câu hỏi dù đơn giản hay phức tạp, người hướng dẫn của{' '}

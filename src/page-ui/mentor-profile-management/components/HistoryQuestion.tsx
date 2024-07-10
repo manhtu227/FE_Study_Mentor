@@ -1,5 +1,4 @@
 import { MoreOutlined } from '@ant-design/icons';
-import CustomSelectInput from '@components/form-input/CustomSelectInput';
 import ModalDetailedQuestion from '@components/modal/ModalDetailedQuestion';
 import { DATE_FORMAT } from '@core/constants/commons.constant';
 import { MY_ROUTE } from '@core/constants/routes.constant';
@@ -197,37 +196,6 @@ export function HistoryQuestion() {
                 />
             )}
             <span className='font-bold text-lg'>Lịch sử câu hỏi đã trả lời</span>
-            <div className='flex justify-between items-center'>
-                <CustomSelectInput
-                    classNameForm='w-[167px]'
-                    optionsSelect={[]}
-                    placeholder='Sắp xếp theo'
-                    classNameSelect='placeholder-color'
-                />
-
-                {/* <div className='flex gap-4'>
-                    {filterQuestionOptions.map((e, i) => (
-                        <div
-                            key={i}
-                            onClick={() => setFilter(e.value)}
-                            className={clsx(
-                                'font-bold text-[15px] px-[20px] py-2 h-fit rounded-lg cursor-pointer transition-all duration-300 ease-in-out',
-                                filter === e.value
-                                    ? 'bg-primary-800 text-white-900'
-                                    : 'bg-white-900 text-black-800 hover:text-primary-800',
-                            )}
-                        >
-                            {e.label}
-                        </div>
-                    ))}
-                </div> */}
-                <CustomSelectInput
-                    classNameForm='w-[131px] '
-                    optionsSelect={[]}
-                    placeholder='Bộ lọc'
-                    classNameSelect='placeholder-color '
-                />
-            </div>
             <Table
                 columns={columns}
                 dataSource={data}

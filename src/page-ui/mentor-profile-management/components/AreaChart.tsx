@@ -1,6 +1,11 @@
-import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
 import { DATE_FORMAT } from '@core/constants/date.constant';
-import { getChartRevenueApi, getChartRevenueKeys } from '@core/services/user.service';
+import { UserRole } from '@core/models/user.model';
+import {
+    getChartRevenueApi,
+    getChartRevenueKeys,
+    getStudentChartRevenueApi,
+    getStudentChartRevenueKeys,
+} from '@core/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { Select } from 'antd';
 import {
@@ -16,7 +21,6 @@ import {
 } from 'chart.js';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-// import faker from 'faker';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -47,14 +51,27 @@ export const options = {
     },
 };
 
-export function AreaChart({ optionsChart }: { optionsChart: { value: number; label: string }[] }) {
+export function AreaChart({
+    optionsChart,
+    userType,
+}: {
+    optionsChart: { value: number; label: string }[];
+    userType: UserRole;
+}) {
     const [option, setOption] = useState(optionsChart[0].value);
     const [labels, setLabels] = useState<string[]>([]);
     const [revenues, setRevenues] = useState<number[]>([]);
 
-    const getChartRevenueQuery = useQuery({
+    const getTutorChartRevenueQuery = useQuery({
         queryKey: getChartRevenueKeys.list({ option }),
         queryFn: () => getChartRevenueApi(option),
+        enabled: userType === UserRole.TUTOR,
+    });
+
+    const getStudentChartRevenueQuery = useQuery({
+        queryKey: getStudentChartRevenueKeys.list({ option }),
+        queryFn: () => getStudentChartRevenueApi(option),
+        enabled: userType === UserRole.STUDENT,
     });
 
     const handleChangeFilterChart = (value: any) => {
@@ -62,15 +79,26 @@ export function AreaChart({ optionsChart }: { optionsChart: { value: number; lab
     };
 
     useEffect(() => {
-        if (getChartRevenueQuery?.data?.data?.data) {
-            const data = getChartRevenueQuery.data.data.data.sort(
+        if (getTutorChartRevenueQuery?.data?.data?.data && userType === UserRole.TUTOR) {
+            const data = getTutorChartRevenueQuery.data.data.data.sort(
                 (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
             );
 
             setLabels(data.map((item) => format(new Date(item.date), DATE_FORMAT.DATE.SHORT_DATE)));
             setRevenues(data.map((item) => item.totalCost));
         }
-    }, [getChartRevenueQuery?.data?.data?.data]);
+    }, [getTutorChartRevenueQuery?.data?.data?.data, userType]);
+
+    useEffect(() => {
+        if (getStudentChartRevenueQuery?.data?.data?.data && userType === UserRole.STUDENT) {
+            const data = getStudentChartRevenueQuery.data.data.data.sort(
+                (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            );
+
+            setLabels(data.map((item) => format(new Date(item.date), DATE_FORMAT.DATE.SHORT_DATE)));
+            setRevenues(data.map((item) => item.totalCost));
+        }
+    }, [getStudentChartRevenueQuery?.data?.data?.data, userType]);
 
     const data = {
         labels,
@@ -89,7 +117,7 @@ export function AreaChart({ optionsChart }: { optionsChart: { value: number; lab
     };
 
     return (
-        <div className='px-[9.5px] bg-white-900 rounded-md w-full py-4'>
+        <div className='bg-white-900 rounded-md w-full py-4'>
             <div className='flex flex-col px-4 pt-0 pb-6'>
                 <span className='text-lg font-bold text-black-500'>Doanh thu</span>
                 <div className='w-full flex justify-end'>
@@ -101,11 +129,7 @@ export function AreaChart({ optionsChart }: { optionsChart: { value: number; lab
                     />
                 </div>
             </div>
-            {getChartRevenueQuery.isFetching ? (
-                <CustomSkeletonParagraph height={300} />
-            ) : (
-                <Line options={options} data={data} className='!h-[300px] !w-full' />
-            )}
+            <Line options={options} data={data} className='!max-h-[500px] !w-full' />
         </div>
     );
 }

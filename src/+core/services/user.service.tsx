@@ -203,3 +203,11 @@ export const getStudentReportApi = async (reportId: string) => {
 export const deleteSubjectApi = async (subjectId: string) => {
     return api.delete<void>(`/api/users/subjects/${subjectId}`);
 };
+
+export const getStudentChartRevenueKeys = initKeys('get-student-chart-revenue-keys');
+
+export const getStudentChartRevenueApi = async (days: number) => {
+    return api.get<BaseResp<ChartRevenueItem[]>>(`api/users/student/chart-expense`, {
+        params: { option: days },
+    });
+};

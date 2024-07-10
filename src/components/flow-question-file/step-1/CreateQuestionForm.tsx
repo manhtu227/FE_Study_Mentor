@@ -292,12 +292,12 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 name='timeAnswer'
                                 showSearch
                                 optionsSelect={[
-                                    { value: 10, label: '10 phút' },
-                                    { value: 15, label: '15 phút' },
-                                    { value: 20, label: '20 phút' },
                                     { value: 30, label: '30 phút' },
-                                    { value: 45, label: '45 phút' },
-                                    { value: 60, label: '60 phút' },
+                                    { value: 60, label: '1 giờ' },
+                                    { value: 120, label: '2 giờ' },
+                                    { value: 240, label: '4 giờ' },
+                                    { value: 360, label: '6 giờ' },
+                                    { value: 600, label: '10 giờ' },
                                     { value: 24 * 60, label: '24 giờ' },
                                 ]}
                                 rules={[{ required: true, message: 'Vui lòng nhập giá trị!' }]}
@@ -319,7 +319,8 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                             { value: 20, label: '20 phút' },
                                             { value: 30, label: '30 phút' },
                                             { value: 45, label: '45 phút' },
-                                            { value: 60, label: '60 phút' },
+                                            { value: 60, label: '1 giờ' },
+                                            { value: 120, label: '2 giờ' },
                                         ]}
                                         rules={[
                                             { required: true, message: 'Vui lòng nhập giá trị!' },

@@ -81,7 +81,7 @@ export default function FindQuestionsPage() {
                 />
                 <CustomTextInput
                     prefix={<SearchOutlined />}
-                    placeholder='Nhập nội dung tìm kiếm...'
+                    placeholder='Nhập tiêu đề câu hỏi/ tên môn học để tìm kiếm...'
                     classNameForm='w-[400px]'
                     onChange={(e: any) => {
                         handleFilterChange({ search: e.target.value });

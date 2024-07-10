@@ -10,6 +10,7 @@ import { PaginationCore } from '@components/pagination/pagination';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
+import { UserRole } from '@core/models/user.model';
 import { PickTutorReq, getTutorOnline, pickTutor, tutorsKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
@@ -116,7 +117,10 @@ export default function CardListPage() {
                                   <CardMentorInfo
                                       mentor={{
                                           id: mentor.id,
-                                          image: imageUtility(mentor.avatar.fileKey),
+                                          image: imageUtility(
+                                              mentor.avatar.fileKey,
+                                              UserRole.TUTOR,
+                                          ),
                                           name: mentor.fullName,
                                           age: mentor.age,
                                           rating: mentor.averageRate,
