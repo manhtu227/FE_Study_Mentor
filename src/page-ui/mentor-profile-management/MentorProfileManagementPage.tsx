@@ -4,7 +4,7 @@ import DocumentIcon from '@assets/icons/document-icon';
 import WalletIcon from '@assets/icons/wallet-icon';
 import { CardTitleIcon } from '@components/card/CardTitleIcon';
 import CustomSkeletonParagraph from '@components/skeleton/CustomSkeletonParagraph';
-import { OverviewTutorInfo } from '@core/models/user.model';
+import { OverviewTutorInfo, UserRole } from '@core/models/user.model';
 import { getOverviewTutorInfoApi, getOverviewTutorInfoKeys } from '@core/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -67,7 +67,7 @@ export default function MentorProfileManagementPage() {
                     </div>
                 </div>
                 <div className='w-full my-8'>
-                    <AreaChart optionsChart={optionsChart} />
+                    <AreaChart optionsChart={optionsChart} userType={UserRole.TUTOR} />
                 </div>
                 {/* <Chat chatList={dataChat} setChatList={handleDataChat} /> */}
                 <HistoryQuestion />

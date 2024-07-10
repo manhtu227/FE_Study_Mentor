@@ -1,7 +1,6 @@
 'use client';
 import { PropsWithChildren } from 'react';
 
-import QuestionIcon from '@components/message/QuestionIcon';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { usePathname } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
@@ -17,12 +16,7 @@ export default function Layout({ children }: PropsWithChildren) {
         <div className='h-screen overflow-auto flex flex-col'>
             {pathname !== MY_ROUTE.LOGIN &&
                 pathname !== MY_ROUTE.SIGN_UP &&
-                pathname !== MY_ROUTE.RESET_PASSWORD && (
-                    <>
-                        <Header />
-                        <QuestionIcon />
-                    </>
-                )}
+                pathname !== MY_ROUTE.RESET_PASSWORD && <Header />}
 
             <div
                 className={

@@ -176,7 +176,6 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
                 )}
             </div>
             <div className='fixed bottom-0 right-0 left-0 top-0 bg-white-800 -z-10'></div>
-            <div className='fixed bottom-0 right-0 left-0 h-4 bg-primary-600 shadow-sm z-10'></div>
         </div>
     );
 }

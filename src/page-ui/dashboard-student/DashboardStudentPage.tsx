@@ -6,6 +6,7 @@ import { CardTitleIcon } from '@components/card/CardTitleIcon';
 import { FilterQuestionType } from '@core/enums/filter-question-type.enum';
 import { QuestionStatus, QuestionStatusString } from '@core/enums/question.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
+import { UserRole } from '@core/models/user.model';
 import { getEnum } from '@core/parser/enum.parser';
 import {
     QuestionListFilter,
@@ -14,11 +15,11 @@ import {
 } from '@core/services/questions.service';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { AreaChart } from '@page/mentor-profile-management/components/AreaChart';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { HistoryQuestion, convertQuestionToTabel } from './components/HistoryQuestion';
-import { SideBarMentorProfile } from './components/SideBarMentorPorfile';
 
 export default function DashboardStudentPage() {
     const searchParams = useSearchParams();
@@ -65,12 +66,12 @@ export default function DashboardStudentPage() {
         placeholderData: keepPreviousData,
     });
 
-    // const totalPrice = useMemo(() => {
-    //     return data.data?.data.data.reduce((total, item) => {
-    //         if (item.status !== QuestionStatus.EXPIRED) return total + +item.price;
-    //         return total;
-    //     }, 0);
-    // }, [data.data?.data.data]);
+    const optionsChart = [
+        { value: 7, label: '7 ngày gần nhất' },
+        { value: 30, label: '30 ngày gần nhất' },
+        { value: 90, label: '90 ngày gần nhất' },
+        { value: 365, label: '365 ngày gần nhất' },
+    ];
 
     return (
         <div className='pack-layout pb-16 px-4'>
@@ -80,9 +81,6 @@ export default function DashboardStudentPage() {
                 <span>Quản lý và thống kê</span>
             </div> */}
             <div className='flex items-start w-full gap-8 pt-12'>
-                <div className='w-[435px]'>
-                    <SideBarMentorProfile />
-                </div>
                 <div className='min-w-[500px] flex-grow'>
                     <div className='mb-8'>
                         <div className='flex gap-4 justify-between'>
@@ -109,6 +107,9 @@ export default function DashboardStudentPage() {
                                 icon={<GlobeIcon />}
                             />
                         </div>
+                    </div>
+                    <div className='w-full my-8'>
+                        <AreaChart optionsChart={optionsChart} userType={UserRole.STUDENT} />
                     </div>
                     <HistoryQuestion
                         data={data.data?.data || []}

@@ -177,7 +177,7 @@ export function CardMentorInfo({
                                                 className='flex border rounded-lg border-gray-600 border-solid mt-1 items-center justify-between p-4 gap-1'
                                             >
                                                 <div className='flex items-center'>
-                                                    <div className='font-bold text-md mx-4 max-w-4/5 truncate '>
+                                                    <div className='font-bold text-md max-w-4/5 truncate '>
                                                         {file.fileName}
                                                     </div>
                                                 </div>

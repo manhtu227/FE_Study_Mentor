@@ -233,8 +233,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                                     </div>
                                     <div>{item.message}</div>
                                     <div className='text-gray-400 font-light'>
-                                        {item?.createdAt &&
-                                            calculateTimeAgo(new Date(item?.createdAt))}
+                                        {item?.createdAt && calculateTimeAgo(item?.createdAt)}
                                     </div>
                                 </div>
                                 <div
