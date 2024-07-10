@@ -22,7 +22,7 @@ import {
 import NotificationBell from '@components/notification-bell/NotificationBell';
 import { NotificationType } from '@core/enums/notification.enum';
 import { Notification } from '@core/models/notification.model';
-import { UserModel, UserRole } from '@core/models/user.model';
+import { UserModel } from '@core/models/user.model';
 import {
     getDetailApi,
     getNotificationApi,
@@ -55,26 +55,12 @@ const Header = () => {
 
     const userItems: MenuProps['items'] = [
         {
-            label: (
-                <Link
-                    href={
-                        data?.user.user.role === UserRole.STUDENT
-                            ? MY_ROUTE.DASHBOARD_STUDENT
-                            : MY_ROUTE.DASHBOARD_TUTOR
-                    }
-                >
-                    Bảng điều khiển
-                </Link>
-            ),
-            key: '0',
+            label: <Link href={MY_ROUTE.PROFILE}>Trang cá nhân</Link>,
+            key: '2',
         },
         {
             label: <Link href={MY_ROUTE.REPORT}>Báo cáo của bạn</Link>,
             key: '1',
-        },
-        {
-            label: <Link href={MY_ROUTE.PROFILE}>Trang cá nhân</Link>,
-            key: '2',
         },
         {
             label: (
@@ -390,24 +376,41 @@ const Header = () => {
                 <div className='flex h-full w-2/3 items-center gap-8'>
                     <Logo title='Study Mentor' className='cursor-pointer' />
                     {data?.user.user?.role !== undefined ? (
-                        <Link
-                            type='link'
-                            className='text-primary-900 text-base font-bold no-underline hover:opacity-80'
-                            href={
-                                data?.user.user?.role === UserType.TUTOR
-                                    ? MY_ROUTE.MENTOR.RECEIVED_QUESTIONS
-                                    : MY_ROUTE.LIST_QUESTION
-                            }
-                        >
-                            Danh sách câu hỏi
-                        </Link>
+                        <>
+                            <Link
+                                type='link'
+                                className='text-primary-900 text-base font-bold no-underline hover:opacity-80'
+                                href={
+                                    data?.user.user?.role === UserType.TUTOR
+                                        ? MY_ROUTE.MENTOR.RECEIVED_QUESTIONS
+                                        : MY_ROUTE.LIST_QUESTION
+                                }
+                            >
+                                Danh sách câu hỏi
+                            </Link>
+                            <Link
+                                type='link'
+                                className='text-primary-900 text-base font-bold no-underline hover:opacity-80'
+                                href={
+                                    data?.user.user?.role === UserType.TUTOR
+                                        ? MY_ROUTE.DASHBOARD_TUTOR
+                                        : MY_ROUTE.DASHBOARD_STUDENT
+                                }
+                            >
+                                Bảng điều khiển
+                            </Link>
+                        </>
                     ) : (
                         <></>
                     )}
                 </div>
                 {data?.user.user ? (
                     <div className='flex w-1/3 items-center justify-end gap-4'>
-                        <NotificationBell notifications={notifications} />
+                        <NotificationBell
+                            notifications={notifications
+                                .toReversed()
+                                .filter((item) => item.type !== NotificationType.RECEIVE_GGMEET)}
+                        />
                         <MessageIcon />
                         <Button
                             type='link'

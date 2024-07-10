@@ -131,6 +131,10 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                                 : MY_ROUTE.MENTOR.FILE
                         }?step=1`,
                     );
+                } else {
+                    router.push(
+                        `${MY_ROUTE.MENTOR.RECEIVED_QUESTIONS}/${notification.question.id}`,
+                    );
                 }
                 break;
             case NotificationType.STUDENT_PICK_TUTOR:
@@ -146,6 +150,8 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                                 : MY_ROUTE.MENTOR.FILE
                         }?step=3`,
                     );
+                } else {
+                    router.push(`${MY_ROUTE.DASHBOARD_TUTOR}`);
                 }
                 break;
             case NotificationType.PAID_SUCCESS_FOR_TUTOR:
@@ -213,33 +219,31 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     dataSource={notifications}
                     renderItem={(item) => (
                         <List.Item key={item.id}>
-                            {item.type !== NotificationType.RECEIVE_GGMEET && (
-                                <div
-                                    className='flex gap-3 justify-between items-center bg-white-900 rounded-lg shadow-md p-4 cursor-pointer
+                            <div
+                                className='flex gap-3 justify-between items-center bg-white-900 rounded-lg shadow-md p-4 cursor-pointer
                                 hover:bg-gray-100 transition-colors duration-300 ease-in-out'
-                                    onClick={() => handleClickNotification(item)}
-                                >
-                                    <div className='text-3xl'>
-                                        {handleShowIconNotification(item.type)}
+                                onClick={() => handleClickNotification(item)}
+                            >
+                                <div className='text-3xl'>
+                                    {handleShowIconNotification(item.type)}
+                                </div>
+                                <div>
+                                    <div className='font-medium text-lg'>
+                                        {handleShowTitleNotification(item.type)}
                                     </div>
-                                    <div>
-                                        <div className='font-medium text-lg'>
-                                            {handleShowTitleNotification(item.type)}
-                                        </div>
-                                        <div>{item.message}</div>
-                                        <div className='text-gray-400 font-light'>
-                                            {item?.createdAt &&
-                                                calculateTimeAgo(new Date(item?.createdAt))}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className='flex self-baseline cursor-pointer'
-                                        onClick={(e) => handleRemoveNotification(e, item.id ?? '')}
-                                    >
-                                        <CloseOutlined />
+                                    <div>{item.message}</div>
+                                    <div className='text-gray-400 font-light'>
+                                        {item?.createdAt &&
+                                            calculateTimeAgo(new Date(item?.createdAt))}
                                     </div>
                                 </div>
-                            )}
+                                <div
+                                    className='flex self-baseline cursor-pointer'
+                                    onClick={(e) => handleRemoveNotification(e, item.id ?? '')}
+                                >
+                                    <CloseOutlined />
+                                </div>
+                            </div>
                         </List.Item>
                     )}
                 />

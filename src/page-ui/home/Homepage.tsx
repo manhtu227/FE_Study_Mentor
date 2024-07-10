@@ -11,36 +11,37 @@ import { useSession } from 'next-auth/react';
 
 import 'react-multi-carousel/lib/styles.css';
 
+const CHARACTEISTICS = [
+    {
+        id: 1,
+        image: images.charac1,
+        title: 'Đội ngũ người hướng dẫn chất lượng',
+        description:
+            'Tất cả các người hướng dẫn đều có kiến thức chuyên sâu, chứng chỉ đầy đủ và tâm huyết với nghề nghiệp giáo dục.',
+    },
+    {
+        id: 2,
+        image: images.charac2,
+        title: 'Đa dạng hình thức giải đáp câu hỏi',
+        description:
+            'Hỗ trợ giải đáp câu hỏi bằng trí tuệ nhân tạo AI hoặc bởi người hướng dẫn chất lượng. Bạn có thể chọn lựa theo nhu cầu của mình.',
+    },
+    {
+        id: 3,
+        image: images.charac3,
+        title: 'Hỗ trợ giải đáp câu hỏi 24/7.',
+        description:
+            'Bạn có thể đặt câu hỏi bất kỳ lúc nào, bất kỳ nơi đâu và nhận câu trả lời gần như ngay lập tức.',
+    },
+];
+
+const ANONYMOUS_DESCRIPTION =
+    'trang web hàng đầu hỗ trợ giải đáp cho mọi thắc mắc học tập của bạn. Dù bạn đang học tiểu học, trung học, đại học hay tự học, chúng tôi luôn sẵn sàng hỗ trợ thông qua trí tuệ nhân tạo AI và người hướng dẫn.';
+const TUTOR_DESCRIPTION =
+    'nền tảng nơi bạn có thể chia sẻ kiến thức và kiếm thêm thu nhập bằng cách trở thành người hướng dẫn. Hãy kết nối với hàng nghìn học viên đang tìm kiếm sự hỗ trợ và giải đáp thắc mắc học tập của họ, đồng thời phát triển sự nghiệp giáo dục của bạn.';
+
 function Homepage() {
     const { data } = useSession();
-
-    const characteistics = [
-        {
-            id: 1,
-            image: images.charac1,
-            title: 'Tutor 1:1 cho từng học viên',
-            description:
-                'Áp dụng phương pháp giảng dạy Porfolio Mentoring. Học & tương tác trực tiếp với giảng viên, được mentor dự án portfolio cá nhân xuyên suốt lộ trình học.',
-        },
-        {
-            id: 2,
-            image: images.charac2,
-            title: 'Học tại HCM/ Hà Nội/ Trực tuyến qua Google Meet',
-            description:
-                'Có thể học cùng lúc nhiều môn hoặc học tuần tự từng môn theo thời gian bạn có.',
-        },
-        {
-            id: 3,
-            image: images.charac3,
-            title: 'Hỗ trợ giải đáp câu hỏi 24/7 bởi các người hướng dẫn chất lượng',
-            description: 'Giúp bạn sở hữu trọn vẹn kiến thức dù có mất gốc hay có câu hỏi hóc búa.',
-        },
-    ];
-
-    const anonymousDescription =
-        'trang web hàng đầu hỗ trợ giải đáp cho mọi thắc mắc học tập của bạn. Dù bạn đang học tiểu học, trung học, đại học hay tự học, chúng tôi luôn sẵn sàng hỗ trợ thông qua trí tuệ nhân tạo AI và người hướng dẫn.';
-    const tutorDescription =
-        'nền tảng nơi bạn có thể chia sẻ kiến thức và kiếm thêm thu nhập bằng cách trở thành người hướng dẫn. Hãy kết nối với hàng nghìn học viên đang tìm kiếm sự hỗ trợ và giải đáp thắc mắc học tập của họ, đồng thời phát triển sự nghiệp giáo dục của bạn.';
 
     return (
         <div className='w-full h-full bg-[#F3F9FA]'>
@@ -93,8 +94,8 @@ function Homepage() {
                                 </span>
                                 ,{' '}
                                 {data?.user?.user?.role === UserRole.TUTOR
-                                    ? tutorDescription
-                                    : anonymousDescription}
+                                    ? TUTOR_DESCRIPTION
+                                    : ANONYMOUS_DESCRIPTION}
                             </div>
                             <div className='flex items-start w-full'>
                                 <Button
@@ -120,9 +121,9 @@ function Homepage() {
                     data?.user?.user?.role !== UserRole.STUDENT ? 'mt-24' : ''
                 }`}
             >
-                {characteistics &&
-                    characteistics.length > 0 &&
-                    characteistics.map((item) => {
+                {CHARACTEISTICS &&
+                    CHARACTEISTICS.length > 0 &&
+                    CHARACTEISTICS.map((item) => {
                         return (
                             <Characteristic
                                 image={item.image}
@@ -137,18 +138,20 @@ function Homepage() {
             <section className='mx-[180px] mb-[200px]'>
                 <div className='mb-8'>
                     <h4 className='font-bold text-[32px] text-center mb-6'>
-                        <span className='text-blue-600'>Quy trình</span> làm việc của Study Mentor
+                        <span className='text-blue-600'>Quy trình</span> đặt 1 câu hỏi với người
+                        hướng dẫn của Study Mentor
                     </h4>
                     <div className='max-w-[845px] text-center mx-auto font-medium text-lg text-gray-700'>
-                        Mỗi dự án dù lớn hay nhỏ, Study Mentor đều lên kế hoạch chi tiết, đảm bảo
-                        giá trị và chất lượng dịch vụ tốt nhất cho người học.
+                        Mỗi câu hỏi dù đơn giản hay phức tạp, người hướng dẫn của{' '}
+                        <strong>Study Mentor</strong> đều đặt hết tâm huyết, đảm bảo cung cấp câu
+                        trả lời chính xác cho người học.
                     </div>
                 </div>
                 <div className='flex items-center'>
                     <Image
                         preview={false}
                         src={images.process1.src}
-                        alt='Quy trình làm việc của Study Mentor'
+                        alt='Quy trình đặt 1 câu hỏi với người hướng dẫn của Study Mentor'
                     />
                     <div className='relative'>
                         <Image
@@ -160,7 +163,7 @@ function Homepage() {
                         <div className='absolute top-28 right-20 rotate-6'>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B1</span> &nbsp; Nhận thông tin câu
-                                hỏi từ người học qua diễn đàn hoặc cuộc họp trực tuyến
+                                hỏi từ người học qua file hoặc cuộc họp trực tuyến
                             </div>
                             <div className='py-6 px-8 bg-white-900 mb-3 rounded-md'>
                                 <span className='text-blue-600'>B2</span> &nbsp; Người hướng dẫn

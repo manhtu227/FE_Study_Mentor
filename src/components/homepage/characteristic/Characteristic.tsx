@@ -10,7 +10,7 @@ const Characteristic = ({
     description: string;
 }) => {
     return (
-        <div className='items-center self-stretch flex w-1/3 flex-col pt-9 px-6'>
+        <div className='items-center self-stretch flex w-1/3 flex-col pt-9 px-2'>
             <Image
                 loading='lazy'
                 src={image}
