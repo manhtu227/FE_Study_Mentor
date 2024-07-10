@@ -82,7 +82,6 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         session: async ({ session, token }) => {
-            console.log('log session', session, token);
             const { user, account } = token;
             session.user = user as any;
             session.account = account;
@@ -90,11 +89,6 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
         jwt: async ({ token, user, account, trigger, session }) => {
-            console.log('log token', token);
-            console.log('log user', user);
-            console.log('log account', account);
-            console.log('log trigger', trigger);
-            console.log('log session', session);
             if (user) {
                 token.user = {
                     ...token.user,
