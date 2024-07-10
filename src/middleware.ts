@@ -6,7 +6,6 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
     function middleware(request: NextRequestWithAuth) {
-        console.log(' request.nextauth.token', request.nextauth.token);
         if (!authorizeUser(request.nextUrl.pathname, request.nextauth.token?.user.user.role)) {
             return NextResponse.rewrite(new URL('/denied', request.url));
         }
