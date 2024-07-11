@@ -11,6 +11,7 @@ import {
     getListAnsweredQuestionsKeys,
 } from '@core/services/user.service';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
+import { imageUtility } from '@core/utilities/image.utility';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Avatar, Dropdown, Empty, Image, Skeleton, Table } from 'antd';
 import { TableProps } from 'antd/lib';
@@ -72,7 +73,7 @@ export function HistoryQuestion() {
                                         <Image
                                             alt={'image of question'}
                                             loading='lazy'
-                                            src={`${process.env.NEXT_PUBLIC_PHOTO}${record?.avatar.fileKey}`}
+                                            src={imageUtility(record?.avatar.fileKey)}
                                         />
                                     }
                                 />
@@ -103,10 +104,6 @@ export function HistoryQuestion() {
             render: (value, record) => {
                 return <div>{record.isPaid ? 'Đã được thanh toán' : 'Chưa được thanh toán'}</div>;
             },
-        },
-        {
-            title: 'Thời gian tạo',
-            dataIndex: 'date',
         },
         {
             title: 'Hành động',

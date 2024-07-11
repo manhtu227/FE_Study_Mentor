@@ -100,7 +100,7 @@ function ProfilePage() {
                                         <div className='text-black-800 font-bold text-[27px] mb-2'>
                                             {personalInfoQuery.data?.fullName ?? DEFAULT_USER_NAME}
                                         </div>
-                                        {isVerified ? (
+                                        {isVerified && data?.user?.user?.role === UserRole.TUTOR ? (
                                             <Button className='bg-gray-700 rounded-md text-white-900 text-md hover:opacity-90 hover:!text-white-900 hover:!bg-gray-700'>
                                                 Tài khoản đã xác thực
                                             </Button>

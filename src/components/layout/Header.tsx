@@ -364,6 +364,7 @@ const Header = () => {
                 price={pickedQuestion?.price || 1}
                 questionName={pickedQuestion?.content || ''}
                 subjectName={pickedQuestion?.subject.name || ''}
+                title={pickedQuestion?.title || ''}
             />
             {isShowModalPickedQuestion && pickedQuestion && (
                 <ModalAcceptQuestion
@@ -420,7 +421,10 @@ const Header = () => {
                                 <div className='flex items-center gap-2 '>
                                     <Image
                                         className='rounded-full w-8 h-8 bg-[#D9D9D9]'
-                                        src={imageUtility(data.user.user.avatar?.fileKey)}
+                                        src={imageUtility(
+                                            data.user.user.avatar?.fileKey,
+                                            data.user?.user?.role,
+                                        )}
                                         height={32}
                                         width={32}
                                         preview={false}

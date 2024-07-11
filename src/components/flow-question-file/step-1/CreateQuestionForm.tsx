@@ -419,33 +419,39 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                 footer={null}
                 width={500}
                 centered
-                title='Chọn mã khuyến mãi'
+                title='Chọn mã giảm giá'
                 className='px-4'
             >
                 <div className='flex flex-col gap-3 w-full'>
-                    {voucherQuery.data?.map((voucher, index) => {
-                        return (
-                            <VoucherItem
-                                key={index}
-                                percent={voucher.percentage}
-                                quantity={voucher.quantity}
-                                time={voucher.endDate}
-                                onClick={() => {
-                                    form.validateFields().then(
-                                        (values) => {
-                                            form.setFieldValue('voucher', voucher.code);
-                                            values.voucher = voucher.code;
-                                            handleSubmit(values);
-                                        },
-                                        () => {
-                                            setIsOpenVoucher(false);
-                                            toastError('Vui lòng nhập đầy đủ thông tin');
-                                        },
-                                    );
-                                }}
-                            />
-                        );
-                    })}
+                    {voucherQuery?.data?.length ? (
+                        voucherQuery.data?.map((voucher, index) => {
+                            return (
+                                <VoucherItem
+                                    key={index}
+                                    percent={voucher.percentage}
+                                    quantity={voucher.quantity}
+                                    time={voucher.endDate}
+                                    onClick={() => {
+                                        form.validateFields().then(
+                                            (values) => {
+                                                form.setFieldValue('voucher', voucher.code);
+                                                values.voucher = voucher.code;
+                                                handleSubmit(values);
+                                            },
+                                            () => {
+                                                setIsOpenVoucher(false);
+                                                toastError('Vui lòng nhập đầy đủ thông tin');
+                                            },
+                                        );
+                                    }}
+                                />
+                            );
+                        })
+                    ) : (
+                        <div className='text-gray-400 font-medium italic'>
+                            Không có mã giảm giá nào
+                        </div>
+                    )}
                 </div>
             </Modal>
         </Spin>

@@ -1,5 +1,7 @@
 import CameraIcon from '@assets/icons/camera';
+import images from '@assets/images';
 import { FileReq } from '@core/models/file.model';
+import { UserRole } from '@core/models/user.model';
 import { beforeUpload } from '@core/utilities/file.utility';
 import { imageUtility } from '@core/utilities/image.utility';
 import type { UploadFile, UploadProps } from 'antd';
@@ -18,9 +20,15 @@ type CustomUploadAvatarInputProps = {
     image?: FileReq;
     name?: string;
     onChange?: () => void;
+    userType?: UserRole;
 };
 
-const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarInputProps) => {
+const CustomUploadAvatarInput = ({
+    image,
+    name,
+    onChange,
+    userType,
+}: CustomUploadAvatarInputProps) => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
 
@@ -63,7 +71,17 @@ const CustomUploadAvatarInput = ({ image, name, onChange }: CustomUploadAvatarIn
             )} */}
             </div>
             <div className='w-[100px] h-[100px] rounded-full bg-gray-600 overflow-hidden'>
-                {imageUrl ? <img src={imageUrl} alt='avatar' className='w-full h-full' /> : <></>}
+                {imageUrl ? (
+                    <img src={imageUrl} alt='avatar' className='w-full h-full' />
+                ) : (
+                    <img
+                        src={
+                            userType === UserRole.STUDENT ? images.student.src : images.teacher.src
+                        }
+                        alt='avatar'
+                        className='w-full h-full'
+                    />
+                )}
                 <Form.Item name={name} className='absolute z-50 right-0 bottom-0 m-0'>
                     <Upload
                         name='avatar'
