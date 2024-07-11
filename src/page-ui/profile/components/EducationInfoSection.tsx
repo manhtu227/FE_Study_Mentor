@@ -240,7 +240,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                 </div>
                 <div className='font-bold'>Danh sách môn học đã được duyệt</div>
                 <div className='border border-solid border-gray-200 w-full rounded-md mb-8 mt-4'>
-                    <div className='p-4 flex items-start justify-start gap-4'>
+                    <div className='p-4 flex items-start justify-start gap-4 text-center'>
                         {initialDataForm?.subjects && initialDataForm?.subjects.length > 0
                             ? initialDataForm?.subjects.map((subject) => {
                                   return (
@@ -310,7 +310,7 @@ export function EducationInfoSection({ data }: { data?: EducationInfoResp }) {
                             </Button>
                         </>
                     ) : (
-                        <div className='flex items-center justify-center p-6'>
+                        <div className='flex items-start p-4'>
                             Không có môn học nào chưa được duyệt
                         </div>
                     )}

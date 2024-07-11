@@ -235,7 +235,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                 {query.data?.questionType === QuestionEnum.GG_MEET ? (
                                     query.data.meetingURL ? (
                                         <div
-                                            className='text-base px-2 hover:text-primary-600'
+                                            className='text-base px-2 hover:text-blue-600 cursor-pointer'
                                             onClick={() => window.open(query.data?.meetingURL)}
                                         >
                                             {query.data.meetingURL}
@@ -256,7 +256,7 @@ export default function CheckQAPage({ onNext }: Props) {
 
                                         <br />
                                         {answer.fileAttachmentAnswers?.length > 0 && (
-                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>
+                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
                                                 Tệp đính kèm
                                             </h3>
                                         )}
@@ -269,15 +269,15 @@ export default function CheckQAPage({ onNext }: Props) {
                                                     <div className='flex items-center'>
                                                         <div className='w-[30px]'>
                                                             <FileIcon
-                                                                extension={questionFile.extension}
+                                                                extension={
+                                                                    file.fileKey.split('.').pop() ||
+                                                                    ''
+                                                                }
                                                                 // {...defaultStyles.docx}
                                                             />
                                                         </div>
                                                         <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
-                                                            {questionFile.fileName}
-                                                        </div>
-                                                        <div className='text-sm text-black-800'>
-                                                            {questionFile.size} MB
+                                                            {file.fileName}
                                                         </div>
                                                     </div>
                                                     <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
