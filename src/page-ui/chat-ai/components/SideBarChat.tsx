@@ -84,7 +84,7 @@ function SideBarChat({ onSetData, categoryAi, mutateGetMessageByRoomId }: Sideba
             <div className='p-6 flex flex-col gap-8'>
                 <div className='flex justify-between'>
                     <div className='text-black-800 text-lg font-bold flex items-center'>
-                        Đoạn chát
+                        Đoạn chat
                         <div className='w-8 h-6 rounded-full bg-white-800 ml-4 text-center text-sm'>
                             {(listQuestion.data || []).length}
                         </div>

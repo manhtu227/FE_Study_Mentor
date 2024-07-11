@@ -35,7 +35,7 @@ function MentorSelectMethodPage() {
                 <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
                         image={images.ggMeetMethod}
-                        title='Trả lời thông qua Zoom/ Google meet'
+                        title='Trả lời thông qua Google meet'
                         titleButton='Trải nghiệm ngay'
                         type={DescriptionEnum.GoogleMeet}
                         className='max-w-[542px]'
