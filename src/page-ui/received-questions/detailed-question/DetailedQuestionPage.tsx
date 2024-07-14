@@ -77,7 +77,10 @@ function DetailedQuestionPage() {
             return;
         }
 
-        if (question?.isAccepted && question.type === QuestionType.MEETING) {
+        if (
+            question?.status === QuestionStatus.ACCEPTED &&
+            question.type === QuestionType.MEETING
+        ) {
             setShowForm(false);
             setIsAnswered(true);
             return;
@@ -86,10 +89,16 @@ function DetailedQuestionPage() {
         if (question?.isAnswered) {
             setShowForm(false);
             setIsAnswered(true);
-        } else if (question?.tutor?.id === data?.user.user.id && question?.isAccepted) {
+        } else if (
+            question?.tutor?.id === data?.user.user.id &&
+            question?.status === QuestionStatus.ACCEPTED
+        ) {
             setShowForm(true);
             setIsAnswered(false);
-        } else if (question?.tutor?.id !== data?.user.user.id && question?.isAccepted) {
+        } else if (
+            question?.tutor?.id !== data?.user.user.id &&
+            question?.status === QuestionStatus.ACCEPTED
+        ) {
             setShowForm(false);
             setIsAnswered(true);
         } else {
