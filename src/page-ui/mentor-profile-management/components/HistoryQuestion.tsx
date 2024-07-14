@@ -28,6 +28,7 @@ export type HistoryQuestionTable = {
     status: number;
     date: string;
     isPaid: boolean;
+    title: string;
 };
 
 export const statusActiveColors = {
@@ -59,6 +60,15 @@ export function HistoryQuestion() {
     const router = useRouter();
 
     const columns: TableProps<HistoryQuestionTable>['columns'] = [
+        {
+            title: 'Tiêu đề',
+            dataIndex: 'expense',
+            render: (value, record) => (
+                <div className='font-normal text-sm flex flex-col'>
+                    <span className='font-bold text-sm max-w-48 truncate'>{record.title}</span>
+                </div>
+            ),
+        },
         {
             title: 'Tên học viên',
             dataIndex: 'name',
@@ -104,6 +114,15 @@ export function HistoryQuestion() {
             render: (value, record) => {
                 return <div>{record.isPaid ? 'Đã được thanh toán' : 'Chưa được thanh toán'}</div>;
             },
+        },
+        {
+            title: 'Thời gian đặt câu hỏi',
+            dataIndex: 'expense',
+            render: (value, record) => (
+                <div className='font-normal text-sm flex flex-col'>
+                    <span className='text-sm'>{record.date}</span>
+                </div>
+            ),
         },
         {
             title: 'Hành động',
@@ -176,6 +195,7 @@ export function HistoryQuestion() {
                     status: e.status,
                     date: format(new Date(e.createdAt), DATE_FORMAT).toString(),
                     isPaid: e.isPaid,
+                    title: e.title,
                 };
             });
 
