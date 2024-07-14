@@ -36,6 +36,7 @@ export const roleUser = [
     MY_ROUTE.MENTOR.GOOGLE_MEET,
     MY_ROUTE.MENTOR.self,
     MY_ROUTE.DASHBOARD_STUDENT,
+    MY_ROUTE.REPORT_QUESTION,
     MY_ROUTE.REPORT,
 ];
 export const roleTutor = [

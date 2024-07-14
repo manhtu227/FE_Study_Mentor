@@ -219,6 +219,7 @@ export type GetQuestionResponseModel = {
     isAccepted: boolean;
     title?: string;
     questionType: QuestionEnum;
+    isFeedback?: boolean;
     timeMetting?: number;
     meetingURL?: string;
     id?: string;
@@ -258,6 +259,7 @@ export type ReportQuestionReq = {
     studentId: string;
     attachFiles?: FileReq[] | null;
     content: string;
+    tutorId?: string;
 };
 
 export type QuestionReportRes = {

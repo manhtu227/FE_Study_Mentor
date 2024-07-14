@@ -7,7 +7,7 @@ import CreateQuestionForm from '@components/flow-question-file/step-1/CreateQues
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Steps, message } from 'antd';
+import { Spin, Steps } from 'antd';
 import clsx from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
@@ -144,7 +144,12 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
 
     const items = steps.map((item) => ({ key: item.title, title: item.title, icon: item.icon }));
 
-    return (
+    return question.isFetching ? (
+        <Spin
+            size='large'
+            className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+        />
+    ) : (
         <div className='w-full '>
             <div className='bg-white-800 fixed top-16 h-4 z-20 left-0 right-0'></div>
             <div className='fixed top-20 left-0 right-0 z-20'>
@@ -158,7 +163,8 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
             <div className='pb-6'>
                 <div className='pt-20 max-w-[1369px] mx-auto '>{steps[current].content}</div>
             </div>
-            <div className=' flex w-fit mb-6'>
+
+            {/* <div className=' flex w-fit mb-6'>
                 {current < steps.length - 1 && (
                     <Button type='primary' onClick={handleNextStep}>
                         Next
@@ -174,7 +180,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
                         Previous
                     </Button>
                 )}
-            </div>
+            </div> */}
             <div className='fixed bottom-0 right-0 left-0 top-0 bg-white-800 -z-10'></div>
         </div>
     );

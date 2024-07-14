@@ -34,7 +34,7 @@ export const getStepByStatus = (status: QuestionStatus): QuestionStep => {
         case QuestionStatus.REJECTED:
             return QuestionStep.TWO;
         case QuestionStatus.ANSWERED:
-            return QuestionStep.FOUR;
+            return QuestionStep.THREE;
         case QuestionStatus.DONE:
             return QuestionStep.THREE;
         default:

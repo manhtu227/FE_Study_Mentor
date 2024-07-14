@@ -33,9 +33,9 @@ export function CardMentorInfo({
     });
 
     const handleShowModalMentor = () => {
-        if (onPickMentor) {
-            userMutation.mutate(mentor.id);
-        }
+        // if (onPickMentor) {
+        userMutation.mutate(mentor.id);
+        // }
     };
 
     const handlePickMentor = () => {
@@ -109,6 +109,7 @@ export function CardMentorInfo({
                 onCancel={handleCancelMentor}
                 okText='Chọn người này'
                 cancelText='Hủy bỏ'
+                footer={onPickMentor ? undefined : null}
             >
                 <div>
                     <div className='flex gap-x-2 items-center'>
