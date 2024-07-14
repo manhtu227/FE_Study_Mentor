@@ -5,7 +5,7 @@ import images from '@assets/images';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomTextAreaInput } from '@components/form-input/CustomTextAreaInput';
 import { MY_ROUTE } from '@core/constants/routes.constant';
-import { RatingInput, RatingReq } from '@core/models/question.model';
+import { QuestionEnum, RatingInput, RatingReq } from '@core/models/question.model';
 import {
     createRatingApi,
     detailedQuestionKeys,
@@ -62,15 +62,30 @@ export default function RatingAnswerPage() {
             <SideBarMentor
                 className='p-8'
                 button={
-                    <ButtonPrimary
-                        title='Báo cáo'
-                        className='w-full bg-red-600 hover:!bg-red-500'
-                        onClick={() =>
-                            router.push(
-                                `${MY_ROUTE.REPORT_QUESTION}/${questions.currentQuestionId}`,
-                            )
-                        }
-                    />
+                    <div className='flex flex-col gap-2'>
+                        <ButtonPrimary
+                            title='Xem chi tiết câu trả lời'
+                            // className='w-full bg-red-600 hover:!bg-red-500'
+                            onClick={() =>
+                                router.push(
+                                    `${
+                                        query.data?.questionType === QuestionEnum.GG_MEET
+                                            ? MY_ROUTE.MENTOR.GOOGLE_MEET
+                                            : MY_ROUTE.MENTOR.FILE
+                                    }?step=2`,
+                                )
+                            }
+                        />
+                        <ButtonPrimary
+                            title='Báo cáo'
+                            className='w-full bg-red-600 hover:!bg-red-500'
+                            onClick={() =>
+                                router.push(
+                                    `${MY_ROUTE.REPORT_QUESTION}/${questions.currentQuestionId}`,
+                                )
+                            }
+                        />
+                    </div>
                 }
             >
                 <div className='flex flex-col text-left gap-x-4'>

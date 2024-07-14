@@ -291,6 +291,15 @@ export default function CheckQAPage({ onNext }: Props) {
                             </div>
                         </SideBarMentor>
                     </div>
+                    {query.data?.status === QuestionStatus.DONE && !query.data.isFeedback && (
+                        <ButtonPrimary
+                            title={'Vui lòng đánh giá'}
+                            className='ml-[432px] mt-6 !w-fit'
+                            onClick={() => {
+                                onNext();
+                            }}
+                        />
+                    )}
                     {query.data?.status !== QuestionStatus.DONE &&
                         query.data?.status !== QuestionStatus.EXPIRED &&
                         query.data?.status !== QuestionStatus.REJECTED && (

@@ -219,6 +219,7 @@ export type GetQuestionResponseModel = {
     isAccepted: boolean;
     title?: string;
     questionType: QuestionEnum;
+    isFeedback?: boolean;
     timeMetting?: number;
     meetingURL?: string;
     id?: string;
