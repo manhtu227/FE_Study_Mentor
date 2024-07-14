@@ -259,6 +259,7 @@ export type ReportQuestionReq = {
     studentId: string;
     attachFiles?: FileReq[] | null;
     content: string;
+    tutorId?: string;
 };
 
 export type QuestionReportRes = {
