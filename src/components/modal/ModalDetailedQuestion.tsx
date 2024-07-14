@@ -128,7 +128,7 @@ export default function ModalDetailedQuestion({
                                                             </div>
                                                         </div>
                                                         <Link
-                                                            href={`${process.env.NEXT_PUBLIC_PHOTO}${file.fileKey}`}
+                                                            href={imageUtility(file.fileKey)}
                                                             type='download'
                                                             className='hover:opacity-90'
                                                         >

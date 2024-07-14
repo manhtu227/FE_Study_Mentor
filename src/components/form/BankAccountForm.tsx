@@ -14,7 +14,7 @@ import {
     updateTutorialBankInfoApi,
 } from '@core/services/user.service';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
-import { toastSuccess } from '@core/utilities/toast.utility';
+import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Image, Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
@@ -56,7 +56,8 @@ function BankAccountForm() {
 
     const handleCancelUpdate = () => {
         setIsUpdate(false);
-        form.resetFields();
+
+        setFormValues();
     };
 
     const lookUpMutation = useMutation({
@@ -92,11 +93,37 @@ function BankAccountForm() {
         select: (resp) => resp.data.data,
     });
 
+    const setFormValues = () => {
+        if (
+            !getTutorBankInfoQuery?.data?.idOfBanking ||
+            !getTutorBankInfoQuery?.data?.numberOfBanking
+        )
+            return;
+
+        form.setFieldsValue({
+            binBank: getTutorBankInfoQuery?.data?.idOfBanking,
+            accountNumber: getTutorBankInfoQuery?.data?.numberOfBanking,
+            accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking,
+        });
+
+        const requestCreateQRCode: QRCodeReq = {
+            accountNo: getTutorBankInfoQuery?.data?.numberOfBanking,
+            accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking ?? '',
+            acqId: +getTutorBankInfoQuery?.data?.idOfBanking,
+            template: 'qr_only',
+        };
+
+        createQRCode.mutate(requestCreateQRCode);
+    };
+
     useEffect(() => {
         if (lookUpMutation.data?.data?.data?.accountName) {
             form.setFieldValue('accountName', lookUpMutation.data?.data?.data?.accountName);
+        } else if (!lookUpMutation.data?.data?.data && form.isFieldsTouched()) {
+            form.setFieldValue('accountName', '');
+            toastError('Số tài khoản không hợp lệ');
         }
-    }, [lookUpMutation.data?.data?.data?.accountName]);
+    }, [lookUpMutation.data?.data?.data]);
 
     useEffect(() => {
         if (createQRCode.data?.data?.data?.qrDataURL) {
@@ -116,23 +143,9 @@ function BankAccountForm() {
         if (
             getTutorBankInfoQuery?.data &&
             getTutorBankInfoQuery?.data?.idOfBanking &&
-            getTutorBankInfoQuery?.data?.numberOfBanking &&
-            getTutorBankInfoQuery?.data?.nameOfBanking
+            getTutorBankInfoQuery?.data?.numberOfBanking
         ) {
-            form.setFieldsValue({
-                binBank: getTutorBankInfoQuery?.data?.idOfBanking,
-                accountNumber: getTutorBankInfoQuery?.data?.numberOfBanking,
-                accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking,
-            });
-
-            const requestCreateQRCode: QRCodeReq = {
-                accountNo: getTutorBankInfoQuery?.data?.numberOfBanking,
-                accountName: getTutorBankInfoQuery?.data?.nameUserOfBanking ?? '',
-                acqId: +getTutorBankInfoQuery?.data?.idOfBanking,
-                template: 'qr_only',
-            };
-
-            createQRCode.mutate(requestCreateQRCode);
+            setFormValues();
         }
     }, [getTutorBankInfoQuery?.data?.idOfBanking]);
 
