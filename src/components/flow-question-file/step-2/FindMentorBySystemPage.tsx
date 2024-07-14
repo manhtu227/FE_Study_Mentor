@@ -49,10 +49,10 @@ export default function FindMentorBySystemPage() {
                     <div className='w-full bg-white-900 p-8 rounded-md text-center flex flex-col gap-8'>
                         <div>
                             <h3 className='text-black-800 font-bold text-lg m-0'>
-                                This is title for questions
+                                Chọn phương thức tìm kiếm người hướng dẫn của bạn
                             </h3>
                             <p className='text-[16px] leading-6 text-[#838B8F] m-0'>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Học hôm nay, thành công ngày mai!
                             </p>
                         </div>
 
