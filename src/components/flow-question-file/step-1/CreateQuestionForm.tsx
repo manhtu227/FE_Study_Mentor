@@ -92,7 +92,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
 
     /* Handler */
     const { data } = useSession();
-    const file = useUploadFileApi();
+    const file = useUploadFileApi(true);
     const handleSubmit = async (values: QuestionInput) => {
         const request: ICalculatePriceRequestModel = {
             level:

@@ -5,11 +5,11 @@ import { useMutation } from '@tanstack/react-query';
 import { UploadFile } from 'antd';
 import { useState } from 'react';
 
-export const useUploadFileApi = () => {
+export const useUploadFileApi = (isCheckFile?: boolean) => {
     const [isFetching, setIsFetching] = useState(false);
 
     const uploadToBackend = useMutation({
-        mutationFn: (data: string) => getSignedUrlApi(data),
+        mutationFn: (data: string) => getSignedUrlApi(data, isCheckFile),
         onError: handleError,
     });
 
