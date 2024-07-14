@@ -11,6 +11,7 @@ import { MY_ROUTE } from '@core/constants/routes.constant';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { usePagingFilter } from '@core/hooks/usePagingFilter';
 import { UserRole } from '@core/models/user.model';
+import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { PickTutorReq, getTutorOnline, pickTutor, tutorsKeys } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { IPaginationInfo, initialPagingState } from '@core/types/paging.type';
@@ -29,7 +30,7 @@ export default function CardListPage() {
 
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const [mentorList, setMentorList] = useState<MentorListResp[]>([]);
-    const questions = useSelector((state: RootState) => state.questions.questions);
+    // const questions = useSelector((state: RootState) => state.questions.questions);
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
 
     const initialPaging: IPaginationInfo = useMemo(() => {
@@ -40,11 +41,17 @@ export default function CardListPage() {
         return initialPaging;
     }, [searchParams]);
 
-    const question = useMemo(() => {
-        if (questions && currentQuestionId) {
-            return questions?.find((question) => question.questionId === currentQuestionId);
-        }
-    }, [questions]);
+    // const question = useMemo(() => {
+    //     if (questions && currentQuestionId) {
+    //         return questions?.find((question) => question.questionId === currentQuestionId);
+    //     }
+    // }, [questions]);
+
+    const question = useQuery({
+        queryKey: detailedQuestionKeys.list({ currentQuestionId, step: searchParams.get('step') }),
+        queryFn: () => getDetailedQuestionApi(currentQuestionId),
+        select: (data) => data?.data.data,
+    });
 
     const [paginationInfo, setPaginationInfo] = useState<IPaginationInfo>(initialPaging);
 
@@ -56,13 +63,14 @@ export default function CardListPage() {
     useQuery({
         queryKey: tutorsKeys.list({
             ...filter,
-            subjectId: question?.subjectId ?? '',
+            subjectId: question?.data?.subject.id ?? '',
         }),
         queryFn: () =>
             getTutorOnline({
                 ...filter,
-                subjectId: question?.subjectId ?? '',
+                subjectId: question?.data?.subject.id ?? '',
             }),
+        enabled: !!question?.data?.subject.id,
     });
 
     const mutatePickTutor = useMutation({
@@ -127,7 +135,7 @@ export default function CardListPage() {
                                       }}
                                       onPickMentor={() => {
                                           mutatePickTutor.mutate({
-                                              questionId: question?.questionId || '',
+                                              questionId: question?.data?.questionId || '',
                                               tutorId: mentor.id,
                                           });
                                       }}
