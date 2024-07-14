@@ -46,7 +46,7 @@ function ReportQuestionPage() {
                     ) : (
                         <div className='flex items-center gap-4'>
                             <img
-                                src={`${process.env.NEXT_PUBLIC_PHOTO}${currentQuestion?.student?.avatar?.fileKey}`}
+                                src={imageUtility(currentQuestion?.student?.avatar?.fileKey)}
                                 alt='avatar'
                                 className='rounded-full h-12 w-12'
                             />

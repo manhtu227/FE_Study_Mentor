@@ -85,7 +85,7 @@ function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
             ) : (
                 <>
                     <div className='w-full font-bold text-lg text-black mb-4'>Nội dung báo cáo</div>
-                    {detailedTutorReportQuery?.data?.id ? (
+                    {detailedTutorReportQuery?.data?.id && reportId ? (
                         <>
                             {detailedTutorReportQuery?.data?.content ? (
                                 <div

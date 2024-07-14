@@ -71,7 +71,7 @@ export function HistoryQuestion() {
                                     size={44}
                                     icon={
                                         <Image
-                                            alt={'image of question'}
+                                            alt={'Avatar'}
                                             loading='lazy'
                                             src={imageUtility(record?.avatar.fileKey)}
                                         />

@@ -148,7 +148,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                     <ButtonPrimary
                                         title={
                                             query.data?.status === QuestionStatus.DONE
-                                                ? 'Xem đoạn chát'
+                                                ? 'Xem đoạn chat'
                                                 : query.data?.roomId
                                                 ? 'Giải đáp'
                                                 : 'Tạo đoạn chat'
