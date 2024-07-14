@@ -50,7 +50,7 @@ function ReportQuestionForm({ questionId, studentId, reportId, tutorId }: IProps
                 ? getStudentReportApi((params?.slug as string) || (reportId as string))
                 : getTutorReportApi((params?.slug as string) || (reportId as string)),
         select: (data) => data?.data.data,
-        enabled: !!params?.slug || !!reportId || !!session.data?.user.user.role,
+        enabled: !!params?.slug || !!reportId || session.data?.user.user.role !== null,
     });
 
     const handleSubmit = async (values: ReportAnswer) => {
