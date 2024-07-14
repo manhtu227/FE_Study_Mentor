@@ -175,6 +175,7 @@ function ReportQuestionPage() {
                         questionId={currentQuestion?.questionId}
                         studentId={currentQuestion?.student?.id}
                         reportId={currentQuestion?.reportId}
+                        tutorId={currentQuestion?.tutor?.id}
                     />
                 </div>
             </div>

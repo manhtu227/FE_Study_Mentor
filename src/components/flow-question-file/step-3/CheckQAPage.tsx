@@ -280,7 +280,14 @@ export default function CheckQAPage({ onNext }: Props) {
                                                             {file.fileName}
                                                         </div>
                                                     </div>
-                                                    <DownloadOutlined className='text-[#4EA8B4] text-2xl cursor-pointer' />
+                                                    <DownloadOutlined
+                                                        className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                        onClick={async () => {
+                                                            await downloadUrl(
+                                                                imageUtility(file.fileKey),
+                                                            );
+                                                        }}
+                                                    />
                                                 </div>
                                             );
                                         })}

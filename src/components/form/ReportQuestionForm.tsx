@@ -24,9 +24,10 @@ type IProps = {
     questionId?: string;
     studentId?: string;
     reportId?: string;
+    tutorId?: string;
 };
 
-function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
+function ReportQuestionForm({ questionId, studentId, reportId, tutorId }: IProps) {
     const params = useParams();
     const [form] = Form.useForm<ReportAnswer>();
     const file = useUploadFileApi();
@@ -62,7 +63,10 @@ function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
     const reportQuestionMutate = useMutation({
         mutationFn: (values: ReportQuestionReq) =>
             session.data?.user.user.role === UserRole.STUDENT
-                ? reportQuestionStudentApi(values)
+                ? reportQuestionStudentApi({
+                      ...values,
+                      tutorId,
+                  })
                 : reportQuestionApi(values),
         onSuccess: () => {
             toastSuccess('Báo cáo câu hỏi thành công');
