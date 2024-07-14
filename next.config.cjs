@@ -24,6 +24,7 @@ const nextConfig = {
 
         return config;
     },
+    env: { NEXTAUTH_URL: 'https://studymentor.id.vn' },
 };
 
 module.exports = nextConfig;

@@ -8,7 +8,12 @@ import { useUploadFileApi } from '@core/hooks/useUploadFileApi';
 import { ReportAnswer, ReportQuestionReq } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
 import { reportQuestionApi, reportQuestionStudentApi } from '@core/services/questions.service';
-import { getTutorReportApi, getTutorReportKeys } from '@core/services/user.service';
+import {
+    getStudentReportApi,
+    getStudentReportKeys,
+    getTutorReportApi,
+    getTutorReportKeys,
+} from '@core/services/user.service';
 import { downloadUrl } from '@core/utilities/download.util';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { imageUtility } from '@core/utilities/image.utility';
@@ -35,10 +40,16 @@ function ReportQuestionForm({ questionId, studentId, reportId }: IProps) {
     const session = useSession();
 
     const detailedTutorReportQuery = useQuery({
-        queryKey: getTutorReportKeys.all,
-        queryFn: () => getTutorReportApi((params?.slug as string) || (reportId as string)),
+        queryKey:
+            session.data?.user.user.role === UserRole.STUDENT
+                ? getStudentReportKeys.all
+                : getTutorReportKeys.all,
+        queryFn: () =>
+            session.data?.user.user.role === UserRole.STUDENT
+                ? getStudentReportApi((params?.slug as string) || (reportId as string))
+                : getTutorReportApi((params?.slug as string) || (reportId as string)),
         select: (data) => data?.data.data,
-        enabled: !!params?.slug || !!reportId,
+        enabled: !!params?.slug || !!reportId || !!session.data?.user.user.role,
     });
 
     const handleSubmit = async (values: ReportAnswer) => {
