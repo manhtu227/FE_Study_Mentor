@@ -68,7 +68,7 @@ function Report() {
                 : getQuestionReportApi(),
         select: (data) => data?.data,
         placeholderData: keepPreviousData,
-        enabled: !!session.data?.user.user.role,
+        enabled: session.data?.user.user.role !== null,
     });
 
     const [data, setData] = useState<ReportTable[]>([]);
