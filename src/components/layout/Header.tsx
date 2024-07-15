@@ -19,6 +19,7 @@ import {
     ReceiveNewQuestionModel,
 } from '@core/models/question.model';
 
+import ModalConfirm from '@components/modal/ModalConfirm';
 import NotificationBell from '@components/notification-bell/NotificationBell';
 import { NotificationType } from '@core/enums/notification.enum';
 import { Notification } from '@core/models/notification.model';
@@ -94,6 +95,7 @@ const Header = () => {
     const [completedQuestion, setCompletedQuestion] = useState<CompletedQuestion>();
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
+    const [isOpenVoucher, setIsOpenVoucher] = useState(false);
     const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
     const notifications = useSelector((state: RootState) => state.notifications.notifications);
 
@@ -292,7 +294,7 @@ const Header = () => {
                     );
 
                     socket.on(SocketEvent.GET_VOUCHER, (data) => {
-                        console.log('GET_VOUCHER', data);
+                        setIsOpenVoucher(true);
                     });
                 }
 
@@ -468,6 +470,21 @@ const Header = () => {
                 methodAnswer={questionInfo?.methodAnswer}
                 isAccepted={questionInfo?.isAccepted}
                 questionId={questionInfo?.questionId}
+            />
+            <ModalConfirm
+                isOpen={isOpenVoucher}
+                setIsOpen={setIsOpenVoucher}
+                message='Xin lỗi bạn, hệ thống sẽ tặng bạn mã khuyến mãi vào đợt kế tiếp'
+                titleYes='Đặt lại câu hỏi'
+                titleCancel='Quay lại trang chủ'
+                onConfirm={() => {
+                    setIsOpenVoucher(false);
+                    router.push(`${MY_ROUTE.MENTOR.FILE}?step=1`);
+                }}
+                onCancel={() => {
+                    setIsOpenVoucher(false);
+                    router.push(`${MY_ROUTE.HOME}`);
+                }}
             />
         </header>
     );
