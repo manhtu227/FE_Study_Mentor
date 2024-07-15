@@ -14,7 +14,11 @@ export default withAuth(
         secret: ENV.AUTH_SECRET,
         callbacks: {
             authorized: ({ token, req }) => {
-                if (req.nextUrl.pathname === '/') {
+                if (
+                    req.nextUrl.pathname === '/' ||
+                    req.nextUrl.pathname === MY_ROUTE.SIGN_UP ||
+                    req.nextUrl.pathname === MY_ROUTE.RESET_PASSWORD
+                ) {
                     return true;
                 }
                 return !!token?.user?.user?.id;
