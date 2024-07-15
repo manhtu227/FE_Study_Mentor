@@ -2,14 +2,13 @@
 import images from '@assets/images';
 import AIItem from '@components/ai/ai-item/AIItem';
 import MethodItem from '@components/study-method/StudyMethod';
-import { AUTHENTICATED } from '@core/constants/authentication.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { DescriptionEnum } from '@core/enums/common.enum';
 import { Image, Modal } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const FreeAIList = [
     {
         id: CategoryAiEnum.CHAT_GPT,
@@ -41,11 +40,11 @@ function AISelectMethodPage() {
 
     const { data: authData, status: authStatus } = useSession();
 
-    useEffect(() => {
-        if (authStatus === AUTHENTICATED) return;
+    // useEffect(() => {
+    //     if (authStatus === AUTHENTICATED) return;
 
-        router.push(MY_ROUTE.LOGIN);
-    }, [authData, authStatus]);
+    //     router.push(MY_ROUTE.LOGIN);
+    // }, [authData, authStatus]);
 
     return (
         <div className='relative pb-[300px] h-[500px] max-w-full'>

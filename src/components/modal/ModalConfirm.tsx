@@ -18,6 +18,7 @@ type ModalConfirmProps = {
     titleYes?: string;
     onCancel?: () => void;
     isLoading?: boolean;
+    closable?: boolean;
 };
 
 const ModalConfirm = ({
@@ -32,6 +33,7 @@ const ModalConfirm = ({
     titleYes = 'Yes',
     onCancel,
     isLoading = false,
+    closable = false,
 }: ModalConfirmProps) => {
     // const [isClick, setIsClick] = useState(false);
     const idRef = useRef<number | number[] | undefined>();
@@ -55,7 +57,9 @@ const ModalConfirm = ({
             okButtonProps={{ style: { display: 'none' } }}
             cancelButtonProps={{ style: { display: 'none' } }}
             onCancel={() => onCancel ?? setIsOpen(false)}
-            closable={false}
+            closable={closable}
+            // maskClosable={false}
+
             // width={368}
             className={className}
         >

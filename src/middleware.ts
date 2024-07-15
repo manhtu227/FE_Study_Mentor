@@ -14,7 +14,10 @@ export default withAuth(
         secret: ENV.AUTH_SECRET,
         callbacks: {
             authorized: ({ token, req }) => {
-                return true;
+                if (req.nextUrl.pathname === '/') {
+                    return true;
+                }
+                return !!token?.user?.user?.id;
             },
         },
         pages: {
@@ -42,4 +45,4 @@ function authorizeUser(pathname: string, authority?: UserRole) {
     }
 }
 
-export const config = { matcher: [`${MY_ROUTE.AI.self}/:path*`] };
+// export const config = { matcher: [`${MY_ROUTE.AI.self}/:path*`] };
