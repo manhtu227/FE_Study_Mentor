@@ -1,6 +1,6 @@
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import { DescriptionEnum } from '@core/enums/common.enum';
-import Image, { StaticImageData } from 'next/image';
+import { Image } from 'antd';
 import Link from 'next/link';
 
 const listDescriptions = [
@@ -72,7 +72,7 @@ function MethodItem({
     className,
     onClick,
 }: {
-    image: StaticImageData;
+    image: string;
     titleButton: string;
     title: string;
     type: number;
@@ -87,6 +87,7 @@ function MethodItem({
             className={`items-center shadow-sm bg-white-900 flex flex-col pb-8 rounded-lg ${className}`}
         >
             <Image
+                preview={false}
                 loading='lazy'
                 src={image}
                 alt={title}

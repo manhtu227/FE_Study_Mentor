@@ -62,7 +62,7 @@ function AISelectMethodPage() {
                 </div>
                 <div className='flex items-start gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
-                        image={images.freeAI}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646438186922_018959820722eee971a184bc1a99b2a7.jpg'
                         title='Trả lời với AI miễn phí'
                         titleButton='Bắt đầu ngay'
                         type={DescriptionEnum.FreeAI}
@@ -71,7 +71,7 @@ function AISelectMethodPage() {
                         href={MY_ROUTE.AI.FREE}
                     />
                     <MethodItem
-                        image={images.paidAI}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646437854764_dd29088b665a8cd79f07810571554ede.jpg'
                         title='Trả lời với AI có phí'
                         titleButton='Bắt đầu ngay'
                         type={DescriptionEnum.PaidAI}
