@@ -22,7 +22,7 @@ function SelectMethodPage() {
                 </div>
                 <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
-                        image={images.aiMethod}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646475417332_98a23a2c8e98ca283069eea47acfb2c9.jpg'
                         title='Trả lời bằng AI'
                         titleButton='Trải nghiệm ngay'
                         type={DescriptionEnum.AI}
@@ -30,7 +30,7 @@ function SelectMethodPage() {
                         href={``}
                     />
                     <MethodItem
-                        image={images.mentorMethod}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646431390176_a5f1c6011bd0ce5463dcb9f6b003fab8.jpg'
                         title='Giải đáp bởi người hướng dẫn'
                         titleButton='Trải nghiệm ngay'
                         type={DescriptionEnum.Mentor}
