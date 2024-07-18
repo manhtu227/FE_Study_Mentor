@@ -14,21 +14,21 @@ import 'react-multi-carousel/lib/styles.css';
 const CHARACTEISTICS = [
     {
         id: 1,
-        image: images.charac1,
+        image: 'https://storage.googleapis.com/study-mentor/asset/451644919_874329544729811_1925968886856974908_n.png',
         title: 'Đội ngũ người hướng dẫn chất lượng',
         description:
             'Tất cả các người hướng dẫn đều có kiến thức chuyên sâu, chứng chỉ đầy đủ và tâm huyết với nghề nghiệp giáo dục.',
     },
     {
         id: 2,
-        image: images.charac2,
+        image: 'https://storage.googleapis.com/study-mentor/asset/450258899_1215476006124071_1239259109585122411_n.png',
         title: 'Đa dạng hình thức giải đáp câu hỏi',
         description:
             'Hỗ trợ giải đáp câu hỏi bằng trí tuệ nhân tạo AI hoặc bởi người hướng dẫn chất lượng. Bạn có thể chọn lựa theo nhu cầu của mình.',
     },
     {
         id: 3,
-        image: images.charac3,
+        image: 'https://storage.googleapis.com/study-mentor/asset/449845892_1018910252923185_3806969098795529161_n.png',
         title: 'Hỗ trợ giải đáp câu hỏi 24/7.',
         description:
             'Bạn có thể đặt câu hỏi bất kỳ lúc nào, bất kỳ nơi đâu và nhận câu trả lời gần như ngay lập tức.',
@@ -69,7 +69,7 @@ function Homepage() {
                     {data?.user?.user?.role !== UserRole.TUTOR ? (
                         <div className='flex items-center gap-[52px] w-full justify-center'>
                             <MethodItem
-                                image={images.aiMethod}
+                                image='https://storage.googleapis.com/study-mentor/asset/z5646475417332_98a23a2c8e98ca283069eea47acfb2c9.jpg'
                                 title='Trả lời bằng AI'
                                 titleButton='Trải nghiệm ngay'
                                 type={DescriptionEnum.AI}
@@ -77,7 +77,7 @@ function Homepage() {
                                 href={MY_ROUTE.AI.self}
                             />
                             <MethodItem
-                                image={images.mentorMethod}
+                                image='https://storage.googleapis.com/study-mentor/asset/z5646431390176_a5f1c6011bd0ce5463dcb9f6b003fab8.jpg'
                                 title='Giải đáp bởi người hướng dẫn'
                                 titleButton='Trải nghiệm ngay'
                                 type={DescriptionEnum.Mentor}

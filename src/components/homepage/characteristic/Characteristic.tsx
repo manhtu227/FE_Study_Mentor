@@ -1,17 +1,18 @@
-import Image, { StaticImageData } from 'next/image';
+import { Image } from 'antd';
 
 const Characteristic = ({
     image,
     title,
     description,
 }: {
-    image: StaticImageData;
+    image: string;
     title: string;
     description: string;
 }) => {
     return (
         <div className='items-center self-stretch flex w-1/3 flex-col pt-9 px-2'>
             <Image
+                preview={false}
                 loading='lazy'
                 src={image}
                 className='aspect-[0.88] object-contain object-center w-[202px] overflow-hidden max-w-full'
