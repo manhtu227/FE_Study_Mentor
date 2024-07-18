@@ -34,7 +34,7 @@ function MentorSelectMethodPage() {
                 </div>
                 <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
-                        image={images.ggMeetMethod}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646431613178_d10adc8c161e4ea8ee539909a58bb4e0.jpg'
                         title='Trả lời thông qua Google meet'
                         titleButton='Trải nghiệm ngay'
                         type={DescriptionEnum.GoogleMeet}
@@ -42,7 +42,7 @@ function MentorSelectMethodPage() {
                         href={MY_ROUTE.MENTOR.GOOGLE_MEET}
                     />
                     <MethodItem
-                        image={images.fileMethod}
+                        image='https://storage.googleapis.com/study-mentor/asset/z5646431891145_a61ec5e9c95e4522ec496387ebc645db.jpg'
                         title='Trả lời thông qua File hướng dẫn (PDF, DOC, ...)'
                         titleButton='Tìm người hướng dẫn'
                         type={DescriptionEnum.File}
