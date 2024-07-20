@@ -50,6 +50,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { defaultSocket } from '../../socket';
+import { SocketStudent } from './SocketStudent';
 
 const Header = () => {
     const { data, update } = useSession();
@@ -359,6 +360,7 @@ const Header = () => {
 
     return (
         <header className='h-[64px] min-h-[64px] w-full items-center z-[999] shadow-md sticky top-0 right-0'>
+            <SocketStudent />
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
                 isModalOpen={isShowModalReceiveGoogleMeet}

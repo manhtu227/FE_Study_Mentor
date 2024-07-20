@@ -6,12 +6,14 @@ import { SocketEvent } from '@core/enums/socket.enum';
 import { MentorType } from '@core/models/profile.model';
 import {
     AnswerResponseModel,
+    CreateGGMeetModel,
     GetQuestionResponseModel,
     QuestionEnum,
     StatusQuestionReq,
 } from '@core/models/question.model';
 
 import images from '@assets/images';
+import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
 import { QuestionStatus } from '@core/enums/question.enum';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
@@ -28,6 +30,7 @@ import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Divider } from 'antd';
+import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FileIcon } from 'react-file-icon';
 import { useSelector } from 'react-redux';
@@ -57,6 +60,7 @@ export default function CheckQAPage({ onNext }: Props) {
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const currentQuestionId = useSelector((state: RootState) => state.questions.currentQuestionId);
     const [answer, setAnswer] = useState<AnswerResponseModel>();
+    const [dateGoogleMeet, setDateGoogleMeet] = useState<Dayjs | null>(null);
 
     const query = useQuery({
         queryKey: detailedQuestionKeys.list({ currentQuestionId }),
@@ -112,18 +116,28 @@ export default function CheckQAPage({ onNext }: Props) {
     });
 
     const handleCreateGoogleMeet = async () => {
-        mutationCreate.mutate(
-            {
-                questionId: currentQuestionId,
-                tutorId: query.data?.tutor?.id || '',
-            },
-            {
-                onSuccess: () => {
-                    toastSuccess('Tạo cuộc họp thành công');
-                    query.refetch();
-                },
-            },
-        );
+        if (socketReducer) {
+            socketReducer?.emit(SocketEvent.SEND_INFO_GOOGLE_MEET, {
+                questionId: query.data?.questionId,
+                studentId: query.data?.student.id,
+                tutorId: query.data?.tutor?.id,
+                isStudent: true,
+                meeting_start_time: dateGoogleMeet?.format('YYYY-MM-DD HH:mm:ss'),
+            } as CreateGGMeetModel);
+            toastSuccess('Tạo cuộc họp thành công');
+        }
+        // mutationCreate.mutate(
+        //     {
+        //         questionId: currentQuestionId,
+        //         tutorId: query.data?.tutor?.id || '',
+        //     },
+        //     {
+        //         onSuccess: () => {
+        //             toastSuccess('Tạo cuộc họp thành công');
+        //             query.refetch();
+        //         },
+        //     },
+        // );
     };
 
     return (
@@ -234,17 +248,36 @@ export default function CheckQAPage({ onNext }: Props) {
                                 <Divider />
                                 {query.data?.questionType === QuestionEnum.GG_MEET ? (
                                     query.data.meetingURL ? (
-                                        <div
-                                            className='text-base px-2 hover:text-blue-600 cursor-pointer'
-                                            onClick={() => window.open(query.data?.meetingURL)}
-                                        >
-                                            {query.data.meetingURL}
+                                        <div>
+                                            <div
+                                                className='text-base px-2 hover:text-blue-600 cursor-pointer'
+                                                onClick={() => window.open(query.data?.meetingURL)}
+                                            >
+                                                {query.data.meetingURL}
+                                            </div>
                                         </div>
                                     ) : (
-                                        <ButtonPrimary
-                                            title={'Create google meet'}
-                                            onClick={handleCreateGoogleMeet}
-                                        />
+                                        <div>
+                                            <span className='text-xl '>
+                                                Thời gian bạn muốn tham gia google meet
+                                            </span>
+                                            <CustomDateInput
+                                                showTime
+                                                classNameForm='mt-4 !w-fit'
+                                                placeholder='Chọn thời gian'
+                                                value={dateGoogleMeet}
+                                                disabledBeforeDate
+                                                onChange={(value) => {
+                                                    setDateGoogleMeet(value as Dayjs);
+                                                }}
+                                            />
+                                            <ButtonPrimary
+                                                title={'Gửi lời mời'}
+                                                className='!w-fit'
+                                                disabled={!dateGoogleMeet}
+                                                onClick={handleCreateGoogleMeet}
+                                            />
+                                        </div>
                                     )
                                 ) : answer ? (
                                     <>
