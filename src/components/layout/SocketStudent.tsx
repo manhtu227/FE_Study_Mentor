@@ -51,7 +51,7 @@ export function SocketStudent() {
                     if (!questionDetail) return;
                     mutationCreate.mutate(
                         {
-                            questionId: questionDetail.id!,
+                            questionId: questionDetail.questionId!,
                             tutorId: questionDetail!.tutor!.id!,
                             studentId: questionDetail.student.id!,
                             meeting_start_time: data!.meeting_start_time,
