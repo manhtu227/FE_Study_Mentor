@@ -37,6 +37,7 @@ export type ChatModel = {
     content: string;
     files?: FileReq[] | null;
     createdAt?: string;
+    isOutOfScope?: boolean;
 };
 
 export type ChatTitleModel = {

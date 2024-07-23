@@ -1,5 +1,7 @@
 'use client';
 import { ChatList } from '@components/chat/ChatList';
+import ModalConfirm from '@components/modal/ModalConfirm';
+import { MY_ROUTE } from '@core/constants/routes.constant';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel, RoomReq } from '@core/models/chat.model';
 import { FileReq } from '@core/models/file.model';
@@ -13,8 +15,8 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 type ChatProps = {
@@ -35,6 +37,8 @@ export default function Chat({
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const searchParams = useSearchParams();
     const { data } = useSession();
+    const [modalConfirm, setModalConfirm] = useState(false);
+    const router = useRouter();
 
     const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
 
@@ -56,6 +60,20 @@ export default function Chat({
     const mutateChat = useMutation({
         mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
         onSuccess: (resp) => {
+            console.log('resp', resp.data.isOutOfScope);
+            if (resp.data.isOutOfScope) {
+                const lastCheck = localStorage.getItem('ai-check');
+                // if (lastCheck) {
+                const lastCheckDate = dayjs(lastCheck);
+                console.log('lastCheckDate', lastCheck);
+                console.log('sao', dayjs().diff(lastCheckDate, 'minute'));
+                // so sánh thời gian hiện tại lớn hơn với thời gian lần cuối check
+                if (!lastCheck || dayjs().diff(lastCheckDate, 'hour') > 2) {
+                    setModalConfirm(true);
+                    return;
+                }
+                // }
+            }
             setChatList([...chatList, resp.data]);
             queryClient.invalidateQueries({
                 queryKey: chatAIRoomListKeys.lists(),
@@ -102,15 +120,32 @@ export default function Chat({
     };
 
     return (
+        <>
+            <ChatList
+                avatar={avatar}
+                dataList={chatList}
+                isLoadingEnd={mutateChat.isPending}
+                onSubmit={handleSubmit}
+                classNameMessage='absolute left-4 right-4 bottom-4'
+                className='absolute left-4 right-4 top-20 max-h-[calc(100vh-254px)] hover-scrollbar'
+            />
+            <ModalConfirm
+                isOpen={modalConfirm}
+                setIsOpen={setModalConfirm}
+                onConfirm={() => {
+                    router.push(MY_ROUTE.MENTOR.FILE);
+                }}
+                onCancel={() => {
+                    localStorage.setItem('ai-check', dayjs().toISOString());
+                    setModalConfirm(false);
+                }}
+                titleCancel='Hủy'
+                titleYes='Đồng ý'
+                message='Xin lỗi câu này AI không trả lời được, chúng tôi có gợi ý bạn qua người hướng dẫn trả lời'
+            />
+        </>
         // <Spin spinning={isFetchingData || mutateChat.isPending}>
-        <ChatList
-            avatar={avatar}
-            dataList={chatList}
-            isLoadingEnd={mutateChat.isPending}
-            onSubmit={handleSubmit}
-            classNameMessage='absolute left-4 right-4 bottom-4'
-            className='absolute left-4 right-4 top-20 max-h-[calc(100vh-254px)] hover-scrollbar'
-        />
+
         // <MessageForm onSubmit={handleSubmit} className='absolute left-4 right-4 bottom-4' />
         // </Spin>
     );
