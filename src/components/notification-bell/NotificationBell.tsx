@@ -201,10 +201,11 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
             case NotificationType.RECEIVE_INFO_GOOGLE_MEET:
                 if (notification.meetingurl) {
                     router.push(MY_ROUTE.MENTOR.GOOGLE_MEET);
-                    break;
+                } else {
+                    setNotification(notification);
+                    setIsOpenGoogleMeet(true);
                 }
-                setNotification(notification);
-                setIsOpenGoogleMeet(true);
+                break;
             case NotificationType.CANCEL_GGMEET:
                 break;
             default:
@@ -295,7 +296,7 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 onAccept={() => {
                     mutationCreate.mutate(
                         {
-                            questionId: notifcation?.question.id!,
+                            questionId: notifcation!.question!.id!,
                             tutorId: notifcation!.tutor!.id!,
                             studentId: notifcation!.student!.id,
                             meeting_start_time: notifcation?.meeting_start_time,
