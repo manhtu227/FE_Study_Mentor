@@ -8,6 +8,7 @@ import {
     AnswerResponseModel,
     CreateGGMeetModel,
     GetQuestionResponseModel,
+    GoogleMeetInfoResp,
     QuestionEnum,
     StatusQuestionReq,
 } from '@core/models/question.model';
@@ -22,7 +23,6 @@ import {
     getDetailedQuestionApi,
     updateStatusQuestionApi,
 } from '@core/services/questions.service';
-import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { downloadUrl } from '@core/utilities/download.util';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
@@ -89,7 +89,15 @@ export default function CheckQAPage({ onNext }: Props) {
                     setAnswer(data.data.answer);
                 },
             );
+            socketReducer.on(SocketEvent.RECEIVE_GGMEET, (data: GoogleMeetInfoResp) => {
+                toastSuccess('Tạo cuộc họp thành công');
+                query.refetch();
+            });
         }
+        return () => {
+            socketReducer?.off(SocketEvent.ANSWER);
+            socketReducer?.off(SocketEvent.RECEIVE_GGMEET);
+        };
     }, [socketReducer, currentQuestionId]);
 
     const mutateCreateRoom = useMutation({
@@ -110,10 +118,10 @@ export default function CheckQAPage({ onNext }: Props) {
         onError: handleError,
     });
 
-    const mutationCreate = useMutation({
-        mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
-        onError: handleError,
-    });
+    // const mutationCreate = useMutation({
+    //     mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
+    //     onError: handleError,
+    // });
 
     const handleCreateGoogleMeet = async () => {
         if (socketReducer) {
@@ -263,7 +271,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                             </span>
                                             <CustomDateInput
                                                 showTime
-                                                classNameForm='mt-4 !w-fit'
+                                                classNameForm='mt-4 '
                                                 placeholder='Chọn thời gian'
                                                 value={dateGoogleMeet}
                                                 disabledBeforeDate

@@ -1,6 +1,5 @@
 'use client';
 import { ChatList } from '@components/chat/ChatList';
-import ModalConfirm from '@components/modal/ModalConfirm';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { CategoryAiEnum } from '@core/enums/ai.enum';
 import { ChatModel, RoomReq } from '@core/models/chat.model';
@@ -13,6 +12,7 @@ import {
     createRoomAiIdApi,
 } from '@core/services/chat.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Modal, Radio } from 'antd';
 import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -39,6 +39,7 @@ export default function Chat({
     const { data } = useSession();
     const [modalConfirm, setModalConfirm] = useState(false);
     const router = useRouter();
+    const [value, setValue] = useState(0);
 
     const roomId = useMemo(() => searchParams && searchParams.get('room'), [searchParams]);
 
@@ -129,7 +130,61 @@ export default function Chat({
                 classNameMessage='absolute left-4 right-4 bottom-4'
                 className='absolute left-4 right-4 top-20 max-h-[calc(100vh-254px)] hover-scrollbar'
             />
-            <ModalConfirm
+
+            <Modal
+                // title='Chọn nền tảng AI mà bạn muốn trò chuyện'
+                centered
+                open={modalConfirm}
+                footer={null}
+                closable={true}
+                onCancel={() => setModalConfirm(false)}
+            >
+                <div className='font-medium '>
+                    Xin lỗi câu này AI không trả lời được, Chúng tôi có 2 gợi ý cho bạn
+                </div>
+                <Radio.Group
+                    onChange={(value) => {
+                        setValue(value.target.value);
+                    }}
+                    value={value}
+                    className='flex flex-col my-3 gap-2'
+                >
+                    {categoryAi !== CategoryAiEnum.SYSTEM && (
+                        <Radio value={0}>Trả lời bằng AI Premium</Radio>
+                    )}
+                    <Radio value={1}>Trả lời bằng File qua người hướng dẫn</Radio>
+                    <Radio value={2}>Trả lời bằng google meet qua người hướng dẫn</Radio>
+                </Radio.Group>
+                <div className='flex justify-center w-full gap-4'>
+                    <Button
+                        onClick={() => setModalConfirm(false)}
+                        type='default'
+                        className='bg-gray-custom-600 h-[54px] text-base text-white font-bold w-full border-gray-custom-600'
+                    >
+                        Hủy
+                    </Button>
+                    <Button
+                        type='primary'
+                        className='bg-primary-custom-900  h-[54px] text-base font-bold text-white w-full'
+                        onClick={() => {
+                            if (value === 0) {
+                                router.push(MY_ROUTE.AI.PAID);
+                            }
+                            if (value === 1) {
+                                router.push(MY_ROUTE.MENTOR.FILE);
+                            }
+                            if (value === 2) {
+                                router.push(MY_ROUTE.MENTOR.GOOGLE_MEET);
+                            }
+                        }}
+                        // loading={true}
+                    >
+                        Đồng ý
+                    </Button>
+                </div>
+            </Modal>
+
+            {/* <ModalConfirm
                 isOpen={modalConfirm}
                 setIsOpen={setModalConfirm}
                 onConfirm={() => {
@@ -142,7 +197,7 @@ export default function Chat({
                 titleCancel='Hủy'
                 titleYes='Đồng ý'
                 message='Xin lỗi câu này AI không trả lời được, chúng tôi có gợi ý bạn qua người hướng dẫn trả lời'
-            />
+            /> */}
         </>
         // <Spin spinning={isFetchingData || mutateChat.isPending}>
 

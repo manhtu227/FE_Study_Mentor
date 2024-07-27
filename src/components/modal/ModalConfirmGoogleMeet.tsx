@@ -5,8 +5,12 @@ import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { CreateGGMeetModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
+import { detailedQuestionKeys } from '@core/services/questions.service';
+import { CancelGoogleMeetReq, cancelGoogleMeetByIdApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'antd';
 import { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react';
@@ -30,11 +34,34 @@ export default function ModalConfirmGoogleMeet({
     const socketReducer = useSelector((state: RootState) => state.socket.socket);
     const session = useSession();
 
+    const cancleMutation = useMutation({
+        mutationFn: (data: CancelGoogleMeetReq) => cancelGoogleMeetByIdApi(data),
+        onError: handleError,
+    });
+
     const handleOk = () => {
         setIsModalOpen(null);
     };
+    const queryClient = useQueryClient();
 
     const handleCancel = () => {
+        if (questionDetail?.questionId) {
+            cancleMutation.mutate(
+                {
+                    isStudent: session.data?.user.user.role === UserRole.STUDENT,
+                    questionId: questionDetail.questionId,
+                    studentId: questionDetail.student.id,
+                    tutorId: questionDetail.tutor!.id,
+                },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: detailedQuestionKeys.all,
+                        });
+                    },
+                },
+            );
+        }
         setIsModalOpen(null);
     };
 
@@ -46,12 +73,14 @@ export default function ModalConfirmGoogleMeet({
                 onCancel={handleCancel}
                 // okText='Chấp nhận'
                 // cancelText='Từ chối'
+                maskClosable={false}
+                closable={false}
                 footer={null}
                 className='w-[500px] h-[500px] flex flex-col text-center items-center justify-center'
             >
                 <div className='flex flex-col gap-2 items-start'>
                     <div className='text-xl'>
-                        Câu hỏi chủ đề : <strong>{questionDetail?.subject.name}</strong>
+                        Câu hỏi chủ đề : <strong>{questionDetail?.subject?.name}</strong>
                     </div>
                     <div className='text-xl'>
                         Tiêu đề : <strong>{questionDetail?.title}</strong>
@@ -69,7 +98,8 @@ export default function ModalConfirmGoogleMeet({
                     <span className='text-xl mt-2'>Đề xuất giờ mới cho đối phương:</span>
                     <CustomDateInput
                         showTime
-                        classNameForm='mb-3'
+                        classNameForm='my-3 w-[300px]'
+                        placeholder='Chọn thời gian'
                         disabledBeforeDate
                         onChange={(value) => {
                             setDate(value);

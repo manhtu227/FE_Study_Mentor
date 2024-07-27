@@ -146,8 +146,10 @@ export default function ModalFoundTutor({
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText='Tiếp tục'
+                // closable={false}
                 width={450}
                 cancelText='Quay lại trang chủ'
+                maskClosable={false}
                 // className='flex flex-col text-center items-center justify-center'
             >
                 <div className='flex flex-col text-center items-center justify-center'>
@@ -166,7 +168,9 @@ export default function ModalFoundTutor({
                             ? 'Hình thức trò chuyện'
                             : 'Hình thức giải đáp qua google meet'}
                     </div>
-                    {isAccepted === 1 && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
+                    {isAccepted === 1 && methodAnswer !== QuestionEnum.GG_MEET && (
+                        <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>
+                    )}
                     <div className='flex items-start gap-6 mt-5'>
                         <div className='h-[60px]'>
                             <Avatar

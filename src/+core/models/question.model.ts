@@ -275,7 +275,8 @@ export type QuestionReportRes = {
 
 export type GoogleMeetInfoResp = {
     meetingUrl: string;
-    createdAt: string;
+    meeting_start_time: string;
+    meeting_end_time: string;
 };
 
 export type CompletedQuestion = {

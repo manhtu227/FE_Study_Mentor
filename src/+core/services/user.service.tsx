@@ -211,3 +211,14 @@ export const getStudentChartRevenueApi = async (days: number) => {
         params: { option: days },
     });
 };
+
+export type CancelGoogleMeetReq = {
+    studentId: string;
+    tutorId: string;
+    questionId: string;
+    isStudent: boolean;
+};
+
+export const cancelGoogleMeetByIdApi = async (body: CancelGoogleMeetReq) => {
+    return api.post<void>(`api/users/cancel/ggMeet/${body.questionId}`, body);
+};
