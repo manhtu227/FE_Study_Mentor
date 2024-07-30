@@ -140,7 +140,7 @@ export default function Chat({
                 onCancel={() => setModalConfirm(false)}
             >
                 <div className='font-medium '>
-                    Xin lỗi câu này AI không trả lời được, Chúng tôi có 2 gợi ý cho bạn
+                    Xin lỗi câu này AI không trả lời được, Chúng tôi có 3 gợi ý cho bạn
                 </div>
                 <Radio.Group
                     onChange={(value) => {

@@ -145,9 +145,9 @@ function ProfilePage() {
                                     </Button>
                                 </div>
                             </div>
+                            <BankAccountForm />
                             {userType === UserRole.TUTOR && (
                                 <>
-                                    <BankAccountForm />
                                     <Prestige
                                         averageRate={
                                             +(personalInfoQuery.data?.averageRate.toFixed(1) ?? 0)

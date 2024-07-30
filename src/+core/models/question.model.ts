@@ -1,4 +1,5 @@
 import {
+    MeetingPlatform,
     QuestionAcceptStatus,
     QuestionStatus,
     QuestionStep,
@@ -26,6 +27,7 @@ export type QuestionInput = {
     numberOfStars: number;
     voucher?: string;
     title: string;
+    platform?: MeetingPlatform;
 };
 
 export type UploadQuestionProps = {
