@@ -61,13 +61,15 @@ export default function Chat({
     const mutateChat = useMutation({
         mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
         onSuccess: (resp) => {
-            console.log('resp', resp.data.isOutOfScope);
+            setChatList([...chatList, resp.data]);
+            queryClient.invalidateQueries({
+                queryKey: chatAIRoomListKeys.lists(),
+            });
             if (resp.data.isOutOfScope) {
                 const lastCheck = localStorage.getItem('ai-check');
                 // if (lastCheck) {
                 const lastCheckDate = dayjs(lastCheck);
-                console.log('lastCheckDate', lastCheck);
-                console.log('sao', dayjs().diff(lastCheckDate, 'minute'));
+
                 // so sánh thời gian hiện tại lớn hơn với thời gian lần cuối check
                 if (!lastCheck || dayjs().diff(lastCheckDate, 'hour') > 2) {
                     setModalConfirm(true);
@@ -75,10 +77,6 @@ export default function Chat({
                 }
                 // }
             }
-            setChatList([...chatList, resp.data]);
-            queryClient.invalidateQueries({
-                queryKey: chatAIRoomListKeys.lists(),
-            });
         },
     });
 
