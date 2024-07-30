@@ -32,7 +32,7 @@ export default function UpgradeAiPage() {
                             mutateCreatePaymentRequest.mutate({
                                 type: PaymentType.CHAT_AI,
                                 cancelUrl: window.location.href,
-                                returnUrl: MY_ROUTE.AI.PAID,
+                                returnUrl: `${window.location.origin}${MY_ROUTE.AI.PAID}`,
                                 expirationDateType: type,
                             });
                         }}

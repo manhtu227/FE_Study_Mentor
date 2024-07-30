@@ -140,7 +140,8 @@ export default function Chat({
                 onCancel={() => setModalConfirm(false)}
             >
                 <div className='font-medium '>
-                    Xin lỗi câu này AI không trả lời được, Chúng tôi có 3 gợi ý cho bạn
+                    Xin lỗi câu này AI không trả lời được, Chúng tôi có{' '}
+                    {categoryAi !== CategoryAiEnum.SYSTEM ? 3 : 2} gợi ý cho bạn
                 </div>
                 <Radio.Group
                     onChange={(value) => {
@@ -168,7 +169,11 @@ export default function Chat({
                         className='bg-primary-custom-900  h-[54px] text-base font-bold text-white w-full'
                         onClick={() => {
                             if (value === 0) {
-                                router.push(MY_ROUTE.AI.PAID);
+                                if (data?.user.user.isMembership) {
+                                    router.push(MY_ROUTE.AI.PAID);
+                                } else {
+                                    router.push(MY_ROUTE.AI.UPGRADE);
+                                }
                             }
                             if (value === 1) {
                                 router.push(MY_ROUTE.MENTOR.FILE);
