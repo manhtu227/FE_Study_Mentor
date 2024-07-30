@@ -264,7 +264,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 Chọn nền tảng bạn muốn tham gia trả lời câu hỏi
                             </div>
                             <CustomSelectInput<QuestionInput>
-                                name='timeAnswer'
+                                name='platform'
                                 showSearch
                                 optionsSelect={platforms}
                                 rules={[{ required: true, message: 'Vui lòng chọn nền tảng!' }]}
