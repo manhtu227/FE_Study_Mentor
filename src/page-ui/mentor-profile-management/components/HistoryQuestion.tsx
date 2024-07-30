@@ -29,6 +29,7 @@ export type HistoryQuestionTable = {
     date: string;
     isPaid: boolean;
     title: string;
+    answerTime: string;
 };
 
 export const statusActiveColors = {
@@ -125,6 +126,15 @@ export function HistoryQuestion() {
             ),
         },
         {
+            title: 'Thời gian trả lời câu hỏi',
+            dataIndex: 'expense',
+            render: (value, record) => (
+                <div className='font-normal text-sm flex flex-col'>
+                    <span className='text-sm'>{record.answerTime}</span>
+                </div>
+            ),
+        },
+        {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
@@ -196,6 +206,9 @@ export function HistoryQuestion() {
                     date: format(new Date(e.createdAt), DATE_FORMAT).toString(),
                     isPaid: e.isPaid,
                     title: e.title,
+                    answerTime: e.answeredAt
+                        ? format(new Date(e.answeredAt), DATE_FORMAT).toString()
+                        : format(new Date(), DATE_FORMAT).toString(),
                 };
             });
 

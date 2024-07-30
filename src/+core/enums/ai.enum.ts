@@ -1,5 +1,5 @@
 export enum CategoryAiEnum {
-    CHAT_GPT = 'Chat gpt',
+    CHAT_GPT = 'Chat GPT',
     GEMINI = 'Gemini',
     SYSTEM = 'System',
 }

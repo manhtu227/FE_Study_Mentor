@@ -138,11 +138,11 @@ export const getAvatarByIdTutorApi = (id: string) => {
 export const getTutorBankInfoKeys = initKeys('get-tutor-bank-info-keys');
 
 export const getTutorBankInfoApi = async () => {
-    return api.get<BaseResp<BankModel>>(`api/users/tutor/bank`);
+    return api.get<BaseResp<BankModel>>(`api/users/bank`);
 };
 
 export const updateTutorialBankInfoApi = async (data: BankModel) => {
-    return api.put<void>(`api/users/tutor/bank`, data);
+    return api.put<void>(`api/users/bank`, data);
 };
 
 export const getOverviewTutorInfoKeys = initKeys('get-overview-tutor-info-keys');
