@@ -2,11 +2,24 @@ import LogoIcon from '@assets/icons/logo';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 
-function Logo({ size, title, className }: { size?: string; title: string; className?: string }) {
+function Logo({
+    size,
+    title,
+    className,
+    isRouter = true,
+}: {
+    size?: string;
+    title: string;
+    className?: string;
+    isRouter?: boolean;
+}) {
     const router = useRouter();
 
     return (
-        <div className={`flex h-full items-center ${className}`} onClick={() => router.push('/')}>
+        <div
+            className={`flex h-full items-center ${className}`}
+            onClick={() => isRouter && router.push('/')}
+        >
             <LogoIcon
                 className={clsx({
                     'h-[32px] w-[34px]': !size,

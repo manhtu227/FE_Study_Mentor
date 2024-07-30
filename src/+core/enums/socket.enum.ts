@@ -23,8 +23,12 @@ export enum SocketEvent {
     ERROR = 'error',
     CREATE_GGMEET = 'create-ggmeet',
     RECEIVE_GGMEET = 'receive-ggmeet',
+    CANCEL_GGMEET = 'cancel-google-meet',
     COMPLETED_QUESTION = 'completed-question',
     PAID_SUCCESS_FOR_TUTOR = 'paid-success-for-tutor',
+    SEND_INFO_GOOGLE_MEET = 'send-info-google-meet',
+    RECEIVE_INFO_GOOGLE_MEET = 'receive-info-google-meet',
+    CONFIRM_GOOGLE_MEET = 'confirm-google-meet',
 }
 
 export const SOCKET_QUESTION_EMIT = (topic: string) => `question-${topic}`;

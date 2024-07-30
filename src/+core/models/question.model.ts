@@ -275,7 +275,8 @@ export type QuestionReportRes = {
 
 export type GoogleMeetInfoResp = {
     meetingUrl: string;
-    createdAt: string;
+    meeting_start_time: string;
+    meeting_end_time: string;
 };
 
 export type CompletedQuestion = {
@@ -292,4 +293,12 @@ export type CompletedQuestion = {
 
 export type StatusQuestionReq = {
     status: QuestionStatus;
+};
+
+export type CreateGGMeetModel = {
+    studentId: string;
+    tutorId: string;
+    questionId: string;
+    meeting_start_time?: string;
+    isStudent?: boolean;
 };

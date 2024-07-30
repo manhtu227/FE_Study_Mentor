@@ -11,4 +11,7 @@ export type Notification = {
     role: UserRole;
     createdAt?: Date;
     message?: string;
+    meeting_start_time?: string;
+    meeting_end_time?: string;
+    meetingurl?: string;
 };

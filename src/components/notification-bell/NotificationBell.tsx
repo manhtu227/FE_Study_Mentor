@@ -9,15 +9,22 @@ import {
     UsergroupDeleteOutlined,
 } from '@ant-design/icons';
 import BellIcon from '@assets/icons/bell';
+import ModalConfirmGoogleMeet from '@components/modal/ModalConfirmGoogleMeet';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { NotificationTitle, NotificationType } from '@core/enums/notification.enum';
 import { Notification } from '@core/models/notification.model';
-import { QuestionEnum } from '@core/models/question.model';
+import { CreateGGMeetModel, QuestionEnum } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
-import { deleteAllNotificationApi, deleteNotificationApi } from '@core/services/user.service';
+import {
+    createGoogleMeetApi,
+    deleteAllNotificationApi,
+    deleteNotificationApi,
+} from '@core/services/user.service';
 import { clearNotifications, removeNotification } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { calculateTimeAgo } from '@core/utilities/calculate-time-ago';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation } from '@tanstack/react-query';
 import { Badge, Button, Drawer, List } from 'antd';
 import { useSession } from 'next-auth/react';
@@ -34,6 +41,8 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { data } = useSession();
+    const [isOpenGoogleMeet, setIsOpenGoogleMeet] = useState(false);
+    const [notifcation, setNotification] = useState<Notification | null>(null);
 
     // Query
     const deleteNotification = useMutation({
@@ -89,6 +98,10 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 return NotificationTitle.TUTOR_ACCEPTED_QUESTION;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return NotificationTitle.PICKED_TUTOR_ACCEPTED_QUESTION;
+            case NotificationType.RECEIVE_INFO_GOOGLE_MEET:
+                return NotificationTitle.RECEIVE_INFO_GOOGLE_MEET;
+            case NotificationType.CANCEL_GGMEET:
+                return NotificationTitle.CANCEL_GGMEET;
             default:
                 return '';
         }
@@ -185,6 +198,16 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     );
                 }
                 break;
+            case NotificationType.RECEIVE_INFO_GOOGLE_MEET:
+                if (notification.meetingurl) {
+                    router.push(MY_ROUTE.MENTOR.GOOGLE_MEET);
+                } else {
+                    setNotification(notification);
+                    setIsOpenGoogleMeet(true);
+                }
+                break;
+            case NotificationType.CANCEL_GGMEET:
+                break;
             default:
                 break;
         }
@@ -195,6 +218,11 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
 
         handleRedirectWhenClickedNoti(item);
     };
+
+    const mutationCreate = useMutation({
+        mutationFn: (data: CreateGGMeetModel) => createGoogleMeetApi(data),
+        onError: handleError,
+    });
 
     return (
         <div className='notification-bell-custom'>
@@ -247,6 +275,42 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     )}
                 />
             </Drawer>
+
+            <ModalConfirmGoogleMeet
+                isModalOpen={isOpenGoogleMeet}
+                setIsModalOpen={() => {
+                    setIsOpenGoogleMeet(false);
+                }}
+                questionDetail={
+                    {
+                        questionId: notifcation?.question.id || '',
+                        tutor: notifcation?.tutor,
+                        student: notifcation?.student,
+                        price: notifcation?.question.price || '',
+                        answers: notifcation?.question.answers || null,
+                        subject: notifcation?.question.subject,
+                        title: notifcation?.question.title,
+                    } as any
+                }
+                timeStart={notifcation?.meeting_start_time || ''}
+                onAccept={() => {
+                    mutationCreate.mutate(
+                        {
+                            questionId: notifcation!.question!.id!,
+                            tutorId: notifcation!.tutor!.id!,
+                            studentId: notifcation!.student!.id,
+                            meeting_start_time: notifcation?.meeting_start_time,
+                            // meeting_start_time
+                        },
+                        {
+                            onSuccess: () => {
+                                setIsOpenGoogleMeet(false);
+                                toastSuccess('Tạo cuộc họp thành công');
+                            },
+                        },
+                    );
+                }}
+            />
         </div>
     );
 };

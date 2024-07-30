@@ -9,14 +9,11 @@ import {
 } from '@core/models/question.model';
 import { UserModel, UserRole } from '@core/models/user.model';
 import { getChatRoomListKeys } from '@core/services/chat.service';
-import { PickTutorReq, createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { setCurrentQuestionId } from '@core/store/reducers/question.reducer';
 import { addRoom } from '@core/store/reducers/room-chat.reducer';
-import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { imageUtility } from '@core/utilities/image.utility';
-import { toastSuccess } from '@core/utilities/toast.utility';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Avatar, Image, Modal, Rate } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -47,10 +44,10 @@ export default function ModalFoundTutor({
     const [modalConfirm, setModalConfirm] = useState(false);
     const session = useSession();
 
-    const mutationCreate = useMutation({
-        mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
-        onError: handleError,
-    });
+    // const mutationCreate = useMutation({
+    //     mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
+    //     onError: handleError,
+    // });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -71,18 +68,7 @@ export default function ModalFoundTutor({
         setIsModalOpen(false);
         if (isAccepted == 1) {
             if (methodAnswer === QuestionEnum.GG_MEET && questionId && user?.id) {
-                mutationCreate.mutate(
-                    {
-                        questionId: questionId,
-                        tutorId: user?.id,
-                    },
-                    {
-                        onSuccess: () => {
-                            toastSuccess('Tạo cuộc họp thành công');
-                            router.push(`${MY_ROUTE.MENTOR.GOOGLE_MEET}?step=2&id=${user?.id}`);
-                        },
-                    },
-                );
+                router.push(`${MY_ROUTE.MENTOR.GOOGLE_MEET}?step=2`);
                 return;
             }
             router.push(`${MY_ROUTE.MENTOR.FILE}?step=2&id=${user?.id}`);
@@ -160,8 +146,10 @@ export default function ModalFoundTutor({
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText='Tiếp tục'
+                // closable={false}
                 width={450}
                 cancelText='Quay lại trang chủ'
+                maskClosable={false}
                 // className='flex flex-col text-center items-center justify-center'
             >
                 <div className='flex flex-col text-center items-center justify-center'>
@@ -180,7 +168,9 @@ export default function ModalFoundTutor({
                             ? 'Hình thức trò chuyện'
                             : 'Hình thức giải đáp qua google meet'}
                     </div>
-                    {isAccepted === 1 && <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>}
+                    {isAccepted === 1 && methodAnswer !== QuestionEnum.GG_MEET && (
+                        <div>Chờ câu trả lời từ người hướng dẫn {dots}</div>
+                    )}
                     <div className='flex items-start gap-6 mt-5'>
                         <div className='h-[60px]'>
                             <Avatar
