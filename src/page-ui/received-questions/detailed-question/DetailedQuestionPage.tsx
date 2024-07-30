@@ -40,7 +40,7 @@ function DetailedQuestionPage() {
             title:
                 questionType === QuestionType.FILE
                     ? 'Bạn có chắc chắn muốn trả lời câu hỏi này không?'
-                    : 'Bạn có chắc chắn muốn trả lời câu hỏi này không? Câu hỏi này sẽ được trả lời thông qua Google Meet',
+                    : 'Bạn có chắc chắn muốn trả lời câu hỏi này không? Câu hỏi này sẽ được Trả lời thông qua cuộc gọi video',
             icon: <ExclamationCircleFilled />,
             content: 'Nếu đồng ý, bạn sẽ không thể hủy bỏ hành động này',
             onOk() {

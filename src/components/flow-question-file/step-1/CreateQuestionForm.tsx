@@ -45,6 +45,11 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
     const [selectedSubject, setSelectedSubject] = useState<string>('');
     const [isOpenVoucher, setIsOpenVoucher] = useState<boolean>(false);
     const router = useRouter();
+    const platforms = [
+        { value: 'googleMeet', label: 'Google Meet' },
+        { value: 'zoom', label: 'Zoom' },
+        { value: 'microsoftTeam', label: 'Microsoft Team' },
+    ];
 
     const levelData = useGetLevels();
     const levelOptions = levelData?.map(ConvertLevelToOption) ?? [];
@@ -178,7 +183,7 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
             <div className='p-8 bg-white-900'>
                 {isGoogleMeet ? (
                     <h2 className='text-3xl leading-[27px] text-center'>
-                        Trả lời thông qua Google meet
+                        Trả lời thông qua cuộc gọi video
                     </h2>
                 ) : (
                     <div className='w-full font-bold text-lg text-black mb-8'>Nội dung câu hỏi</div>
@@ -254,6 +259,17 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                     </Form.Item>
                                 </div>
                             </Form.Item>
+                            {/* Platform */}
+                            <div className='font-bold text-base mb-2'>
+                                Chọn nền tảng bạn muốn tham gia trả lời câu hỏi
+                            </div>
+                            <CustomSelectInput<QuestionInput>
+                                name='timeAnswer'
+                                showSearch
+                                optionsSelect={platforms}
+                                rules={[{ required: true, message: 'Vui lòng chọn nền tảng!' }]}
+                                placeholder='Chọn nền tảng bạn muốn tham gia trả lời câu hỏi'
+                            />
                             {/* Title question */}
                             <div className='font-bold text-base mb-2'>
                                 Tiêu đề câu hỏi (mô tả ngắn)
@@ -292,6 +308,9 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                 name='timeAnswer'
                                 showSearch
                                 optionsSelect={[
+                                    { value: 10, label: '10 phút' },
+                                    { value: 15, label: '15 phút' },
+                                    { value: 20, label: '20 phút' },
                                     { value: 30, label: '30 phút' },
                                     { value: 60, label: '1 giờ' },
                                     { value: 120, label: '2 giờ' },

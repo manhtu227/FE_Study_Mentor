@@ -15,12 +15,12 @@ const FreeAIList = [
         title: 'Chat GPT',
         description:
             'Sử dụng mạng Neural Transformer để học và trả lời câu hỏi, ChatGPT có thể đáp ứng yêu cầu trả lời nhanh và chính xác của bạn',
-        image: images.chatPGT,
+        image: 'https://storage.googleapis.com/study-mentor/asset/z5646514166228_6113b132e542d6f7bd9514523f2cd6f6.jpg',
     },
     {
         id: CategoryAiEnum.GEMINI,
         title: 'Gemini',
-        image: images.gemini,
+        image: 'https://storage.googleapis.com/study-mentor/asset/z5646514489579_b9717bb5f2ced23a9311e16f7912322a.jpg',
         description:
             'Sử dụng deep learning trên lượng lớn dữ liệu về nhiều lĩnh vực khác nhau, đảm bảo có thể đưa ra câu trả lời về bất kỳ lĩnh vực nào mà bạn muốn',
     },
