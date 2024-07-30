@@ -35,7 +35,7 @@ function MentorSelectMethodPage() {
                 <div className='flex items-center gap-[32px] w-full justify-center mb-[58px]'>
                     <MethodItem
                         image='https://storage.googleapis.com/study-mentor/asset/z5646431613178_d10adc8c161e4ea8ee539909a58bb4e0.jpg'
-                        title='Trả lời thông qua Google meet'
+                        title='Trả lời thông qua cuộc gọi video'
                         titleButton='Trải nghiệm ngay'
                         type={DescriptionEnum.GoogleMeet}
                         className='max-w-[542px]'

@@ -108,3 +108,9 @@ export enum QuestionAcceptStatus {
     AGREE = 1,
     DECLINE = 0,
 }
+
+export enum MeetingPlatform {
+    GOOGLE_MEET = 1,
+    ZOOM = 2,
+    MICROSOFT_TEAM = 3,
+}

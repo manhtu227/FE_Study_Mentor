@@ -8,7 +8,7 @@ export default function ModalGGMeet() {
     return (
         <div className='w-[1200px] p-4 shadow-lg '>
             <h2 className='text-[18px] leading-[27px] text-center'>
-                Trả lời thông qua Google meet
+                Trả lời thông qua cuộc gọi video
             </h2>
             <div className='w-[1089px] flex'>
                 <form className='p-8'>

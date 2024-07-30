@@ -60,7 +60,9 @@ export default function CreateQuestionByGoogleMeetPage() {
 
     return (
         <div className='w-full p-8 shadow-lg'>
-            <h2 className='text-3xl leading-[27px] text-center'>Trả lời thông qua Google meet</h2>
+            <h2 className='text-3xl leading-[27px] text-center'>
+                Trả lời thông qua cuộc gọi video
+            </h2>
             <div className='w-full flex justify-center'>
                 <form className='p-4 w-1/2'>
                     <div className='flex flex-row gap-8'>

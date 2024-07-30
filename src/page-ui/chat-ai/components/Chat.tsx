@@ -61,13 +61,15 @@ export default function Chat({
     const mutateChat = useMutation({
         mutationFn: (body: ChatWithAiReq) => chatWithAiApi(data!.user.user.id, categoryAi, body),
         onSuccess: (resp) => {
-            console.log('resp', resp.data.isOutOfScope);
+            setChatList([...chatList, resp.data]);
+            queryClient.invalidateQueries({
+                queryKey: chatAIRoomListKeys.lists(),
+            });
             if (resp.data.isOutOfScope) {
                 const lastCheck = localStorage.getItem('ai-check');
                 // if (lastCheck) {
                 const lastCheckDate = dayjs(lastCheck);
-                console.log('lastCheckDate', lastCheck);
-                console.log('sao', dayjs().diff(lastCheckDate, 'minute'));
+
                 // so sánh thời gian hiện tại lớn hơn với thời gian lần cuối check
                 if (!lastCheck || dayjs().diff(lastCheckDate, 'hour') > 2) {
                     setModalConfirm(true);
@@ -75,10 +77,6 @@ export default function Chat({
                 }
                 // }
             }
-            setChatList([...chatList, resp.data]);
-            queryClient.invalidateQueries({
-                queryKey: chatAIRoomListKeys.lists(),
-            });
         },
     });
 
@@ -140,7 +138,8 @@ export default function Chat({
                 onCancel={() => setModalConfirm(false)}
             >
                 <div className='font-medium '>
-                    Xin lỗi câu này AI không trả lời được, Chúng tôi có 2 gợi ý cho bạn
+                    Xin lỗi câu này AI không trả lời được, Chúng tôi có{' '}
+                    {categoryAi !== CategoryAiEnum.SYSTEM ? 3 : 2} gợi ý cho bạn
                 </div>
                 <Radio.Group
                     onChange={(value) => {
@@ -168,7 +167,11 @@ export default function Chat({
                         className='bg-primary-custom-900  h-[54px] text-base font-bold text-white w-full'
                         onClick={() => {
                             if (value === 0) {
-                                router.push(MY_ROUTE.AI.PAID);
+                                if (data?.user.user.isMembership) {
+                                    router.push(MY_ROUTE.AI.PAID);
+                                } else {
+                                    router.push(MY_ROUTE.AI.UPGRADE);
+                                }
                             }
                             if (value === 1) {
                                 router.push(MY_ROUTE.MENTOR.FILE);

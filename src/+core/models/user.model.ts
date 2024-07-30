@@ -59,6 +59,7 @@ export type QuestionAnsweredItem = {
     email: string;
     isPaid: boolean;
     title: string;
+    answeredAt: Date;
 };
 
 export type ResetPasswordReq = {
