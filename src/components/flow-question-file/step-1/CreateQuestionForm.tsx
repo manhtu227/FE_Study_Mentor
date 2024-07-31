@@ -259,17 +259,25 @@ function CreateQuestionForm({ isGoogleMeet }: Props) {
                                     </Form.Item>
                                 </div>
                             </Form.Item>
+
                             {/* Platform */}
-                            <div className='font-bold text-base mb-2'>
-                                Chọn nền tảng bạn muốn tham gia trả lời câu hỏi
-                            </div>
-                            <CustomSelectInput<QuestionInput>
-                                name='platform'
-                                showSearch
-                                optionsSelect={platforms}
-                                rules={[{ required: true, message: 'Vui lòng chọn nền tảng!' }]}
-                                placeholder='Chọn nền tảng bạn muốn tham gia trả lời câu hỏi'
-                            />
+                            {isGoogleMeet && (
+                                <>
+                                    <div className='font-bold text-base mb-2'>
+                                        Chọn nền tảng bạn muốn tham gia trả lời câu hỏi
+                                    </div>
+                                    <CustomSelectInput<QuestionInput>
+                                        name='platform'
+                                        showSearch
+                                        optionsSelect={platforms}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng chọn nền tảng!' },
+                                        ]}
+                                        placeholder='Chọn nền tảng bạn muốn tham gia trả lời câu hỏi'
+                                    />
+                                </>
+                            )}
+
                             {/* Title question */}
                             <div className='font-bold text-base mb-2'>
                                 Tiêu đề câu hỏi (mô tả ngắn)
