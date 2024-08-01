@@ -1,9 +1,12 @@
 'use client';
+import { DATE_FORMAT } from '@core/constants/date.constant';
 import { Modal } from 'antd';
+import { format } from 'date-fns';
 
 export default function ModalJoinGoogleMeet({
     questionName,
     googleMeetUrl,
+    startTime,
     subjectName,
     price,
     title,
@@ -12,6 +15,7 @@ export default function ModalJoinGoogleMeet({
 }: {
     questionName: string;
     googleMeetUrl: string;
+    startTime: string;
     subjectName: string;
     price: number;
     isModalOpen: boolean;
@@ -51,7 +55,9 @@ export default function ModalJoinGoogleMeet({
                     </div>
                 </div>
                 <h3 className='leading-[27px] text-[NeutralDark1]'>
-                    Tham gia cuộc họp theo link này để trả lời câu hỏi:
+                    Tham gia cuộc họp vào{' '}
+                    {format(startTime ?? new Date(), DATE_FORMAT.DATE_TIME.HYPHEN)} theo link này để
+                    trả lời câu hỏi:
                 </h3>
                 <a className='font-bold mb-4 block' href={googleMeetUrl}>
                     {googleMeetUrl}

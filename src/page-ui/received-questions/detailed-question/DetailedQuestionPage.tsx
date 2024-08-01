@@ -78,7 +78,8 @@ function DetailedQuestionPage() {
         }
 
         if (
-            question?.status === QuestionStatus.ACCEPTED &&
+            question?.status &&
+            +question?.status >= QuestionStatus.ACCEPTED &&
             question.type === QuestionType.MEETING
         ) {
             setShowForm(false);
@@ -195,6 +196,32 @@ function DetailedQuestionPage() {
                                         );
                                     })}
                                 </ul>
+                                {currentQuestion?.type === QuestionType.MEETING &&
+                                    currentQuestion?.meeting_start_time && (
+                                        <>
+                                            <div className='text-lg font-bold mt-4'>
+                                                Thời gian đã lên lịch:{' '}
+                                                <span className='font-bold text-lg'>
+                                                    {format(
+                                                        currentQuestion?.meeting_start_time ??
+                                                            new Date(),
+                                                        DATE_FORMAT.DATE_TIME.HYPHEN,
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className='text-lg font-bold mt-4'>
+                                                Tham gia tại:{' '}
+                                                <a
+                                                    className='font-bold text-lg'
+                                                    href={currentQuestion?.meetingURL}
+                                                    target='_blank'
+                                                    rel='noreferrer'
+                                                >
+                                                    {currentQuestion?.meetingURL}
+                                                </a>
+                                            </div>
+                                        </>
+                                    )}
                             </div>
                             <div className='flex items-center gap-2'>
                                 <Avatar

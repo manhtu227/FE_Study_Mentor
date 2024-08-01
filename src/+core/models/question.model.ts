@@ -226,6 +226,7 @@ export type GetQuestionResponseModel = {
     meetingURL?: string;
     id?: string;
     reportId?: string;
+    meeting_start_time?: string;
 };
 
 export type AcceptQuestionModel = {
