@@ -366,10 +366,10 @@ const Header = () => {
                 startTime={newGoogleMeet?.meeting_start_time || ''}
                 isModalOpen={isShowModalReceiveGoogleMeet}
                 setIsModalOpen={setIsShowModalReceiveGoogleMeet}
-                price={pickedQuestion?.price || 1}
-                questionName={pickedQuestion?.content || ''}
-                subjectName={pickedQuestion?.subject.name || ''}
-                title={pickedQuestion?.title || ''}
+                price={pickedQuestion?.price || newQuestion?.price || 0}
+                questionName={pickedQuestion?.content || newQuestion?.content || ''}
+                subjectName={pickedQuestion?.subject.name || newQuestion?.subject.name || ''}
+                title={pickedQuestion?.title || newQuestion?.title || ''}
             />
             {isShowModalPickedQuestion && pickedQuestion && (
                 <ModalAcceptQuestion
