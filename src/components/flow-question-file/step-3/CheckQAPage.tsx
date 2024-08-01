@@ -369,7 +369,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                 title={
                                     query.data?.questionType === QuestionEnum.FILE
                                         ? 'Kết thúc cuộc trò chuyện'
-                                        : 'Hoàn thành buổi meet room'
+                                        : 'Hoàn thành buổi giải đáp'
                                 }
                                 className='ml-[432px] mt-6 !w-fit'
                                 disabled={

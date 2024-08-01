@@ -22,12 +22,9 @@ export default function ModalJoinGoogleMeet({
     title?: string;
     setIsModalOpen: (value: boolean) => void;
 }) {
-    // const showModal = () => {
-    //     setIsModalOpen(true);
-    // };
-
     const handleOk = () => {
         setIsModalOpen(false);
+        window.location.reload();
     };
 
     const handleCancel = () => {
@@ -56,7 +53,7 @@ export default function ModalJoinGoogleMeet({
                 </div>
                 <h3 className='leading-[27px] text-[NeutralDark1]'>
                     Tham gia cuộc họp vào{' '}
-                    {format(startTime ?? new Date(), DATE_FORMAT.DATE_TIME.HYPHEN)} theo link này để
+                    {format(startTime || new Date(), DATE_FORMAT.DATE_TIME.HYPHEN)} theo link này để
                     trả lời câu hỏi:
                 </h3>
                 <a className='font-bold mb-4 block' href={googleMeetUrl}>
