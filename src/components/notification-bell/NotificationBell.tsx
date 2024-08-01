@@ -98,10 +98,6 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 return NotificationTitle.TUTOR_ACCEPTED_QUESTION;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return NotificationTitle.PICKED_TUTOR_ACCEPTED_QUESTION;
-            case NotificationType.RECEIVE_INFO_GOOGLE_MEET:
-                return NotificationTitle.RECEIVE_INFO_GOOGLE_MEET;
-            case NotificationType.CANCEL_GGMEET:
-                return NotificationTitle.CANCEL_GGMEET;
             default:
                 return '';
         }
@@ -197,16 +193,6 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                         }?step=2`,
                     );
                 }
-                break;
-            case NotificationType.RECEIVE_INFO_GOOGLE_MEET:
-                if (notification.meetingurl) {
-                    router.push(MY_ROUTE.MENTOR.GOOGLE_MEET);
-                } else {
-                    setNotification(notification);
-                    setIsOpenGoogleMeet(true);
-                }
-                break;
-            case NotificationType.CANCEL_GGMEET:
                 break;
             default:
                 break;

@@ -15,6 +15,7 @@ import {
 
 import images from '@assets/images';
 import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
+import { DATE_FORMAT } from '@core/constants/date.constant';
 import { QuestionStatus } from '@core/enums/question.enum';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
@@ -30,6 +31,7 @@ import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Divider } from 'antd';
+import { format } from 'date-fns';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FileIcon } from 'react-file-icon';
@@ -204,48 +206,47 @@ export default function CheckQAPage({ onNext }: Props) {
                                 />
 
                                 <br />
-                                {query.data?.fileQuestions &&
-                                    query.data?.fileQuestions?.length > 0 && (
-                                        <>
-                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
-                                                Tệp đính kèm
-                                            </h3>
-                                            <div className='flex flex-col gap-2'>
-                                                {query.data?.fileQuestions?.map((file) => {
-                                                    return (
-                                                        <div
-                                                            key={file.fileKey}
-                                                            className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                        >
-                                                            <div className='flex items-center'>
-                                                                <div className='w-[30px]'>
-                                                                    <FileIcon
-                                                                        extension={
-                                                                            file.fileKey
-                                                                                .split('.')
-                                                                                .pop() || ''
-                                                                        }
-                                                                        // {...defaultStyles.docx}
-                                                                    />
-                                                                </div>
-                                                                <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
-                                                                    {file.fileName}
-                                                                </div>
+                                {query.data?.fileQuestions && query.data?.fileQuestions?.length && (
+                                    <>
+                                        <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
+                                            Tệp đính kèm
+                                        </h3>
+                                        <div className='flex flex-col gap-2'>
+                                            {query.data?.fileQuestions?.map((file) => {
+                                                return (
+                                                    <div
+                                                        key={file.fileKey}
+                                                        className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
+                                                    >
+                                                        <div className='flex items-center'>
+                                                            <div className='w-[30px]'>
+                                                                <FileIcon
+                                                                    extension={
+                                                                        file.fileKey
+                                                                            .split('.')
+                                                                            .pop() || ''
+                                                                    }
+                                                                    // {...defaultStyles.docx}
+                                                                />
                                                             </div>
-                                                            <DownloadOutlined
-                                                                className='text-[#4EA8B4] text-2xl cursor-pointer'
-                                                                onClick={async () => {
-                                                                    await downloadUrl(
-                                                                        imageUtility(file.fileKey),
-                                                                    );
-                                                                }}
-                                                            />
+                                                            <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
+                                                                {file.fileName}
+                                                            </div>
                                                         </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </>
-                                    )}
+                                                        <DownloadOutlined
+                                                            className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                            onClick={async () => {
+                                                                await downloadUrl(
+                                                                    imageUtility(file.fileKey),
+                                                                );
+                                                            }}
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             <div className='flex flex-col text-left'>
                                 <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>
@@ -257,11 +258,24 @@ export default function CheckQAPage({ onNext }: Props) {
                                 {query.data?.questionType === QuestionEnum.GG_MEET ? (
                                     query.data.meetingURL ? (
                                         <div>
-                                            <div
-                                                className='text-base px-2 hover:text-blue-600 cursor-pointer'
-                                                onClick={() => window.open(query.data?.meetingURL)}
-                                            >
-                                                {query.data.meetingURL}
+                                            <div className='text-base px-2'>
+                                                Tham gia tại: {''}
+                                                <a
+                                                    href={query.data.meetingURL}
+                                                    target='_blank'
+                                                    rel='noreferrer'
+                                                >
+                                                    {query.data.meetingURL}
+                                                </a>
+                                            </div>
+                                            <div className='text-base px-2'>
+                                                Thời gian: {''}
+                                                <span className='font-bold'>
+                                                    {format(
+                                                        query.data.meeting_start_time ?? new Date(),
+                                                        DATE_FORMAT.DATE_TIME.HYPHEN,
+                                                    )}
+                                                </span>
                                             </div>
                                         </div>
                                     ) : (
