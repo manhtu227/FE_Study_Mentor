@@ -15,7 +15,6 @@ import {
 
 import images from '@assets/images';
 import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
-import { DATE_FORMAT } from '@core/constants/date.constant';
 import { QuestionStatus } from '@core/enums/question.enum';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
@@ -273,7 +272,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                                 <span className='font-bold'>
                                                     {format(
                                                         query.data.meeting_start_time ?? new Date(),
-                                                        DATE_FORMAT.DATE_TIME.HYPHEN,
+                                                        'yyyy-MM-dd hh:mm',
                                                     )}
                                                 </span>
                                             </div>
