@@ -363,12 +363,13 @@ const Header = () => {
             <SocketStudent />
             <ModalJoinGoogleMeet
                 googleMeetUrl={newGoogleMeet?.meetingUrl || '22'}
+                startTime={newGoogleMeet?.meeting_start_time || ''}
                 isModalOpen={isShowModalReceiveGoogleMeet}
                 setIsModalOpen={setIsShowModalReceiveGoogleMeet}
-                price={pickedQuestion?.price || 1}
-                questionName={pickedQuestion?.content || ''}
-                subjectName={pickedQuestion?.subject.name || ''}
-                title={pickedQuestion?.title || ''}
+                price={pickedQuestion?.price || newQuestion?.price || 0}
+                questionName={pickedQuestion?.content || newQuestion?.content || ''}
+                subjectName={pickedQuestion?.subject.name || newQuestion?.subject.name || ''}
+                title={pickedQuestion?.title || newQuestion?.title || ''}
             />
             {isShowModalPickedQuestion && pickedQuestion && (
                 <ModalAcceptQuestion
@@ -414,7 +415,12 @@ const Header = () => {
                         <NotificationBell
                             notifications={notifications
                                 .toReversed()
-                                .filter((item) => item.type !== NotificationType.RECEIVE_GGMEET)}
+                                .filter(
+                                    (item) =>
+                                        item.type !== NotificationType.RECEIVE_GGMEET &&
+                                        item.type !== NotificationType.RECEIVE_INFO_GOOGLE_MEET &&
+                                        item.type !== NotificationType.CANCEL_GGMEET,
+                                )}
                         />
                         <MessageIcon />
                         <Button

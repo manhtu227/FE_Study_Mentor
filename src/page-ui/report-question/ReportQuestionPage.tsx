@@ -86,24 +86,21 @@ function ReportQuestionPage() {
                                                     return (
                                                         <div
                                                             key={file.fileKey}
-                                                            className='flex gap-2 items-center'
+                                                            className='w-full border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
                                                         >
-                                                            <div
-                                                                key={file.fileKey}
-                                                                className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                            >
-                                                                <div className='flex items-center'></div>
-                                                                <DownloadOutlined
-                                                                    className='text-[#4EA8B4] text-2xl cursor-pointer'
-                                                                    onClick={async () => {
-                                                                        await downloadUrl(
-                                                                            imageUtility(
-                                                                                file.fileKey,
-                                                                            ),
-                                                                        );
-                                                                    }}
-                                                                />
+                                                            <div className='flex items-center'>
+                                                                <div className='font-bold text-md max-w-4/5 truncate text-black-800'>
+                                                                    {file.fileName}
+                                                                </div>
                                                             </div>
+                                                            <DownloadOutlined
+                                                                className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                                onClick={async () => {
+                                                                    await downloadUrl(
+                                                                        imageUtility(file.fileKey),
+                                                                    );
+                                                                }}
+                                                            />
                                                         </div>
                                                     );
                                                 })}
@@ -145,7 +142,7 @@ function ReportQuestionPage() {
                                                                 className='w-full border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
                                                             >
                                                                 <div className='flex items-center'>
-                                                                    <div className='font-bold text-md mx-4 max-w-4/5 truncate text-black-800'>
+                                                                    <div className='font-bold text-md max-w-4/5 truncate text-black-800'>
                                                                         {file.fileName}
                                                                     </div>
                                                                 </div>

@@ -1,16 +1,13 @@
 import { PaginationCore } from '@components/pagination/pagination';
-import {
-    FilterQuestionType,
-    convertQuestionFilter,
-    filterQuestionOptions,
-} from '@core/enums/filter-question-type.enum';
+import { DATE_FORMAT } from '@core/constants/date.constant';
+import { FilterQuestionType, convertQuestionFilter } from '@core/enums/filter-question-type.enum';
 import { GetQuestionResponseModel } from '@core/models/question.model';
 import { IPaginationInfo } from '@core/types/paging.type';
 import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { imageUtility } from '@core/utilities/image.utility';
 import { Avatar, Image, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import clsx from 'clsx';
+import { format } from 'date-fns';
 import { useState } from 'react';
 
 export type HistoryQuestionTable = {
@@ -76,7 +73,6 @@ const columns: ColumnsType<HistoryQuestionTable> = [
         dataIndex: 'price',
         render: (value) => (
             <div className='font-normal text-sm flex flex-col'>
-                {value}
                 <span className='text-primary-800 font-bold text-sm'>{formatPriceVND(value)}</span>
             </div>
         ),
@@ -87,7 +83,12 @@ const columns: ColumnsType<HistoryQuestionTable> = [
             return statusActiveColors[text];
         },
     },
-    { dataIndex: 'date' },
+    {
+        dataIndex: 'date',
+        render: (value) => {
+            return <div>{format(value ?? new Date(), DATE_FORMAT.DATE_TIME.HYPHEN)}</div>;
+        },
+    },
 ];
 
 export function convertQuestionToTabel(r: GetQuestionResponseModel): HistoryQuestionTable {
@@ -122,7 +123,7 @@ export function HistoryQuestion({ data, pagination, loading, handlePageChange }:
                     classNameSelect='placeholder-color'
                 /> */}
 
-                <div className='flex gap-4'>
+                {/* <div className='flex gap-4'>
                     {filterQuestionOptions.map((e, i) => (
                         <div
                             key={i}
@@ -137,7 +138,7 @@ export function HistoryQuestion({ data, pagination, loading, handlePageChange }:
                             {e.label}
                         </div>
                     ))}
-                </div>
+                </div> */}
                 {/* <CustomSelectInput
                     classNameForm='w-[131px] !m-0'
                     optionsSelect={[]}
