@@ -15,6 +15,11 @@ export type LoginInput = {
     password: string;
 };
 
+export type LoginGoogle = {
+    fullName: string;
+    email: string;
+};
+
 export type IAuthenResponseModel = {
     accessToken: string;
     resetToken: string;

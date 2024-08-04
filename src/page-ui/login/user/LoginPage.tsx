@@ -4,7 +4,6 @@ import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomPasswordInput } from '@components/form-input/CustomPasswordInput';
 import { CustomTextInput } from '@components/form-input/CustomTextInput';
 import {
-    AUTHENTICATED,
     PASSWORD_PATTERN,
     PASSWORD_VALIDATION_MESSAGE,
 } from '@core/constants/authentication.constants';
@@ -17,13 +16,14 @@ import { Form } from 'antd';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import SocialLogin from './components/SocialLogin';
 
 const LoginPage = () => {
     const [form] = Form.useForm<LoginInput>();
     const router = useRouter();
     const { data: authData, status: authStatus } = useSession();
+    const [verify, setVerify] = useState(false);
 
     /* Action */
     const loginMutation = useMutation({
@@ -40,16 +40,17 @@ const LoginPage = () => {
         const resp = await loginMutation.mutateAsync(values);
         if (resp && resp?.ok) {
             toastSuccess('Đăng nhập thành công');
+            router.push(MY_ROUTE.HOME);
             return;
         }
         toastError('Email hoặc mật khẩu không hợp lệ.');
     };
 
     /* Effect */
-    useEffect(() => {
-        if (authStatus !== AUTHENTICATED) return;
-        router.push(MY_ROUTE.HOME);
-    }, [authStatus, authData]);
+    // useEffect(() => {
+    //     if (authStatus !== AUTHENTICATED) return;
+    //     router.push(MY_ROUTE.HOME);
+    // }, [authStatus, authData]);
 
     return (
         <div className='font-[sans-serif]'>

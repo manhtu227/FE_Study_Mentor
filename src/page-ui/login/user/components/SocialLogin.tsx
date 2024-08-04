@@ -1,4 +1,10 @@
 import GoogleIcon from '@assets/icons/google';
+import { MY_ROUTE } from '@core/constants/routes.constant';
+import { LoginGoogle } from '@core/models/authentication.model';
+import { loginByGooogleApi } from '@core/services/authentication.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { toastSuccess } from '@core/utilities/toast.utility';
+import { useMutation } from '@tanstack/react-query';
 import { Spin } from 'antd';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -18,44 +24,30 @@ export default function SocialLogin({ size = 55 }: { size?: number }) {
     const router = useRouter();
     //   const [signinSocial, { isLoading }] = useSigninSocialMutation();
 
+    const loginGoogleMutation = useMutation({
+        mutationFn: (body: LoginGoogle) => loginByGooogleApi(body),
+        onSuccess: (data) => {
+            if (!session) return;
+            session.user = data.data.data;
+            updateSession(session);
+            toastSuccess('Đăng nhập thành công');
+            router.push(MY_ROUTE.HOME);
+            return;
+        },
+        onError: handleError,
+    });
+
     useEffect(() => {
         if (session) {
-            if (session?.user && !verify) {
-                // call api to verify social token
+            if (session?.account && !verify) {
                 setVerify(true);
                 const { account } = session;
-                let token;
                 if (account?.provider === 'google') {
-                    token = account?.id_token;
-                } else {
-                    token = account?.access_token;
+                    loginGoogleMutation.mutate({
+                        email: account.email,
+                        fullName: account.name,
+                    });
                 }
-                console.log('token', token);
-                // signinSocial({ provider: account.provider, idToken: token })
-                //   .unwrap()
-                //   .then((res: any) => {
-                //     if (res?.name === 'HttpException') {
-                //       //move to sns signup
-                //       updateSession({});
-                //       router.push(
-                //         /join-membership/sns-member?idToken=${account.id_token}&provider=${account.provider},
-                //       );
-                //     } else {
-                //       // update session
-                //       const sessionWithoutaccount = {
-                //         user: res.data,
-                //         expires: session.expires,
-                //       };
-                //       updateSession(sessionWithoutaccount).then(() => {
-                //         router.replace('/');
-                //         // window.location.reload();
-                //       });
-                //     }
-                //   })
-                //   .catch((err) => {
-                //     console.log({ err });
-                //     updateSession({});
-                //   });
             }
         }
     }, [session?.account]);

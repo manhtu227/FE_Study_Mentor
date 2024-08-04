@@ -13,8 +13,12 @@ import { useEffect } from 'react';
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import ButtonPrimary from '@components/button/ButtonPrimary';
-import { AUTHENTICATED } from '@core/constants/authentication.constants';
-import { toastSuccess } from '@core/utilities/toast.utility';
+import {
+    AUTHENTICATED,
+    PASSWORD_PATTERN,
+    PASSWORD_VALIDATION_MESSAGE,
+} from '@core/constants/authentication.constants';
+import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import dayjs from 'dayjs';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -35,13 +39,17 @@ const SignUpPage = () => {
                 type: data.type,
                 dateOfBirth: dayjs(data.dateOfBirth).get('year'),
             } as SignUpInput & SignInOptions),
-        onSuccess: () => {
-            toastSuccess('Đăng ký thành công');
-        },
     });
 
-    const handleSubmitSignUp = (values: SignUpInput) => {
+    const handleSubmitSignUp = async (values: SignUpInput) => {
         signUpMutate.mutate(values);
+
+        const resp = await signUpMutate.mutateAsync(values);
+        if (resp && resp?.ok) {
+            toastSuccess('Đăng ký thành công');
+            return;
+        }
+        toastError('Thông tin không hơp lệ');
     };
 
     useEffect(() => {
@@ -165,7 +173,13 @@ const SignUpPage = () => {
                                         placeholder='Nhập email...'
                                         classNameForm='w-full mb-6'
                                         prefix={<UserOutlined />}
-                                        rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập email' },
+                                            {
+                                                type: 'email',
+                                                message: 'Email không hợp lệ',
+                                            },
+                                        ]}
                                     />
                                 </div>
                             </div>
@@ -184,6 +198,10 @@ const SignUpPage = () => {
                                         prefix={<LockOutlined />}
                                         rules={[
                                             { required: true, message: 'Vui lòng nhập mật khẩu' },
+                                            {
+                                                pattern: PASSWORD_PATTERN,
+                                                message: PASSWORD_VALIDATION_MESSAGE,
+                                            },
                                         ]}
                                     />
                                 </div>
