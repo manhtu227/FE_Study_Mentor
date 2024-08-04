@@ -8,6 +8,7 @@ import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form, Upload } from 'antd';
 import { RcFile, UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -31,6 +32,7 @@ const CustomUploadAvatarInput = ({
 }: CustomUploadAvatarInputProps) => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
+    const session = useSession();
 
     useEffect(() => {
         image && setImageUrl(imageUtility(image?.fileKey));
@@ -76,7 +78,9 @@ const CustomUploadAvatarInput = ({
                 ) : (
                     <img
                         src={
-                            userType === UserRole.STUDENT ? images.student.src : images.teacher.src
+                            session.data?.user.user.role === UserRole.STUDENT
+                                ? images.student.src
+                                : images.teacher.src
                         }
                         alt='avatar'
                         className='w-full h-full'

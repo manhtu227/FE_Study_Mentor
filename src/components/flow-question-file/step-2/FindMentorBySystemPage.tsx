@@ -42,7 +42,7 @@ export default function FindMentorBySystemPage() {
 
     return (
         <>
-            {mode === FindMentorEnum.SYSTEM && <SystemLoadingPage />}
+            {mode === FindMentorEnum.SYSTEM && <SystemLoadingPage id={currentQuestionId} />}
             {mode === FindMentorEnum.SELF && <MentorListPage />}
             {mode === FindMentorEnum.LIST && (
                 <div className='flex items-start w-full gap-8'>

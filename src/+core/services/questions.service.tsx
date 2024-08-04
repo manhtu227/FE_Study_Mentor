@@ -150,3 +150,7 @@ export const getQuestionSameSubjectApi = async (questionId: string) => {
         `api/users/tutor/question-same-topic/${questionId}`,
     );
 };
+
+export const cancelQuestionSystemApi = async (questionId: string) => {
+    return api.post<void>(`/api/questions/${questionId}/cancel-find-tutor/system`);
+};
