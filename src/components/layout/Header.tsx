@@ -54,6 +54,7 @@ import { SocketStudent } from './SocketStudent';
 
 const Header = () => {
     const { data, update } = useSession();
+    const socketReducer = useSelector((state: RootState) => state.socket.socket);
 
     const userItems: MenuProps['items'] = [
         {
@@ -212,93 +213,6 @@ const Header = () => {
                     dispatch(onDisconnect());
                 };
 
-                if (data?.user?.user?.role === UserType.TUTOR) {
-                    // New question
-                    socket.on(SocketEvent.NEW_QUESTION, (data) => {
-                        data.data.createdAt = new Date();
-
-                        setNewQuestion({
-                            ...data.data,
-                            methodAnswer: data.methodAnswer,
-                        });
-                    });
-
-                    // Student pick tutor
-                    socket.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
-                        data.data.createdAt = new Date();
-                        dispatch(
-                            setPickedQuestion({
-                                ...data.data,
-                                methodAnswer: data.methodAnswer,
-                            }),
-                        );
-
-                        setIsShowModalPickedQuestion(true);
-                        getNotificationsQuery.refetch();
-                    });
-
-                    // Receive Google Meet
-                    socket.on(SocketEvent.RECEIVE_GGMEET, (data) => {
-                        setIsShowModalReceiveGoogleMeet(true);
-                        setNewGoogleMeet(data);
-                    });
-
-                    // Completed question
-                    socket.on(SocketEvent.COMPLETED_QUESTION, (data) => {
-                        setCompletedQuestion(data.data);
-                        getNotificationsQuery.refetch();
-                    });
-
-                    // Paid success for tutor
-                    socket.on(SocketEvent.PAID_SUCCESS_FOR_TUTOR, (data) => {
-                        handleCompleteQuestion(data, false);
-                        getNotificationsQuery.refetch();
-                    });
-                }
-                if (data?.user?.user?.role === UserType.STUDENT) {
-                    socket.on(
-                        SocketEvent.TUTOR_ACCEPTED_QUESTION,
-                        (data: {
-                            data: {
-                                questionId: string;
-                                tutor: UserModel;
-                                methodAnswer: QuestionEnum;
-                            };
-                        }) => {
-                            setIsOpenModalFoundTutor(true);
-                            setQuestionInfo({
-                                ...data.data,
-                                isAccepted: 1,
-                            });
-                            dispatch(addTutor(data.data.tutor));
-                            dispatch(setCurrentQuestionId(data.data.questionId));
-                        },
-                    );
-
-                    socket.on(
-                        SocketEvent.PICKED_TUTOR_ACCEPTED_QUESTION,
-                        (data: {
-                            data: {
-                                questionId: string;
-                                tutor: UserModel;
-                                isAccepted: number;
-                                methodAnswer: QuestionEnum;
-                            };
-                        }) => {
-                            setIsOpenModalFoundTutor(true);
-                            setQuestionInfo(data.data);
-                            if (data.data.isAccepted === 1) {
-                                dispatch(setCurrentQuestionId(data.data.questionId));
-                                dispatch(addTutor(data.data.tutor));
-                            }
-                        },
-                    );
-
-                    socket.on(SocketEvent.GET_VOUCHER, (data) => {
-                        setIsOpenVoucher(true);
-                    });
-                }
-
                 socket.on('connect', onConnectSocket);
                 socket.on('disconnect', onDisconnectSocket);
                 socket.on('error', (error) => {
@@ -313,6 +227,107 @@ const Header = () => {
             }
         }
     }, [data?.user?.user?.id]);
+
+    useEffect(() => {
+        if (socketReducer) {
+            if (data?.user?.user?.role === UserType.TUTOR) {
+                // New question
+                socketReducer.on(SocketEvent.NEW_QUESTION, (data) => {
+                    data.data.createdAt = new Date();
+
+                    setNewQuestion({
+                        ...data.data,
+                        methodAnswer: data.methodAnswer,
+                    });
+                });
+
+                // Student pick tutor
+                socketReducer.on(SocketEvent.STUDENT_PICK_TUTOR, (data) => {
+                    data.data.createdAt = new Date();
+                    dispatch(
+                        setPickedQuestion({
+                            ...data.data,
+                            methodAnswer: data.methodAnswer,
+                        }),
+                    );
+
+                    setIsShowModalPickedQuestion(true);
+                    getNotificationsQuery.refetch();
+                });
+
+                // Receive Google Meet
+                socketReducer.on(SocketEvent.RECEIVE_GGMEET, (data) => {
+                    setIsShowModalReceiveGoogleMeet(true);
+                    setNewGoogleMeet(data);
+                });
+
+                // Completed question
+                socketReducer.on(SocketEvent.COMPLETED_QUESTION, (data) => {
+                    setCompletedQuestion(data.data);
+                    getNotificationsQuery.refetch();
+                });
+
+                // Paid success for tutor
+                socketReducer.on(SocketEvent.PAID_SUCCESS_FOR_TUTOR, (data) => {
+                    handleCompleteQuestion(data, false);
+                    getNotificationsQuery.refetch();
+                });
+            }
+            if (data?.user?.user?.role === UserType.STUDENT) {
+                socketReducer.on(
+                    SocketEvent.TUTOR_ACCEPTED_QUESTION,
+                    (data: {
+                        data: {
+                            questionId: string;
+                            tutor: UserModel;
+                            methodAnswer: QuestionEnum;
+                        };
+                    }) => {
+                        setIsOpenModalFoundTutor(true);
+                        setQuestionInfo({
+                            ...data.data,
+                            isAccepted: 1,
+                        });
+                        dispatch(addTutor(data.data.tutor));
+                        dispatch(setCurrentQuestionId(data.data.questionId));
+                    },
+                );
+
+                socketReducer.on(
+                    SocketEvent.PICKED_TUTOR_ACCEPTED_QUESTION,
+                    (data: {
+                        data: {
+                            questionId: string;
+                            tutor: UserModel;
+                            isAccepted: number;
+                            methodAnswer: QuestionEnum;
+                        };
+                    }) => {
+                        setIsOpenModalFoundTutor(true);
+                        setQuestionInfo(data.data);
+                        if (data.data.isAccepted === 1) {
+                            dispatch(setCurrentQuestionId(data.data.questionId));
+                            dispatch(addTutor(data.data.tutor));
+                        }
+                    },
+                );
+
+                socketReducer.on(SocketEvent.GET_VOUCHER, (data) => {
+                    setIsOpenVoucher(true);
+                });
+            }
+        }
+        return () => {
+            socketReducer?.off(SocketEvent.NEW_QUESTION);
+            socketReducer?.off(SocketEvent.STUDENT_PICK_TUTOR);
+            socketReducer?.off(SocketEvent.RECEIVE_GGMEET);
+            socketReducer?.off(SocketEvent.COMPLETED_QUESTION);
+            socketReducer?.off(SocketEvent.PAID_SUCCESS_FOR_TUTOR);
+            socketReducer?.off(SocketEvent.TUTOR_ACCEPTED_QUESTION);
+            socketReducer?.off(SocketEvent.PICKED_TUTOR_ACCEPTED_QUESTION);
+            socketReducer?.off(SocketEvent.GET_VOUCHER);
+        };
+    }, [socketReducer]);
 
     const handleWatchLaterNotification = () => {
         if (!newQuestion) return;

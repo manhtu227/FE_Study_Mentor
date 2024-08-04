@@ -48,14 +48,13 @@ export default function ChatMentorPage({
     useEffect(() => {
         if (socketReducer) {
             socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
-
             socketReducer?.on(SocketEvent.RECEIVE_MESSAGE, (data: ChatModel) => {
                 setDataChat((prev) => [...prev, data]);
             });
-            return () => {
-                socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
-            };
         }
+        return () => {
+            socketReducer?.off(SocketEvent.RECEIVE_MESSAGE);
+        };
     }, [socketReducer]);
 
     const { data } = useSession();

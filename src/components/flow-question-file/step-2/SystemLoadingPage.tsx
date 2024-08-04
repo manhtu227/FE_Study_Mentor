@@ -2,11 +2,18 @@
 import images from '@assets/images';
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
+import { cancelQuestionSystemApi } from '@core/services/questions.service';
+import { handleError } from '@core/utilities/failure-handler.utitlity';
+import { useMutation } from '@tanstack/react-query';
 import { Image } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FindMentorEnum } from './FindMentorBySystemPage';
 
-export default function SystemLoadingPage() {
+type Props = {
+    id: string;
+};
+
+export default function SystemLoadingPage({ id }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -15,6 +22,16 @@ export default function SystemLoadingPage() {
     // const handleFoundMentor = () => {
     //     setSearching(false);
     // };
+
+    const cancelQuestionMutation = useMutation({
+        mutationFn: () => cancelQuestionSystemApi(id),
+        onSuccess: () => {
+            const newParams = new URLSearchParams(searchParams || '');
+            newParams.set('mode', FindMentorEnum.LIST);
+            router.push(`${pathname}?${newParams.toString()}`);
+        },
+        onError: handleError,
+    });
 
     return (
         <div>
@@ -33,9 +50,7 @@ export default function SystemLoadingPage() {
                         <ButtonOutlined
                             title='Hủy tìm kiếm'
                             onClick={() => {
-                                const newParams = new URLSearchParams(searchParams || '');
-                                newParams.set('mode', FindMentorEnum.LIST);
-                                router.push(`${pathname}?${newParams.toString()}`);
+                                cancelQuestionMutation.mutate();
                             }}
                         />
                         <ButtonPrimary
