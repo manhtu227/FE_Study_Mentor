@@ -205,7 +205,7 @@ function DetailedQuestionPage() {
                                                     {format(
                                                         currentQuestion?.meeting_start_time ??
                                                             new Date(),
-                                                        DATE_FORMAT.DATE_TIME.HYPHEN,
+                                                        DATE_FORMAT.DATE_TIME.HYPHEN_24H,
                                                     )}
                                                 </span>
                                             </div>

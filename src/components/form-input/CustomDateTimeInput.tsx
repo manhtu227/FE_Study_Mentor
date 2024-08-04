@@ -70,6 +70,7 @@ export const CustomDateInput = <T extends object>({
                 value={value}
                 onChange={onChange}
                 showTime={showTime ? { format: 'HH:mm' } : false}
+                format={'YYYY/MM/DD HH:mm'}
             />
         </Form.Item>
     );

@@ -98,6 +98,7 @@ const Header = () => {
     const [isShowModalReceiveGoogleMeet, setIsShowModalReceiveGoogleMeet] = useState(false);
     const [isShowModalPickedQuestion, setIsShowModalPickedQuestion] = useState(false);
     const [isOpenVoucher, setIsOpenVoucher] = useState(false);
+    const avatar = useSelector((state: RootState) => state.avatar.avatar);
     const pickedQuestion = useSelector((state: RootState) => state.questions.pickedQuestion);
     const notifications = useSelector((state: RootState) => state.notifications.notifications);
 
@@ -446,10 +447,10 @@ const Header = () => {
                                 <div className='flex items-center gap-2 '>
                                     <Image
                                         className='rounded-full w-8 h-8 bg-[#D9D9D9]'
-                                        src={imageUtility(
-                                            data.user.user.avatar?.fileKey,
-                                            data.user?.user?.role,
-                                        )}
+                                        src={
+                                            avatar ??
+                                            imageUtility(data?.user?.user?.avatar?.fileKey)
+                                        }
                                         height={32}
                                         width={32}
                                         preview={false}

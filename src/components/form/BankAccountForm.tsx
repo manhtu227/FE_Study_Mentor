@@ -62,7 +62,15 @@ function BankAccountForm() {
 
     const lookUpMutation = useMutation({
         mutationFn: (data: LookUpBankNumberReq) => lookUpBankNumberApi(data),
-        onError: handleError,
+        onError: () => {
+            form.setFieldValue('accountName', '');
+            toastError('Số tài khoản không hợp lệ');
+        },
+        onSuccess: (data) => {
+            form.setFieldsValue({
+                accountName: data.data.data.accountName,
+            });
+        },
     });
 
     const createQRCode = useMutation({
@@ -115,15 +123,6 @@ function BankAccountForm() {
 
         createQRCode.mutate(requestCreateQRCode);
     };
-
-    useEffect(() => {
-        if (lookUpMutation.data?.data?.data?.accountName) {
-            form.setFieldValue('accountName', lookUpMutation.data?.data?.data?.accountName);
-        } else if (!lookUpMutation.data?.data?.data && form.isFieldsTouched()) {
-            form.setFieldValue('accountName', '');
-            toastError('Số tài khoản không hợp lệ');
-        }
-    }, [lookUpMutation.data?.data?.data]);
 
     useEffect(() => {
         if (createQRCode.data?.data?.data?.qrDataURL) {
