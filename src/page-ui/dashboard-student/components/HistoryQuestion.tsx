@@ -86,7 +86,7 @@ const columns: ColumnsType<HistoryQuestionTable> = [
     {
         dataIndex: 'date',
         render: (value) => {
-            return <div>{format(value ?? new Date(), DATE_FORMAT.DATE_TIME.HYPHEN)}</div>;
+            return <div>{format(value ?? new Date(), DATE_FORMAT.DATE_TIME.HYPHEN_24H)}</div>;
         },
     },
 ];
