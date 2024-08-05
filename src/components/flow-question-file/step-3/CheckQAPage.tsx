@@ -127,7 +127,7 @@ export default function CheckQAPage({ onNext }: Props) {
                 studentId: query.data?.student.id,
                 tutorId: query.data?.tutor?.id,
                 isStudent: true,
-                meeting_start_time: dateGoogleMeet?.toString(),
+                meeting_start_time: dateGoogleMeet?.toISOString(),
             } as CreateGGMeetModel);
             toastSuccess('Tạo cuộc họp thành công');
         }

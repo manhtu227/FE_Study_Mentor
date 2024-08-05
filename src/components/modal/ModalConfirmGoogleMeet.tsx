@@ -119,7 +119,7 @@ export default function ModalConfirmGoogleMeet({
                                 studentId: questionDetail?.student.id,
                                 tutorId: questionDetail?.tutor?.id,
                                 isStudent: session.data?.user.user.role === UserRole.STUDENT,
-                                meeting_start_time: date?.toString(),
+                                meeting_start_time: date?.toISOString(),
                             } as CreateGGMeetModel);
                             setIsModalOpen(null);
                         }}
