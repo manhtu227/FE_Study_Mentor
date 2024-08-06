@@ -10,6 +10,7 @@ export const DATE_FORMAT = {
     },
     DATE_TIME: {
         HYPHEN: 'yyyy-MM-dd hh:mm a',
+        HYPHEN_24H: 'yyyy-MM-dd HH:mm',
         SLASH: 'YYYY/MM/DD hh:mm a',
         DOT: 'YYYY.MM.DD hh:mm a',
         DOWNLOAD: 'YYYY-MM-DD_hh:mm a',

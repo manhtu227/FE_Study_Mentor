@@ -2,6 +2,7 @@
 import ButtonOutlined from '@components/button/ButtonOutlined';
 import ButtonPrimary from '@components/button/ButtonPrimary';
 import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
+import { DATE_FORMAT } from '@core/constants/date.constant';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { CreateGGMeetModel, GetQuestionResponseModel } from '@core/models/question.model';
 import { UserRole } from '@core/models/user.model';
@@ -12,6 +13,7 @@ import { formatPriceVND } from '@core/utilities/caculate-price.utility';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'antd';
+import { format } from 'date-fns';
 import { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -92,7 +94,9 @@ export default function ModalConfirmGoogleMeet({
                         </strong>
                     </div>
                     <div className='text-xl'>Thời gian tham gia google meet</div>
-                    <div className='text-xl font-semibold text-red-600'>{timeStart}</div>
+                    <div className='text-xl font-semibold text-red-600'>
+                        {format(timeStart || new Date(), DATE_FORMAT.DATE_TIME.HYPHEN_24H)}
+                    </div>
                 </div>
                 <div className='flex flex-col justify-start items-start'>
                     <span className='text-xl mt-2'>Đề xuất giờ mới cho đối phương:</span>
@@ -115,7 +119,7 @@ export default function ModalConfirmGoogleMeet({
                                 studentId: questionDetail?.student.id,
                                 tutorId: questionDetail?.tutor?.id,
                                 isStudent: session.data?.user.user.role === UserRole.STUDENT,
-                                meeting_start_time: date?.format('YYYY-MM-DD HH:mm:ss'),
+                                meeting_start_time: date?.toISOString(),
                             } as CreateGGMeetModel);
                             setIsModalOpen(null);
                         }}

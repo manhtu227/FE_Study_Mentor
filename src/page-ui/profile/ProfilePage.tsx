@@ -15,11 +15,14 @@ import {
     updateAvatarApi,
     userDetailKeys,
 } from '@core/services/user.service';
+import { setAvatarReducer } from '@core/store/reducers/avatar.reducer';
+import { imageUtility } from '@core/utilities/image.utility';
 import { toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Spin } from 'antd';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { ProfileForm } from './components/ProfileForm';
 
 function ProfilePage() {
@@ -29,6 +32,7 @@ function ProfilePage() {
     const file = useUploadFileApi();
     const [avatar, setAvatar] = useState<FileReq>();
     const [isVerified, setIsVerified] = useState<boolean>(false);
+    const dispatch = useDispatch();
     const [isShowChangePasswordModal, setIsShowChangePasswordModal] = useState<boolean>(false);
 
     const personalInfoQuery = useQuery({
@@ -45,8 +49,9 @@ function ProfilePage() {
 
     const mutateUpdate = useMutation({
         mutationFn: (data: any) => updateAvatarApi(data),
-        onSuccess: () => {
+        onSuccess: (data) => {
             toastSuccess('Cập nhật thông tin thành công');
+            dispatch(setAvatarReducer(imageUtility(data.data.data.avatar.fileKey)));
         },
     });
 
@@ -61,11 +66,9 @@ function ProfilePage() {
     };
 
     useEffect(() => {
-        if (mutateUpdate?.data?.data) setAvatar(mutateUpdate?.data?.data?.avatar);
-    }, [mutateUpdate?.data?.data]);
-
-    useEffect(() => {
-        if (personalInfoQuery.data?.avatar?.fileKey) setAvatar(personalInfoQuery.data?.avatar);
+        if (personalInfoQuery.data?.avatar?.fileKey) {
+            setAvatar(personalInfoQuery.data?.avatar);
+        }
     }, [personalInfoQuery.data]);
 
     useEffect(() => {

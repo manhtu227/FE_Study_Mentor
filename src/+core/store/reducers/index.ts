@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import authenticationReducer from './authentication.reducer';
+import avatarReducer from './avatar.reducer';
 import counterReducer from './counter.reducer';
 import notificationReducer from './notification.reducer';
 import questionReducer from './question.reducer';
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     notifications: notificationReducer,
     receivedQuestions: receivedQuestionsReducer,
     roomChat: roomChatReducer,
+    avatar: avatarReducer,
 });
 
 export default rootReducer;

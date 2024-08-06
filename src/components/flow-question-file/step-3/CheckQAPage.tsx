@@ -15,6 +15,7 @@ import {
 
 import images from '@assets/images';
 import { CustomDateInput } from '@components/form-input/CustomDateTimeInput';
+import { DATE_FORMAT } from '@core/constants/date.constant';
 import { QuestionStatus } from '@core/enums/question.enum';
 import { UserModel } from '@core/models/user.model';
 import { CreateRoomUserReq, createRoomUserIdApi } from '@core/services/chat.service';
@@ -119,11 +120,6 @@ export default function CheckQAPage({ onNext }: Props) {
         onError: handleError,
     });
 
-    // const mutationCreate = useMutation({
-    //     mutationFn: (data: PickTutorReq) => createGoogleMeetApi(data),
-    //     onError: handleError,
-    // });
-
     const handleCreateGoogleMeet = async () => {
         if (socketReducer) {
             socketReducer?.emit(SocketEvent.SEND_INFO_GOOGLE_MEET, {
@@ -131,22 +127,10 @@ export default function CheckQAPage({ onNext }: Props) {
                 studentId: query.data?.student.id,
                 tutorId: query.data?.tutor?.id,
                 isStudent: true,
-                meeting_start_time: dateGoogleMeet?.format('YYYY-MM-DD HH:mm:ss'),
+                meeting_start_time: dateGoogleMeet?.toISOString(),
             } as CreateGGMeetModel);
             toastSuccess('Tạo cuộc họp thành công');
         }
-        // mutationCreate.mutate(
-        //     {
-        //         questionId: currentQuestionId,
-        //         tutorId: query.data?.tutor?.id || '',
-        //     },
-        //     {
-        //         onSuccess: () => {
-        //             toastSuccess('Tạo cuộc họp thành công');
-        //             query.refetch();
-        //         },
-        //     },
-        // );
     };
 
     return (
@@ -272,7 +256,7 @@ export default function CheckQAPage({ onNext }: Props) {
                                                 <span className='font-bold'>
                                                     {format(
                                                         query.data.meeting_start_time ?? new Date(),
-                                                        'yyyy-MM-dd hh:mm',
+                                                        DATE_FORMAT.DATE_TIME.HYPHEN_24H,
                                                     )}
                                                 </span>
                                             </div>

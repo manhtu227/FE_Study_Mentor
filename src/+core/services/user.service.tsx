@@ -67,7 +67,7 @@ export const getListSubjectsCertificatesNotVerifyApi = async () => {
 };
 
 export const updateAvatarApi = async (data: FileReq) => {
-    return api.patch<UserResp>(`api/users/profile/avatar`, data);
+    return api.patch<BaseResp<UserResp>>(`api/users/profile/avatar`, data);
 };
 
 export const deleteSubjectsCertificatesNotVerifyApi = async () => {
