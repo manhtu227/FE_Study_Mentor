@@ -29,9 +29,12 @@ export default function SocialLogin({ size = 55 }: { size?: number }) {
         onSuccess: async (data) => {
             if (!session) return;
             console.log('data login', data.data);
-            session.user = data.data.data;
-            console.log('data session', session);
-            // await updateSession(session);
+            const value = {
+                user: data.data.data,
+                account: session.account,
+                expires: session.expires,
+            };
+            updateSession(value);
             router.push(MY_ROUTE.HOME);
             toastSuccess('Đăng nhập thành công');
             return;
