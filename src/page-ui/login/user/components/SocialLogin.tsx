@@ -28,7 +28,9 @@ export default function SocialLogin({ size = 55 }: { size?: number }) {
         mutationFn: (body: LoginGoogle) => loginByGooogleApi(body),
         onSuccess: (data) => {
             if (!session) return;
+            console.log('data login', data.data);
             session.user = data.data.data;
+            console.log('data session', session);
             updateSession(session);
             toastSuccess('Đăng nhập thành công');
             router.push(MY_ROUTE.HOME);
