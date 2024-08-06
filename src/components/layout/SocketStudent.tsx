@@ -5,7 +5,7 @@ import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/que
 import { createGoogleMeetApi } from '@core/services/user.service';
 import { RootState } from '@core/store';
 import { handleError } from '@core/utilities/failure-handler.utitlity';
-import { toastSuccess } from '@core/utilities/toast.utility';
+import { toastError, toastSuccess } from '@core/utilities/toast.utility';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -37,7 +37,7 @@ export function SocketStudent({ modalOpenProps }: Props) {
                 queryClient.invalidateQueries({
                     queryKey: detailedQuestionKeys.all,
                 });
-                toastSuccess('Cuộc họp đã bị hủy');
+                toastError('Cuộc họp đã bị hủy');
             });
         }
         return () => {

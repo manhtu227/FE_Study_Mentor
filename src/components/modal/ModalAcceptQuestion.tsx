@@ -127,7 +127,7 @@ export default function ModalAcceptQuestion({
                             <strong>Chủ đề:</strong> {question.subject.name}
                         </div>
                         <div className='text-lg'>
-                            <strong>Giá:</strong> {question.price} đồng
+                            <strong>Giá:</strong> {question.price} VND
                         </div>
                         <div className='font-bold text-lg'>Nội dung:</div>
                         <div

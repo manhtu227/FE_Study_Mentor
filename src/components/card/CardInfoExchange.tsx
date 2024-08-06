@@ -24,11 +24,6 @@ export function CardInfoExchange({ data }: CardInfoExchangeProps) {
                         <p className='text-base font-bold m-0'>{data?.subject.name}</p>
                     </div>
                     <div className='flex items-center gap-x-3'>
-                        <Image preview={false} src={images.layer.src} />
-                        <h4 className='text-sm text-[#838B8F] font-thin m-0'>Lớp / Cấp độ:</h4>
-                        <p className='text-base font-bold m-0'>{data?.subject.name} </p>
-                    </div>
-                    <div className='flex items-center gap-x-3'>
                         <Image preview={false} src={images.cardCredit.src} />
                         <h4 className='text-sm text-[#838B8F] font-thin m-0'>Thanh toán:</h4>
                         <p className='text-base font-bold m-0'>Tài khoản ngân hàng </p>
