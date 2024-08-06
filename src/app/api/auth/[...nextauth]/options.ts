@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: MY_ROUTE.LOGIN,
     },
-    secret: ENV.AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         CredentialsProvider({
             id: 'custom-login',
