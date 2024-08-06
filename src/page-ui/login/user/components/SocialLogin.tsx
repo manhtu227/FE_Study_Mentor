@@ -26,14 +26,14 @@ export default function SocialLogin({ size = 55 }: { size?: number }) {
 
     const loginGoogleMutation = useMutation({
         mutationFn: (body: LoginGoogle) => loginByGooogleApi(body),
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!session) return;
             console.log('data login', data.data);
             session.user = data.data.data;
             console.log('data session', session);
-            updateSession(session);
-            toastSuccess('Đăng nhập thành công');
+            await updateSession(session);
             router.push(MY_ROUTE.HOME);
+            toastSuccess('Đăng nhập thành công');
             return;
         },
         onError: handleError,
