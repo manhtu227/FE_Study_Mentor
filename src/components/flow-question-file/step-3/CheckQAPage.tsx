@@ -129,7 +129,6 @@ export default function CheckQAPage({ onNext }: Props) {
                 isStudent: true,
                 meeting_start_time: dateGoogleMeet?.toISOString(),
             } as CreateGGMeetModel);
-            toastSuccess('Tạo cuộc họp thành công');
         }
     };
 
@@ -187,49 +186,48 @@ export default function CheckQAPage({ onNext }: Props) {
                                 <div
                                     dangerouslySetInnerHTML={{ __html: query.data?.content || '' }}
                                 />
-
-                                <br />
-                                {query.data?.fileQuestions && query.data?.fileQuestions?.length && (
-                                    <>
-                                        <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
-                                            Tệp đính kèm
-                                        </h3>
-                                        <div className='flex flex-col gap-2'>
-                                            {query.data?.fileQuestions?.map((file) => {
-                                                return (
-                                                    <div
-                                                        key={file.fileKey}
-                                                        className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
-                                                    >
-                                                        <div className='flex items-center'>
-                                                            <div className='w-[30px]'>
-                                                                <FileIcon
-                                                                    extension={
-                                                                        file.fileKey
-                                                                            .split('.')
-                                                                            .pop() || ''
-                                                                    }
-                                                                    // {...defaultStyles.docx}
-                                                                />
+                                {query.data?.fileQuestions &&
+                                    query.data?.fileQuestions?.length > 0 && (
+                                        <>
+                                            <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border mb-2'>
+                                                Tệp đính kèm
+                                            </h3>
+                                            <div className='flex flex-col gap-2'>
+                                                {query.data?.fileQuestions?.map((file) => {
+                                                    return (
+                                                        <div
+                                                            key={file.fileKey}
+                                                            className='border rounded-lg border-gray-600 flex items-center justify-between p-4 border-solid'
+                                                        >
+                                                            <div className='flex items-center'>
+                                                                <div className='w-[30px]'>
+                                                                    <FileIcon
+                                                                        extension={
+                                                                            file.fileKey
+                                                                                .split('.')
+                                                                                .pop() || ''
+                                                                        }
+                                                                        // {...defaultStyles.docx}
+                                                                    />
+                                                                </div>
+                                                                <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
+                                                                    {file.fileName}
+                                                                </div>
                                                             </div>
-                                                            <div className='font-bold text-md mx-4 max-w-[145px] truncate text-black-800'>
-                                                                {file.fileName}
-                                                            </div>
+                                                            <DownloadOutlined
+                                                                className='text-[#4EA8B4] text-2xl cursor-pointer'
+                                                                onClick={async () => {
+                                                                    await downloadUrl(
+                                                                        imageUtility(file.fileKey),
+                                                                    );
+                                                                }}
+                                                            />
                                                         </div>
-                                                        <DownloadOutlined
-                                                            className='text-[#4EA8B4] text-2xl cursor-pointer'
-                                                            onClick={async () => {
-                                                                await downloadUrl(
-                                                                    imageUtility(file.fileKey),
-                                                                );
-                                                            }}
-                                                        />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </>
-                                )}
+                                                    );
+                                                })}
+                                            </div>
+                                        </>
+                                    )}
                             </div>
                             <div className='flex flex-col text-left'>
                                 <h3 className='text-black-800 font-bold text-lg leading-[27px] m-0 border'>
@@ -349,11 +347,7 @@ export default function CheckQAPage({ onNext }: Props) {
                         query.data?.status !== QuestionStatus.EXPIRED &&
                         query.data?.status !== QuestionStatus.REJECTED && (
                             <ButtonPrimary
-                                title={
-                                    query.data?.questionType === QuestionEnum.FILE
-                                        ? 'Kết thúc cuộc trò chuyện'
-                                        : 'Hoàn thành buổi giải đáp'
-                                }
+                                title={'Xác nhận hoàn thành câu hỏi'}
                                 className='ml-[432px] mt-6 !w-fit'
                                 disabled={
                                     query.data?.questionType === QuestionEnum.FILE

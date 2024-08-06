@@ -31,7 +31,7 @@ const CompletedQuestionNotification = ({
                     Tiêu đề: <span className='font-bold'>{title}</span>
                 </div>
                 <div>
-                    Giá: <span className='font-bold'>{price}</span>
+                    Giá: <span className='font-bold'>{price}</span> VND
                 </div>
             </div>
             {toastFooter}

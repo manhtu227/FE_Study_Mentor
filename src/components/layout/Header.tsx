@@ -31,6 +31,7 @@ import {
     userDetailKeys,
 } from '@core/services/user.service';
 import { RootState } from '@core/store';
+import { removeAvatar } from '@core/store/reducers/avatar.reducer';
 import { setNotifications } from '@core/store/reducers/notification.reducer';
 import { setCurrentQuestionId, setPickedQuestion } from '@core/store/reducers/question.reducer';
 import {
@@ -70,6 +71,7 @@ const Header = () => {
                 <div
                     onClick={() => {
                         signOut();
+                        dispatch(removeAvatar());
                     }}
                 >
                     Đăng xuất
@@ -448,7 +450,7 @@ const Header = () => {
                                     <Image
                                         className='rounded-full w-8 h-8 bg-[#D9D9D9]'
                                         src={
-                                            avatar ??
+                                            avatar ||
                                             imageUtility(data?.user?.user?.avatar?.fileKey)
                                         }
                                         height={32}
