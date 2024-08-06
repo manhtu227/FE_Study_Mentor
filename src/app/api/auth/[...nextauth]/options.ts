@@ -1,12 +1,13 @@
 import { ENV } from '@core/constants/env.constants';
 import { MY_ROUTE } from '@core/constants/routes.constant';
 import { Gender, UserType } from '@core/enums/user.enum';
-import { LoginInput, SignUpInput } from '@core/models/authentication.model';
-import { loginApi, signUpApi } from '@core/services/authentication.service';
+import { LoginGoogle, LoginInput, SignUpInput } from '@core/models/authentication.model';
+import { loginApi, loginByGooogleApi, signUpApi } from '@core/services/authentication.service';
 import { isAxiosError } from 'axios';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+type CredentialGoogleProviderInput = { [key in keyof LoginGoogle]: any };
 type CredentialProviderInput = { [key in keyof LoginInput]: any };
 type CredentialSignUpProviderInput = { [key in keyof SignUpInput]: any };
 
@@ -14,7 +15,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: MY_ROUTE.LOGIN,
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: ENV.AUTH_SECRET,
     providers: [
         CredentialsProvider({
             id: 'custom-login',
@@ -32,6 +33,31 @@ export const authOptions: NextAuthOptions = {
                     const { data } = await loginApi({
                         email: credentials.email,
                         password: credentials.password,
+                    });
+
+                    return data.data as any;
+                } catch (e: any) {
+                    if (isAxiosError(e)) console.error('Login failed', e.message);
+                    return null;
+                }
+            },
+        }),
+        CredentialsProvider({
+            id: 'custom-login-google',
+            name: 'Credentials',
+            credentials: {
+                fullName: { label: 'FullName' },
+                email: { label: 'Email' },
+            } as CredentialGoogleProviderInput,
+            async authorize(credentials) {
+                // This is where you need to retrieve user data
+                // to verify with credentials
+                // Docs: https://next-auth.js.org/configuration/providers/credentials
+                if (!credentials) return;
+                try {
+                    const { data } = await loginByGooogleApi({
+                        fullName: credentials.fullName,
+                        email: credentials.email,
                     });
 
                     return data.data as any;
