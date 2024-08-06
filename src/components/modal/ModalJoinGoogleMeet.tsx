@@ -48,7 +48,7 @@ export default function ModalJoinGoogleMeet({
                         Tiêu đề : <strong>{title}</strong>
                     </div>
                     <div className='text-xl'>
-                        Giá: <strong>{price}</strong>
+                        Giá: <strong>{price}</strong> VND
                     </div>
                 </div>
                 <h3 className='leading-[27px] text-[NeutralDark1]'>
