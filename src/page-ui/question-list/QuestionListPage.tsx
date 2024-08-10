@@ -1,6 +1,6 @@
 'use client';
 import { SearchOutlined } from '@ant-design/icons';
-import { Col, Empty, Row } from 'antd';
+import { Col, DatePicker, Empty, Row } from 'antd';
 
 import { CardQuestionUser } from '@components/card/CardQuestionUser';
 import CustomSelectInput from '@components/form-input/CustomSelectInput';
@@ -25,6 +25,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+const { RangePicker } = DatePicker;
 
 export default function QuestionListPage() {
     const searchParams = useSearchParams();
@@ -53,6 +54,7 @@ export default function QuestionListPage() {
         initialPaging,
         initialFilter,
         searchParamDefault: ['step', 'mode', 'searchMySelfTab', 'isTutorOnline'],
+        debounceTime: 500,
     });
 
     const data = useQuery({
@@ -65,16 +67,24 @@ export default function QuestionListPage() {
         <div>
             <div className='flex mb-8 justify-between flex-wrap gap-2'>
                 {/* <DropDownField className='px-6 py-3 flex items-center' title='Sắp xếp theo' /> */}
-                <CustomSelectInput
-                    classNameForm='w-[167px]'
-                    optionsSelect={[]}
-                    placeholder='Sắp xếp theo'
-                    classNameSelect='placeholder-color'
+                <RangePicker
+                    size='small'
+                    className='!h-[48px]'
+                    onChange={(e) => {
+                        handleFilterChange({
+                            fromDate: e?.[0]?.format('YYYY-MM-DD') ?? undefined,
+                            toDate: e?.[1]?.format('YYYY-MM-DD') ?? undefined,
+                        });
+                    }}
+                    placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
                 />
                 <CustomTextInput
                     prefix={<SearchOutlined />}
                     placeholder='Nhập tiêu đề câu hỏi/ tên môn học để tìm kiếm...'
                     classNameForm='w-[400px]'
+                    onChange={(e: any) => {
+                        handleFilterChange({ search: e.target.value });
+                    }}
                 />
                 <CustomSelectInput
                     classNameForm='w-[131px] '

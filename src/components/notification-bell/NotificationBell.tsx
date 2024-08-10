@@ -4,6 +4,7 @@ import {
     CheckSquareOutlined,
     CloseOutlined,
     DollarOutlined,
+    GiftOutlined,
     PushpinOutlined,
     QuestionCircleOutlined,
     UsergroupDeleteOutlined,
@@ -98,6 +99,8 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 return NotificationTitle.TUTOR_ACCEPTED_QUESTION;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return NotificationTitle.PICKED_TUTOR_ACCEPTED_QUESTION;
+            case NotificationType.SEND_VOUCHER:
+                return NotificationTitle.SEND_VOUCHER;
             default:
                 return '';
         }
@@ -117,6 +120,8 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 return <UsergroupDeleteOutlined />;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return <CheckSquareOutlined />;
+            case NotificationType.SEND_VOUCHER:
+                return <GiftOutlined />;
             default:
                 return null;
         }
@@ -194,6 +199,9 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                     );
                 }
                 break;
+            case NotificationType.SEND_VOUCHER:
+                dispatch(removeNotification(notification!.id!));
+                deleteNotification.mutate(notification!.id!);
             default:
                 break;
         }

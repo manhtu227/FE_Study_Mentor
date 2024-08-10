@@ -4,13 +4,16 @@ import GraduationIcon from '@assets/icons/graduation';
 import QuestionIcon from '@assets/icons/question';
 import StarIcon from '@assets/icons/star';
 import CreateQuestionForm from '@components/flow-question-file/step-1/CreateQuestionForm';
+import ModalConfirm from '@components/modal/ModalConfirm';
+import { MY_ROUTE } from '@core/constants/routes.constant';
+import { QuestionStatus } from '@core/enums/question.enum';
 import { detailedQuestionKeys, getDetailedQuestionApi } from '@core/services/questions.service';
 import { RootState } from '@core/store';
 import { useQuery } from '@tanstack/react-query';
 import { Spin, Steps } from 'antd';
 import clsx from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import FindMentorBySystemPage from '../../components/flow-question-file/step-2/FindMentorBySystemPage';
 import CheckQAPage from '../../components/flow-question-file/step-3/CheckQAPage';
@@ -20,6 +23,7 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
+    const [isOpenVoucher, setIsOpenVoucher] = useState(false);
     const currentQuestionId = useSelector((state: RootState) => {
         return state.questions.currentQuestionId;
     });
@@ -49,6 +53,12 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
 
         return step;
     }, [searchParams, question.data]);
+
+    useEffect(() => {
+        if (question.data?.status === QuestionStatus.EXPIRED && current !== 0) {
+            setIsOpenVoucher(true);
+        }
+    }, [question.data, current]);
 
     const next = () => {
         const params = new URLSearchParams(searchParams || '');
@@ -181,6 +191,21 @@ function QuestionByFilePage({ isGoogleMeet }: { isGoogleMeet?: boolean }) {
                     </Button>
                 )}
             </div> */}
+            <ModalConfirm
+                isOpen={isOpenVoucher}
+                setIsOpen={setIsOpenVoucher}
+                message='Xin lỗi bạn câu hỏi đã hết hạn, vui lòng hỏi câu hỏi khác'
+                titleYes='Đặt lại câu hỏi'
+                titleCancel='Quay lại trang chủ'
+                onConfirm={() => {
+                    setIsOpenVoucher(false);
+                    router.push(`${MY_ROUTE.MENTOR.FILE}?step=0`);
+                }}
+                onCancel={() => {
+                    setIsOpenVoucher(false);
+                    router.push(`${MY_ROUTE.HOME}`);
+                }}
+            />
             <div className='fixed bottom-0 right-0 left-0 top-0 bg-white-800 -z-10'></div>
         </div>
     );

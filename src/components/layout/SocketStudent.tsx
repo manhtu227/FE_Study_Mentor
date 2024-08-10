@@ -1,3 +1,4 @@
+import ModalConfirm from '@components/modal/ModalConfirm';
 import ModalConfirmGoogleMeet from '@components/modal/ModalConfirmGoogleMeet';
 import { SocketEvent } from '@core/enums/socket.enum';
 import { CreateGGMeetModel } from '@core/models/question.model';
@@ -10,7 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-type ModalOpen = SocketEvent.RECEIVE_INFO_GOOGLE_MEET | null;
+type ModalOpen = SocketEvent.RECEIVE_INFO_GOOGLE_MEET | SocketEvent.CANCEL_GGMEET | null;
 
 type Props = {
     modalOpenProps?: ModalOpen;
@@ -59,6 +60,17 @@ export function SocketStudent({ modalOpenProps }: Props) {
 
     return (
         <div>
+            <ModalConfirm
+                isOpen={modalOpen === SocketEvent.CANCEL_GGMEET}
+                setIsOpen={setModalOpen}
+                onConfirm={() => {
+                    setModalOpen(null);
+                }}
+                message='Cuộc họp đã bị hủy vui lòng tìm kiếm lại'
+                onCancel={() => {
+                    setModalOpen(null);
+                }}
+            />
             <ModalConfirmGoogleMeet
                 isModalOpen={modalOpen === SocketEvent.RECEIVE_INFO_GOOGLE_MEET}
                 setIsModalOpen={setModalOpen}

@@ -50,6 +50,7 @@ export default function FindQuestionsPage() {
     const { handlePageChange, filter, handleFilterChange } = usePagingFilter({
         initialPaging,
         initialFilter,
+        debounceTime: 500,
     });
 
     const data = useQuery({

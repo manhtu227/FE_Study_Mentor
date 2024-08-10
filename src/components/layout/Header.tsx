@@ -500,7 +500,7 @@ const Header = () => {
             <ModalConfirm
                 isOpen={isOpenVoucher}
                 setIsOpen={setIsOpenVoucher}
-                message='Xin lỗi bạn, hệ thống sẽ tặng bạn mã khuyến mãi vào đợt kế tiếp'
+                message='Xin lỗi bạn chưa có ai chấp nhận, hệ thống sẽ tặng bạn mã khuyến mãi vào đợt kế tiếp'
                 titleYes='Đặt lại câu hỏi'
                 titleCancel='Quay lại trang chủ'
                 onConfirm={() => {

@@ -21,7 +21,6 @@ export default withAuth(
                 ) {
                     return true;
                 }
-                console.log(token?.user?.user?.id, 'loi à');
                 return !!token?.user?.user?.id;
             },
         },

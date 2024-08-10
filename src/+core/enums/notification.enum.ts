@@ -8,6 +8,7 @@ export enum NotificationType {
     PICKED_TUTOR_ACCEPTED_QUESTION = 'picked-tutor-accepted-question',
     RECEIVE_INFO_GOOGLE_MEET = 'receive-info-google-meet',
     CANCEL_GGMEET = 'cancel-google-meet',
+    SEND_VOUCHER = 'send-voucher',
 }
 
 export enum NotificationTitle {
@@ -19,4 +20,5 @@ export enum NotificationTitle {
     PICKED_TUTOR_ACCEPTED_QUESTION = 'Chọn người hướng dẫn thành công',
     RECEIVE_INFO_GOOGLE_MEET = 'Bạn có cuộc hẹn google meet',
     CANCEL_GGMEET = 'Cuộc hẹn google meet đã bị hủy',
+    SEND_VOUCHER = 'Xin lỗi câu hỏi của bạn đã hết hạn, chúng tôi gửi cho bạn một mã giảm giá',
 }
