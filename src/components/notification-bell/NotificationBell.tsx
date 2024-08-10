@@ -201,7 +201,9 @@ const NotificationBell: React.FC<IProps> = ({ notifications }: IProps) => {
                 break;
             case NotificationType.SEND_VOUCHER:
                 dispatch(removeNotification(notification!.id!));
+                router.push(MY_ROUTE.PROFILE);
                 deleteNotification.mutate(notification!.id!);
+                break;
             default:
                 break;
         }

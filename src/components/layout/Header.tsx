@@ -358,6 +358,8 @@ const Header = () => {
                 return `Đã có người hướng dẫn ${notification.tutor?.fullName} chấp nhận câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
             case NotificationType.PICKED_TUTOR_ACCEPTED_QUESTION:
                 return `Người hướng dẫn ${notification.tutor?.fullName} bạn chọn đã chấp nhận câu hỏi với tiêu đề ${notification.question.title} với giá ${notification.question.price} đồng`;
+            case NotificationType.SEND_VOUCHER:
+                return `Nếu bạn chưa cập nhật tài khoản ngân hàng, vui lòng cập nhật để hoàn tiền sớm nhất có thể`;
             default:
                 return '';
         }
